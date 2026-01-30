@@ -13,7 +13,43 @@
 
 ## High Priority Features 🔴
 
-### 1. **Landing Page with Statistics**
+### 1. **Fixed Layout with Scrollable Selection Window** ⭐
+**Problem:** Page scrolls, hiding configuration summary; header takes too much space
+**Solution:**
+- **Fixed viewport layout** - No page scrolling, only component areas scroll
+- **Ultra-compact header** - Single line of text only (e.g., "Fuzzy Engineering Pedal Customizer")
+- **Scrollable selection area** - Tabs and product grid in windowed, scrollable container
+- **Sticky summary panel** - Configuration summary always visible at bottom
+- **Layout structure:**
+  ```
+  ┌──────────────────────────────────────┐
+  │ Header (single line, minimal)        │
+  ├──────────────────────────────────────┤
+  │ ┌──────────────────────────────────┐ │
+  │ │ Tabs + Filters                   │ │
+  │ ├──────────────────────────────────┤ │
+  │ │                                  │ │
+  │ │ Product Grid                     │ │ ← Scrollable
+  │ │ (scrollable content)             │ │
+  │ │                                  │ │
+  │ └──────────────────────────────────┘ │
+  ├──────────────────────────────────────┤
+  │ Configuration Summary (always visible)│ ← Fixed
+  └──────────────────────────────────────┘
+  ```
+- **Benefits:**
+  - User always sees their selections
+  - No context switching by scrolling
+  - Cleaner, more app-like experience
+  - Better use of screen real estate
+
+**Implementation considerations:**
+- Use CSS `height: 100vh` with `overflow: hidden` on main container
+- Selection area: `flex-grow: 1` with `overflow-y: auto`
+- Summary: Fixed height at bottom
+- Header: Minimal padding, single line (~40-50px total height)
+
+### 2. **Landing Page with Statistics**
 **Problem:** No overview before diving into configurator
 **Solution:**
 - Create dedicated landing page with hero section
@@ -27,14 +63,14 @@
 - Brief explanation of process
 - Example: "68 finishes × 6 designs × 6 LEDs × 7 other options = 170,856 possible combinations!"
 
-### 2. **Visual Preview / 3D Mockup**
+### 3. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
 **Solution:** 
 - Generate a real-time visual preview of the pedal with selected options
 - Show enclosure color, labeling position, LED placement
 - Could be 2D illustration or simple 3D render
 
-### 3. **Save & Load Configurations**
+### 4. **Save & Load Configurations**
 **Problem:** Users can't save their work and come back to it
 **Solution:**
 - Save configurations to browser localStorage
@@ -42,7 +78,7 @@
 - Name/label saved configurations
 - Share configurations via URL parameters
 
-### 4. **Order Submission System**
+### 5. **Order Submission System**
 **Problem:** Currently only downloads JSON - no way to actually order
 **Solution:**
 - Email integration to send configuration to you
@@ -50,7 +86,7 @@
 - Order confirmation system
 - Optional: Payment integration (Stripe/PayPal)
 
-### 5. **Image Gallery for Each Option**
+### 6. **Image Gallery for Each Option**
 **Problem:** All options show placeholder "Logo.png" image
 **Solution:**
 - Add actual product images for each finish, LED type, etc.
@@ -61,21 +97,21 @@
 
 ## Medium Priority Features 🟡
 
-### 6. **Price Breakdown Display**
+### 7. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
 - Highlight price changes when selecting options
 - Show supplier cost vs customer price (admin view)
 
-### 7. **Comparison Mode**
+### 8. **Comparison Mode**
 **Problem:** Hard to compare different configurations
 **Solution:**
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
 
-### 7. **Search Across All Categories**
+### 9. **Search Across All Categories**
 **Problem:** Search only works on paint options
 **Solution:**
 - Global search across all tabs
@@ -251,11 +287,11 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 Based on typical user needs, I'd suggest prioritizing:
 
-1. **Landing Page with Stats & Combinations** - Shows off the scope of customization ⭐
-2. **Option Dependencies/Exclusions** - Prevent invalid configurations immediately
-3. **Visual Preview** - Makes the biggest UX impact
-4. **Order Submission** - Critical for business functionality  
-5. **Image Gallery** - Currently all placeholders
-6. **Save/Load Configs** - Reduces friction in decision-making
+1. **Fixed Layout with Scrollable Selection** - Critical UX improvement for usability ⭐⭐⭐
+2. **Landing Page with Stats & Combinations** - Shows off the scope of customization
+3. **Option Dependencies/Exclusions** - Prevent invalid configurations immediately
+4. **Visual Preview** - Makes the biggest UX impact
+5. **Order Submission** - Critical for business functionality  
+6. **Image Gallery** - Currently all placeholders
 
 Would you like me to start implementing any of these features?
