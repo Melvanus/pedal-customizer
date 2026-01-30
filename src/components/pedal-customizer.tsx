@@ -168,62 +168,65 @@ export function PedalCustomizer({
       </div>
 
       {/* Scrollable Content Area */}
-      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem" }}>
-        {/* Tabs */}
-        <div
-          style={{
-            background: "#1a1a1a",
-            padding: "1.5rem",
-            borderRadius: "10px",
-            boxShadow: "0 2px 15px rgba(0,0,0,0.5)",
-            marginBottom: "2rem",
-            border: "1px solid #333",
-          }}
-        >
-          <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem", borderBottom: "2px solid #2d2d2d" }}>
-            {(["paint", "design", "led", "other"] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                style={{
-                  padding: "0.75rem 1.5rem",
-                  border: "none",
-                  background: activeTab === tab ? "#fff" : "transparent",
-                  color: activeTab === tab ? "#000" : "#888",
-                  fontWeight: 600,
-                  fontSize: "0.95rem",
-                  cursor: "pointer",
-                  borderRadius: "5px 5px 0 0",
-                  transition: "all 0.3s ease",
-                }}
-              >
-                {tab === "paint" && "Paint / Finish"}
-                {tab === "design" && "Design / Labeling"}
-                {tab === "led" && "LED"}
-                {tab === "other" && "Other"}
-              </button>
-            ))}
-          </div>
+      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", position: "relative" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: "0", paddingBottom: "200px" }}>
+          {/* Floating Tabs & Filters Panel */}
+          <div
+            style={{
+              position: "sticky",
+              top: "1rem",
+              width: "100%",
+              maxWidth: "800px",
+              background: "rgba(26, 26, 26, 0.85)",
+              backdropFilter: "blur(10px)",
+              boxShadow: "0 6px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: "10px",
+              zIndex: 100,
+              padding: "1rem",
+              marginBottom: "2rem",
+              marginTop: "1rem",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            {/* Tabs */}
+            <div style={{ display: "flex", gap: "0.75rem", marginBottom: activeTab === "paint" ? "1rem" : 0, borderBottom: "2px solid rgba(255,255,255,0.1)", paddingBottom: "0.5rem" }}>
+              {(["paint", "design", "led", "other"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  style={{
+                    padding: "0.6rem 1.2rem",
+                    border: "none",
+                    background: activeTab === tab ? "#fff" : "transparent",
+                    color: activeTab === tab ? "#000" : "#888",
+                    fontWeight: 600,
+                    fontSize: "0.9rem",
+                    cursor: "pointer",
+                    borderRadius: "6px",
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  {tab === "paint" && "Paint / Finish"}
+                  {tab === "design" && "Design / Labeling"}
+                  {tab === "led" && "LED"}
+                  {tab === "other" && "Other"}
+                </button>
+              ))}
+            </div>
 
-          {/* Paint/Finish Tab */}
-          {activeTab === "paint" && (
-            <>
-              {/* Filters */}
+            {/* Filters for Paint Tab */}
+            {activeTab === "paint" && (
               <div
                 style={{
-                  background: "#0f0f0f",
-                  padding: "1.5rem",
-                  borderRadius: "10px",
-                  marginBottom: "2rem",
                   display: "grid",
                   gridTemplateColumns: "1.5fr 1fr 1fr 0.8fr",
-                  gap: "1rem",
-                  border: "1px solid #2d2d2d",
+                  gap: "0.75rem",
                 }}
               >
                 <div>
-                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.9rem", display: "block", marginBottom: "0.5rem" }}>
+                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.8rem", display: "block", marginBottom: "0.4rem" }}>
                     Search Products
                   </label>
                   <input
@@ -237,13 +240,13 @@ export function PedalCustomizer({
                       border: "2px solid #333",
                       borderRadius: "5px",
                       fontSize: "0.9rem",
-                      background: "#1a1a1a",
+                      background: "#0f0f0f",
                       color: "#e0e0e0",
                     }}
                   />
                 </div>
                 <div>
-                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.9rem", display: "block", marginBottom: "0.5rem" }}>
+                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.8rem", display: "block", marginBottom: "0.4rem" }}>
                     Filter by Color
                   </label>
                   <select
@@ -255,7 +258,7 @@ export function PedalCustomizer({
                       border: "2px solid #333",
                       borderRadius: "5px",
                       fontSize: "0.9rem",
-                      background: "#1a1a1a",
+                      background: "#0f0f0f",
                       color: "#e0e0e0",
                     }}
                   >
@@ -266,7 +269,7 @@ export function PedalCustomizer({
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.9rem", display: "block", marginBottom: "0.5rem" }}>
+                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.8rem", display: "block", marginBottom: "0.4rem" }}>
                     Filter by Finish
                   </label>
                   <select
@@ -278,7 +281,7 @@ export function PedalCustomizer({
                       border: "2px solid #333",
                       borderRadius: "5px",
                       fontSize: "0.9rem",
-                      background: "#1a1a1a",
+                      background: "#0f0f0f",
                       color: "#e0e0e0",
                     }}
                   >
@@ -289,7 +292,7 @@ export function PedalCustomizer({
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.9rem", display: "block", marginBottom: "0.5rem" }}>
+                  <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.8rem", display: "block", marginBottom: "0.4rem" }}>
                     Sort By
                   </label>
                   <select
@@ -301,7 +304,7 @@ export function PedalCustomizer({
                       border: "2px solid #333",
                       borderRadius: "5px",
                       fontSize: "0.9rem",
-                      background: "#1a1a1a",
+                      background: "#0f0f0f",
                       color: "#e0e0e0",
                     }}
                   >
@@ -313,15 +316,18 @@ export function PedalCustomizer({
                   </select>
                 </div>
               </div>
+            )}
+          </div>
 
-              {/* Paint Grid */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                  gap: "1.5rem",
-                }}
-              >
+          {/* Paint/Finish Tab */}
+          {activeTab === "paint" && (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                gap: "1.5rem",
+              }}
+            >
                 {filteredPaintOptions.map((option) => (
                   <div
                     key={option.id}
@@ -387,12 +393,11 @@ export function PedalCustomizer({
                   </div>
                 ))}
               </div>
-            </>
           )}
 
           {/* Design/Labeling Tab */}
           {activeTab === "design" && (
-            <>
+            <div>
               <div
                 style={{
                   display: "grid",
@@ -469,7 +474,7 @@ export function PedalCustomizer({
                   }}
                 />
               </div>
-            </>
+            </div>
           )}
 
           {/* LED Tab */}
@@ -576,30 +581,29 @@ export function PedalCustomizer({
             </div>
           )}
         </div>
-        </div>
 
         {/* Floating Configuration Summary Panel */}
         <div
           style={{
             position: "fixed",
-            bottom: "1.5rem",
+            bottom: "1rem",
             left: "50%",
             transform: "translateX(-50%)",
-            width: "90%",
-            maxWidth: "900px",
-            background: "rgba(26, 26, 26, 0.98)",
-            padding: "1.5rem",
-            borderRadius: "12px",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1)",
-            border: "1px solid #333",
+            width: "85%",
+            maxWidth: "800px",
+            background: "rgba(26, 26, 26, 0.85)",
+            padding: "1rem",
+            borderRadius: "10px",
+            boxShadow: "0 6px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.15)",
             zIndex: 1000,
             backdropFilter: "blur(10px)",
           }}
         >
-          <h2 style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: "1rem", color: "#fff", textAlign: "center" }}>
+          <h2 style={{ fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.75rem", color: "#fff", textAlign: "center" }}>
             Configuration Summary
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.5rem", marginBottom: "0.75rem" }}>
             <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
               <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
               <span style={{ fontSize: "0.8rem", color: "#aaa" }}>
@@ -623,15 +627,15 @@ export function PedalCustomizer({
               <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", padding: "0.75rem 0", marginBottom: "1rem", borderTop: "2px solid #fff", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.75rem", padding: "0.5rem 0", marginBottom: "0.5rem", borderTop: "2px solid #fff", flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
-              <span style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>Total:</span>
-              <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
+              <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#fff" }}>Total:</span>
+              <span style={{ fontSize: "1.3rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
             </div>
             <button
               onClick={handleProceedToSummary}
               style={{
-                padding: "0.75rem 1.75rem",
+                padding: "0.6rem 1.4rem",
                 background: "#fff",
                 color: "#000",
                 border: "none",
@@ -660,7 +664,7 @@ export function PedalCustomizer({
             <button
               onClick={handleDownload}
               style={{
-                padding: "0.75rem 1.5rem",
+                padding: "0.6rem 1.2rem",
                 background: "transparent",
                 color: "#fff",
                 border: "2px solid #fff",
