@@ -27,13 +27,15 @@ export default async function CustomizePage() {
   const designPath = path.join(process.cwd(), "Enclosures", "design_labeling.json");
   const ledPath = path.join(process.cwd(), "Enclosures", "led.json");
   const otherPath = path.join(process.cwd(), "Enclosures", "other.json");
+  const favouritesPath = path.join(process.cwd(), "Enclosures", "favourites.json");
   const imageDir = path.join(process.cwd(), "Enclosures", "images");
 
-  const [rawData, rawDesign, rawLed, rawOther, imageFiles] = await Promise.all([
+  const [rawData, rawDesign, rawLed, rawOther, rawFavourites, imageFiles] = await Promise.all([
     fs.readFile(dataPath, "utf-8"),
     fs.readFile(designPath, "utf-8"),
     fs.readFile(ledPath, "utf-8"),
     fs.readFile(otherPath, "utf-8"),
+    fs.readFile(favouritesPath, "utf-8"),
     fs.readdir(imageDir),
   ]);
 
@@ -102,6 +104,8 @@ export default async function CustomizePage() {
     image: mapOptionImage(item.image),
   }));
 
+  const favourites = JSON.parse(rawFavourites) as { paintFinishFavourites: string[] };
+
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
       <PedalCustomizer
@@ -109,6 +113,7 @@ export default async function CustomizePage() {
         designOptions={designOptions}
         ledOptions={ledOptions}
         otherOptions={otherOptions}
+        favouritePaintIds={favourites.paintFinishFavourites}
       />
     </main>
   );

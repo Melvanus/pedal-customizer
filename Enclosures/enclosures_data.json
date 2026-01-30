@@ -1,12 +1,12 @@
 {
     "scraper_info":  {
                          "version":  "offline_mode",
-                         "total_products":  78,
-                         "available_products":  69,
+                         "total_products":  79,
+                         "available_products":  70,
                          "unavailable_products":  9,
                          "scrape_date":  "2026-01-30",
                          "data_source":  "local_html_file_only",
-                         "note":  "Data extracted from local HTML without accessing individual product pages. Includes custom paint option."
+                         "note":  "Data extracted from local HTML without accessing individual product pages. Includes custom paint option and furry finish."
                      },
     "products":  [
                      {
@@ -130,6 +130,62 @@
                          "shortDescription":  "Hand-sprayed custom color (any RGB color, Matte or Glossy)",
                          "longDescription":  "Create your perfect pedal with a completely custom hand-sprayed finish in any RGB color you desire. Choose between Matte or Glossy finish to match your aesthetic. Each custom-painted enclosure is carefully hand-sprayed by our skilled technicians. ⚠️ Requires manual review and has an extended production time of 5-7 business days. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and includes 4 steel mounting screws.",
                          "isCustomColor":  true
+                     },
+                     {
+                         "sku":  "FURRY-001",
+                         "product_id":  "SPECIAL",
+                         "name":  "125B Style Aluminum Diecast Enclosure Furry Finish",
+                         "product_url":  "",
+                         "image_url":  "Logo.png",
+                         "lifestyle_image_url":  "",
+                         "image_alt_text":  "Make it Furry",
+                         "price":  "$12.00",
+                         "quantity_available":  "999",
+                         "available":  true,
+                         "details":  [
+                                         "SKU: FURRY-001",
+                                         "Unique furry texture finish",
+                                         "Soft and fuzzy appearance",
+                                         "Requires additional care",
+                                         "THIS PRODUCT MIGHT REQUIRE MANUAL REVIEW",
+                                         "Production time: 5-7 business days"
+                                     ],
+                         "color_info":  {
+                                            "primary_color":  "Natural",
+                                            "color_description":  "Soft furry texture",
+                                            "color_family":  "Special"
+                                        },
+                         "finish_info":  {
+                                             "finish_type":  "Furry",
+                                             "texture":  "Soft and fuzzy",
+                                             "description":  "Unique tactile experience"
+                                         },
+                         "material":  "Aluminum Diecast with Furry Coating",
+                         "style":  "125B Style",
+                         "features":  [
+                                          "Soft, fuzzy texture",
+                                          "Unique tactile experience",
+                                          "Vintage aesthetic",
+                                          "Includes 4 steel screws"
+                                      ],
+                         "pantone_code":  "",
+                         "rgb":  "rgb(255, 228, 196)",
+                         "pantone":  "",
+                         "dimensions":  {
+                                            "nominal_size":  "125B",
+                                            "external_dimensions":  {
+                                                                        "length":  "120mm",
+                                                                        "width":  "94mm",
+                                                                        "height":  "34mm",
+                                                                        "note":  "Typical 125B dimensions - verify from manufacturer specs"
+                                                                    }
+                                        },
+                         "scraped_from":  "custom",
+                         "displayedName":  "Aluminium Enclosure Make it Furry",
+                         "supplierPriceUSD":  "$12.00",
+                         "customerPriceEUR":  5,
+                         "shortDescription":  "You're gonna make a new best friend with this one!",
+                         "longDescription":  "A unique furry finish that gives your pedal a soft, fuzzy appearance and feel. Creates a distinctive tactile experience and vintage aesthetic. Note: This specialty finish may require additional care, careful handling, mealtimes, playing and lot of attention."
                      },
                      {
                          "sku":  "A-8448",

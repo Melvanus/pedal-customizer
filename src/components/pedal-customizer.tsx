@@ -35,6 +35,7 @@ type PedalCustomizerProps = {
   designOptions: OptionItem[];
   ledOptions: OptionItem[];
   otherOptions: OptionItem[];
+  favouritePaintIds: string[];
 };
 
 const formatPrice = (value: number) => `€${value.toFixed(2)}`;
@@ -66,6 +67,7 @@ export function PedalCustomizer({
   designOptions,
   ledOptions,
   otherOptions,
+  favouritePaintIds,
 }: PedalCustomizerProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = React.useState<"paint" | "design" | "led" | "other">("paint");
@@ -77,7 +79,7 @@ export function PedalCustomizer({
   const [searchTerm, setSearchTerm] = React.useState("");
   const [colorFilter, setColorFilter] = React.useState("");
   const [finishFilter, setFinishFilter] = React.useState("");
-  const [sortBy, setSortBy] = React.useState("name");
+  const [sortBy, setSortBy] = React.useState("favourites");
   const [showColorPicker, setShowColorPicker] = React.useState(false);
   const [customColor, setCustomColor] = React.useState("#808080");
   const [customFinish, setCustomFinish] = React.useState<"Matte" | "Glossy">("Matte");
@@ -113,7 +115,9 @@ export function PedalCustomizer({
 
   const filteredPaintOptions = React.useMemo(() => {
     const term = normalize(searchTerm);
-    return paintOptions
+    const hasActiveFilters = Boolean(term || colorFilter || finishFilter);
+    
+    const filtered = paintOptions
       .filter((option) =>
         term
           ? [option.name, option.sku, option.color, option.finish]
@@ -123,14 +127,32 @@ export function PedalCustomizer({
       )
       .filter((option) => (colorFilter ? option.color === colorFilter : true))
       .filter((option) => (finishFilter ? option.finish === finishFilter : true))
-      .sort((a, b) => {
-        if (sortBy === "price") return a.customerPriceEUR - b.customerPriceEUR;
-        if (sortBy === "sku") return a.sku.localeCompare(b.sku);
-        if (sortBy === "color") return (a.color ?? "").localeCompare(b.color ?? "");
-        if (sortBy === "finish") return (a.finish ?? "").localeCompare(b.finish ?? "");
+      .filter((option) => hasActiveFilters ? !option.isCustomColor : true);
+
+    if (sortBy === "favourites") {
+      return filtered.sort((a, b) => {
+        const aIndex = favouritePaintIds.indexOf(a.id);
+        const bIndex = favouritePaintIds.indexOf(b.id);
+        
+        // If both are favourites, sort by their position in the favourites list
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+        // If only a is a favourite, it comes first
+        if (aIndex !== -1) return -1;
+        // If only b is a favourite, it comes first
+        if (bIndex !== -1) return 1;
+        // Neither are favourites, maintain alphabetical order
         return a.name.localeCompare(b.name);
       });
-  }, [paintOptions, searchTerm, colorFilter, finishFilter, sortBy]);
+    }
+
+    return filtered.sort((a, b) => {
+      if (sortBy === "price") return a.customerPriceEUR - b.customerPriceEUR;
+      if (sortBy === "sku") return a.sku.localeCompare(b.sku);
+      if (sortBy === "color") return (a.color ?? "").localeCompare(b.color ?? "");
+      if (sortBy === "finish") return (a.finish ?? "").localeCompare(b.finish ?? "");
+      return a.name.localeCompare(b.name);
+    });
+  }, [paintOptions, searchTerm, colorFilter, finishFilter, sortBy, favouritePaintIds]);
 
   const handleToggleOther = (id: string) => {
     setSelectedOtherIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
@@ -335,6 +357,7 @@ export function PedalCustomizer({
                       color: "#e0e0e0",
                     }}
                   >
+                    <option value="favourites">Fuzzy's Favourites</option>
                     <option value="name">Name</option>
                     <option value="sku">SKU</option>
                     <option value="price">Price</option>
@@ -359,10 +382,10 @@ export function PedalCustomizer({
                   <div
                     key={option.id}
                     onClick={() => {
+                      setSelectedPaintId(option.id);
                       if (option.isCustomColor) {
                         setShowColorPicker(true);
                       }
-                      setSelectedPaintId(option.id);
                     }}
                     style={{
                       background: "#0f0f0f",
@@ -383,41 +406,7 @@ export function PedalCustomizer({
                     }}
                   >
                     <div style={{ width: "100%", height: "160px", background: "#1a1a1a", padding: "0.75rem", position: "relative" }}>
-                      {option.isCustomColor ? (
-                        <div style={{ 
-                          position: "relative",
-                          width: "100%",
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}>
-                          <Image 
-                            src={option.image} 
-                            alt={option.name} 
-                            fill 
-                            unoptimized 
-                            style={{ 
-                              objectFit: "contain",
-                              filter: `brightness(0.7) sepia(1) saturate(3) hue-rotate(${customColor})`,
-                              mixBlendMode: "multiply",
-                            }} 
-                          />
-                          <div style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background: customColor,
-                            mixBlendMode: "multiply",
-                            opacity: 0.5,
-                            pointerEvents: "none",
-                          }} />
-                        </div>
-                      ) : (
-                        <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
-                      )}
+                      <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
                     </div>
                     <div style={{ padding: "1rem" }}>
                       {option.isCustomColor && (
