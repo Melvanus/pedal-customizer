@@ -22,7 +22,7 @@ function Get-Descriptions {
     if ($color) {
         $longDesc += " in $color"
     }
-    $longDesc += ". The 125B enclosure measures 120mm × 94mm × 34mm (L×W×H) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. "
+    $longDesc += ". The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. "
     
     # Add finish-specific notes
     if ($finish -match "Metallic") {
@@ -56,7 +56,10 @@ foreach ($product in $jsonContent.products) {
 }
 
 # Save updated JSON
-$jsonContent | ConvertTo-Json -Depth 20 | Set-Content "${jsonPath}.tmp" -Encoding UTF8
+$outputJson = $jsonContent | ConvertTo-Json -Depth 20
+# Write as UTF-8 without BOM
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText("${jsonPath}.tmp", $outputJson, $utf8NoBom)
 
 Write-Host "Descriptions added successfully!"
 Write-Host "Output saved to: ${jsonPath}.tmp"
