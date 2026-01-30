@@ -8,12 +8,43 @@
 - Real-time price calculation in EUR
 - Configuration summary display
 - Download configuration as JSON
+- Fixed layout with scrollable selection area
+- Floating configuration summary panel at bottom-center
 
 ---
 
 ## High Priority Features 🔴
 
-### 1. **Fixed Layout with Scrollable Selection Window** ⭐
+### 1. **Product Descriptions & Final Summary Page** ⭐⭐⭐
+**Problem:** No detailed descriptions for options; no final review before ordering
+**Solution:**
+- **Short descriptions:** Add to all JSON files, display in product grid cards (1-2 lines)
+- **Long descriptions:** Detailed explanations for final summary page
+- **Final Summary Page:** Full review of configuration with:
+  - All selected options with long descriptions
+  - Total price breakdown
+  - Incompatibility warnings (manual review needed)
+  - Customer details form
+  - Order submission
+- **Warnings in floating summary:** Show alert icon (⚠️) when incompatibilities detected
+- **Benefits:**
+  - Users understand what they're selecting
+  - Final review reduces order errors
+  - Proactive warning system for incompatible combinations
+  - Professional ordering experience
+
+**JSON Structure:**
+```json
+{
+  "id": "xyz",
+  "name": "Product Name",
+  "shortDescription": "Brief 1-2 line description for grid",
+  "longDescription": "Detailed explanation with technical specs, compatibility notes, and usage information",
+  "customerPriceEUR": 5.99
+}
+```
+
+### 2. **Fixed Layout with Scrollable Selection Window** ✅ COMPLETED
 **Problem:** Page scrolls, hiding configuration summary; header takes too much space
 **Solution:**
 - **Fixed viewport layout** - No page scrolling, only component areas scroll
@@ -50,7 +81,7 @@
 - Header: Minimal padding, single line (~40-50px total height)
 - Summary panel should have high z-index and semi-transparent backdrop for visibility
 
-### 2. **Landing Page with Statistics**
+### 3. **Landing Page with Statistics**
 **Problem:** No overview before diving into configurator
 **Solution:**
 - Create dedicated landing page with hero section
@@ -64,14 +95,14 @@
 - Brief explanation of process
 - Example: "68 finishes × 6 designs × 6 LEDs × 7 other options = 170,856 possible combinations!"
 
-### 3. **Visual Preview / 3D Mockup**
+### 4. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
 **Solution:** 
 - Generate a real-time visual preview of the pedal with selected options
 - Show enclosure color, labeling position, LED placement
 - Could be 2D illustration or simple 3D render
 
-### 4. **Save & Load Configurations**
+### 5. **Save & Load Configurations**
 **Problem:** Users can't save their work and come back to it
 **Solution:**
 - Save configurations to browser localStorage
@@ -79,15 +110,16 @@
 - Name/label saved configurations
 - Share configurations via URL parameters
 
-### 5. **Order Submission System**
+### 6. **Order Submission System**
 **Problem:** Currently only downloads JSON - no way to actually order
 **Solution:**
 - Email integration to send configuration to you
 - Form to collect customer details (name, email, shipping address)
 - Order confirmation system
 - Optional: Payment integration (Stripe/PayPal)
+- **NOTE:** Partially covered by Final Summary Page feature (#1)
 
-### 6. **Image Gallery for Each Option**
+### 7. **Image Gallery for Each Option**
 **Problem:** All options show placeholder "Logo.png" image
 **Solution:**
 - Add actual product images for each finish, LED type, etc.
@@ -98,35 +130,35 @@
 
 ## Medium Priority Features 🟡
 
-### 7. **Price Breakdown Display**
+### 8. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
 - Highlight price changes when selecting options
 - Show supplier cost vs customer price (admin view)
 
-### 8. **Comparison Mode**
+### 9. **Comparison Mode**
 **Problem:** Hard to compare different configurations
 **Solution:**
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
 
-### 9. **Search Across All Categories**
+### 10. **Search Across All Categories**
 **Problem:** Search only works on paint options
 **Solution:**
 - Global search across all tabs
 - Search by feature, price range, color, etc.
 - Filter results by category
 
-### 8. **Favorites / Wishlist**
+### 11. **Favorites / Wishlist**
 **Problem:** Can't mark interesting options for later
 **Solution:**
 - Heart/star icon to favorite items
 - View all favorited items
 - Create multiple wishlists
 
-### 9. **Option Dependencies & Exclusions** ⚠️
+### 12. **Option Dependencies & Exclusions** ⚠️
 **Problem:** Some options are incompatible or mutually exclusive with others
 **Solution Options:**
 
@@ -163,8 +195,9 @@
 
 **Recommended Approach:**
 Start with **A + D**: Simple rule-based system with visual indicators. Can migrate to matrix system if rules become complex.
+**NOTE:** Warnings system partially covered by Final Summary Page feature (#1)
 
-### 10. **Validation & Warnings**
+### 13. **Validation & Warnings**
 **Problem:** No feedback if selections are incompatible
 **Solution:**
 - Warn about incompatible combinations
@@ -176,14 +209,14 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Low Priority / Nice-to-Have Features 🟢
 
-### 11. **Stock Availability Indicator**
+### 14. **Stock Availability Indicator**
 **Problem:** No visibility into actual stock levels
 **Solution:**
 - Real-time stock display
 - "Low stock" warnings
 - "Notify when available" option
 
-### 12. **Customer Accounts**
+### 15. **Customer Accounts**
 **Problem:** No user history or repeat customer benefits
 **Solution:**
 - User registration/login
@@ -191,21 +224,21 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Saved addresses
 - Loyalty/discount system
 
-### 13. **Mobile Responsiveness Optimization**
+### 16. **Mobile Responsiveness Optimization**
 **Problem:** Layout may not be optimal on small screens
 **Solution:**
 - Optimize grid for mobile (1-2 columns)
 - Touch-friendly controls
 - Swipe gestures for tabs
 
-### 14. **Bulk/Batch Orders**
+### 17. **Bulk/Batch Orders**
 **Problem:** Can't order multiple pedals at once
 **Solution:**
 - "Add to cart" functionality
 - Configure multiple pedals
 - Bulk pricing discounts
 
-### 15. **Tutorials / Help System**
+### 18. **Tutorials / Help System**
 **Problem:** First-time users may be confused
 **Solution:**
 - Interactive tour/walkthrough
@@ -213,7 +246,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - FAQ section
 - Video demonstrations
 
-### 16. **Analytics Dashboard (Admin)**
+### 19. **Analytics Dashboard (Admin)**
 **Problem:** No insights into user behavior
 **Solution:**
 - Track popular configurations
@@ -225,30 +258,30 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Technical Improvements 🔧
 
-### 17. **Performance Optimization**
+### 20. **Performance Optimization**
 - Lazy load images
 - Virtualize large lists
 - Cache configurations
 - Optimize bundle size
 
-### 18. **Error Handling**
+### 21. **Error Handling**
 - Graceful fallbacks for missing images
 - Network error recovery
 - Form validation
 - User-friendly error messages
 
-### 19. **Accessibility**
+### 22. **Accessibility**
 - Keyboard navigation
 - Screen reader support
 - High contrast mode
 - Focus indicators
 
-### 20. **Internationalization**
+### 23. **Internationalization**
 - Multi-language support
 - Currency conversion
 - Regional pricing
 
-### 21. **Testing & Quality**
+### 24. **Testing & Quality**
 - Unit tests for calculations
 - E2E tests for user flows
 - Visual regression testing
@@ -288,11 +321,11 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 Based on typical user needs, I'd suggest prioritizing:
 
-1. **Fixed Layout with Scrollable Selection** - Critical UX improvement for usability ⭐⭐⭐
+1. **Product Descriptions & Final Summary Page** - Critical for order clarity and error prevention ⭐⭐⭐
 2. **Landing Page with Stats & Combinations** - Shows off the scope of customization
 3. **Option Dependencies/Exclusions** - Prevent invalid configurations immediately
 4. **Visual Preview** - Makes the biggest UX impact
-5. **Order Submission** - Critical for business functionality  
+5. **Order Submission** - Critical for business functionality (partially in #1)
 6. **Image Gallery** - Currently all placeholders
 
 Would you like me to start implementing any of these features?
