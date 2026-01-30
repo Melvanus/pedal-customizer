@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Download, ChevronRight } from "lucide-react";
+import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation } from "lucide-react";
 
 export type OptionItem = {
   id: string;
@@ -36,6 +36,27 @@ type PedalCustomizerProps = {
 
 const formatPrice = (value: number) => `€${value.toFixed(2)}`;
 const normalize = (value: string) => value.toLowerCase().trim();
+
+// Helper function to get finish type icon
+const getFinishIcon = (finish?: string) => {
+  if (!finish) return { Icon: Palette, color: "#888" };
+  
+  const finishLower = finish.toLowerCase();
+  
+  if (finishLower.includes("gloss")) {
+    return { Icon: Star, color: "#ffd700" }; // Gold for glossy
+  } else if (finishLower.includes("hammer")) {
+    return { Icon: Hammer, color: "#a0a0a0" }; // Gray for hammered
+  } else if (finishLower.includes("sand") || finishLower.includes("texture")) {
+    return { Icon: Mountain, color: "#d4a574" }; // Sandy brown
+  } else if (finishLower.includes("glow")) {
+    return { Icon: Radiation, color: "#00ff00" }; // Green for glow-in-the-dark
+  } else if (finishLower.includes("metallic")) {
+    return { Icon: Sparkles, color: "#c0c0c0" }; // Silver for metallic
+  } else {
+    return { Icon: Palette, color: "#888" }; // Default for matte/standard
+  }
+};
 
 export function PedalCustomizer({
   paintOptions,
@@ -355,18 +376,40 @@ export function PedalCustomizer({
                     </div>
                     <div style={{ padding: "1rem" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
-                        <span
-                          style={{
-                            background: "#fff",
-                            color: "#000",
-                            padding: "0.25rem 0.6rem",
-                            borderRadius: "15px",
-                            fontSize: "0.75rem",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {option.sku}
-                        </span>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          <span
+                            style={{
+                              background: "#fff",
+                              color: "#000",
+                              padding: "0.25rem 0.6rem",
+                              borderRadius: "15px",
+                              fontSize: "0.75rem",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {option.sku}
+                          </span>
+                          {(() => {
+                            const { Icon, color } = getFinishIcon(option.finish);
+                            return (
+                              <div
+                                style={{
+                                  width: "28px",
+                                  height: "28px",
+                                  borderRadius: "50%",
+                                  background: "rgba(255, 255, 255, 0.1)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                                }}
+                                title={option.finish || "Standard Finish"}
+                              >
+                                <Icon size={16} color={color} />
+                              </div>
+                            );
+                          })()}
+                        </div>
                         <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
                           {formatPrice(option.customerPriceEUR)}
                         </span>
@@ -604,28 +647,143 @@ export function PedalCustomizer({
             Configuration Summary
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.5rem", marginBottom: "0.75rem" }}>
-            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
-              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>
+            <button
+              onClick={() => setActiveTab("paint")}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                background: activeTab === "paint" ? "#fff" : "#0f0f0f",
+                borderRadius: "5px",
+                textAlign: "center",
+                border: activeTab === "paint" ? "2px solid #fff" : "2px solid transparent",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== "paint") {
+                  e.currentTarget.style.background = "#1a1a1a";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== "paint") {
+                  e.currentTarget.style.background = "#0f0f0f";
+                }
+              }}
+            >
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "paint" ? "#000" : "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
+              <span style={{ fontSize: "0.8rem", color: activeTab === "paint" ? "#000" : "#aaa" }}>
                 {selectedPaint ? selectedPaint.displayedName : "—"}
               </span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Design</span>
-              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedDesign?.name || "—"}</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Label Text</span>
-              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{labelText || "—"}</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>LED</span>
-              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedLed?.name || "—"}</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Other Options</span>
-              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
-            </div>
+            </button>
+            <button
+              onClick={() => setActiveTab("design")}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                background: activeTab === "design" ? "#fff" : "#0f0f0f",
+                borderRadius: "5px",
+                textAlign: "center",
+                border: activeTab === "design" ? "2px solid #fff" : "2px solid transparent",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== "design") {
+                  e.currentTarget.style.background = "#1a1a1a";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== "design") {
+                  e.currentTarget.style.background = "#0f0f0f";
+                }
+              }}
+            >
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design</span>
+              <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{selectedDesign?.name || "—"}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("design")}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                background: activeTab === "design" ? "#fff" : "#0f0f0f",
+                borderRadius: "5px",
+                textAlign: "center",
+                border: activeTab === "design" ? "2px solid #fff" : "2px solid transparent",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== "design") {
+                  e.currentTarget.style.background = "#1a1a1a";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== "design") {
+                  e.currentTarget.style.background = "#0f0f0f";
+                }
+              }}
+            >
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Label Text</span>
+              <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{labelText || "—"}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("led")}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                background: activeTab === "led" ? "#fff" : "#0f0f0f",
+                borderRadius: "5px",
+                textAlign: "center",
+                border: activeTab === "led" ? "2px solid #fff" : "2px solid transparent",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== "led") {
+                  e.currentTarget.style.background = "#1a1a1a";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== "led") {
+                  e.currentTarget.style.background = "#0f0f0f";
+                }
+              }}
+            >
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "led" ? "#000" : "#888", marginBottom: "0.25rem" }}>LED</span>
+              <span style={{ fontSize: "0.8rem", color: activeTab === "led" ? "#000" : "#aaa" }}>{selectedLed?.name || "—"}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("other")}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                background: activeTab === "other" ? "#fff" : "#0f0f0f",
+                borderRadius: "5px",
+                textAlign: "center",
+                border: activeTab === "other" ? "2px solid #fff" : "2px solid transparent",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== "other") {
+                  e.currentTarget.style.background = "#1a1a1a";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== "other") {
+                  e.currentTarget.style.background = "#0f0f0f";
+                }
+              }}
+            >
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "other" ? "#000" : "#888", marginBottom: "0.25rem" }}>Other Options</span>
+              <span style={{ fontSize: "0.8rem", color: activeTab === "other" ? "#000" : "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
+            </button>
           </div>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.75rem", padding: "0.5rem 0", marginBottom: "0.5rem", borderTop: "2px solid #fff", flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
