@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { Download } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Download, ChevronRight } from "lucide-react";
 
 export type OptionItem = {
   id: string;
@@ -11,6 +12,8 @@ export type OptionItem = {
   image: string;
   description?: string;
   customerPriceEUR: number;
+  shortDescription?: string;
+  longDescription?: string;
 };
 
 export type PaintOption = OptionItem & {
@@ -20,6 +23,8 @@ export type PaintOption = OptionItem & {
   available?: boolean;
   displayedName: string;
   customerPriceEUR: number;
+  shortDescription?: string;
+  longDescription?: string;
 };
 
 type PedalCustomizerProps = {
@@ -38,6 +43,7 @@ export function PedalCustomizer({
   ledOptions,
   otherOptions,
 }: PedalCustomizerProps) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = React.useState<"paint" | "design" | "led" | "other">("paint");
   const [selectedPaintId, setSelectedPaintId] = React.useState(paintOptions[0]?.id ?? "");
   const [selectedDesignId, setSelectedDesignId] = React.useState(designOptions[0]?.id ?? "");
@@ -123,6 +129,23 @@ export function PedalCustomizer({
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
+  };
+
+  const handleProceedToSummary = () => {
+    const configData = {
+      paint: selectedPaint ?? null,
+      design: selectedDesign ?? null,
+      labelText,
+      led: selectedLed ?? null,
+      other: selectedOthers,
+      totalPrice,
+    };
+    
+    // Store configuration in sessionStorage
+    sessionStorage.setItem("pedalConfiguration", JSON.stringify(configData));
+    
+    // Navigate to summary page
+    router.push("/customize/summary");
   };
 
   return (
@@ -342,9 +365,14 @@ export function PedalCustomizer({
                           {formatPrice(option.customerPriceEUR)}
                         </span>
                       </div>
-                      <div style={{ fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.75rem", color: "#e0e0e0", lineHeight: 1.3 }}>
+                      <div style={{ fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem", color: "#e0e0e0", lineHeight: 1.3 }}>
                         {option.displayedName}
                       </div>
+                      {option.shortDescription && (
+                        <div style={{ fontSize: "0.8rem", color: "#999", marginBottom: "0.75rem", lineHeight: 1.4 }}>
+                          {option.shortDescription}
+                        </div>
+                      )}
                       <div>
                         <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderBottom: "1px solid #2d2d2d" }}>
                           <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Color</span>
@@ -399,12 +427,17 @@ export function PedalCustomizer({
                       <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
                     </div>
                     <div style={{ padding: "1rem" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                         <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
                         <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
                           {formatPrice(option.customerPriceEUR)}
                         </span>
                       </div>
+                      {option.shortDescription && (
+                        <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
+                          {option.shortDescription}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -474,12 +507,17 @@ export function PedalCustomizer({
                     <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
                   </div>
                   <div style={{ padding: "1rem" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                       <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
                       <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
                         {formatPrice(option.customerPriceEUR)}
                       </span>
                     </div>
+                    {option.shortDescription && (
+                      <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
+                        {option.shortDescription}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -521,12 +559,17 @@ export function PedalCustomizer({
                     <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
                   </div>
                   <div style={{ padding: "1rem" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                       <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
                       <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
                         {formatPrice(option.customerPriceEUR)}
                       </span>
                     </div>
+                    {option.shortDescription && (
+                      <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
+                        {option.shortDescription}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -580,15 +623,15 @@ export function PedalCustomizer({
               <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem", padding: "0.75rem 0", marginBottom: "1rem", borderTop: "2px solid #fff" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", padding: "0.75rem 0", marginBottom: "1rem", borderTop: "2px solid #fff", flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
               <span style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>Total:</span>
               <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
             </div>
             <button
-              onClick={handleDownload}
+              onClick={handleProceedToSummary}
               style={{
-                padding: "0.75rem 1.5rem",
+                padding: "0.75rem 1.75rem",
                 background: "#fff",
                 color: "#000",
                 border: "none",
@@ -611,8 +654,37 @@ export function PedalCustomizer({
                 e.currentTarget.style.background = "#fff";
               }}
             >
+              Review & Submit
+              <ChevronRight size={16} />
+            </button>
+            <button
+              onClick={handleDownload}
+              style={{
+                padding: "0.75rem 1.5rem",
+                background: "transparent",
+                color: "#fff",
+                border: "2px solid #fff",
+                borderRadius: "8px",
+                fontSize: "0.9rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+                transition: "transform 0.2s ease, background 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = "transparent";
+              }}
+            >
               <Download size={16} />
-              Download Configuration
+              Download JSON
             </button>
           </div>
         </div>

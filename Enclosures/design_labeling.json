@@ -1,9 +1,58 @@
 [
-  {"name":"No Labeling / No Design","price":0,"image":"Logo.png","customerPriceEUR":0,"shortDescription":"Clean enclosure without any labels or designs","longDescription":"A clean, unmarked enclosure surface. Perfect if you want to add your own labeling later or prefer a minimalist look."},
-  {"name":"Labeled Lettering","price":0.5,"image":"Logo.png","customerPriceEUR":1,"shortDescription":"Simple text labels for controls","longDescription":"Basic text labeling for knobs, switches, and jacks. We'll add clear, professional lettering to identify all controls on your pedal. Please specify your desired labels in the order notes."},
-  {"name":"Simple Decal Lettering","price":1,"image":"Logo.png","customerPriceEUR":2,"shortDescription":"Vinyl decal text labels","longDescription":"High-quality vinyl decal lettering for a professional appearance. More durable than basic labeling and available in multiple colors. Specify your text and preferred color in order notes."},
-  {"name":"Customized Decal Graphic","price":3,"image":"Logo.png","customerPriceEUR":3,"shortDescription":"Custom vinyl graphic design","longDescription":"Full custom vinyl decal with your own graphic design. You can provide artwork files (vector preferred) or describe your vision. Includes logo, text, and decorative elements as specified."},
-  {"name":"Engraving","price":3,"image":"Logo.png","customerPriceEUR":3,"shortDescription":"Permanent laser-engraved text","longDescription":"Laser engraving provides permanent, precise text that won't wear off. Ideal for professional builds or pedals that will see heavy use. Note: Engraving works best on raw aluminum or certain powder-coated finishes. May not be compatible with all enclosure finishes."},
-  {"name":"Relic","price":10,"image":"Logo.png","customerPriceEUR":10,"shortDescription":"Vintage worn/aged appearance","longDescription":"Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique. Note: This finish cannot be combined with pristine powder coating or certain metallic finishes. Manual review may be required."},
-  {"name":"Make it Fluffy","price":5,"image":"Logo.png","customerPriceEUR":5,"shortDescription":"Textured fuzzy coating finish","longDescription":"A unique textured coating that gives your pedal a soft, fuzzy appearance and feel. Creates a distinctive tactile experience and vintage aesthetic. Note: This specialty finish may require additional curing time and careful handling."}
+    {
+        "name": "No Labeling / No Design",
+        "price": 0,
+        "image": "Logo.png",
+        "customerPriceEUR": 0,
+        "shortDescription": "Clean enclosure without any labels or designs",
+        "longDescription": "A clean, unmarked enclosure surface. Perfect if you want to add your own labeling later or prefer a minimalist look."
+    },
+    {
+        "name": "Labeled Lettering",
+        "price": 0.5,
+        "image": "Logo.png",
+        "customerPriceEUR": 1,
+        "shortDescription": "Simple text labels for controls",
+        "longDescription": "Basic text labeling for knobs, switches, and jacks. We'll add clear, professional lettering to identify all controls on your pedal. Please specify your desired labels in the order notes."
+    },
+    {
+        "name": "Simple Decal Lettering",
+        "price": 1,
+        "image": "Logo.png",
+        "customerPriceEUR": 2,
+        "shortDescription": "Vinyl decal text labels",
+        "longDescription": "High-quality vinyl decal lettering for a professional appearance. More durable than basic labeling and available in multiple colors. Specify your text and preferred color in order notes."
+    },
+    {
+        "name": "Customized Decal Graphic",
+        "price": 3,
+        "image": "Logo.png",
+        "customerPriceEUR": 3,
+        "shortDescription": "Custom vinyl graphic design",
+        "longDescription": "Full custom vinyl decal with your own graphic design. You can provide artwork files (vector preferred) or describe your vision. Includes logo, text, and decorative elements as specified."
+    },
+    {
+        "name": "Engraving",
+        "price": 3,
+        "image": "Logo.png",
+        "customerPriceEUR": 3,
+        "shortDescription": "Permanent laser-engraved text",
+        "longDescription": "Laser engraving provides permanent, precise text that won't wear off. Ideal for professional builds or pedals that will see heavy use. Note: Engraving works best on raw aluminum or certain powder-coated finishes. May not be compatible with all enclosure finishes."
+    },
+    {
+        "name": "Relic",
+        "price": 10,
+        "image": "Logo.png",
+        "customerPriceEUR": 10,
+        "shortDescription": "Vintage worn/aged appearance",
+        "longDescription": "Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique. Note: This finish cannot be combined with pristine powder coating or certain metallic finishes. Manual review may be required."
+    },
+    {
+        "name": "Make it Furry",
+        "price": 5,
+        "image": "Logo.png",
+        "customerPriceEUR": 5,
+        "shortDescription": "You're gonna make a new best friend with this one!",
+        "longDescription": "A unique furry finish that gives your pedal a soft, fuzzy appearance and feel. Creates a distinctive tactile experience and vintage aesthetic. Note: This specialty finish may require additional care, careful handling, mealtimes, playing and lot of attention."
+    }
 ]

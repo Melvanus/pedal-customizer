@@ -1,8 +1,50 @@
 [
-  {"name":"No LED Holder","price":0,"image":"Logo.png","customerPriceEUR":0,"shortDescription":"No LED mounting hardware","longDescription":"No LED holder or mounting hardware included. Choose this if you don't need an LED indicator or plan to install your own LED mounting solution."},
-  {"name":"No LED","price":0,"image":"Logo.png","customerPriceEUR":0,"shortDescription":"No LED indicator light","longDescription":"No LED indicator light included with your pedal. The enclosure will be prepared without any LED drilling or mounting provisions."},
-  {"name":"Standard LED Holder","price":1,"image":"Logo.png","customerPriceEUR":1,"shortDescription":"Basic LED mounting bezel","longDescription":"Standard chrome or black plastic LED holder bezel. Provides a clean, professional mounting solution for 3mm or 5mm LEDs. Includes mounting hardware and necessary drilling."},
-  {"name":"Fancy LED Holder","price":2,"image":"Logo.png","customerPriceEUR":2,"shortDescription":"Premium decorative LED bezel","longDescription":"Upgraded decorative LED holder with enhanced styling. Available in various finishes including chrome, gold, and colored options. Adds a premium touch to your pedal's appearance."},
-  {"name":"Fender Style Jewel","price":4,"image":"Logo.png","customerPriceEUR":4,"shortDescription":"Vintage Fender-style jewel light","longDescription":"Classic Fender amplifier-style jewel indicator light. Features a domed lens that diffuses LED light beautifully. Available in various colors (red, amber, green, blue). Adds authentic vintage aesthetics to your build."},
-  {"name":"Illuminated Footswitch","price":3,"image":"Logo.png","customerPriceEUR":3,"shortDescription":"LED-lit footswitch button","longDescription":"Footswitch with integrated LED illumination. The switch itself lights up when the pedal is active. Modern, clean look that eliminates the need for a separate indicator LED. Note: Requires specific footswitch wiring - please specify in order notes if you need wiring assistance."}
+    {
+        "name": "No LED Holder",
+        "price": 0,
+        "image": "Logo.png",
+        "customerPriceEUR": 0,
+        "shortDescription": "Just a plain LED through a hole",
+        "longDescription": "No LED holder or mounting hardware included. Choose this if you don't need an LED indicator or plan to install your own LED mounting solution."
+    },
+    {
+        "name": "No LED",
+        "price": 0,
+        "image": "Logo.png",
+        "customerPriceEUR": 0,
+        "shortDescription": "I dont know why youd want that, but ok.",
+        "longDescription": "No LED indicator light included with your pedal. The enclosure will be prepared without any LED drilling or mounting provisions."
+    },
+    {
+        "name": "Standard LED Holder",
+        "price": 1,
+        "image": "Logo.png",
+        "customerPriceEUR": 1,
+        "shortDescription": "Youre a basic bitch? Take this basic LED mounting bezel",
+        "longDescription": "Standard chrome or black plastic LED holder bezel. Provides a clean, professional mounting solution for 3mm or 5mm LEDs. Includes mounting hardware and necessary drilling."
+    },
+    {
+        "name": "Fancy LED Holder",
+        "price": 2,
+        "image": "Logo.png",
+        "customerPriceEUR": 2,
+        "shortDescription": "Premium decorative LED bezel",
+        "longDescription": "Upgraded decorative LED holder with enhanced styling. Available in various finishes including chrome, gold, and colored options. Adds a premium touch to your pedal's appearance."
+    },
+    {
+        "name": "Fender Style Jewel",
+        "price": 4,
+        "image": "Logo.png",
+        "customerPriceEUR": 4,
+        "shortDescription": "Man you got style!",
+        "longDescription": "Classic Fender amplifier-style jewel indicator light. Features a domed lens that diffuses LED light beautifully. Available in various colors (red, amber, green, blue). Adds authentic vintage aesthetics to your build."
+    },
+    {
+        "name": "Illuminated Footswitch",
+        "price": 3,
+        "image": "Logo.png",
+        "customerPriceEUR": 3,
+        "shortDescription": "You're all in for that high tech stuff, huh?",
+        "longDescription": "Footswitch with integrated LED illumination. The switch itself lights up when the pedal is active. Modern, clean look that eliminates the need for a separate indicator LED. Note: Requires specific footswitch wiring - please specify in order notes if you need wiring assistance."
+    }
 ]

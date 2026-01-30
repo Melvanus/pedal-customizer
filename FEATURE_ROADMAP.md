@@ -13,6 +13,8 @@
 
 ---
 
+
+
 ## High Priority Features 🔴
 
 ### 1. **Product Descriptions & Final Summary Page** ⭐⭐⭐
