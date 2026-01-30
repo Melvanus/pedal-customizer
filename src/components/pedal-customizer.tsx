@@ -130,7 +130,7 @@ export function PedalCustomizer({
       .filter((option) => hasActiveFilters ? !option.isCustomColor : true);
 
     if (sortBy === "favourites") {
-      return filtered.sort((a, b) => {
+      return [...filtered].sort((a, b) => {
         const aIndex = favouritePaintIds.indexOf(a.id);
         const bIndex = favouritePaintIds.indexOf(b.id);
         
@@ -145,7 +145,7 @@ export function PedalCustomizer({
       });
     }
 
-    return filtered.sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       if (sortBy === "price") return a.customerPriceEUR - b.customerPriceEUR;
       if (sortBy === "sku") return a.sku.localeCompare(b.sku);
       if (sortBy === "color") return (a.color ?? "").localeCompare(b.color ?? "");

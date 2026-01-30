@@ -33,31 +33,22 @@
   - `pantone`: Pantone color code for professional color matching
   - `rgb`: RGB color values (e.g., "rgb(255, 100, 50)")
   - Display small color swatch on product cards using RGB value
-  - Show color preview in product grid on a circle like the finish type
+  - Show color preview in each item in the product grid on a circle like the finish type
 - **Custom Color Option:** New special paint option
-  - Interactive color picker (color wheel/circle) for matte or glossy custom colors
+  - Interactive color picker on one item of the item list.
+  - Matte or Glossy can be selected on the item
+  - The name of the item should be "Aluminium Enclosure Custom Paint"
   - Price: €4.00 (higher due to manual spray painting)
   - Marked as "Requires Manual Review" with warning indicator
   - Stores selected RGB value and finish type (matte/glossy) in configuration
   - Clear note: "Custom colors are hand-sprayed and require 5-7 business days"
+  - Use the "A-5168 125B Style Aluminum Diecast Enclosure Custom Paint.jpg" as product image and multipy the image with the custom color value
 - **Benefits:**
   - Visual identification of finish characteristics at a glance
   - Accurate color representation reduces customer uncertainty
   - Custom color option expands product offerings
   - Professional color specification via Pantone codes
 
-**Implementation Details:**
-
-```json
-{
-  "id": "xyz",
-  "name": "Gloss Black",
-  "finish": "Gloss",
-  "pantone": "Black C",
-  "rgb": "rgb(0, 0, 0)",
-  "finishIcon": "star"
-}
-```
 
 ### 2. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
