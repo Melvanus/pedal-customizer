@@ -126,26 +126,27 @@ export function PedalCustomizer({
   };
 
   return (
-    <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: "#e0e0e0", background: "#0a0a0a", minHeight: "100vh" }}>
-      {/* Header */}
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: "#e0e0e0", background: "#0a0a0a" }}>
+      {/* Ultra-Compact Header */}
       <div
         style={{
           background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
           color: "white",
-          padding: "1rem 0",
+          padding: "0.5rem 1rem",
           textAlign: "center",
           boxShadow: "0 2px 10px rgba(0,0,0,0.5)",
           borderBottom: "2px solid #333",
+          flexShrink: 0,
         }}
       >
-        <h1 style={{ fontSize: "1.75rem", marginBottom: "0.25rem", fontWeight: 300 }}>
+        <h1 style={{ fontSize: "1.25rem", margin: 0, fontWeight: 400 }}>
           Fuzzy Engineering Pedal Customizer
         </h1>
-        <p style={{ fontSize: "0.9rem", opacity: 0.7 }}>Configure Your Custom Pedal</p>
       </div>
 
-      {/* Container */}
-      <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "2rem" }}>
+      {/* Scrollable Content Area */}
+      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem" }}>
         {/* Tabs */}
         <div
           style={{
@@ -532,70 +533,60 @@ export function PedalCustomizer({
             </div>
           )}
         </div>
+        </div>
+      </div>
 
-        {/* Summary Card */}
-        <div
-          style={{
-            background: "#1a1a1a",
-            padding: "2rem",
-            borderRadius: "10px",
-            boxShadow: "0 5px 20px rgba(0,0,0,0.5)",
-            position: "sticky",
-            top: "2rem",
-            border: "1px solid #333",
-          }}
-        >
-          <h2 style={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: "1.5rem", color: "#fff" }}>
-            Configuration Summary
-          </h2>
-          <div style={{ marginBottom: "1.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.75rem 0", borderBottom: "1px solid #2d2d2d" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Paint/Finish</span>
-              <span style={{ color: "#aaa", textAlign: "right", maxWidth: "60%" }}>
-                {selectedPaint ? `${selectedPaint.displayedName} (${selectedPaint.sku})` : "—"}
-              </span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.75rem 0", borderBottom: "1px solid #2d2d2d" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Design/Labeling</span>
-              <span style={{ color: "#aaa" }}>{selectedDesign?.name || "—"}</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.75rem 0", borderBottom: "1px solid #2d2d2d" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Label Text</span>
-              <span style={{ color: "#aaa" }}>{labelText || "—"}</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.75rem 0", borderBottom: "1px solid #2d2d2d" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>LED</span>
-              <span style={{ color: "#aaa" }}>{selectedLed?.name || "—"}</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.75rem 0", borderBottom: "1px solid #2d2d2d" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Other Options</span>
-              <span style={{ color: "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
-            </div>
+      {/* Fixed Summary Panel at Bottom */}
+      <div
+        style={{
+          background: "#1a1a1a",
+          padding: "1.5rem",
+          boxShadow: "0 -5px 20px rgba(0,0,0,0.5)",
+          borderTop: "2px solid #333",
+          flexShrink: 0,
+        }}
+      >
+        <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "1rem", color: "#fff" }}>
+          Configuration Summary
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
+            <span style={{ fontSize: "0.85rem", color: "#aaa" }}>
+              {selectedPaint ? `${selectedPaint.displayedName}` : "—"}
+            </span>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "1rem 0",
-              marginBottom: "1.5rem",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              borderTop: "2px solid #fff",
-            }}
-          >
-            <span style={{ color: "#fff" }}>Total</span>
-            <span style={{ color: "#fff" }}>{formatPrice(totalPrice)}</span>
+          <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Design</span>
+            <span style={{ fontSize: "0.85rem", color: "#aaa" }}>{selectedDesign?.name || "—"}</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Label</span>
+            <span style={{ fontSize: "0.85rem", color: "#aaa" }}>{labelText || "—"}</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>LED</span>
+            <span style={{ fontSize: "0.85rem", color: "#aaa" }}>{selectedLed?.name || "—"}</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Other</span>
+            <span style={{ fontSize: "0.85rem", color: "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
+          </div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+            <span style={{ fontSize: "0.9rem", color: "#888" }}>Total:</span>
+            <span style={{ fontSize: "1.75rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
           </div>
           <button
             onClick={handleDownload}
             style={{
-              width: "100%",
-              padding: "1rem",
+              padding: "0.75rem 1.5rem",
               background: "#fff",
               color: "#000",
               border: "none",
-              borderRadius: "10px",
-              fontSize: "1.1rem",
+              borderRadius: "8px",
+              fontSize: "1rem",
               fontWeight: 600,
               cursor: "pointer",
               display: "flex",
@@ -603,6 +594,7 @@ export function PedalCustomizer({
               justifyContent: "center",
               gap: "0.5rem",
               transition: "transform 0.2s ease, background 0.2s ease",
+              whiteSpace: "nowrap",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
@@ -613,7 +605,7 @@ export function PedalCustomizer({
               e.currentTarget.style.background = "#fff";
             }}
           >
-            <Download size={20} />
+            <Download size={18} />
             Download Configuration
           </button>
         </div>
