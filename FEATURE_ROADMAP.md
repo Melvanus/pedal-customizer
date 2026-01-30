@@ -19,7 +19,7 @@
 - **Fixed viewport layout** - No page scrolling, only component areas scroll
 - **Ultra-compact header** - Single line of text only (e.g., "Fuzzy Engineering Pedal Customizer")
 - **Scrollable selection area** - Tabs and product grid in windowed, scrollable container
-- **Sticky summary panel** - Configuration summary always visible at bottom
+- **Floating summary panel** - Configuration summary overlays content in bottom-right corner
 - **Layout structure:**
   ```
   ┌──────────────────────────────────────┐
@@ -29,12 +29,11 @@
   │ │ Tabs + Filters                   │ │
   │ ├──────────────────────────────────┤ │
   │ │                                  │ │
-  │ │ Product Grid                     │ │ ← Scrollable
-  │ │ (scrollable content)             │ │
-  │ │                                  │ │
-  │ └──────────────────────────────────┘ │
-  ├──────────────────────────────────────┤
-  │ Configuration Summary (always visible)│ ← Fixed
+  │ │ Product Grid          ┌────────┐ │ │
+  │ │ (scrollable content)  │Summary │ │ │ ← Scrollable with
+  │ │                       │ Panel  │ │ │   floating summary
+  │ │                       │(Float) │ │ │
+  │ └───────────────────────└────────┘ │ │
   └──────────────────────────────────────┘
   ```
 - **Benefits:**
@@ -46,8 +45,9 @@
 **Implementation considerations:**
 - Use CSS `height: 100vh` with `overflow: hidden` on main container
 - Selection area: `flex-grow: 1` with `overflow-y: auto`
-- Summary: Fixed height at bottom
+- Summary: Floating overlay with `position: fixed`, bottom-right corner
 - Header: Minimal padding, single line (~40-50px total height)
+- Summary panel should have high z-index and semi-transparent backdrop for visibility
 
 ### 2. **Landing Page with Statistics**
 **Problem:** No overview before diving into configurator
