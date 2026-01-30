@@ -6,24 +6,34 @@
 - Search, filter, and sort for paint options
 - Multi-select for "Other" category
 - Real-time price calculation in EUR
-- Configuration summary display
+- Configuration summary display with interactive navigation
 - Download configuration as JSON
 - Fixed layout with scrollable selection area
-- Floating configuration summary panel at bottom-center
+- Floating tabs & filters panel at top (translucent, responsive)
+- Floating configuration summary panel at bottom-center (translucent, clickable)
+- Finish type icons on paint cards (⭐ Glossy, 🔨 Hammered, 🏖️ Sand, ☢️ Glow, ✨ Metallic, 🎨 Matte)
+- Product descriptions (short & long) on all options
+- Landing page with statistics and total combinations calculation
+- Final summary page with:
+  - Long descriptions for all selected options
+  - Incompatibility warning detection and display
+  - Customer details form (name, email, notes)
+  - Order submission workflow
+  - Configuration download as JSON backup
 
 ---
 
 
 ## High Priority Features 🔴
 
-### 1. **Visual Color Representation & Finish Type Icons** ⭐⭐⭐
-**Problem:** Paint/finish options lack visual cues; users can't see actual colors
+### 1. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
+**Problem:** Users can't see actual colors of paint options
 **Solution:**
 - **Color Data Fields:** Add to enclosures_data.json:
   - `pantone`: Pantone color code for professional color matching
   - `rgb`: RGB color values (e.g., "rgb(255, 100, 50)")
   - Display small color swatch on product cards using RGB value
-  - Show color preview box in product grid (20x20px rounded square)
+  - Show color preview in product grid on a circle like the finish type
 - **Custom Color Option:** New special paint option
   - Interactive color picker (color wheel/circle) for matte or glossy custom colors
   - Price: €4.00 (higher due to manual spray painting)
@@ -49,94 +59,14 @@
 }
 ```
 
-### 2. **Product Descriptions & Final Summary Page** ⭐⭐⭐
-**Problem:** No detailed descriptions for options; no final review before ordering
-**Solution:**
-- **Short descriptions:** Add to all JSON files, display in product grid cards (1-2 lines)
-- **Long descriptions:** Detailed explanations for final summary page
-- **Final Summary Page:** Full review of configuration with:
-  - All selected options with long descriptions
-  - Total price breakdown
-  - Incompatibility warnings (manual review needed)
-  - Customer details form
-  - Order submission
-- **Warnings in floating summary:** Show alert icon (⚠️) when incompatibilities detected
-- **Benefits:**
-  - Users understand what they're selecting
-  - Final review reduces order errors
-  - Proactive warning system for incompatible combinations
-  - Professional ordering experience
-
-**JSON Structure:**
-```json
-{
-  "id": "xyz",
-  "name": "Product Name",
-  "shortDescription": "Brief 1-2 line description for grid",
-  "longDescription": "Detailed explanation with technical specs, compatibility notes, and usage information",
-  "customerPriceEUR": 5.99
-}
-```
-
-### 3. **Fixed Layout with Scrollable Selection Window** ✅ COMPLETED
-**Problem:** Page scrolls, hiding configuration summary; header takes too much space
-**Solution:**
-- **Fixed viewport layout** - No page scrolling, only component areas scroll
-- **Ultra-compact header** - Single line of text only (e.g., "Fuzzy Engineering Pedal Customizer")
-- **Scrollable selection area** - Tabs and product grid in windowed, scrollable container
-- **Floating summary panel** - Configuration summary overlays content in bottom-right corner
-- **Layout structure:**
-  ```
-  ┌──────────────────────────────────────┐
-  │ Header (single line, minimal)        │
-  ├──────────────────────────────────────┤
-  │ ┌──────────────────────────────────┐ │
-  │ │ Tabs + Filters                   │ │
-  │ ├──────────────────────────────────┤ │
-  │ │                                  │ │
-  │ │ Product Grid                     │ │ ← Scrollable
-  │ │ (scrollable content)             │ │
-  │ │┌────────────────────────────────┐│ │
-  │ ││      Configuration Summary     ││ │← Floating at bottom
-  │ │└────────────────────────────────┘│ │
-  │ └──────────────────────────────────┘ │
-  └──────────────────────────────────────┘
-  ```
-- **Benefits:**
-  - User always sees their selections
-  - No context switching by scrolling
-  - Cleaner, more app-like experience
-  - Better use of screen real estate
-
-**Implementation considerations:**
-- Use CSS `height: 100vh` with `overflow: hidden` on main container
-- Selection area: `flex-grow: 1` with `overflow-y: auto`
-- Summary: Floating overlay with `position: fixed`, bottom center
-- Header: Minimal padding, single line (~40-50px total height)
-- Summary panel should have high z-index and semi-transparent backdrop for visibility
-
-### 4. **Landing Page with Statistics**
-**Problem:** No overview before diving into configurator
-**Solution:**
-- Create dedicated landing page with hero section
-- Display key statistics:
-  - Available Finishes count
-  - Unique Colors count
-  - Finish Types count
-  - **Total possible combinations** (combinatorics calculation)
-- Show featured/popular configurations
-- "Start Customizing" CTA button
-- Brief explanation of process
-- Example: "68 finishes × 6 designs × 6 LEDs × 7 other options = 170,856 possible combinations!"
-
-### 5. **Visual Preview / 3D Mockup**
+### 2. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
 **Solution:** 
 - Generate a real-time visual preview of the pedal with selected options
 - Show enclosure color, labeling position, LED placement
 - Could be 2D illustration or simple 3D render
 
-### 6. **Save & Load Configurations**
+### 3. **Save & Load Configurations**
 **Problem:** Users can't save their work and come back to it
 **Solution:**
 - Save configurations to browser localStorage
@@ -144,16 +74,7 @@
 - Name/label saved configurations
 - Share configurations via URL parameters
 
-### 7. **Order Submission System**
-**Problem:** Currently only downloads JSON - no way to actually order
-**Solution:**
-- Email integration to send configuration to you
-- Form to collect customer details (name, email, shipping address)
-- Order confirmation system
-- Optional: Payment integration (Stripe/PayPal)
-- **NOTE:** Partially covered by Final Summary Page feature (#2)
-
-### 8. **Image Gallery for Each Option**
+### 5. **Image Gallery for Each Option**
 **Problem:** All options show placeholder "Logo.png" image
 **Solution:**
 - Add actual product images for each finish, LED type, etc.
@@ -164,35 +85,35 @@
 
 ## Medium Priority Features 🟡
 
-### 9. **Price Breakdown Display**
+### 6. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
 - Highlight price changes when selecting options
 - Show supplier cost vs customer price (admin view)
 
-### 10. **Comparison Mode**
+### 7. **Comparison Mode**
 **Problem:** Hard to compare different configurations
 **Solution:**
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
 
-### 11. **Search Across All Categories**
+### 8. **Search Across All Categories**
 **Problem:** Search only works on paint options
 **Solution:**
 - Global search across all tabs
 - Search by feature, price range, color, etc.
 - Filter results by category
 
-### 12. **Favorites / Wishlist**
+### 9. **Favorites / Wishlist**
 **Problem:** Can't mark interesting options for later
 **Solution:**
 - Heart/star icon to favorite items
 - View all favorited items
 - Create multiple wishlists
 
-### 13. **Option Dependencies & Exclusions** ⚠️
+### 10. **Option Dependencies & Exclusions** ⚠️
 **Problem:** Some options are incompatible or mutually exclusive with others
 **Solution Options:**
 
@@ -229,9 +150,9 @@
 
 **Recommended Approach:**
 Start with **A + D**: Simple rule-based system with visual indicators. Can migrate to matrix system if rules become complex.
-**NOTE:** Warnings system partially covered by Final Summary Page feature (#2)
+**NOTE:** Warnings system partially implemented
 
-### 14. **Validation & Warnings**
+### 11. **Validation & Warnings**
 **Problem:** No feedback if selections are incompatible
 **Solution:**
 - Warn about incompatible combinations
@@ -243,7 +164,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Low Priority / Nice-to-Have Features 🟢
 
-### 15. **Preconfigured Pedal Templates**
+### 12. **Preconfigured Pedal Templates**
 **Problem:** Users starting from scratch may feel overwhelmed by choices
 **Solution:**
 - Curated set of pre-configured "starter" pedal configurations
@@ -269,14 +190,14 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Modal/dropdown showing template cards with thumbnail, name, and price
 - One-click load replaces current selections (with confirmation if user has selections)
 
-### 16. **Stock Availability Indicator**
+### 13. **Stock Availability Indicator**
 **Problem:** No visibility into actual stock levels
 **Solution:**
 - Real-time stock display
 - "Low stock" warnings
 - "Notify when available" option
 
-### 17. **Customer Accounts**
+### 14. **Customer Accounts**
 **Problem:** No user history or repeat customer benefits
 **Solution:**
 - User registration/login
@@ -284,21 +205,21 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Saved addresses
 - Loyalty/discount system
 
-### 18. **Mobile Responsiveness Optimization**
+### 15. **Mobile Responsiveness Optimization**
 **Problem:** Layout may not be optimal on small screens
 **Solution:**
 - Optimize grid for mobile (1-2 columns)
 - Touch-friendly controls
 - Swipe gestures for tabs
 
-### 19. **Bulk/Batch Orders**
+### 16. **Bulk/Batch Orders**
 **Problem:** Can't order multiple pedals at once
 **Solution:**
 - "Add to cart" functionality
 - Configure multiple pedals
 - Bulk pricing discounts
 
-### 20. **Tutorials / Help System**
+### 17. **Tutorials / Help System**
 **Problem:** First-time users may be confused
 **Solution:**
 - Interactive tour/walkthrough
@@ -306,7 +227,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - FAQ section
 - Video demonstrations
 
-### 21. **Analytics Dashboard (Admin)**
+### 18. **Analytics Dashboard (Admin)**
 **Problem:** No insights into user behavior
 **Solution:**
 - Track popular configurations
@@ -318,30 +239,30 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Technical Improvements 🔧
 
-### 22. **Performance Optimization**
+### 19. **Performance Optimization**
 - Lazy load images
 - Virtualize large lists
 - Cache configurations
 - Optimize bundle size
 
-### 23. **Error Handling**
+### 20. **Error Handling**
 - Graceful fallbacks for missing images
 - Network error recovery
 - Form validation
 - User-friendly error messages
 
-### 24. **Accessibility**
+### 21. **Accessibility**
 - Keyboard navigation
 - Screen reader support
 - High contrast mode
 - Focus indicators
 
-### 25. **Internationalization**
+### 22. **Internationalization**
 - Multi-language support
 - Currency conversion
 - Regional pricing
 
-### 26. **Testing & Quality**
+### 23. **Testing & Quality**
 - Unit tests for calculations
 - E2E tests for user flows
 - Visual regression testing
@@ -381,11 +302,11 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 Based on typical user needs, I'd suggest prioritizing:
 
-1. **Product Descriptions & Final Summary Page** - Critical for order clarity and error prevention ⭐⭐⭐
-2. **Landing Page with Stats & Combinations** - Shows off the scope of customization
-3. **Option Dependencies/Exclusions** - Prevent invalid configurations immediately
-4. **Visual Preview** - Makes the biggest UX impact
-5. **Order Submission** - Critical for business functionality (partially in #1)
-6. **Image Gallery** - Currently all placeholders
+1. **Visual Color Representation & Custom Color Picker** - RGB values and Pantone codes for accurate color display; custom spray paint option
+2. **Visual Preview / 3D Mockup** - Makes the biggest UX impact, shows configured pedal
+3. **Option Dependencies/Exclusions** - Prevent invalid configurations proactively
+4. **Image Gallery** - Replace placeholder images with actual product photos
+5. **Save & Load Configurations** - Enable users to save work and share configs
+6. **Preconfigured Templates** - Reduce decision fatigue with curated starter builds
 
 Would you like me to start implementing any of these features?

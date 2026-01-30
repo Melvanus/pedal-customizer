@@ -49,6 +49,9 @@ export default async function CustomizePage() {
       customerPriceEUR: number;
       shortDescription?: string;
       longDescription?: string;
+      rgb?: string;
+      pantone?: string;
+      isCustomColor?: boolean;
     }>;
   };
 
@@ -75,6 +78,9 @@ export default async function CustomizePage() {
         customerPriceEUR: product.customerPriceEUR,
         shortDescription: product.shortDescription,
         longDescription: product.longDescription,
+        rgb: product.rgb,
+        pantone: product.pantone,
+        isCustomColor: product.isCustomColor,
       };
     });
 

@@ -1,12 +1,12 @@
 {
     "scraper_info":  {
                          "version":  "offline_mode",
-                         "total_products":  77,
-                         "available_products":  68,
+                         "total_products":  78,
+                         "available_products":  69,
                          "unavailable_products":  9,
-                         "scrape_date":  "2026-01-29 17:14:54",
+                         "scrape_date":  "2026-01-30",
                          "data_source":  "local_html_file_only",
-                         "note":  "Data extracted from local HTML without accessing individual product pages"
+                         "note":  "Data extracted from local HTML without accessing individual product pages. Includes custom paint option."
                      },
     "products":  [
                      {
@@ -56,6 +56,8 @@
                                           "Pitch: 0.8mm"
                                       ],
                          "pantone_code":  "",
+                         "rgb":  "rgb(30, 30, 30)",
+                         "pantone":  "PMS Black 6 C",
                          "dimensions":  {
                                             "nominal_size":  "125B",
                                             "external_dimensions":  {
@@ -71,6 +73,63 @@
                          "customerPriceEUR":  2,
                          "shortDescription":  "Professional Metallic finish in Black",
                          "longDescription":  "This Aluminium Enclosure METALLIC Black features a premium Metallic powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days."
+                     },
+                     {
+                         "sku":  "A-5168",
+                         "product_id":  "CUSTOM",
+                         "name":  "125B Style Aluminum Diecast Enclosure Custom Paint",
+                         "product_url":  "",
+                         "image_url":  "A-5168 125B Style Aluminum Diecast Enclosure Custom Paint.jpg",
+                         "lifestyle_image_url":  "",
+                         "image_alt_text":  "Custom Paint",
+                         "price":  "$10.00",
+                         "quantity_available":  "999",
+                         "available":  true,
+                         "details":  [
+                                         "SKU: A-5168",
+                                         "Custom Spray Paint Color",
+                                         "Choose any RGB color with Matte or Glossy finish",
+                                         "Hand-sprayed custom finish",
+                                         "THIS PRODUCT REQUIRES MANUAL REVIEW",
+                                         "Production time: 5-7 business days"
+                                     ],
+                         "color_info":  {
+                                            "primary_color":  "Custom",
+                                            "color_description":  "Custom RGB color selection",
+                                            "color_family":  "Custom"
+                                        },
+                         "finish_info":  {
+                                             "finish_type":  "Custom",
+                                             "texture":  "User selectable: Matte or Glossy",
+                                             "description":  "Hand-sprayed custom color finish"
+                                         },
+                         "material":  "Aluminum Diecast",
+                         "style":  "125B Style",
+                         "features":  [
+                                          "Custom RGB color selection",
+                                          "Matte or Glossy finish options",
+                                          "Hand-sprayed finish",
+                                          "Includes 4 steel screws"
+                                      ],
+                         "pantone_code":  "",
+                         "rgb":  "rgb(128, 128, 128)",
+                         "pantone":  "",
+                         "dimensions":  {
+                                            "nominal_size":  "125B",
+                                            "external_dimensions":  {
+                                                                        "length":  "120mm",
+                                                                        "width":  "94mm",
+                                                                        "height":  "34mm",
+                                                                        "note":  "Typical 125B dimensions - verify from manufacturer specs"
+                                                                    }
+                                        },
+                         "scraped_from":  "custom",
+                         "displayedName":  "Aluminium Enclosure Custom Paint",
+                         "supplierPriceUSD":  "$10.00",
+                         "customerPriceEUR":  4,
+                         "shortDescription":  "Hand-sprayed custom color (any RGB color, Matte or Glossy)",
+                         "longDescription":  "Create your perfect pedal with a completely custom hand-sprayed finish in any RGB color you desire. Choose between Matte or Glossy finish to match your aesthetic. Each custom-painted enclosure is carefully hand-sprayed by our skilled technicians. ⚠️ Requires manual review and has an extended production time of 5-7 business days. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and includes 4 steel mounting screws.",
+                         "isCustomColor":  true
                      },
                      {
                          "sku":  "A-8448",
@@ -116,6 +175,8 @@
                                           "Pitch: 0.8mm"
                                       ],
                          "pantone_code":  "",
+                         "rgb":  "rgb(247, 231, 206)",
+                         "pantone":  "PMS 727 C",
                          "dimensions":  {
                                             "nominal_size":  "125B",
                                             "external_dimensions":  {
@@ -188,6 +249,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(128, 128, 128)",
+                         "pantone":  "PMS Cool Gray 8 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Gray Hammer",
                          "supplierPriceUSD":  "$6.99",
@@ -248,6 +311,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(227, 207, 87)",
+                         "pantone":  "PMS 395 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Sulphur Yellow sand texture",
                          "supplierPriceUSD":  "$6.99",
@@ -311,6 +376,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(212, 175, 55)",
+                         "pantone":  "PMS 7502 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Metallic Golden water texture",
                          "supplierPriceUSD":  "$6.99",
@@ -371,6 +438,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(128, 0, 128)",
+                         "pantone":  "PMS 2602 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Purple Hammer",
                          "supplierPriceUSD":  "$6.99",
@@ -431,6 +500,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(0, 128, 0)",
+                         "pantone":  "PMS 355 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Chrome green",
                          "supplierPriceUSD":  "$7.99",
@@ -494,6 +565,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(139, 90, 43)",
+                         "pantone":  "PMS 4695 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Metallic Brown",
                          "supplierPriceUSD":  "$6.99",
@@ -554,6 +627,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(45, 45, 45)",
+                         "pantone":  "PMS Black 7 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Black Hammer",
                          "supplierPriceUSD":  "$6.99",
@@ -617,6 +692,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 182, 193)",
+                         "pantone":  "PMS 176 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Pink Sand Texture",
                          "supplierPriceUSD":  "$6.99",
@@ -680,6 +757,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(135, 206, 235)",
+                         "pantone":  "PMS 2905 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Sky Blue Sand Texture",
                          "supplierPriceUSD":  "$6.99",
@@ -743,6 +822,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(150, 113, 76)",
+                         "pantone":  "PMS 7504 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Brown Sand Texture",
                          "supplierPriceUSD":  "$6.99",
@@ -806,6 +887,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(107, 142, 35)",
+                         "pantone":  "PMS 5753 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Green Sand Texture",
                          "supplierPriceUSD":  "$6.99",
@@ -866,6 +949,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(169, 169, 169)",
+                         "pantone":  "PMS 877 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Silver Gray Hammer",
                          "supplierPriceUSD":  "$6.99",
@@ -926,6 +1011,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(245, 245, 245)",
+                         "pantone":  "PMS Cool Gray 1 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure White Hammer",
                          "supplierPriceUSD":  "$6.99",
@@ -986,6 +1073,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(0, 71, 171)",
+                         "pantone":  "PMS 2945 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure BLUE HAMMER",
                          "supplierPriceUSD":  "$6.99",
@@ -1044,6 +1133,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(200, 255, 200)",
+                         "pantone":  "",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure GLOWING LIGHT GREEN",
                          "supplierPriceUSD":  "$7.99",
@@ -1104,6 +1195,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(0, 255, 127)",
+                         "pantone":  "PMS 7479 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY GREEN",
                          "supplierPriceUSD":  "$7.99",
@@ -1164,6 +1257,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(230, 230, 230)",
+                         "pantone":  "",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CLEAR",
                          "supplierPriceUSD":  "$6.99",
@@ -1224,6 +1319,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 105, 180)",
+                         "pantone":  "PMS 1915 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY PINK",
                          "supplierPriceUSD":  "$7.99",
@@ -1285,6 +1382,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(190, 30, 100)",
+                         "pantone":  "PMS 18-1750",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure VIVA MAGENTA",
                          "supplierPriceUSD":  "$5.99",
@@ -1348,6 +1447,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(138, 43, 226)",
+                         "pantone":  "PMS 2665 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY PURPLE",
                          "supplierPriceUSD":  "$6.99",
@@ -1411,6 +1512,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(0, 191, 255)",
+                         "pantone":  "PMS 2995 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY BLUE",
                          "supplierPriceUSD":  "$6.99",
@@ -1474,6 +1577,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(227, 0, 34)",
+                         "pantone":  "PMS 185 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY RED",
                          "supplierPriceUSD":  "$6.99",
@@ -1534,6 +1639,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(240, 240, 240)",
+                         "pantone":  "",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure GLOSSY CLEAR",
                          "supplierPriceUSD":  "$6.99",
@@ -1597,6 +1704,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(189, 157, 115)",
+                         "pantone":  "PMS 4515 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC DARK CHAMPAGNE",
                          "supplierPriceUSD":  "$6.99",
@@ -1657,6 +1766,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(192, 192, 192)",
+                         "pantone":  "PMS 877 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure SILVER HAMMER",
                          "supplierPriceUSD":  "$6.99",
@@ -1718,6 +1829,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(225, 255, 225)",
+                         "pantone":  "",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Glow in the dark",
                          "supplierPriceUSD":  "$7.99",
@@ -1779,6 +1892,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 209, 220)",
+                         "pantone":  "PMS 177 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Pastel Pink",
                          "supplierPriceUSD":  "$6.99",
@@ -1842,6 +1957,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(235, 235, 235)",
+                         "pantone":  "",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Clear",
                          "supplierPriceUSD":  "$6.99",
@@ -1902,6 +2019,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(195, 195, 195)",
+                         "pantone":  "PMS Cool Gray 5 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Pearl Gray",
                          "supplierPriceUSD":  "$6.99",
@@ -1963,6 +2082,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(170, 240, 170)",
+                         "pantone":  "PMS 351 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Pastel Light Green",
                          "supplierPriceUSD":  "$6.99",
@@ -2026,6 +2147,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 215, 0)",
+                         "pantone":  "PMS 7407 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY GOLD",
                          "supplierPriceUSD":  "$6.99",
@@ -2087,6 +2210,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(204, 153, 255)",
+                         "pantone":  "PMS 2645 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Pastel Violet",
                          "supplierPriceUSD":  "$6.99",
@@ -2150,6 +2275,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(140, 140, 140)",
+                         "pantone":  "PMS Cool Gray 9 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure MATTE GREY SAND TEXTURE",
                          "supplierPriceUSD":  "$5.99",
@@ -2213,6 +2340,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 140, 0)",
+                         "pantone":  "PMS 151 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure MATTE ORANGE SAND TEXTURE",
                          "supplierPriceUSD":  "$5.99",
@@ -2276,6 +2405,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(200, 16, 46)",
+                         "pantone":  "PMS 186 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure MATTE RED SAND TEXTURE",
                          "supplierPriceUSD":  "$5.99",
@@ -2339,6 +2470,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(250, 250, 250)",
+                         "pantone":  "PMS Cool Gray 1 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure MATTE WHITE SAND TEXTURE",
                          "supplierPriceUSD":  "$5.99",
@@ -2402,6 +2535,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 239, 0)",
+                         "pantone":  "PMS 102 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY YELLOW",
                          "supplierPriceUSD":  "$6.99",
@@ -2465,6 +2600,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(184, 134, 11)",
+                         "pantone":  "PMS 7557 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC DARK GOLD",
                          "supplierPriceUSD":  "$7.99",
@@ -2528,6 +2665,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 223, 0)",
+                         "pantone":  "PMS 109 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC LIGHT GOLD",
                          "supplierPriceUSD":  "$6.99",
@@ -2589,6 +2728,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(220, 220, 220)",
+                         "pantone":  "PMS 877 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure CHROMIUM",
                          "supplierPriceUSD":  "$6.99",
@@ -2649,6 +2790,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(175, 110, 77)",
+                         "pantone":  "PMS 7513 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure GLIMMER BROWN SUGAR",
                          "supplierPriceUSD":  "$5.99",
@@ -2709,6 +2852,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(210, 210, 210)",
+                         "pantone":  "PMS 428 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure WINKED SILVER",
                          "supplierPriceUSD":  "$5.99",
@@ -2773,6 +2918,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(75, 83, 32)",
+                         "pantone":  "PMS 5743 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure MATTE ARMY GREEN",
                          "supplierPriceUSD":  "$5.99",
@@ -2838,6 +2985,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 255, 255)",
+                         "pantone":  "PMS White",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte White",
                          "supplierPriceUSD":  "$5.99",
@@ -2901,6 +3050,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(40, 40, 40)",
+                         "pantone":  "PMS Black 7 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Black Sand Texture",
                          "supplierPriceUSD":  "$5.99",
@@ -2961,6 +3112,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(184, 115, 51)",
+                         "pantone":  "PMS 7516 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Copper Hammer",
                          "supplierPriceUSD":  "$6.99",
@@ -3025,6 +3178,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 128, 0)",
+                         "pantone":  "PMS 152 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Orange",
                          "supplierPriceUSD":  "$5.99",
@@ -3090,6 +3245,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(28, 28, 28)",
+                         "pantone":  "PMS Black 6 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Black",
                          "supplierPriceUSD":  "$5.99",
@@ -3154,6 +3311,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(80, 80, 80)",
+                         "pantone":  "PMS 425 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Dark Gray",
                          "supplierPriceUSD":  "$5.99",
@@ -3218,6 +3377,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(148, 0, 211)",
+                         "pantone":  "PMS 2665 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Violet",
                          "supplierPriceUSD":  "$5.99",
@@ -3282,6 +3443,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(173, 216, 230)",
+                         "pantone":  "PMS 283 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Matte Light Blue",
                          "supplierPriceUSD":  "$5.99",
@@ -3343,6 +3506,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(124, 252, 0)",
+                         "pantone":  "PMS 375 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Lawn Green",
                          "supplierPriceUSD":  "$5.99",
@@ -3404,6 +3569,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 253, 208)",
+                         "pantone":  "PMS 7499 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure CREAM",
                          "supplierPriceUSD":  "$5.99",
@@ -3465,6 +3632,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(128, 128, 128)",
+                         "pantone":  "PMS Cool Gray 8 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure GREY",
                          "supplierPriceUSD":  "$5.99",
@@ -3526,6 +3695,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(200, 200, 200)",
+                         "pantone":  "PMS 877 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Ball Silver",
                          "supplierPriceUSD":  "$5.99",
@@ -3587,6 +3758,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(138, 43, 226)",
+                         "pantone":  "PMS 2665 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Violet",
                          "supplierPriceUSD":  "$5.99",
@@ -3648,6 +3821,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(135, 206, 250)",
+                         "pantone":  "PMS 2905 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Light Sky Blue",
                          "supplierPriceUSD":  "$5.99",
@@ -3709,6 +3884,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 182, 193)",
+                         "pantone":  "PMS 176 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Light Pink",
                          "supplierPriceUSD":  "$5.99",
@@ -3770,6 +3947,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(204, 85, 0)",
+                         "pantone":  "PMS 1665 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Burnt Orange",
                          "supplierPriceUSD":  "$5.99",
@@ -3831,6 +4010,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 0, 0)",
+                         "pantone":  "PMS Red 032 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Red",
                          "supplierPriceUSD":  "$5.99",
@@ -3892,6 +4073,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(0, 128, 0)",
+                         "pantone":  "PMS 355 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Green",
                          "supplierPriceUSD":  "$5.99",
@@ -3953,6 +4136,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 255, 0)",
+                         "pantone":  "PMS Yellow C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Yellow",
                          "supplierPriceUSD":  "$5.99",
@@ -4014,6 +4199,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(0, 0, 255)",
+                         "pantone":  "PMS Blue 072 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Blue",
                          "supplierPriceUSD":  "$5.99",
@@ -4075,6 +4262,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(0, 0, 0)",
+                         "pantone":  "PMS Black C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Black",
                          "supplierPriceUSD":  "$5.99",
@@ -4135,6 +4324,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 255, 255)",
+                         "pantone":  "PMS White",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure White",
                          "supplierPriceUSD":  "$5.99",
@@ -4184,6 +4375,8 @@
                                           "Pitch: 0.8mm"
                                       ],
                          "pantone_code":  "",
+                         "rgb":  "rgb(200, 200, 200)",
+                         "pantone":  "",
                          "dimensions":  {
                                             "nominal_size":  "125B",
                                             "external_dimensions":  {
@@ -4253,6 +4446,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 140, 0)",
+                         "pantone":  "PMS 1505 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CANDY ORANGE",
                          "supplierPriceUSD":  "",
@@ -4311,6 +4506,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(144, 238, 144)",
+                         "pantone":  "PMS 358 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure LIGHT GREEN",
                          "supplierPriceUSD":  "",
@@ -4369,6 +4566,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(184, 115, 51)",
+                         "pantone":  "PMS 7516 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure CANDY COPPER",
                          "supplierPriceUSD":  "",
@@ -4430,6 +4629,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 215, 0)",
+                         "pantone":  "PMS 871 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC GOLD",
                          "supplierPriceUSD":  "",
@@ -4491,6 +4692,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(247, 231, 206)",
+                         "pantone":  "PMS 727 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure METALLIC CHAMPAGNE",
                          "supplierPriceUSD":  "",
@@ -4550,6 +4753,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(186, 85, 211)",
+                         "pantone":  "PMS 2577 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Light Violet",
                          "supplierPriceUSD":  "",
@@ -4609,6 +4814,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(255, 119, 170)",
+                         "pantone":  "PMS 211 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Viola Pink",
                          "supplierPriceUSD":  "",
@@ -4665,6 +4872,8 @@
                                                                         "note":  "Typical 125B dimensions - verify from manufacturer specs"
                                                                     }
                                         },
+                         "rgb":  "rgb(50, 205, 50)",
+                         "pantone":  "PMS 375 C",
                          "scraped_from":  "local_html_only",
                          "displayedName":  "Aluminium Enclosure Lime Green",
                          "supplierPriceUSD":  "",

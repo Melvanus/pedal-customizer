@@ -25,6 +25,9 @@ export type PaintOption = OptionItem & {
   customerPriceEUR: number;
   shortDescription?: string;
   longDescription?: string;
+  rgb?: string;
+  pantone?: string;
+  isCustomColor?: boolean;
 };
 
 type PedalCustomizerProps = {
@@ -75,6 +78,9 @@ export function PedalCustomizer({
   const [colorFilter, setColorFilter] = React.useState("");
   const [finishFilter, setFinishFilter] = React.useState("");
   const [sortBy, setSortBy] = React.useState("name");
+  const [showColorPicker, setShowColorPicker] = React.useState(false);
+  const [customColor, setCustomColor] = React.useState("#808080");
+  const [customFinish, setCustomFinish] = React.useState<"Matte" | "Glossy">("Matte");
 
   const selectedPaint = paintOptions.find((item) => item.id === selectedPaintId);
   const selectedDesign = designOptions.find((item) => item.id === selectedDesignId);
@@ -352,7 +358,12 @@ export function PedalCustomizer({
                 {filteredPaintOptions.map((option) => (
                   <div
                     key={option.id}
-                    onClick={() => setSelectedPaintId(option.id)}
+                    onClick={() => {
+                      if (option.isCustomColor) {
+                        setShowColorPicker(true);
+                      }
+                      setSelectedPaintId(option.id);
+                    }}
                     style={{
                       background: "#0f0f0f",
                       borderRadius: "10px",
@@ -372,9 +383,60 @@ export function PedalCustomizer({
                     }}
                   >
                     <div style={{ width: "100%", height: "160px", background: "#1a1a1a", padding: "0.75rem", position: "relative" }}>
-                      <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      {option.isCustomColor ? (
+                        <div style={{ 
+                          position: "relative",
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}>
+                          <Image 
+                            src={option.image} 
+                            alt={option.name} 
+                            fill 
+                            unoptimized 
+                            style={{ 
+                              objectFit: "contain",
+                              filter: `brightness(0.7) sepia(1) saturate(3) hue-rotate(${customColor})`,
+                              mixBlendMode: "multiply",
+                            }} 
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: customColor,
+                            mixBlendMode: "multiply",
+                            opacity: 0.5,
+                            pointerEvents: "none",
+                          }} />
+                        </div>
+                      ) : (
+                        <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      )}
                     </div>
                     <div style={{ padding: "1rem" }}>
+                      {option.isCustomColor && (
+                        <div style={{
+                          background: "rgba(255, 165, 0, 0.15)",
+                          border: "1px solid rgba(255, 165, 0, 0.5)",
+                          borderRadius: "5px",
+                          padding: "0.5rem",
+                          marginBottom: "0.75rem",
+                          fontSize: "0.75rem",
+                          color: "#ffaa00",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}>
+                          <span style={{ fontSize: "1rem" }}>⚠️</span>
+                          <span>Requires Manual Review</span>
+                        </div>
+                      )}
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                           <span
@@ -390,7 +452,7 @@ export function PedalCustomizer({
                             {option.sku}
                           </span>
                           {(() => {
-                            const { Icon, color } = getFinishIcon(option.finish);
+                            const { Icon, color } = getFinishIcon(option.isCustomColor ? customFinish : option.finish);
                             return (
                               <div
                                 style={{
@@ -403,12 +465,25 @@ export function PedalCustomizer({
                                   justifyContent: "center",
                                   border: "1px solid rgba(255, 255, 255, 0.2)",
                                 }}
-                                title={option.finish || "Standard Finish"}
+                                title={option.isCustomColor ? customFinish : (option.finish || "Standard Finish")}
                               >
                                 <Icon size={16} color={color} />
                               </div>
                             );
                           })()}
+                          {(option.rgb || option.isCustomColor) && (
+                            <div
+                              style={{
+                                width: "28px",
+                                height: "28px",
+                                borderRadius: "50%",
+                                background: option.isCustomColor ? customColor : option.rgb,
+                                border: "2px solid rgba(255, 255, 255, 0.3)",
+                                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
+                              }}
+                              title={option.isCustomColor ? `Custom: ${customColor}` : (option.pantone ? `Color: ${option.color}\nPantone: ${option.pantone}` : `Color: ${option.color}`)}
+                            />
+                          )}
                         </div>
                         <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
                           {formatPrice(option.customerPriceEUR)}
@@ -422,14 +497,27 @@ export function PedalCustomizer({
                           {option.shortDescription}
                         </div>
                       )}
+                      {option.isCustomColor && (
+                        <div style={{
+                          fontSize: "0.75rem",
+                          color: "#888",
+                          fontStyle: "italic",
+                          marginBottom: "0.75rem",
+                          padding: "0.5rem",
+                          background: "rgba(255, 255, 255, 0.05)",
+                          borderRadius: "5px",
+                        }}>
+                          📅 Custom colors are hand-sprayed and require 5-7 business days
+                        </div>
+                      )}
                       <div>
                         <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderBottom: "1px solid #2d2d2d" }}>
                           <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Color</span>
-                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.color || "—"}</span>
+                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.isCustomColor ? "Custom RGB" : (option.color || "—")}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0" }}>
                           <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Finish</span>
-                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.finish || "—"}</span>
+                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.isCustomColor ? customFinish : (option.finish || "—")}</span>
                         </div>
                       </div>
                     </div>
@@ -851,6 +939,153 @@ export function PedalCustomizer({
           </div>
         </div>
       </div>
+
+      {/* Color Picker Modal */}
+      {showColorPicker && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.85)",
+            backdropFilter: "blur(8px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setShowColorPicker(false)}
+        >
+          <div
+            style={{
+              background: "#1a1a1a",
+              borderRadius: "15px",
+              padding: "2rem",
+              maxWidth: "500px",
+              width: "90%",
+              border: "2px solid rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.5)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1.5rem", color: "#fff" }}>
+              🎨 Custom Paint Color
+            </h2>
+            
+            <div style={{ marginBottom: "1.5rem" }}>
+              <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "#ccc", marginBottom: "0.5rem" }}>
+                Choose Your Color
+              </label>
+              <input
+                type="color"
+                value={customColor}
+                onChange={(e) => setCustomColor(e.target.value)}
+                style={{
+                  width: "100%",
+                  height: "60px",
+                  border: "2px solid rgba(255, 255, 255, 0.3)",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  background: customColor,
+                }}
+              />
+              <div style={{ marginTop: "0.5rem", fontSize: "0.85rem", color: "#aaa", fontFamily: "monospace" }}>
+                Selected: {customColor}
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "1.5rem" }}>
+              <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "#ccc", marginBottom: "0.75rem" }}>
+                Finish Type
+              </label>
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <button
+                  onClick={() => setCustomFinish("Matte")}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    borderRadius: "8px",
+                    border: customFinish === "Matte" ? "2px solid #fff" : "2px solid rgba(255, 255, 255, 0.2)",
+                    background: customFinish === "Matte" ? "#fff" : "transparent",
+                    color: customFinish === "Matte" ? "#000" : "#fff",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  🎨 Matte
+                </button>
+                <button
+                  onClick={() => setCustomFinish("Glossy")}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    borderRadius: "8px",
+                    border: customFinish === "Glossy" ? "2px solid #fff" : "2px solid rgba(255, 255, 255, 0.2)",
+                    background: customFinish === "Glossy" ? "#fff" : "transparent",
+                    color: customFinish === "Glossy" ? "#000" : "#fff",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  ⭐ Glossy
+                </button>
+              </div>
+            </div>
+
+            <div style={{
+              background: "rgba(255, 165, 0, 0.15)",
+              border: "1px solid rgba(255, 165, 0, 0.5)",
+              borderRadius: "8px",
+              padding: "1rem",
+              marginBottom: "1.5rem",
+              fontSize: "0.85rem",
+              color: "#ffaa00",
+              lineHeight: 1.5,
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                <span style={{ fontSize: "1.2rem" }}>⚠️</span>
+                <strong>Important Note</strong>
+              </div>
+              <div style={{ paddingLeft: "1.7rem" }}>
+                • Custom colors are hand-sprayed<br />
+                • Requires manual review and confirmation<br />
+                • Production time: 5-7 business days<br />
+                • May vary slightly from digital preview
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowColorPicker(false)}
+              style={{
+                width: "100%",
+                padding: "0.9rem",
+                borderRadius: "8px",
+                border: "2px solid #fff",
+                background: "#fff",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#e0e0e0";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#fff";
+              }}
+            >
+              Apply Custom Color
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
