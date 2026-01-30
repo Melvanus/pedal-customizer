@@ -1,0 +1,45 @@
+Pedal Customizer Web App (Prototype)
+
+Purpose
+- Provide a modern, single-page pedal enclosure customizer where users choose options across categories and download a configuration JSON file instead of placing an order.
+
+Core UX Requirements
+- App Router (Next.js) + Tailwind CSS + shadcn/ui components.
+- Four tabs: Paint/Finish, Design/Labeling, LED, Other.
+- Paint/Finish options are loaded from Enclosures/enclosures_data.json.
+- Design/Labeling, LED, and Other options are loaded from Enclosures/design_labeling.json, Enclosures/led.json, Enclosures/other.json.
+- Each option contains: name, price, image (placeholder uses Logo.png located in Enclosures/images).
+- The “Other” category supports multi-select; all other categories are single-select.
+- A download button generates a JSON configuration file containing the current selections and total price.
+
+Data Sources
+- Enclosures/enclosures_data.json (Tayda enclosure data). Use the “products” array, read name, sku, price, finish_info.finish_type, color_info.primary_color, and available.
+- Enclosures/images folder contains local product images named with SKU prefixes (e.g., A-8455 ...). Use a match by SKU to display the correct image, else fallback to Logo.png.
+- Enclosures/design_labeling.json, Enclosures/led.json, Enclosures/other.json: list of option objects.
+
+UI Structure
+- Hero header with gradient background, app title, and quick badges.
+- Stats row (available finishes, unique colors, finish types, average price).
+- Main area split into two columns:
+	- Left: Tabs with option grids. Paint tab has search + filter (color/finish) + sort controls.
+	- Right: Enclosure preview card (shows selected paint image and details) and a summary card with totals and the download action.
+
+Technical Structure (current implementation)
+- Next.js App Router with TypeScript.
+- src/app/page.tsx loads JSON data server-side, maps image URLs to a local API route, and passes options to a client component.
+- src/components/pedal-customizer.tsx implements UI, tab logic, filtering, selection state, and JSON download.
+- src/app/api/enclosures/image/[...path]/route.ts serves local images from Enclosures/images.
+
+Download File Format
+- JSON with:
+	- createdAt (ISO string)
+	- paint (selected paint object or null)
+	- design (selected design object + labelText)
+	- led (selected LED object or null)
+	- other (array of selected “Other” items)
+	- totalPrice (number)
+
+Visual Style Notes
+- Use rounded cards, soft shadows, hover lift, and grid-based option cards with large image previews.
+- Emphasize selection state with borders and subtle ring highlight.
+- Provide a clean, premium product configurator aesthetic inspired by the existing product-viewer.html.

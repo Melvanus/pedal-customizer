@@ -1,0 +1,9 @@
+[
+  {"name":"Customized Layout","price":4,"image":"Logo.png","customerPriceEUR":4},
+  {"name":"Make it Ultra Compact","price":8,"image":"Logo.png","customerPriceEUR":8},
+  {"name":"Booster Mod","price":10,"image":"Logo.png","customerPriceEUR":10},
+  {"name":"Volume Mod","price":5,"image":"Logo.png","customerPriceEUR":5},
+  {"name":"Buffered Bypass Mod","price":10,"image":"Logo.png","customerPriceEUR":10},
+  {"name":"Voltage Sag/Starve Mod","price":5,"image":"Logo.png","customerPriceEUR":5},
+  {"name":"Internal Battery Clip","price":2,"image":"Logo.png","customerPriceEUR":2}
+]

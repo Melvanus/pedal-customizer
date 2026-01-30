@@ -1,0 +1,8 @@
+[
+  {"name":"No LED Holder","price":0,"image":"Logo.png","customerPriceEUR":0},
+  {"name":"No LED","price":0,"image":"Logo.png","customerPriceEUR":0},
+  {"name":"Standard LED Holder","price":1,"image":"Logo.png","customerPriceEUR":1},
+  {"name":"Fancy LED Holder","price":2,"image":"Logo.png","customerPriceEUR":2},
+  {"name":"Fender Style Jewel","price":4,"image":"Logo.png","customerPriceEUR":4},
+  {"name":"Illuminated Footswitch","price":3,"image":"Logo.png","customerPriceEUR":3}
+]

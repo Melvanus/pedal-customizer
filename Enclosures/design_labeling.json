@@ -1,0 +1,8 @@
+[
+  {"name":"Labeled Lettering","price":0,"image":"Logo.png","customerPriceEUR":0},
+  {"name":"Simple Decal Lettering","price":1,"image":"Logo.png","customerPriceEUR":1},
+  {"name":"Customized Decal Graphic","price":3,"image":"Logo.png","customerPriceEUR":3},
+  {"name":"Engraving","price":3,"image":"Logo.png","customerPriceEUR":3},
+  {"name":"Relic","price":10,"image":"Logo.png","customerPriceEUR":10},
+  {"name":"Make it Fluffy","price":5,"image":"Logo.png","customerPriceEUR":5}
+]
