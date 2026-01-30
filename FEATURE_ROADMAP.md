@@ -29,11 +29,12 @@
   │ │ Tabs + Filters                   │ │
   │ ├──────────────────────────────────┤ │
   │ │                                  │ │
-  │ │ Product Grid          ┌────────┐ │ │
-  │ │ (scrollable content)  │Summary │ │ │ ← Scrollable with
-  │ │                       │ Panel  │ │ │   floating summary
-  │ │                       │(Float) │ │ │
-  │ └───────────────────────└────────┘ │ │
+  │ │ Product Grid                     │ │ ← Scrollable
+  │ │ (scrollable content)             │ │
+  │ │┌────────────────────────────────┐│ │
+  │ ││      Configuration Summary     ││ │← Floating at bottom
+  │ │└────────────────────────────────┘│ │
+  │ └──────────────────────────────────┘ │
   └──────────────────────────────────────┘
   ```
 - **Benefits:**
@@ -45,7 +46,7 @@
 **Implementation considerations:**
 - Use CSS `height: 100vh` with `overflow: hidden` on main container
 - Selection area: `flex-grow: 1` with `overflow-y: auto`
-- Summary: Floating overlay with `position: fixed`, bottom-right corner
+- Summary: Floating overlay with `position: fixed`, bottom center
 - Header: Minimal padding, single line (~40-50px total height)
 - Summary panel should have high z-index and semi-transparent backdrop for visibility
 

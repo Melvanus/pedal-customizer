@@ -540,8 +540,10 @@ export function PedalCustomizer({
           style={{
             position: "fixed",
             bottom: "1.5rem",
-            right: "1.5rem",
-            maxWidth: "420px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "90%",
+            maxWidth: "900px",
             background: "rgba(26, 26, 26, 0.98)",
             padding: "1.5rem",
             borderRadius: "12px",
@@ -551,67 +553,68 @@ export function PedalCustomizer({
             backdropFilter: "blur(10px)",
           }}
         >
-          <h2 style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: "1rem", color: "#fff" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: "1rem", color: "#fff", textAlign: "center" }}>
             Configuration Summary
           </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1rem", fontSize: "0.85rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Paint:</span>
-              <span style={{ color: "#aaa", textAlign: "right", maxWidth: "60%", fontSize: "0.8rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
+              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>
                 {selectedPaint ? selectedPaint.displayedName : "—"}
               </span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Design:</span>
-              <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{selectedDesign?.name || "—"}</span>
+            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Design</span>
+              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedDesign?.name || "—"}</span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Label:</span>
-              <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{labelText || "—"}</span>
+            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Label Text</span>
+              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{labelText || "—"}</span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>LED:</span>
-              <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{selectedLed?.name || "—"}</span>
+            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>LED</span>
+              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedLed?.name || "—"}</span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px" }}>
-              <span style={{ fontWeight: 600, color: "#888" }}>Other:</span>
-              <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
+            <div style={{ display: "flex", flexDirection: "column", padding: "0.5rem", background: "#0f0f0f", borderRadius: "5px", textAlign: "center" }}>
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#888", marginBottom: "0.25rem" }}>Other Options</span>
+              <span style={{ fontSize: "0.8rem", color: "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 0", marginBottom: "1rem", borderTop: "2px solid #fff" }}>
-            <span style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>Total:</span>
-            <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem", padding: "0.75rem 0", marginBottom: "1rem", borderTop: "2px solid #fff" }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+              <span style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>Total:</span>
+              <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
+            </div>
+            <button
+              onClick={handleDownload}
+              style={{
+                padding: "0.75rem 1.5rem",
+                background: "#fff",
+                color: "#000",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "0.95rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+                transition: "transform 0.2s ease, background 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.background = "#e0e0e0";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = "#fff";
+              }}
+            >
+              <Download size={16} />
+              Download Configuration
+            </button>
           </div>
-          <button
-            onClick={handleDownload}
-            style={{
-              width: "100%",
-              padding: "0.75rem",
-              background: "#fff",
-              color: "#000",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "0.95rem",
-              fontWeight: 600,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-              transition: "transform 0.2s ease, background 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.background = "#e0e0e0";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.background = "#fff";
-            }}
-          >
-            <Download size={16} />
-            Download Config
-          </button>
         </div>
       </div>
     </div>

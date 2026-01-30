@@ -3,6 +3,7 @@
 - Work through each checklist item systematically.
 - Keep communication concise and focused.
 - Follow development best practices.
+- Dont change the FEATURE_ROADMAP.md unless explicitly instructed by the user.
 
 ## Git Workflow & Version Control
 
