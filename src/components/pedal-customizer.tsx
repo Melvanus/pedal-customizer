@@ -10,6 +10,7 @@ export type OptionItem = {
   name: string;
   price: number;
   image: string;
+  images?: string[];
   description?: string;
   customerPriceEUR: number;
   shortDescription?: string;
@@ -83,6 +84,10 @@ export function PedalCustomizer({
   const [showColorPicker, setShowColorPicker] = React.useState(false);
   const [customColor, setCustomColor] = React.useState("#808080");
   const [customFinish, setCustomFinish] = React.useState<"Matte" | "Glossy">("Matte");
+  const [adminMode, setAdminMode] = React.useState(false);
+  const [availableImages, setAvailableImages] = React.useState<string[]>([]);
+  const [dragOverSku, setDragOverSku] = React.useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = React.useState<Record<string, number>>({});
 
   const selectedPaint = paintOptions.find((item) => item.id === selectedPaintId);
   const selectedDesign = designOptions.find((item) => item.id === selectedDesignId);
@@ -153,6 +158,59 @@ export function PedalCustomizer({
       return a.name.localeCompare(b.name);
     });
   }, [paintOptions, searchTerm, colorFilter, finishFilter, sortBy, favouritePaintIds]);
+
+  // Load available images when admin mode is enabled
+  React.useEffect(() => {
+    if (adminMode) {
+      fetch("/api/admin/list-images")
+        .then((res) => res.json())
+        .then((data) => setAvailableImages(data.images || []))
+        .catch(console.error);
+    }
+  }, [adminMode]);
+
+  const handleDragOver = (e: React.DragEvent, sku: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverSku(sku);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverSku(null);
+  };
+
+  const handleDrop = async (e: React.DragEvent, sku: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverSku(null);
+
+    const files = Array.from(e.dataTransfer.files);
+    const imageFilenames = files.map((f) => f.name);
+
+    if (imageFilenames.length === 0) return;
+
+    try {
+      const response = await fetch("/api/admin/update-product-images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sku, imageFilenames }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`Updated ${sku} with ${result.imageCount} image(s)`);
+        window.location.reload(); // Reload to show new images
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error updating images:", error);
+      alert("Failed to update images");
+    }
+  };
 
   const handleToggleOther = (id: string) => {
     setSelectedOtherIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
@@ -240,7 +298,7 @@ export function PedalCustomizer({
             }}
           >
             {/* Tabs */}
-            <div style={{ display: "flex", gap: "0.75rem", marginBottom: activeTab === "paint" ? "1rem" : 0, borderBottom: "2px solid rgba(255,255,255,0.1)", paddingBottom: "0.5rem" }}>
+            <div style={{ display: "flex", gap: "0.75rem", marginBottom: activeTab === "paint" ? "1rem" : 0, borderBottom: "2px solid rgba(255,255,255,0.1)", paddingBottom: "0.5rem", alignItems: "center" }}>
               {(["paint", "design", "led", "other"] as const).map((tab) => (
                 <button
                   key={tab}
@@ -263,6 +321,27 @@ export function PedalCustomizer({
                   {tab === "other" && "Other"}
                 </button>
               ))}
+              <button
+                onClick={() => setAdminMode(!adminMode)}
+                style={{
+                  marginLeft: "auto",
+                  padding: "0.6rem 1.2rem",
+                  border: "2px solid #4ade80",
+                  background: adminMode ? "#4ade80" : "transparent",
+                  color: adminMode ? "#000" : "#4ade80",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                  borderRadius: "6px",
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+                title="Toggle admin mode for drag & drop image management"
+              >
+                {adminMode ? "🔓" : "🔒"} Admin
+              </button>
             </div>
 
             {/* Filters for Paint Tab */}
@@ -378,7 +457,12 @@ export function PedalCustomizer({
                 gap: "1.5rem",
               }}
             >
-                {filteredPaintOptions.map((option) => (
+                {filteredPaintOptions.map((option) => {
+                  const currentImageIdx = currentImageIndex[option.sku] || 0;
+                  const images = option.images || [option.image];
+                  const currentImage = images[currentImageIdx] || option.image;
+                  
+                  return (
                   <div
                     key={option.id}
                     onClick={() => {
@@ -387,14 +471,18 @@ export function PedalCustomizer({
                         setShowColorPicker(true);
                       }
                     }}
+                    onDragOver={adminMode ? (e) => handleDragOver(e, option.sku) : undefined}
+                    onDragLeave={adminMode ? handleDragLeave : undefined}
+                    onDrop={adminMode ? (e) => handleDrop(e, option.sku) : undefined}
                     style={{
-                      background: "#0f0f0f",
+                      background: dragOverSku === option.sku ? "#1a3a1a" : "#0f0f0f",
                       borderRadius: "10px",
                       overflow: "hidden",
                       boxShadow: selectedPaintId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                      cursor: "pointer",
-                      border: selectedPaintId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease",
+                      cursor: adminMode ? "copy" : "pointer",
+                      border: dragOverSku === option.sku ? "2px dashed #4ade80" : selectedPaintId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
+                      position: "relative",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = "translateY(-3px)";
@@ -406,7 +494,93 @@ export function PedalCustomizer({
                     }}
                   >
                     <div style={{ width: "100%", height: "160px", background: "#1a1a1a", padding: "0.75rem", position: "relative" }}>
-                      <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      {adminMode && (
+                        <div style={{
+                          position: "absolute",
+                          top: "0.5rem",
+                          left: "0.5rem",
+                          background: "rgba(0, 0, 0, 0.8)",
+                          color: "#4ade80",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "5px",
+                          fontSize: "0.7rem",
+                          zIndex: 10,
+                          border: "1px solid #4ade80",
+                        }}>
+                          🔧 Drop images here
+                        </div>
+                      )}
+                      {images.length > 1 && (
+                        <div style={{
+                          position: "absolute",
+                          bottom: "0.75rem",
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          display: "flex",
+                          gap: "0.5rem",
+                          zIndex: 10,
+                          background: "rgba(0, 0, 0, 0.7)",
+                          padding: "0.5rem",
+                          borderRadius: "20px",
+                        }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentImageIndex(prev => ({
+                                ...prev,
+                                [option.sku]: Math.max(0, currentImageIdx - 1)
+                              }));
+                            }}
+                            disabled={currentImageIdx === 0}
+                            style={{
+                              background: "rgba(255, 255, 255, 0.2)",
+                              border: "1px solid rgba(255, 255, 255, 0.3)",
+                              borderRadius: "50%",
+                              width: "32px",
+                              height: "32px",
+                              cursor: "pointer",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              opacity: currentImageIdx === 0 ? 0.3 : 1,
+                            }}
+                          >
+                            ◀
+                          </button>
+                          <span style={{
+                            color: "#fff",
+                            fontSize: "0.75rem",
+                            display: "flex",
+                            alignItems: "center",
+                            padding: "0 0.5rem",
+                          }}>
+                            {currentImageIdx + 1} / {images.length}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentImageIndex(prev => ({
+                                ...prev,
+                                [option.sku]: Math.min(images.length - 1, currentImageIdx + 1)
+                              }));
+                            }}
+                            disabled={currentImageIdx === images.length - 1}
+                            style={{
+                              background: "rgba(255, 255, 255, 0.2)",
+                              border: "1px solid rgba(255, 255, 255, 0.3)",
+                              borderRadius: "50%",
+                              width: "32px",
+                              height: "32px",
+                              cursor: "pointer",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              opacity: currentImageIdx === images.length - 1 ? 0.3 : 1,
+                            }}
+                          >
+                            ▶
+                          </button>
+                        </div>
+                      )}
+                      <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
                     </div>
                     <div style={{ padding: "1rem" }}>
                       {option.isCustomColor && (
@@ -511,7 +685,8 @@ export function PedalCustomizer({
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
           )}
 
