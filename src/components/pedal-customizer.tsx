@@ -991,33 +991,6 @@ export function PedalCustomizer({
                   );
                 })}
               </div>
-              <div
-                style={{
-                  background: "#0f0f0f",
-                  padding: "1.5rem",
-                  borderRadius: "10px",
-                  border: "1px solid #2d2d2d",
-                }}
-              >
-                <label style={{ fontWeight: 600, color: "#ccc", fontSize: "0.9rem", display: "block", marginBottom: "0.5rem" }}>
-                  Custom Label Text
-                </label>
-                <input
-                  type="text"
-                  value={labelText}
-                  onChange={(e) => setLabelText(e.target.value)}
-                  placeholder="e.g. Aurora Drive"
-                  style={{
-                    width: "100%",
-                    padding: "0.75rem",
-                    border: "2px solid #333",
-                    borderRadius: "5px",
-                    fontSize: "1rem",
-                    background: "#1a1a1a",
-                    color: "#e0e0e0",
-                  }}
-                />
-              </div>
             </div>
           )}
 
@@ -1536,33 +1509,7 @@ export function PedalCustomizer({
               <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design</span>
               <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{selectedDesign?.name || "—"}</span>
             </button>
-            <button
-              onClick={() => setActiveTab("design")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                background: activeTab === "design" ? "#fff" : "#0f0f0f",
-                borderRadius: "5px",
-                textAlign: "center",
-                border: activeTab === "design" ? "2px solid #fff" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== "design") {
-                  e.currentTarget.style.background = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== "design") {
-                  e.currentTarget.style.background = "#0f0f0f";
-                }
-              }}
-            >
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Label Text</span>
-              <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{labelText || "—"}</span>
-            </button>
+
             <button
               onClick={() => setActiveTab("led")}
               style={{

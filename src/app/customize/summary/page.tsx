@@ -20,12 +20,19 @@ export default function SummaryPage() {
   const [customerName, setCustomerName] = React.useState("");
   const [customerEmail, setCustomerEmail] = React.useState("");
   const [customerNotes, setCustomerNotes] = React.useState("");
+  const [pedalName, setPedalName] = React.useState("");
+  const [knobLabels, setKnobLabels] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
     const storedConfig = sessionStorage.getItem("pedalConfiguration");
     if (storedConfig) {
-      setConfig(JSON.parse(storedConfig));
+      const parsed = JSON.parse(storedConfig);
+      setConfig(parsed);
+      // Parse the old labelText format if it exists
+      const labelText = parsed.labelText || "";
+      setPedalName(labelText);
+      setKnobLabels("");
     }
   }, []);
 
@@ -65,6 +72,9 @@ export default function SummaryPage() {
     const payload = {
       createdAt: new Date().toISOString(),
       ...config,
+      pedalName,
+      knobLabels,
+      labelText: pedalName, // Keep backward compatibility
       customer: {
         name: customerName,
         email: customerEmail,
@@ -164,8 +174,46 @@ export default function SummaryPage() {
                 price={config.design.customerPriceEUR}
                 shortDesc={config.design.shortDescription}
                 longDesc={config.design.longDescription}
-                extra={config.labelText ? [{ label: "Custom Label", value: config.labelText }] : undefined}
               />
+            )}
+
+            {/* Custom Label Text - Only show if design is selected and not "No Labeling / No Design" */}
+            {config.design && config.design.name !== "No Labeling / No Design" && (
+              <div style={{ background: "#1a1a1a", padding: "0.1rem 1.5rem 1.5rem 1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
+                <h3 style={{ fontSize: "1.2rem", marginBottom: "0.75rem", color: "#fff" }}>Custom Labeling</h3>
+                
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
+                    Custom Pedal Name
+                  </label>
+                  <input
+                    type="text"
+                    value={pedalName}
+                    onChange={(e) => setPedalName(e.target.value)}
+                    placeholder="e.g. Aurora Drive"
+                    style={{ width: "100%", padding: "0.75rem", background: "#0f0f0f", border: "2px solid #2d2d2d", borderRadius: "5px", color: "#e0e0e0", fontSize: "1rem", boxSizing: "border-box" }}
+                  />
+                  <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.5rem", marginBottom: 0 }}>
+                    Leave empty if you'd like us to create a unique name for your pedal
+                  </p>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
+                    Knob Labels
+                  </label>
+                  <input
+                    type="text"
+                    value={knobLabels}
+                    onChange={(e) => setKnobLabels(e.target.value)}
+                    placeholder="e.g. Volume, Drive, Tone, ..."
+                    style={{ width: "100%", padding: "0.75rem", background: "#0f0f0f", border: "2px solid #2d2d2d", borderRadius: "5px", color: "#e0e0e0", fontSize: "1rem", boxSizing: "border-box" }}
+                  />
+                  <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.5rem", marginBottom: 0 }}>
+                    List the names of your knobs/controls separated by commas. You can also leave this empty if you want to leave them with their original labels.
+                  </p>
+                </div>
+              </div>
             )}
 
             {/* LED */}
@@ -181,8 +229,8 @@ export default function SummaryPage() {
 
             {/* Other Options */}
             {config.other.length > 0 && (
-              <div style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", marginBottom: "2rem", border: "1px solid #333" }}>
-                <h3 style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#fff" }}>Additional Modifications</h3>
+              <div style={{ background: "#1a1a1a", padding: "0.1rem 1.5rem 1.5rem 1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
+                <h3 style={{ fontSize: "1.2rem", marginBottom: "0.75rem", color: "#fff" }}>Additional Modifications</h3>
                 {config.other.map((option, i) => (
                   <div key={i} style={{ marginBottom: i < config.other.length - 1 ? "2rem" : 0, paddingBottom: i < config.other.length - 1 ? "2rem" : 0, borderBottom: i < config.other.length - 1 ? "1px solid #2d2d2d" : "none" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem" }}>
@@ -328,8 +376,8 @@ function ConfigSection({
   extra?: { label: string; value: string }[];
 }) {
   return (
-    <div style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", marginBottom: "2rem", border: "1px solid #333" }}>
-      <h3 style={{ fontSize: "1.3rem", marginBottom: "1rem", color: "#fff" }}>{title}</h3>
+    <div style={{ background: "#1a1a1a", padding: "0.1rem 1.5rem 1.5rem 1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
+      <h3 style={{ fontSize: "1.2rem", marginBottom: "0.75rem", color: "#fff" }}>{title}</h3>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
         <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#fff" }}>{name}</span>
         <span style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(price)}</span>
