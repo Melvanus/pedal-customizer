@@ -169,10 +169,10 @@ export function PedalCustomizer({
     }
   }, [adminMode]);
 
-  const handleDragOver = (e: React.DragEvent, sku: string) => {
+  const handleDragOver = (e: React.DragEvent, identifier: string) => {
     e.preventDefault();
     e.stopPropagation();
-    setDragOverSku(sku);
+    setDragOverSku(identifier);
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
@@ -181,7 +181,7 @@ export function PedalCustomizer({
     setDragOverSku(null);
   };
 
-  const handleDrop = async (e: React.DragEvent, sku: string) => {
+  const handleDrop = async (e: React.DragEvent, identifier: string, category: string) => {
     e.preventDefault();
     e.stopPropagation();
     setDragOverSku(null);
@@ -192,17 +192,17 @@ export function PedalCustomizer({
     if (imageFilenames.length === 0) return;
 
     try {
-      const response = await fetch("/api/admin/update-product-images", {
+      const response = await fetch("/api/admin/update-option-images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sku, imageFilenames }),
+        body: JSON.stringify({ identifier, category, imageFilenames }),
       });
 
       const result = await response.json();
 
       if (result.success) {
-        alert(`Updated ${sku} with ${result.imageCount} image(s)`);
-        window.location.reload(); // Reload to show new images
+        alert(`Updated ${identifier} with ${result.imageCount} image(s)`);
+        window.location.reload();
       } else {
         alert(`Error: ${result.error}`);
       }
@@ -473,7 +473,7 @@ export function PedalCustomizer({
                     }}
                     onDragOver={adminMode ? (e) => handleDragOver(e, option.sku) : undefined}
                     onDragLeave={adminMode ? handleDragLeave : undefined}
-                    onDrop={adminMode ? (e) => handleDrop(e, option.sku) : undefined}
+                    onDrop={adminMode ? (e) => handleDrop(e, option.sku, "paint") : undefined}
                     style={{
                       background: dragOverSku === option.sku ? "#1a3a1a" : "#0f0f0f",
                       borderRadius: "10px",
@@ -493,7 +493,7 @@ export function PedalCustomizer({
                       e.currentTarget.style.boxShadow = selectedPaintId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
                     }}
                   >
-                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", padding: "0.75rem", position: "relative" }}>
+                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       {adminMode && (
                         <div style={{
                           position: "absolute",
@@ -511,18 +511,7 @@ export function PedalCustomizer({
                         </div>
                       )}
                       {images.length > 1 && (
-                        <div style={{
-                          position: "absolute",
-                          bottom: "0.75rem",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          display: "flex",
-                          gap: "0.5rem",
-                          zIndex: 10,
-                          background: "rgba(0, 0, 0, 0.7)",
-                          padding: "0.5rem",
-                          borderRadius: "20px",
-                        }}>
+                        <>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -533,28 +522,51 @@ export function PedalCustomizer({
                             }}
                             disabled={currentImageIdx === 0}
                             style={{
-                              background: "rgba(255, 255, 255, 0.2)",
+                              position: "absolute",
+                              left: "0.5rem",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              background: "rgba(0, 0, 0, 0.7)",
                               border: "1px solid rgba(255, 255, 255, 0.3)",
                               borderRadius: "50%",
-                              width: "32px",
-                              height: "32px",
+                              width: "36px",
+                              height: "36px",
                               cursor: "pointer",
                               color: "#fff",
                               fontSize: "1rem",
                               opacity: currentImageIdx === 0 ? 0.3 : 1,
+                              zIndex: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              transition: "all 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (currentImageIdx > 0) {
+                                e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)";
                             }}
                           >
                             ◀
                           </button>
-                          <span style={{
+                          <div style={{
+                            position: "absolute",
+                            bottom: "0.5rem",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            background: "rgba(0, 0, 0, 0.7)",
+                            padding: "0.25rem 0.75rem",
+                            borderRadius: "12px",
+                            zIndex: 10,
                             color: "#fff",
-                            fontSize: "0.75rem",
-                            display: "flex",
-                            alignItems: "center",
-                            padding: "0 0.5rem",
+                            fontSize: "0.7rem",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
                           }}>
                             {currentImageIdx + 1} / {images.length}
-                          </span>
+                          </div>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -565,22 +577,41 @@ export function PedalCustomizer({
                             }}
                             disabled={currentImageIdx === images.length - 1}
                             style={{
-                              background: "rgba(255, 255, 255, 0.2)",
+                              position: "absolute",
+                              right: "0.5rem",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              background: "rgba(0, 0, 0, 0.7)",
                               border: "1px solid rgba(255, 255, 255, 0.3)",
                               borderRadius: "50%",
-                              width: "32px",
-                              height: "32px",
+                              width: "36px",
+                              height: "36px",
                               cursor: "pointer",
                               color: "#fff",
                               fontSize: "1rem",
                               opacity: currentImageIdx === images.length - 1 ? 0.3 : 1,
+                              zIndex: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              transition: "all 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (currentImageIdx < images.length - 1) {
+                                e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)";
                             }}
                           >
                             ▶
                           </button>
-                        </div>
+                        </>
                       )}
-                      <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
+                        <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      </div>
                     </div>
                     <div style={{ padding: "1rem" }}>
                       {option.isCustomColor && (
@@ -701,18 +732,27 @@ export function PedalCustomizer({
                   marginBottom: "2rem",
                 }}
               >
-                {designOptions.map((option) => (
+                {designOptions.map((option) => {
+                  const currentImageIdx = currentImageIndex[option.id] || 0;
+                  const images = option.images || [option.image];
+                  const currentImage = images[currentImageIdx] || option.image;
+                  
+                  return (
                   <div
                     key={option.id}
                     onClick={() => setSelectedDesignId(option.id)}
+                    onDragOver={adminMode ? (e) => handleDragOver(e, option.id) : undefined}
+                    onDragLeave={adminMode ? handleDragLeave : undefined}
+                    onDrop={adminMode ? (e) => handleDrop(e, option.id, "design") : undefined}
                     style={{
-                      background: "#0f0f0f",
+                      background: dragOverSku === option.id ? "#1a3a1a" : "#0f0f0f",
                       borderRadius: "10px",
                       overflow: "hidden",
                       boxShadow: selectedDesignId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                      cursor: "pointer",
-                      border: selectedDesignId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease",
+                      cursor: adminMode ? "copy" : "pointer",
+                      border: dragOverSku === option.id ? "2px dashed #4ade80" : selectedDesignId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
+                      position: "relative",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = "translateY(-3px)";
@@ -723,8 +763,95 @@ export function PedalCustomizer({
                       e.currentTarget.style.boxShadow = selectedDesignId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
                     }}
                   >
-                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", padding: "0.75rem", position: "relative" }}>
-                      <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {adminMode && (
+                        <div style={{
+                          position: "absolute",
+                          top: "0.5rem",
+                          left: "0.5rem",
+                          background: "rgba(0, 0, 0, 0.8)",
+                          color: "#4ade80",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "5px",
+                          fontSize: "0.7rem",
+                          zIndex: 10,
+                          border: "1px solid #4ade80",
+                        }}>
+                          🔧 Drop images here
+                        </div>
+                      )}
+                      {images.length > 1 && (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentImageIndex(prev => ({...prev, [option.id]: Math.max(0, currentImageIdx - 1)}));
+                            }}
+                            disabled={currentImageIdx === 0}
+                            style={{
+                              position: "absolute",
+                              left: "0.5rem",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              background: "rgba(0, 0, 0, 0.7)",
+                              border: "1px solid rgba(255, 255, 255, 0.3)",
+                              borderRadius: "50%",
+                              width: "36px",
+                              height: "36px",
+                              cursor: "pointer",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              opacity: currentImageIdx === 0 ? 0.3 : 1,
+                              zIndex: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              transition: "all 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => { if (currentImageIdx > 0) e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)"; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)"; }}
+                          >
+                            ◀
+                          </button>
+                          <div style={{position: "absolute", bottom: "0.5rem", left: "50%", transform: "translateX(-50%)", background: "rgba(0, 0, 0, 0.7)", padding: "0.25rem 0.75rem", borderRadius: "12px", zIndex: 10, color: "#fff", fontSize: "0.7rem", border: "1px solid rgba(255, 255, 255, 0.2)"}}>
+                            {currentImageIdx + 1} / {images.length}
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentImageIndex(prev => ({...prev, [option.id]: Math.min(images.length - 1, currentImageIdx + 1)}));
+                            }}
+                            disabled={currentImageIdx === images.length - 1}
+                            style={{
+                              position: "absolute",
+                              right: "0.5rem",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              background: "rgba(0, 0, 0, 0.7)",
+                              border: "1px solid rgba(255, 255, 255, 0.3)",
+                              borderRadius: "50%",
+                              width: "36px",
+                              height: "36px",
+                              cursor: "pointer",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              opacity: currentImageIdx === images.length - 1 ? 0.3 : 1,
+                              zIndex: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              transition: "all 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => { if (currentImageIdx < images.length - 1) e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)"; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)"; }}
+                          >
+                            ▶
+                          </button>
+                        </>
+                      )}
+                      <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
+                        <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      </div>
                     </div>
                     <div style={{ padding: "1rem" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
@@ -740,7 +867,8 @@ export function PedalCustomizer({
                       )}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
               <div
                 style={{
@@ -781,7 +909,12 @@ export function PedalCustomizer({
                 gap: "1.5rem",
               }}
             >
-              {ledOptions.map((option) => (
+              {ledOptions.map((option) => {
+                const currentImageIdx = currentImageIndex[option.id] ?? 0;
+                const images = option.images || [option.image];
+                const currentImage = images[currentImageIdx];
+                
+                return (
                 <div
                   key={option.id}
                   onClick={() => setSelectedLedId(option.id)}
@@ -791,8 +924,8 @@ export function PedalCustomizer({
                     overflow: "hidden",
                     boxShadow: selectedLedId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
                     transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    cursor: "pointer",
-                    border: selectedLedId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
+                    cursor: adminMode ? "copy" : "pointer",
+                    border: dragOverSku === option.id ? "2px dashed #4ade80" : selectedLedId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-3px)";
@@ -802,9 +935,135 @@ export function PedalCustomizer({
                     e.currentTarget.style.transform = "translateY(0)";
                     e.currentTarget.style.boxShadow = selectedLedId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
                   }}
+                  onDragOver={adminMode ? (e) => handleDragOver(e, option.id) : undefined}
+                  onDragLeave={adminMode ? handleDragLeave : undefined}
+                  onDrop={adminMode ? (e) => handleDrop(e, option.id, "led") : undefined}
                 >
-                  <div style={{ width: "100%", height: "160px", background: "#1a1a1a", padding: "0.75rem", position: "relative" }}>
-                    <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                  <div style={{ 
+                    width: "100%", 
+                    height: "160px", 
+                    background: "#1a1a1a",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative"
+                  }}>
+                    {adminMode && (
+                      <div style={{
+                        position: "absolute",
+                        top: "0.5rem",
+                        left: "0.5rem",
+                        background: dragOverSku === option.id ? "rgba(26, 58, 26, 0.95)" : "rgba(26, 26, 26, 0.85)",
+                        padding: "0.25rem 0.5rem",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                        color: dragOverSku === option.id ? "#4ade80" : "#999",
+                        border: dragOverSku === option.id ? "1px solid #4ade80" : "1px solid #333",
+                        zIndex: 10,
+                        pointerEvents: "none",
+                      }}>
+                        {dragOverSku === option.id ? "Drop images here" : "🔓 Admin"}
+                      </div>
+                    )}
+                    
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(prev => ({
+                              ...prev,
+                              [option.id]: currentImageIdx > 0 ? currentImageIdx - 1 : images.length - 1
+                            }));
+                          }}
+                          style={{
+                            position: "absolute",
+                            left: "0.5rem",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            background: "rgba(26, 26, 26, 0.8)",
+                            border: "2px solid rgba(255, 255, 255, 0.3)",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                            transition: "all 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
+                            e.currentTarget.style.borderColor = "#fff";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
+                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+                          }}
+                        >
+                          ←
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(prev => ({
+                              ...prev,
+                              [option.id]: currentImageIdx < images.length - 1 ? currentImageIdx + 1 : 0
+                            }));
+                          }}
+                          style={{
+                            position: "absolute",
+                            right: "0.5rem",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            background: "rgba(26, 26, 26, 0.8)",
+                            border: "2px solid rgba(255, 255, 255, 0.3)",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                            transition: "all 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
+                            e.currentTarget.style.borderColor = "#fff";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
+                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+                          }}
+                        >
+                          →
+                        </button>
+                        <div style={{
+                          position: "absolute",
+                          bottom: "0.5rem",
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          background: "rgba(26, 26, 26, 0.8)",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "4px",
+                          fontSize: "0.75rem",
+                          color: "#999",
+                          zIndex: 10,
+                        }}>
+                          {currentImageIdx + 1} / {images.length}
+                        </div>
+                      </>
+                    )}
+                    
+                    <div style={{ padding: "0.75rem", position: "relative", width: "100%", height: "100%" }}>
+                      <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                    </div>
                   </div>
                   <div style={{ padding: "1rem" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
@@ -820,7 +1079,8 @@ export function PedalCustomizer({
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -833,7 +1093,12 @@ export function PedalCustomizer({
                 gap: "1.5rem",
               }}
             >
-              {otherOptions.map((option) => (
+              {otherOptions.map((option) => {
+                const currentImageIdx = currentImageIndex[option.id] ?? 0;
+                const images = option.images || [option.image];
+                const currentImage = images[currentImageIdx];
+                
+                return (
                 <div
                   key={option.id}
                   onClick={() => handleToggleOther(option.id)}
@@ -843,8 +1108,8 @@ export function PedalCustomizer({
                     overflow: "hidden",
                     boxShadow: selectedOtherIds.includes(option.id) ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
                     transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    cursor: "pointer",
-                    border: selectedOtherIds.includes(option.id) ? "2px solid #fff" : "2px solid #2d2d2d",
+                    cursor: adminMode ? "copy" : "pointer",
+                    border: dragOverSku === option.id ? "2px dashed #4ade80" : selectedOtherIds.includes(option.id) ? "2px solid #fff" : "2px solid #2d2d2d",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-3px)";
@@ -854,9 +1119,135 @@ export function PedalCustomizer({
                     e.currentTarget.style.transform = "translateY(0)";
                     e.currentTarget.style.boxShadow = selectedOtherIds.includes(option.id) ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
                   }}
+                  onDragOver={adminMode ? (e) => handleDragOver(e, option.id) : undefined}
+                  onDragLeave={adminMode ? handleDragLeave : undefined}
+                  onDrop={adminMode ? (e) => handleDrop(e, option.id, "other") : undefined}
                 >
-                  <div style={{ width: "100%", height: "160px", background: "#1a1a1a", padding: "0.75rem", position: "relative" }}>
-                    <Image src={option.image} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                  <div style={{ 
+                    width: "100%", 
+                    height: "160px", 
+                    background: "#1a1a1a",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative"
+                  }}>
+                    {adminMode && (
+                      <div style={{
+                        position: "absolute",
+                        top: "0.5rem",
+                        left: "0.5rem",
+                        background: dragOverSku === option.id ? "rgba(26, 58, 26, 0.95)" : "rgba(26, 26, 26, 0.85)",
+                        padding: "0.25rem 0.5rem",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                        color: dragOverSku === option.id ? "#4ade80" : "#999",
+                        border: dragOverSku === option.id ? "1px solid #4ade80" : "1px solid #333",
+                        zIndex: 10,
+                        pointerEvents: "none",
+                      }}>
+                        {dragOverSku === option.id ? "Drop images here" : "🔓 Admin"}
+                      </div>
+                    )}
+                    
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(prev => ({
+                              ...prev,
+                              [option.id]: currentImageIdx > 0 ? currentImageIdx - 1 : images.length - 1
+                            }));
+                          }}
+                          style={{
+                            position: "absolute",
+                            left: "0.5rem",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            background: "rgba(26, 26, 26, 0.8)",
+                            border: "2px solid rgba(255, 255, 255, 0.3)",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                            transition: "all 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
+                            e.currentTarget.style.borderColor = "#fff";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
+                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+                          }}
+                        >
+                          ←
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(prev => ({
+                              ...prev,
+                              [option.id]: currentImageIdx < images.length - 1 ? currentImageIdx + 1 : 0
+                            }));
+                          }}
+                          style={{
+                            position: "absolute",
+                            right: "0.5rem",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            background: "rgba(26, 26, 26, 0.8)",
+                            border: "2px solid rgba(255, 255, 255, 0.3)",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                            transition: "all 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
+                            e.currentTarget.style.borderColor = "#fff";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
+                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+                          }}
+                        >
+                          →
+                        </button>
+                        <div style={{
+                          position: "absolute",
+                          bottom: "0.5rem",
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          background: "rgba(26, 26, 26, 0.8)",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "4px",
+                          fontSize: "0.75rem",
+                          color: "#999",
+                          zIndex: 10,
+                        }}>
+                          {currentImageIdx + 1} / {images.length}
+                        </div>
+                      </>
+                    )}
+                    
+                    <div style={{ padding: "0.75rem", position: "relative", width: "100%", height: "100%" }}>
+                      <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                    </div>
                   </div>
                   <div style={{ padding: "1rem" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
@@ -872,7 +1263,8 @@ export function PedalCustomizer({
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

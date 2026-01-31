@@ -79,7 +79,7 @@
             "product_id": "CUSTOM",
             "name": "125B Style Aluminum Diecast Enclosure Custom Paint",
             "product_url": "",
-            "image_url": "Logo.png",
+            "image_url": "Example_Bare.jpg",
             "lifestyle_image_url": "",
             "image_alt_text": "Custom Paint",
             "price": "$10.00",
@@ -129,7 +129,12 @@
             "customerPriceEUR": 4,
             "shortDescription": "Hand-sprayed custom color (any RGB color, Matte or Glossy)",
             "longDescription": "Create your perfect pedal with a completely custom hand-sprayed finish in any RGB color you desire. Choose between Matte or Glossy finish to match your aesthetic. Each custom-painted enclosure is carefully hand-sprayed by our skilled technicians. ⚠️ Requires manual review and has an extended production time of 5-7 business days. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and includes 4 steel mounting screws.",
-            "isCustomColor": true
+            "isCustomColor": true,
+            "image_urls": [
+                "Example_Bare.jpg",
+                "Example_Relic_1.jpg",
+                "Example_Relic_2.jpg"
+            ]
         },
         {
             "sku": "FURRY-001",

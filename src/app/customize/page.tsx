@@ -17,6 +17,7 @@ type RawOption = {
   name: string;
   price: number;
   image: string;
+  images?: string[];
   customerPriceEUR: number;
   shortDescription?: string;
   longDescription?: string;
@@ -91,18 +92,21 @@ export default async function CustomizePage() {
     ...item,
     id: item.name.toLowerCase().replace(/\s+/g, "-"),
     image: mapOptionImage(item.image),
+    images: item.images?.map(mapOptionImage),
   }));
 
   const ledOptions = (JSON.parse(rawLed) as RawOption[]).map((item) => ({
     ...item,
     id: item.name.toLowerCase().replace(/\s+/g, "-"),
     image: mapOptionImage(item.image),
+    images: item.images?.map(mapOptionImage),
   }));
 
   const otherOptions = (JSON.parse(rawOther) as RawOption[]).map((item) => ({
     ...item,
     id: item.name.toLowerCase().replace(/\s+/g, "-"),
     image: mapOptionImage(item.image),
+    images: item.images?.map(mapOptionImage),
   }));
 
   const favourites = JSON.parse(rawFavourites) as { paintFinishFavourites: string[] };
