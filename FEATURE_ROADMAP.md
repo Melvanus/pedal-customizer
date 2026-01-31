@@ -42,7 +42,7 @@
   - Marked as "Requires Manual Review" with warning indicator
   - Stores selected RGB value and finish type (matte/glossy) in configuration
   - Clear note: "Custom colors are hand-sprayed and require 5-7 business days"
-  - Use the "A-5168 125B Style Aluminum Diecast Enclosure Custom Paint.jpg" as product image and multipy the image with the custom color value
+  - Use the "A-5168 125B Style Aluminum Diecast Enclosure Custom Paint.jpg" as product image and multipy the image with the custom color
 - **Benefits:**
   - Visual identification of finish characteristics at a glance
   - Accurate color representation reduces customer uncertainty

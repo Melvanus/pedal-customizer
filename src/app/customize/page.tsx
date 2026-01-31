@@ -45,6 +45,7 @@ export default async function CustomizePage() {
       name: string;
       price: string;
       available: boolean;
+      image_url?: string;
       finish_info?: { finish_type?: string };
       color_info?: { primary_color?: string };
       displayedName: string;
@@ -62,10 +63,7 @@ export default async function CustomizePage() {
   const paintOptions: PaintOption[] = data.products
     .filter((product) => product.available)
     .map((product) => {
-      const matchedImage = imageFiles.find((file) =>
-        file.toLowerCase().startsWith(product.sku.toLowerCase())
-      );
-      const image = resolveImageUrl(matchedImage ?? "Logo.png");
+      const image = resolveImageUrl(product.image_url || "Logo.png");
 
       return {
         id: product.sku,
