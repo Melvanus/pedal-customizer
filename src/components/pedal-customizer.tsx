@@ -18,7 +18,9 @@ export type OptionItem = {
 };
 
 export type PaintOption = OptionItem & {
-  sku: string;
+  supplier_sku: string;
+  supplier_id: string;
+  internal_product_id: string;
   finish?: string;
   color?: string;
   available?: boolean;
@@ -125,7 +127,7 @@ export function PedalCustomizer({
     const filtered = paintOptions
       .filter((option) =>
         term
-          ? [option.name, option.sku, option.color, option.finish]
+          ? [option.name, option.supplier_sku, option.color, option.finish]
               .filter(Boolean)
               .some((value) => normalize(String(value)).includes(term))
           : true
@@ -152,7 +154,7 @@ export function PedalCustomizer({
 
     return [...filtered].sort((a, b) => {
       if (sortBy === "price") return a.customerPriceEUR - b.customerPriceEUR;
-      if (sortBy === "sku") return a.sku.localeCompare(b.sku);
+      if (sortBy === "sku") return a.supplier_sku.localeCompare(b.supplier_sku);
       if (sortBy === "color") return (a.color ?? "").localeCompare(b.color ?? "");
       if (sortBy === "finish") return (a.finish ?? "").localeCompare(b.finish ?? "");
       return a.name.localeCompare(b.name);
@@ -220,7 +222,7 @@ export function PedalCustomizer({
     // Get the option to find its current images
     let option: any;
     if (category === "paint") {
-      option = paintOptions.find((p) => p.sku === identifier);
+      option = paintOptions.find((p) => p.supplier_sku === identifier);
     } else if (category === "design") {
       option = designOptions.find((p) => p.id === identifier);
     } else if (category === "led") {
@@ -511,7 +513,7 @@ export function PedalCustomizer({
               }}
             >
                 {filteredPaintOptions.map((option) => {
-                  const currentImageIdx = currentImageIndex[option.sku] || 0;
+                  const currentImageIdx = currentImageIndex[option.supplier_sku] || 0;
                   const images = option.images || [option.image];
                   const currentImage = images[currentImageIdx] || option.image;
                   
@@ -524,17 +526,17 @@ export function PedalCustomizer({
                         setShowColorPicker(true);
                       }
                     }}
-                    onDragOver={adminMode ? (e) => handleDragOver(e, option.sku) : undefined}
+                    onDragOver={adminMode ? (e) => handleDragOver(e, option.supplier_sku) : undefined}
                     onDragLeave={adminMode ? handleDragLeave : undefined}
-                    onDrop={adminMode ? (e) => handleDrop(e, option.sku, "paint") : undefined}
+                    onDrop={adminMode ? (e) => handleDrop(e, option.supplier_sku, "paint") : undefined}
                     style={{
-                      background: dragOverSku === option.sku ? "#1a3a1a" : "#0f0f0f",
+                      background: dragOverSku === option.supplier_sku ? "#1a3a1a" : "#0f0f0f",
                       borderRadius: "10px",
                       overflow: "hidden",
                       boxShadow: selectedPaintId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
                       transition: "transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease",
                       cursor: adminMode ? "copy" : "pointer",
-                      border: dragOverSku === option.sku ? "2px dashed #4ade80" : selectedPaintId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
+                      border: dragOverSku === option.supplier_sku ? "2px dashed #4ade80" : selectedPaintId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
                       position: "relative",
                     }}
                     onMouseEnter={(e) => {
@@ -564,7 +566,7 @@ export function PedalCustomizer({
                             🔧 Drop images here
                           </div>
                           <button
-                            onClick={(e) => handleDeleteImage(e, option.sku, "paint", currentImage)}
+                            onClick={(e) => handleDeleteImage(e, option.supplier_sku, "paint", currentImage)}
                             style={{
                               position: "absolute",
                               top: "0.5rem",
@@ -604,7 +606,7 @@ export function PedalCustomizer({
                               e.stopPropagation();
                               setCurrentImageIndex(prev => ({
                                 ...prev,
-                                [option.sku]: Math.max(0, currentImageIdx - 1)
+                                [option.supplier_sku]: Math.max(0, currentImageIdx - 1)
                               }));
                             }}
                             disabled={currentImageIdx === 0}
@@ -659,7 +661,7 @@ export function PedalCustomizer({
                               e.stopPropagation();
                               setCurrentImageIndex(prev => ({
                                 ...prev,
-                                [option.sku]: Math.min(images.length - 1, currentImageIdx + 1)
+                                [option.supplier_sku]: Math.min(images.length - 1, currentImageIdx + 1)
                               }));
                             }}
                             disabled={currentImageIdx === images.length - 1}
@@ -730,7 +732,7 @@ export function PedalCustomizer({
                               fontWeight: "bold",
                             }}
                           >
-                            {option.sku}
+                            {adminMode ? option.supplier_sku : option.internal_product_id}
                           </span>
                           {(() => {
                             const { Icon, color } = getFinishIcon(option.isCustomColor ? customFinish : option.finish);

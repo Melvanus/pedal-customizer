@@ -159,7 +159,7 @@ export default function SummaryPage() {
                 shortDesc={config.paint.shortDescription}
                 longDesc={config.paint.longDescription}
                 details={[
-                  { label: "SKU", value: config.paint.sku },
+                  { label: "Product ID", value: config.paint.internal_product_id },
                   { label: "Color", value: config.paint.color },
                   { label: "Finish", value: config.paint.finish },
                 ]}

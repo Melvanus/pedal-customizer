@@ -120,7 +120,6 @@
     ],
     "products": [
         {
-            "sku": "A-8455",
             "product_id": "10558",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC Black",
             "price": "$6.99",
@@ -148,10 +147,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC Black features a premium Metallic powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8455 125B Style Aluminum Diecast Enclosure METALLIC Black.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8455",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-001"
         },
         {
-            "sku": "CUSTOM-001",
             "product_id": "CUSTOM",
             "name": "125B Style Aluminum Diecast Enclosure Custom Paint",
             "price": "$10.00",
@@ -180,10 +181,12 @@
             "isCustomColor": true,
             "image_urls": [
                 "Enclosure_Placeholder.jpg"
-            ]
+            ],
+            "supplier_sku": "CUSTOM-001",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-002"
         },
         {
-            "sku": "FURRY-001",
             "product_id": "SPECIAL",
             "name": "125B Style Aluminum Diecast Enclosure Furry Finish",
             "price": "$12.00",
@@ -211,10 +214,12 @@
             "longDescription": "A unique furry finish that gives your pedal a soft, fuzzy appearance and feel. Creates a distinctive tactile experience and vintage aesthetic. Note: This specialty finish may require additional care, careful handling, mealtimes, playing and lot of attention.",
             "image_urls": [
                 "A-5165 125B Style Aluminum Diecast Enclosure Furry Finish.jpg"
-            ]
+            ],
+            "supplier_sku": "FURRY-001",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-003"
         },
         {
-            "sku": "A-8448",
             "product_id": "10551",
             "name": "125B Style Aluminum Diecast Enclosure CHAMPAGNE",
             "price": "$6.99",
@@ -242,10 +247,12 @@
             "longDescription": "This Aluminium Enclosure CHAMPAGNE features a premium Glossy powder coating in Champagne. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8448 125B Style Aluminum Diecast Enclosure CHAMPAGNE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8448",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-004"
         },
         {
-            "sku": "A-8437",
             "product_id": "10537",
             "name": "125B Style Aluminum Diecast Enclosure Matte Gray Hammer",
             "price": "$6.99",
@@ -273,10 +280,12 @@
             "longDescription": "This Aluminium Enclosure Matte Gray Hammer features a premium Hammer powder coating in Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8437 125B Style Aluminum Diecast Enclosure Matte Gray Hammer.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8437",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-005"
         },
         {
-            "sku": "A-8430",
             "product_id": "10530",
             "name": "125B Style Aluminum Diecast Enclosure Sulphur Yellow sand texture",
             "price": "$6.99",
@@ -304,10 +313,12 @@
             "longDescription": "This Aluminium Enclosure Sulphur Yellow sand texture features a premium Sand Texture powder coating in Sulphur Yellow. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8430 125B Style Aluminum Diecast Enclosure Sulphur Yellow sand texture.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8430",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-006"
         },
         {
-            "sku": "A-8423",
             "product_id": "10523",
             "name": "125B Style Aluminum Diecast Enclosure Metallic Golden water texture",
             "price": "$6.99",
@@ -335,10 +346,12 @@
             "longDescription": "This Aluminium Enclosure Metallic Golden water texture features a premium Metallic powder coating in Golden. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8423 125B Style Aluminum Diecast Enclosure Metallic Golden water texture.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8423",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-007"
         },
         {
-            "sku": "A-8415",
             "product_id": "10515",
             "name": "125B Style Aluminum Diecast Enclosure Purple Hammer",
             "price": "$6.99",
@@ -366,10 +379,12 @@
             "longDescription": "This Aluminium Enclosure Purple Hammer features a premium Hammer powder coating in Purple. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8415 125B Style Aluminum Diecast Enclosure Purple Hammer.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8415",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-008"
         },
         {
-            "sku": "A-8329",
             "product_id": "10406",
             "name": "125B Style Aluminum Diecast Enclosure Chrome green",
             "price": "$7.99",
@@ -397,10 +412,12 @@
             "longDescription": "This Aluminium Enclosure Chrome green features a premium Glossy powder coating in Chrome Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8329 125B Style Aluminum Diecast Enclosure Chrome green.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8329",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-009"
         },
         {
-            "sku": "A-8286",
             "product_id": "10352",
             "name": "125B Style Aluminum Diecast Enclosure Metallic Brown",
             "price": "$6.99",
@@ -428,10 +445,12 @@
             "longDescription": "This Aluminium Enclosure Metallic Brown features a premium Metallic powder coating in Brown. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8286 125B Style Aluminum Diecast Enclosure Metallic Brown.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8286",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-010"
         },
         {
-            "sku": "A-8279",
             "product_id": "10345",
             "name": "125B Style Aluminum Diecast Enclosure Black Hammer",
             "price": "$6.99",
@@ -459,10 +478,12 @@
             "longDescription": "This Aluminium Enclosure Black Hammer features a premium Hammer powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8279 125B Style Aluminum Diecast Enclosure Black Hammer.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8279",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-011"
         },
         {
-            "sku": "A-8220",
             "product_id": "10269",
             "name": "125B Style Aluminum Diecast Enclosure Matte Pink Sand Texture",
             "price": "$6.99",
@@ -490,10 +511,12 @@
             "longDescription": "This Aluminium Enclosure Matte Pink Sand Texture features a premium Sand Texture powder coating in Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8220 125B Style Aluminum Diecast Enclosure Matte Pink Sand Texture.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8220",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-012"
         },
         {
-            "sku": "A-8212",
             "product_id": "10262",
             "name": "125B Style Aluminum Diecast Enclosure Matte Sky Blue Sand Texture",
             "price": "$6.99",
@@ -521,10 +544,12 @@
             "longDescription": "This Aluminium Enclosure Matte Sky Blue Sand Texture features a premium Sand Texture powder coating in Sky Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8212 125B Style Aluminum Diecast Enclosure Matte Sky Blue Sand Texture.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8212",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-013"
         },
         {
-            "sku": "A-8205",
             "product_id": "10255",
             "name": "125B Style Aluminum Diecast Enclosure Matte Brown Sand Texture",
             "price": "$6.99",
@@ -552,10 +577,12 @@
             "longDescription": "This Aluminium Enclosure Matte Brown Sand Texture features a premium Sand Texture powder coating in Brown. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8205 125B Style Aluminum Diecast Enclosure Matte Brown Sand Texture.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8205",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-014"
         },
         {
-            "sku": "A-8198",
             "product_id": "10248",
             "name": "125B Style Aluminum Diecast Enclosure Matte Green Sand Texture",
             "price": "$6.99",
@@ -583,10 +610,12 @@
             "longDescription": "This Aluminium Enclosure Matte Green Sand Texture features a premium Sand Texture powder coating in Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8198 125B Style Aluminum Diecast Enclosure Matte Green Sand Texture.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8198",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-015"
         },
         {
-            "sku": "A-8164",
             "product_id": "10160",
             "name": "125B Style Aluminum Diecast Enclosure Silver Gray Hammer",
             "price": "$6.99",
@@ -614,10 +643,12 @@
             "longDescription": "This Aluminium Enclosure Silver Gray Hammer features a premium Hammer powder coating in Silver Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8164 125B Style Aluminum Diecast Enclosure Silver Gray Hammer.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8164",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-016"
         },
         {
-            "sku": "A-8157",
             "product_id": "10153",
             "name": "125B Style Aluminum Diecast Enclosure White Hammer",
             "price": "$6.99",
@@ -645,10 +676,12 @@
             "longDescription": "This Aluminium Enclosure White Hammer features a premium Hammer powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8157 125B Style Aluminum Diecast Enclosure White Hammer.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8157",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-017"
         },
         {
-            "sku": "A-8094",
             "product_id": "10054",
             "name": "125B Style Aluminum Diecast Enclosure BLUE HAMMER",
             "price": "$6.99",
@@ -676,10 +709,12 @@
             "longDescription": "This Aluminium Enclosure BLUE HAMMER features a premium Hammer powder coating in Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-8094 125B Style Aluminum Diecast Enclosure BLUE HAMMER.jpg"
-            ]
+            ],
+            "supplier_sku": "A-8094",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-018"
         },
         {
-            "sku": "A-7556",
             "product_id": "9269",
             "name": "125B Style Aluminum Diecast Enclosure GLOWING LIGHT GREEN",
             "price": "$7.99",
@@ -707,10 +742,12 @@
             "longDescription": "This Aluminium Enclosure GLOWING LIGHT GREEN features a premium Glossy powder coating in Glowing Light Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7556 125B Style Aluminum Diecast Enclosure GLOWING LIGHT GREEN.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7556",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-019"
         },
         {
-            "sku": "A-7549",
             "product_id": "9262",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY GREEN",
             "price": "$7.99",
@@ -738,10 +775,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CANDY GREEN features a premium Metallic powder coating in Candy Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7549 125B Style Aluminum Diecast Enclosure METALLIC CANDY GREEN.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7549",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-020"
         },
         {
-            "sku": "A-7465",
             "product_id": "9131",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CLEAR",
             "price": "$6.99",
@@ -769,10 +808,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CLEAR features a premium Metallic powder coating in Clear. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7465 125B Style Aluminum Diecast Enclosure METALLIC CLEAR.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7465",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-021"
         },
         {
-            "sku": "A-7392",
             "product_id": "9046",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY PINK",
             "price": "$7.99",
@@ -800,10 +841,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CANDY PINK features a premium Metallic powder coating in Candy Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7392 125B Style Aluminum Diecast Enclosure METALLIC CANDY PINK.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7392",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-022"
         },
         {
-            "sku": "A-7377",
             "product_id": "9041",
             "name": "125B Style Aluminum Diecast Enclosure VIVA MAGENTA",
             "price": "$5.99",
@@ -831,10 +874,12 @@
             "longDescription": "This Aluminium Enclosure VIVA MAGENTA features a premium Glossy powder coating in Viva Magenta. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7377 125B Style Aluminum Diecast Enclosure VIVA MAGENTA.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7377",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-023"
         },
         {
-            "sku": "A-7251",
             "product_id": "9011",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY PURPLE",
             "price": "$6.99",
@@ -862,10 +907,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CANDY PURPLE features a premium Metallic powder coating in Candy Purple. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7251 125B Style Aluminum Diecast Enclosure METALLIC CANDY PURPLE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7251",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-024"
         },
         {
-            "sku": "A-7244",
             "product_id": "9004",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY BLUE",
             "price": "$6.99",
@@ -893,10 +940,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CANDY BLUE features a premium Metallic powder coating in Candy Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7244 125B Style Aluminum Diecast Enclosure METALLIC CANDY BLUE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7244",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-025"
         },
         {
-            "sku": "A-7161",
             "product_id": "8887",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY RED",
             "price": "$6.99",
@@ -924,10 +973,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CANDY RED features a premium Metallic powder coating in Candy Red. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7161 125B Style Aluminum Diecast Enclosure METALLIC CANDY RED.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7161",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-026"
         },
         {
-            "sku": "A-7089",
             "product_id": "8798",
             "name": "125B Style Aluminum Diecast Enclosure GLOSSY CLEAR",
             "price": "$6.99",
@@ -955,10 +1006,12 @@
             "longDescription": "This Aluminium Enclosure GLOSSY CLEAR features a premium Glossy powder coating in Glossy Clear. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7089 125B Style Aluminum Diecast Enclosure GLOSSY CLEAR.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7089",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-027"
         },
         {
-            "sku": "A-7082",
             "product_id": "8787",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC DARK CHAMPAGNE",
             "price": "$6.99",
@@ -986,10 +1039,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC DARK CHAMPAGNE features a premium Metallic powder coating in Dark Champagne. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-7082 125B Style Aluminum Diecast Enclosure METALLIC DARK CHAMPAGNE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-7082",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-028"
         },
         {
-            "sku": "A-6959",
             "product_id": "8618",
             "name": "125B Style Aluminum Diecast Enclosure SILVER HAMMER",
             "price": "$6.99",
@@ -1017,10 +1072,12 @@
             "longDescription": "This Aluminium Enclosure SILVER HAMMER features a premium Hammer powder coating in Silver. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6959 125B Style Aluminum Diecast Enclosure SILVER HAMMER.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6959",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-029"
         },
         {
-            "sku": "A-6948",
             "product_id": "8602",
             "name": "125B Style Aluminum Diecast Enclosure Glow in the dark",
             "price": "$7.99",
@@ -1048,10 +1105,12 @@
             "longDescription": "This Aluminium Enclosure Glow in the dark features a premium Glossy powder coating in Glow In The Dark. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6948 125B Style Aluminum Diecast Enclosure Glow in the dark.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6948",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-030"
         },
         {
-            "sku": "A-6942",
             "product_id": "8592",
             "name": "125B Style Aluminum Diecast Enclosure Pastel Pink",
             "price": "$6.99",
@@ -1079,10 +1138,12 @@
             "longDescription": "This Aluminium Enclosure Pastel Pink features a premium Glossy powder coating in Pastel Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6942 125B Style Aluminum Diecast Enclosure Pastel Pink.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6942",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-031"
         },
         {
-            "sku": "A-6916",
             "product_id": "8558",
             "name": "125B Style Aluminum Diecast Enclosure Matte Clear",
             "price": "$6.99",
@@ -1110,10 +1171,12 @@
             "longDescription": "This Aluminium Enclosure Matte Clear features a premium Matte powder coating in Clear. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6916 125B Style Aluminum Diecast Enclosure Matte Clear.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6916",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-032"
         },
         {
-            "sku": "A-6903",
             "product_id": "8540",
             "name": "125B Style Aluminum Diecast Enclosure Pearl Gray",
             "price": "$6.99",
@@ -1141,10 +1204,12 @@
             "longDescription": "This Aluminium Enclosure Pearl Gray features a premium Glossy powder coating in Pearl Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6903 125B Style Aluminum Diecast Enclosure Pearl Gray.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6903",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-033"
         },
         {
-            "sku": "A-6871",
             "product_id": "8494",
             "name": "125B Style Aluminum Diecast Enclosure Pastel Light Green",
             "price": "$6.99",
@@ -1172,10 +1237,12 @@
             "longDescription": "This Aluminium Enclosure Pastel Light Green features a premium Glossy powder coating in Pastel Light Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6871 125B Style Aluminum Diecast Enclosure Pastel Light Green.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6871",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-034"
         },
         {
-            "sku": "A-6861",
             "product_id": "8470",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY GOLD",
             "price": "$6.99",
@@ -1203,10 +1270,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CANDY GOLD features a premium Metallic powder coating in Candy Gold. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6861 125B Style Aluminum Diecast Enclosure METALLIC CANDY GOLD.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6861",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-035"
         },
         {
-            "sku": "A-6855",
             "product_id": "8460",
             "name": "125B Style Aluminum Diecast Enclosure Pastel Violet",
             "price": "$6.99",
@@ -1234,10 +1303,12 @@
             "longDescription": "This Aluminium Enclosure Pastel Violet features a premium Glossy powder coating in Pastel Violet. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6855 125B Style Aluminum Diecast Enclosure Pastel Violet.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6855",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-036"
         },
         {
-            "sku": "A-6639",
             "product_id": "8141",
             "name": "125B Style Aluminum Diecast Enclosure MATTE GREY SAND TEXTURE",
             "price": "$5.99",
@@ -1265,10 +1336,12 @@
             "longDescription": "This Aluminium Enclosure MATTE GREY SAND TEXTURE features a premium Sand Texture powder coating in Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6639 125B Style Aluminum Diecast Enclosure MATTE GREY SAND TEXTURE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6639",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-037"
         },
         {
-            "sku": "A-6636",
             "product_id": "8138",
             "name": "125B Style Aluminum Diecast Enclosure MATTE ORANGE SAND TEXTURE",
             "price": "$5.99",
@@ -1296,10 +1369,12 @@
             "longDescription": "This Aluminium Enclosure MATTE ORANGE SAND TEXTURE features a premium Sand Texture powder coating in Orange. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6636 125B Style Aluminum Diecast Enclosure MATTE ORANGE SAND TEXTURE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6636",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-038"
         },
         {
-            "sku": "A-6633",
             "product_id": "8135",
             "name": "125B Style Aluminum Diecast Enclosure MATTE RED SAND TEXTURE",
             "price": "$5.99",
@@ -1327,10 +1402,12 @@
             "longDescription": "This Aluminium Enclosure MATTE RED SAND TEXTURE features a premium Sand Texture powder coating in Red. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6633 125B Style Aluminum Diecast Enclosure MATTE RED SAND TEXTURE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6633",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-039"
         },
         {
-            "sku": "A-6628",
             "product_id": "8130",
             "name": "125B Style Aluminum Diecast Enclosure MATTE WHITE SAND TEXTURE",
             "price": "$5.99",
@@ -1358,10 +1435,12 @@
             "longDescription": "This Aluminium Enclosure MATTE WHITE SAND TEXTURE features a premium Sand Texture powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6628 125B Style Aluminum Diecast Enclosure MATTE WHITE SAND TEXTURE.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6628",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-040"
         },
         {
-            "sku": "A-6620",
             "product_id": "8122",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY YELLOW",
             "price": "$6.99",
@@ -1389,10 +1468,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC CANDY YELLOW features a premium Metallic powder coating in Candy Yellow. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6620 125B Style Aluminum Diecast Enclosure METALLIC CANDY YELLOW.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6620",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-041"
         },
         {
-            "sku": "A-6617",
             "product_id": "8119",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC DARK GOLD",
             "price": "$7.99",
@@ -1420,10 +1501,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC DARK GOLD features a premium Metallic powder coating in Dark Gold. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6617 125B Style Aluminum Diecast Enclosure METALLIC DARK GOLD.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6617",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-042"
         },
         {
-            "sku": "A-6614",
             "product_id": "8116",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC LIGHT GOLD",
             "price": "$6.99",
@@ -1451,10 +1534,12 @@
             "longDescription": "This Aluminium Enclosure METALLIC LIGHT GOLD features a premium Metallic powder coating in Light Gold. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6614 125B Style Aluminum Diecast Enclosure METALLIC LIGHT GOLD.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6614",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-043"
         },
         {
-            "sku": "A-6608",
             "product_id": "8110",
             "name": "125B Style Aluminum Diecast Enclosure CHROMIUM",
             "price": "$6.99",
@@ -1482,10 +1567,12 @@
             "longDescription": "This Aluminium Enclosure CHROMIUM features a premium Glossy powder coating in Chromium. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6608 125B Style Aluminum Diecast Enclosure CHROMIUM.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6608",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-044"
         },
         {
-            "sku": "A-6564",
             "product_id": "8038",
             "name": "125B Style Aluminum Diecast Enclosure GLIMMER BROWN SUGAR",
             "price": "$5.99",
@@ -1513,10 +1600,12 @@
             "longDescription": "This Aluminium Enclosure GLIMMER BROWN SUGAR features a premium Glossy powder coating in Glimmer Brown Sugar. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6564 125B Style Aluminum Diecast Enclosure GLIMMER BROWN SUGAR.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6564",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-045"
         },
         {
-            "sku": "A-6557",
             "product_id": "8027",
             "name": "125B Style Aluminum Diecast Enclosure WINKED SILVER",
             "price": "$5.99",
@@ -1544,10 +1633,12 @@
             "longDescription": "This Aluminium Enclosure WINKED SILVER features a premium Glossy powder coating in Winked Silver. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-6557 125B Style Aluminum Diecast Enclosure WINKED SILVER.jpg"
-            ]
+            ],
+            "supplier_sku": "A-6557",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-046"
         },
         {
-            "sku": "A-5936",
             "product_id": "6411",
             "name": "125B Style Aluminum Diecast Enclosure MATTE ARMY GREEN",
             "price": "$5.99",
@@ -1575,10 +1666,12 @@
             "longDescription": "This Aluminium Enclosure MATTE ARMY GREEN features a premium Matte powder coating in Army Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5936 125B Style Aluminum Diecast Enclosure MATTE ARMY GREEN.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5936",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-047"
         },
         {
-            "sku": "A-5931",
             "product_id": "6402",
             "name": "125B Style Aluminum Diecast Enclosure Matte White",
             "price": "$5.99",
@@ -1606,10 +1699,12 @@
             "longDescription": "This Aluminium Enclosure Matte White features a premium Sand Texture powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5931 125B Style Aluminum Diecast Enclosure Matte White.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5931",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-048"
         },
         {
-            "sku": "A-5881",
             "product_id": "5666",
             "name": "125B Style Aluminum Diecast Enclosure Matte Black Sand Texture",
             "price": "$5.99",
@@ -1637,10 +1732,12 @@
             "longDescription": "This Aluminium Enclosure Matte Black Sand Texture features a premium Sand Texture powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5881 125B Style Aluminum Diecast Enclosure Matte Black Sand Texture.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5881",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-049"
         },
         {
-            "sku": "A-5877",
             "product_id": "5662",
             "name": "125B Style Aluminum Diecast Enclosure Copper Hammer",
             "price": "$6.99",
@@ -1668,10 +1765,12 @@
             "longDescription": "This Aluminium Enclosure Copper Hammer features a premium Hammer powder coating. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5877 125B Style Aluminum Diecast Enclosure Copper Hammer.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5877",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-050"
         },
         {
-            "sku": "A-5873",
             "product_id": "5204",
             "name": "125B Style Aluminum Diecast Enclosure Matte Orange",
             "price": "$5.99",
@@ -1699,10 +1798,12 @@
             "longDescription": "This Aluminium Enclosure Matte Orange features a premium Matte powder coating in Orange. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5873 125B Style Aluminum Diecast Enclosure Matte Orange.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5873",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-051"
         },
         {
-            "sku": "A-5869",
             "product_id": "5137",
             "name": "125B Style Aluminum Diecast Enclosure Matte Black",
             "price": "$5.99",
@@ -1730,10 +1831,12 @@
             "longDescription": "This Aluminium Enclosure Matte Black features a premium Sand Texture powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5869 125B Style Aluminum Diecast Enclosure Matte Black.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5869",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-052"
         },
         {
-            "sku": "A-5865",
             "product_id": "5133",
             "name": "125B Style Aluminum Diecast Enclosure Matte Dark Gray",
             "price": "$5.99",
@@ -1761,10 +1864,12 @@
             "longDescription": "This Aluminium Enclosure Matte Dark Gray features a premium Matte powder coating in Dark Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5865 125B Style Aluminum Diecast Enclosure Matte Dark Gray.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5865",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-053"
         },
         {
-            "sku": "A-5861",
             "product_id": "5129",
             "name": "125B Style Aluminum Diecast Enclosure Matte Violet",
             "price": "$5.99",
@@ -1792,10 +1897,12 @@
             "longDescription": "This Aluminium Enclosure Matte Violet features a premium Matte powder coating in Violet. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5861 125B Style Aluminum Diecast Enclosure Matte Violet.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5861",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-054"
         },
         {
-            "sku": "A-5857",
             "product_id": "5125",
             "name": "125B Style Aluminum Diecast Enclosure Matte Light Blue",
             "price": "$5.99",
@@ -1823,10 +1930,12 @@
             "longDescription": "This Aluminium Enclosure Matte Light Blue features a premium Matte powder coating in Light Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5857 125B Style Aluminum Diecast Enclosure Matte Light Blue.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5857",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-055"
         },
         {
-            "sku": "A-5850",
             "product_id": "4834",
             "name": "125B Style Aluminum Diecast Enclosure Lawn Green",
             "price": "$5.99",
@@ -1854,10 +1963,12 @@
             "longDescription": "This Aluminium Enclosure Lawn Green features a premium Glossy powder coating in Lawn Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5850 125B Style Aluminum Diecast Enclosure Lawn Green.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5850",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-056"
         },
         {
-            "sku": "A-5837",
             "product_id": "4432",
             "name": "125B Style Aluminum Diecast Enclosure CREAM",
             "price": "$5.99",
@@ -1885,10 +1996,12 @@
             "longDescription": "This Aluminium Enclosure CREAM features a premium Glossy powder coating in Cream. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5837 125B Style Aluminum Diecast Enclosure CREAM.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5837",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-057"
         },
         {
-            "sku": "A-5832",
             "product_id": "4251",
             "name": "125B Style Aluminum Diecast Enclosure GREY",
             "price": "$5.99",
@@ -1916,10 +2029,12 @@
             "longDescription": "This Aluminium Enclosure GREY features a premium Glossy powder coating in Grey. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5832 125B Style Aluminum Diecast Enclosure GREY.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5832",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-058"
         },
         {
-            "sku": "A-5825",
             "product_id": "4244",
             "name": "125B Style Aluminum Diecast Enclosure Ball Silver",
             "price": "$5.99",
@@ -1947,10 +2062,12 @@
             "longDescription": "This Aluminium Enclosure Ball Silver features a premium Glossy powder coating in Ball Silver. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5825 125B Style Aluminum Diecast Enclosure Ball Silver.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5825",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-059"
         },
         {
-            "sku": "A-5821",
             "product_id": "4217",
             "name": "125B Style Aluminum Diecast Enclosure Violet",
             "price": "$5.99",
@@ -1978,10 +2095,12 @@
             "longDescription": "This Aluminium Enclosure Violet features a premium Glossy powder coating in Violet. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5821 125B Style Aluminum Diecast Enclosure Violet.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5821",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-060"
         },
         {
-            "sku": "A-5819",
             "product_id": "4189",
             "name": "125B Style Aluminum Diecast Enclosure Light Sky Blue",
             "price": "$5.99",
@@ -2009,10 +2128,12 @@
             "longDescription": "This Aluminium Enclosure Light Sky Blue features a premium Glossy powder coating in Light Sky Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5819 125B Style Aluminum Diecast Enclosure Light Sky Blue.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5819",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-061"
         },
         {
-            "sku": "A-5815",
             "product_id": "4183",
             "name": "125B Style Aluminum Diecast Enclosure Light Pink",
             "price": "$5.99",
@@ -2040,10 +2161,12 @@
             "longDescription": "This Aluminium Enclosure Light Pink features a premium Glossy powder coating in Light Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5815 125B Style Aluminum Diecast Enclosure Light Pink.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5815",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-062"
         },
         {
-            "sku": "A-5802",
             "product_id": "4170",
             "name": "125B Style Aluminum Diecast Enclosure Burnt Orange",
             "price": "$5.99",
@@ -2071,10 +2194,12 @@
             "longDescription": "This Aluminium Enclosure Burnt Orange features a premium Glossy powder coating in Burnt Orange. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5802 125B Style Aluminum Diecast Enclosure Burnt Orange.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5802",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-063"
         },
         {
-            "sku": "A-5192",
             "product_id": "4151",
             "name": "125B Style Aluminum Diecast Enclosure Red",
             "price": "$5.99",
@@ -2102,10 +2227,12 @@
             "longDescription": "This Aluminium Enclosure Red features a premium Glossy powder coating in Red. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5192 125B Style Aluminum Diecast Enclosure Red.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5192",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-064"
         },
         {
-            "sku": "A-5184",
             "product_id": "4143",
             "name": "125B Style Aluminum Diecast Enclosure Green",
             "price": "$5.99",
@@ -2133,10 +2260,12 @@
             "longDescription": "This Aluminium Enclosure Green features a premium Glossy powder coating in Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5184 125B Style Aluminum Diecast Enclosure Green.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5184",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-065"
         },
         {
-            "sku": "A-5180",
             "product_id": "4139",
             "name": "125B Style Aluminum Diecast Enclosure Yellow",
             "price": "$5.99",
@@ -2164,10 +2293,12 @@
             "longDescription": "This Aluminium Enclosure Yellow features a premium Glossy powder coating in Yellow. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5180 125B Style Aluminum Diecast Enclosure Yellow.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5180",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-066"
         },
         {
-            "sku": "A-5176",
             "product_id": "4135",
             "name": "125B Style Aluminum Diecast Enclosure Blue",
             "price": "$5.99",
@@ -2195,10 +2326,12 @@
             "longDescription": "This Aluminium Enclosure Blue features a premium Glossy powder coating in Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5176 125B Style Aluminum Diecast Enclosure Blue.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5176",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-067"
         },
         {
-            "sku": "A-5169",
             "product_id": "3629",
             "name": "125B Style Aluminum Diecast Enclosure Black",
             "price": "$5.99",
@@ -2226,10 +2359,12 @@
             "longDescription": "This Aluminium Enclosure Black features a premium Glossy powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5169 125B Style Aluminum Diecast Enclosure Black.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5169",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-068"
         },
         {
-            "sku": "A-5168",
             "product_id": "3628",
             "name": "125B Style Aluminum Diecast Enclosure White",
             "price": "$5.99",
@@ -2257,10 +2392,12 @@
             "longDescription": "This Aluminium Enclosure White features a premium Glossy powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5168 125B Style Aluminum Diecast Enclosure Custom Paint.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5168",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-069"
         },
         {
-            "sku": "A-5165",
             "product_id": "2855",
             "name": "125B Style Aluminum Diecast Enclosure",
             "price": "$5.49",
@@ -2288,10 +2425,12 @@
             "longDescription": "This Aluminium Enclosure  features a premium Bare powder coating. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
             "image_urls": [
                 "A-5165 125B Style Aluminum Diecast Enclosure.jpg"
-            ]
+            ],
+            "supplier_sku": "A-5165",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-070"
         },
         {
-            "sku": "A-7449",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CANDY ORANGE",
             "price": "",
@@ -2317,10 +2456,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-7449",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-071"
         },
         {
-            "sku": "A-7175",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure LIGHT GREEN",
             "price": "",
@@ -2346,10 +2487,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-7175",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-072"
         },
         {
-            "sku": "A-7168",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure CANDY COPPER",
             "price": "",
@@ -2375,10 +2518,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-7168",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-073"
         },
         {
-            "sku": "A-6611",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC GOLD",
             "price": "",
@@ -2404,10 +2549,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-6611",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-074"
         },
         {
-            "sku": "A-6605",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure METALLIC CHAMPAGNE",
             "price": "",
@@ -2433,10 +2580,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-6605",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-075"
         },
         {
-            "sku": "A-5811",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure Light Violet",
             "price": "",
@@ -2462,10 +2611,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-5811",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-076"
         },
         {
-            "sku": "A-5807",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure Viola Pink",
             "price": "",
@@ -2491,10 +2642,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-5807",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-077"
         },
         {
-            "sku": "A-5188",
             "product_id": "",
             "name": "125B Style Aluminum Diecast Enclosure Lime Green",
             "price": "",
@@ -2520,10 +2673,12 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "A-5188",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-078"
         },
         {
-            "sku": "SRV1-125B-D2",
             "product_id": "",
             "name": "Fine Buffed 125B Enclosure",
             "price": "",
@@ -2547,7 +2702,10 @@
             "customerPriceEUR": 1,
             "image_urls": [
                 "Logo.png"
-            ]
+            ],
+            "supplier_sku": "SRV1-125B-D2",
+            "supplier_id": "tayda",
+            "internal_product_id": "PED-ENC-079"
         }
     ]
 }

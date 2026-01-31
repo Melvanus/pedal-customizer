@@ -42,7 +42,9 @@ export default async function CustomizePage() {
 
   const data = JSON.parse(rawData) as {
     products: Array<{
-      sku: string;
+      supplier_sku: string;
+      supplier_id: string;
+      internal_product_id: string;
       name: string;
       price: string;
       available: boolean;
@@ -69,8 +71,10 @@ export default async function CustomizePage() {
       const images = product.image_urls?.map(resolveImageUrl);
 
       return {
-        id: product.sku,
-        sku: product.sku,
+        id: product.supplier_sku,
+        supplier_sku: product.supplier_sku,
+        supplier_id: product.supplier_id,
+        internal_product_id: product.internal_product_id,
         name: product.name,
         price: toNumber(product.price),
         image,
