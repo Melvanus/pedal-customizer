@@ -11,20 +11,24 @@
     {
         "name": "Make it Ultra Compact",
         "price": 8,
-        "image": "Logo.png",
         "customerPriceEUR": 8,
         "shortDescription": "Miniaturized enclosure build",
         "longDescription": "Ultra-compact build using a smaller enclosure size. Requires careful component selection and tight spacing. Ideal for pedalboard space savings. Note: May not be compatible with all circuits or standard components. Some LED holder options may not fit. Manual review required for compatibility.",
-        "needsReview": true
+        "needsReview": true,
+        "images": [
+            "Logo.png"
+        ]
     },
     {
         "name": "Booster Mod",
         "price": 10,
-        "image": "Logo.png",
         "customerPriceEUR": 10,
         "shortDescription": "You want it louder? Take this integrated clean boost circuit!",
         "longDescription": "Adds an integrated clean boost circuit to your pedal. Useful for compensating gain loss or adding extra drive. Can be footswitchable or always-on depending on your preference. Requires additional drilling for boost control(s).",
-        "needsReview": true
+        "needsReview": true,
+        "images": [
+            "Logo.png"
+        ]
     },
     {
         "name": "Volume Mod",

@@ -2,42 +2,59 @@
     {
         "name": "No Labeling / No Design",
         "price": 0,
-        "image": "Logo.png",
+        "image": "Example_Bare.jpg",
         "customerPriceEUR": 0,
         "shortDescription": "Clean enclosure without any labels or designs",
-        "longDescription": "A clean, unmarked enclosure surface. Perfect if you want to add your own labeling later or prefer a minimalist look."
+        "longDescription": "A clean, unmarked enclosure surface. Perfect if you want to add your own labeling later or prefer a minimalist look.",
+        "images": [
+            "Example_Bare.jpg"
+        ]
     },
     {
         "name": "Labeled Lettering",
         "price": 0.5,
-        "image": "Logo.png",
+        "image": "Labeled_Lettering.jpg",
         "customerPriceEUR": 1,
         "shortDescription": "Simple text labels for controls",
-        "longDescription": "Basic text labeling for knobs, switches, and jacks. We'll add clear, professional lettering to identify all controls on your pedal. Please specify your desired labels in the order notes."
+        "longDescription": "Basic text labeling for knobs, switches, and jacks. We'll add clear, professional lettering to identify all controls on your pedal. Please specify your desired labels in the order notes.",
+        "images": [
+            "Labeled_Lettering.jpg",
+            "Labeled_Lettering_2.jpg"
+        ]
     },
     {
-        "name": "Simple Decal Lettering",
+        "name": "Simple Waterslide Decal Lettering",
         "price": 1,
-        "image": "Logo.png",
+        "image": "Example_Water_Decal_Label_1.jpg",
         "customerPriceEUR": 2,
-        "shortDescription": "Vinyl decal text labels",
-        "longDescription": "High-quality vinyl decal lettering for a professional appearance. More durable than basic labeling and available in multiple colors. Specify your text and preferred color in order notes."
+        "shortDescription": "Keeep it simple with waterslide decal text",
+        "longDescription": "Waterslide decal lettering for a clean, professional look. Ideal for simple text labels without complex graphics. Please provide desired text and font style in order notes.",
+        "images": [
+            "Example_Water_Decal_Label_1.jpg",
+            "Example_Water_Decal_Label_2.jpg"
+        ]
     },
     {
-        "name": "Customized Decal Graphic",
+        "name": "Customized Waterslide Decal Graphic",
         "price": 3,
-        "image": "Logo.png",
+        "image": "Example_Custom_Decal_Graphic.jpg",
         "customerPriceEUR": 3,
-        "shortDescription": "Custom vinyl graphic design",
-        "longDescription": "Full custom vinyl decal with your own graphic design. You can provide artwork files (vector preferred) or describe your vision. Includes logo, text, and decorative elements as specified."
+        "shortDescription": "Custom waterslide decal graphic",
+        "longDescription": "Full custom waterslide decal with your own graphic design. You can provide artwork files (vector preferred) or describe your vision. Includes logo, text, and decorative elements as specified.",
+        "images": [
+            "Example_Custom_Decal_Graphic.jpg"
+        ]
     },
     {
         "name": "Engraving",
         "price": 3,
-        "image": "Logo.png",
+        "image": "Example_Engraving.jpg",
         "customerPriceEUR": 3,
-        "shortDescription": "Permanent laser-engraved text",
-        "longDescription": "Laser engraving provides permanent, precise text that won't wear off. Ideal for professional builds or pedals that will see heavy use. Note: Engraving works best on raw aluminum or certain powder-coated finishes. May not be compatible with all enclosure finishes."
+        "shortDescription": "Hand engraved text labels",
+        "longDescription": "Amateurish hand engraving of text labels directly into the enclosure surface. Provides a unique, tactile labeling solution with a vintage vibe. Can also be filled with black paint or fake rust for better visibility. Please specify desired text in order notes.",
+        "images": [
+            "Example_Engraving.jpg"
+        ]
     },
     {
         "name": "Relic",

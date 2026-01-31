@@ -57,13 +57,32 @@ export async function POST(request: NextRequest) {
       existingFiles.includes(filename)
     );
 
-    if (validFilenames.length === 0) {
-      return NextResponse.json({ error: "No valid image files found" }, { status: 400 });
+    // Update the option (allow empty array to delete all images)
+    if (validFilenames.length > 0) {
+      // For paint products, use image_url and image_urls
+      if (category === "paint") {
+        option.image_url = validFilenames[0];
+        option.image_urls = validFilenames;
+        // Clean up old fields if they exist
+        delete option.image;
+        delete option.images;
+      } else {
+        // For other categories, use image and images
+        option.image = validFilenames[0];
+        option.images = validFilenames;
+      }
+    } else {
+      // No images provided - use default Logo.png
+      if (category === "paint") {
+        option.image_url = "Logo.png";
+        option.image_urls = ["Logo.png"];
+        delete option.image;
+        delete option.images;
+      } else {
+        option.image = "Logo.png";
+        option.images = ["Logo.png"];
+      }
     }
-
-    // Update the option
-    option.image = validFilenames[0]; // Primary image (backwards compatibility)
-    option.images = validFilenames; // All images
 
     // Write back to file
     await fs.writeFile(dataPath, JSON.stringify(data, null, 4), "utf-8");
@@ -72,8 +91,8 @@ export async function POST(request: NextRequest) {
       success: true,
       identifier,
       category,
-      imageCount: validFilenames.length,
-      images: validFilenames,
+      imageCount: validFilenames.length > 0 ? validFilenames.length : 1,
+      images: validFilenames.length > 0 ? validFilenames : ["Logo.png"],
     });
   } catch (error: any) {
     console.error("Error updating option images:", error);

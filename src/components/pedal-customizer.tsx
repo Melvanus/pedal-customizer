@@ -212,6 +212,59 @@ export function PedalCustomizer({
     }
   };
 
+  const handleDeleteImage = async (e: React.MouseEvent, identifier: string, category: string, imageToDelete: string) => {
+    e.stopPropagation();
+    
+    if (!confirm(`Delete "${imageToDelete}"?`)) return;
+
+    // Get the option to find its current images
+    let option: any;
+    if (category === "paint") {
+      option = paintOptions.find((p) => p.sku === identifier);
+    } else if (category === "design") {
+      option = designOptions.find((p) => p.id === identifier);
+    } else if (category === "led") {
+      option = ledOptions.find((p) => p.id === identifier);
+    } else if (category === "other") {
+      option = otherOptions.find((p) => p.id === identifier);
+    }
+
+    if (!option) {
+      alert("Option not found");
+      return;
+    }
+
+    // Get current images and filter out the one to delete
+    const currentImages = option.images || [option.image];
+    const updatedImages = currentImages.filter((img: string) => img !== imageToDelete);
+
+    // Extract just the filenames from various path formats
+    const filenames = updatedImages.map((img: string) => {
+      // Handle /api/enclosures/image/, /api/enclosures/images/, /api/images/, or plain filename
+      const match = img.match(/(?:\/api\/(?:enclosures\/)?images?\/)?(.+)$/);
+      return match ? decodeURIComponent(match[1]) : img;
+    });
+
+    try {
+      const response = await fetch("/api/admin/update-option-images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier, category, imageFilenames: filenames }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        window.location.reload();
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      alert("Failed to delete image");
+    }
+  };
+
   const handleToggleOther = (id: string) => {
     setSelectedOtherIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
@@ -493,22 +546,56 @@ export function PedalCustomizer({
                       e.currentTarget.style.boxShadow = selectedPaintId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
                     }}
                   >
-                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                       {adminMode && (
-                        <div style={{
-                          position: "absolute",
-                          top: "0.5rem",
-                          left: "0.5rem",
-                          background: "rgba(0, 0, 0, 0.8)",
-                          color: "#4ade80",
-                          padding: "0.25rem 0.5rem",
-                          borderRadius: "5px",
-                          fontSize: "0.7rem",
-                          zIndex: 10,
-                          border: "1px solid #4ade80",
-                        }}>
-                          🔧 Drop images here
-                        </div>
+                        <>
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            background: "rgba(0, 0, 0, 0.8)",
+                            color: "#4ade80",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "5px",
+                            fontSize: "0.7rem",
+                            zIndex: 10,
+                            border: "1px solid #4ade80",
+                          }}>
+                            🔧 Drop images here
+                          </div>
+                          <button
+                            onClick={(e) => handleDeleteImage(e, option.sku, "paint", currentImage)}
+                            style={{
+                              position: "absolute",
+                              top: "0.5rem",
+                              right: "0.5rem",
+                              width: "24px",
+                              height: "24px",
+                              borderRadius: "50%",
+                              background: "rgba(220, 38, 38, 0.9)",
+                              border: "1px solid rgba(255, 255, 255, 0.3)",
+                              color: "#fff",
+                              fontSize: "0.85rem",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 10,
+                              transition: "all 0.2s ease",
+                              fontWeight: "bold",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
+                              e.currentTarget.style.transform = "scale(1.1)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
+                              e.currentTarget.style.transform = "scale(1)";
+                            }}
+                          >
+                            ×
+                          </button>
+                        </>
                       )}
                       {images.length > 1 && (
                         <>
@@ -763,15 +850,16 @@ export function PedalCustomizer({
                       e.currentTarget.style.boxShadow = selectedDesignId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
                     }}
                   >
-                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                       {adminMode && (
-                        <div style={{
-                          position: "absolute",
-                          top: "0.5rem",
-                          left: "0.5rem",
-                          background: "rgba(0, 0, 0, 0.8)",
-                          color: "#4ade80",
-                          padding: "0.25rem 0.5rem",
+                        <>
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            background: "rgba(0, 0, 0, 0.8)",
+                            color: "#4ade80",
+                            padding: "0.25rem 0.5rem",
                           borderRadius: "5px",
                           fontSize: "0.7rem",
                           zIndex: 10,
@@ -779,6 +867,39 @@ export function PedalCustomizer({
                         }}>
                           🔧 Drop images here
                         </div>
+                        <button
+                          onClick={(e) => handleDeleteImage(e, option.id, "design", currentImage)}
+                          style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            right: "0.5rem",
+                            width: "24px",
+                            height: "24px",
+                            borderRadius: "50%",
+                            background: "rgba(220, 38, 38, 0.9)",
+                            border: "1px solid rgba(255, 255, 255, 0.3)",
+                            color: "#fff",
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                            transition: "all 0.2s ease",
+                            fontWeight: "bold",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
+                            e.currentTarget.style.transform = "scale(1.1)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
+                            e.currentTarget.style.transform = "scale(1)";
+                          }}
+                        >
+                          ×
+                        </button>
+                      </>
                       )}
                       {images.length > 1 && (
                         <>
@@ -946,24 +1067,58 @@ export function PedalCustomizer({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    position: "relative"
+                    position: "relative",
+                    overflow: "hidden"
                   }}>
                     {adminMode && (
-                      <div style={{
-                        position: "absolute",
-                        top: "0.5rem",
-                        left: "0.5rem",
-                        background: dragOverSku === option.id ? "rgba(26, 58, 26, 0.95)" : "rgba(26, 26, 26, 0.85)",
-                        padding: "0.25rem 0.5rem",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                        color: dragOverSku === option.id ? "#4ade80" : "#999",
-                        border: dragOverSku === option.id ? "1px solid #4ade80" : "1px solid #333",
-                        zIndex: 10,
-                        pointerEvents: "none",
-                      }}>
-                        {dragOverSku === option.id ? "Drop images here" : "🔓 Admin"}
-                      </div>
+                      <>
+                        <div style={{
+                          position: "absolute",
+                          top: "0.5rem",
+                          left: "0.5rem",
+                          background: "rgba(0, 0, 0, 0.8)",
+                          color: "#4ade80",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "5px",
+                          fontSize: "0.7rem",
+                          zIndex: 10,
+                          border: "1px solid #4ade80",
+                        }}>
+                          🔧 Drop images here
+                        </div>
+                        <button
+                          onClick={(e) => handleDeleteImage(e, option.id, "led", currentImage)}
+                          style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            right: "0.5rem",
+                            width: "24px",
+                            height: "24px",
+                            borderRadius: "50%",
+                            background: "rgba(220, 38, 38, 0.9)",
+                            border: "1px solid rgba(255, 255, 255, 0.3)",
+                            color: "#fff",
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                            transition: "all 0.2s ease",
+                            fontWeight: "bold",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
+                            e.currentTarget.style.transform = "scale(1.1)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
+                            e.currentTarget.style.transform = "scale(1)";
+                          }}
+                        >
+                          ×
+                        </button>
+                      </>
                     )}
                     
                     {images.length > 1 && (
@@ -1130,24 +1285,58 @@ export function PedalCustomizer({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    position: "relative"
+                    position: "relative",
+                    overflow: "hidden"
                   }}>
                     {adminMode && (
-                      <div style={{
-                        position: "absolute",
-                        top: "0.5rem",
-                        left: "0.5rem",
-                        background: dragOverSku === option.id ? "rgba(26, 58, 26, 0.95)" : "rgba(26, 26, 26, 0.85)",
-                        padding: "0.25rem 0.5rem",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                        color: dragOverSku === option.id ? "#4ade80" : "#999",
-                        border: dragOverSku === option.id ? "1px solid #4ade80" : "1px solid #333",
-                        zIndex: 10,
-                        pointerEvents: "none",
-                      }}>
-                        {dragOverSku === option.id ? "Drop images here" : "🔓 Admin"}
-                      </div>
+                      <>
+                        <div style={{
+                          position: "absolute",
+                          top: "0.5rem",
+                          left: "0.5rem",
+                          background: "rgba(0, 0, 0, 0.8)",
+                          color: "#4ade80",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "5px",
+                          fontSize: "0.7rem",
+                          zIndex: 10,
+                          border: "1px solid #4ade80",
+                        }}>
+                          🔧 Drop images here
+                        </div>
+                        <button
+                          onClick={(e) => handleDeleteImage(e, option.id, "other", currentImage)}
+                          style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            right: "0.5rem",
+                            width: "24px",
+                            height: "24px",
+                            borderRadius: "50%",
+                            background: "rgba(220, 38, 38, 0.9)",
+                            border: "1px solid rgba(255, 255, 255, 0.3)",
+                            color: "#fff",
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                            transition: "all 0.2s ease",
+                            fontWeight: "bold",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
+                            e.currentTarget.style.transform = "scale(1.1)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
+                            e.currentTarget.style.transform = "scale(1)";
+                          }}
+                        >
+                          ×
+                        </button>
+                      </>
                     )}
                     
                     {images.length > 1 && (
