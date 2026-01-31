@@ -59,9 +59,12 @@
     {
         "name": "Relic",
         "price": 10,
-        "image": "Logo.png",
+        "image": "Example_Relic_1.jpg",
         "customerPriceEUR": 10,
         "shortDescription": "Vintage worn/aged appearance",
-        "longDescription": "Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique. Note: This finish cannot be combined with pristine powder coating or certain metallic finishes. Manual review may be required."
+        "longDescription": "Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique. Note: This finish cannot be combined with pristine powder coating or certain metallic finishes. Manual review may be required.",
+        "images": [
+            "Example_Relic_1.jpg"
+        ]
     }
 ]
