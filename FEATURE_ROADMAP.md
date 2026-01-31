@@ -26,7 +26,25 @@
 
 ## High Priority Features 🔴
 
-### 1. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
+### 1. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
+**Problem:** Current SKU system only references supplier SKUs directly without proper product identification
+**Solution:**
+- **SKU Structure Refactor:**
+  - Rename current `sku` field to `supplier_sku` in enclosures_data.json
+  - Add `supplier_id` field to each product (initially "tayda" for all enclosures)
+  - Create internal product numbering system (e.g., "PED-ENC-001", "PED-LED-042")
+  - Maintain mapping between internal IDs and supplier SKUs
+- **Admin/Dev View:**
+  - Display supplier SKU only in development/admin mode
+  - Show internal product ID in admin interface
+  - Toggle between views for inventory management
+- **Benefits:**
+  - Multi-supplier support for future expansion
+  - Clear separation between internal product management and supplier ordering
+  - Easier to switch suppliers or add alternative sources
+  - Professional internal product catalog independent of supplier systems
+
+### 2. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
 **Problem:** Users can't see actual colors of paint options
 **Solution:**
 - **Color Data Fields:** Add to enclosures_data.json:
@@ -76,7 +94,21 @@
 
 ## Medium Priority Features 🟡
 
-### 6. **Price Breakdown Display**
+### 6. **Enclosure Dimensions Display**
+**Problem:** Users can't see physical dimensions of enclosures before ordering
+**Solution:**
+- Add dimensions to enclosure product descriptions
+- Extract dimension data from existing `enclosure_style_data` field in enclosures_data.json
+- Match each enclosure's `style` field to corresponding entry in `enclosure_style_data`
+- Display dimensions in metric and imperial (mm/inches)
+- Show dimensions in product card hover state and full description
+- Include internal cavity dimensions where applicable
+- **Benefits:**
+  - Helps users verify compatibility with their circuit boards
+  - Reduces customer service inquiries about sizing
+  - Professional product information presentation
+
+### 7. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
