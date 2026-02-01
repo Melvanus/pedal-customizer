@@ -307,7 +307,7 @@ export function EffectSelector({
               <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                 <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
                   <Image
-                    src={`/api/data/image/${pedal.image}`}
+                    src={pedal.image}
                     alt={pedal.name}
                     fill
                     unoptimized
