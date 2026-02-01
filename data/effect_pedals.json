@@ -47,7 +47,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["TS9 mode", "808+ bass boost", "Analogman Silver mod"],
-      "price_modifier_eur": 0,
+      "customer_price_eur": 48.90,
       "popular": true
     },
     {
@@ -69,7 +69,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Turbo RAT mode", "LM308 chip swap", "Clipping options"],
-      "price_modifier_eur": 0,
+      "customer_price_eur": 49.90,
       "popular": true
     },
     {
@@ -91,7 +91,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Triangle era mod", "Ram's Head mod", "Tone wicker switch"],
-      "price_modifier_eur": 0,
+      "customer_price_eur": 58.90,
       "popular": true
     },
     {
@@ -113,7 +113,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Germanium diode option", "LED clipping", "Bass contour"],
-      "price_modifier_eur": 1,
+      "customer_price_eur": 64.90,
       "popular": true
     },
     {
@@ -135,7 +135,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["JHS Strong mod", "Keeley mod", "Seeing Eye mod"],
-      "price_modifier_eur": 0,
+      "customer_price_eur": 46.90,
       "popular": true
     },
     {
@@ -157,7 +157,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Silicon/Germanium switch", "External bias", "Input impedance mod"],
-      "price_modifier_eur": 0,
+      "customer_price_eur": 44.90,
       "popular": true
     },
     {
@@ -179,7 +179,7 @@
       },
       "recommended_enclosure": "1590A",
       "compatible_mods": ["Full range option", "Different transistors", "Variable frequency cut"],
-      "price_modifier_eur": 0,
+      "customer_price_eur": 38.90,
       "popular": false
     },
     {
@@ -201,7 +201,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Snub filter mod", "Different op-amps", "More gain mod"],
-      "price_modifier_eur": 0,
+      "customer_price_eur": 56.90,
       "popular": false
     },
     {
@@ -223,7 +223,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Script mod", "R28 mod", "Univibe mode"],
-      "price_modifier_eur": 1,
+      "customer_price_eur": 62.90,
       "popular": false
     },
     {
@@ -245,7 +245,7 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Depth control", "Vibrato mode", "Mix control"],
-      "price_modifier_eur": 2,
+      "customer_price_eur": 78.90,
       "popular": false
     },
     {
@@ -267,7 +267,7 @@
       },
       "recommended_enclosure": "1590BB",
       "compatible_mods": ["Modulation depth", "Extended delay time", "Bright switch"],
-      "price_modifier_eur": 3,
+      "customer_price_eur": 89.90,
       "popular": false
     },
     {
@@ -289,7 +289,7 @@
       },
       "recommended_enclosure": "1590BB",
       "compatible_mods": ["More bands", "Q adjustment", "Clean blend"],
-      "price_modifier_eur": 1,
+      "customer_price_eur": 72.90,
       "popular": false
     }
   ]

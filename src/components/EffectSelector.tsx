@@ -23,7 +23,7 @@ export type EffectPedal = {
   };
   recommended_enclosure: string;
   compatible_mods: string[];
-  price_modifier_eur: number;
+  customer_price_eur: number;
   popular: boolean;
 };
 

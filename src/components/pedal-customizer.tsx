@@ -101,13 +101,6 @@ export function PedalCustomizer({
   const [currentImageIndex, setCurrentImageIndex] = React.useState<Record<string, number>>({});
   const [modalProduct, setModalProduct] = React.useState<ProductModalData | null>(null);
 
-  // Auto-select recommended enclosure size when effect changes
-  React.useEffect(() => {
-    if (selectedEffect?.recommended_enclosure) {
-      setSelectedEnclosureSizeId(selectedEffect.recommended_enclosure);
-    }
-  }, [selectedEffectId, selectedEffect]);
-
   const selectedEffect = effectPedals.find((item) => item.id === selectedEffectId);
   const selectedSize = enclosureSizes.find((item) => item.name === selectedEnclosureSizeId);
   const selectedPaint = paintOptions.find((item) => item.id === selectedPaintId);
@@ -115,8 +108,15 @@ export function PedalCustomizer({
   const selectedLed = ledOptions.find((item) => item.id === selectedLedId);
   const selectedOthers = otherOptions.filter((item) => selectedOtherIds.includes(item.id));
 
+  // Auto-select recommended enclosure size when effect changes
+  React.useEffect(() => {
+    if (selectedEffect?.recommended_enclosure) {
+      setSelectedEnclosureSizeId(selectedEffect.recommended_enclosure);
+    }
+  }, [selectedEffectId, selectedEffect]);
+
   const totalPrice =
-    (selectedEffect?.price_modifier_eur ?? 0) +
+    (selectedEffect?.customer_price_eur ?? 0) +
     (selectedPaint?.customerPriceEUR ?? 0) +
     (selectedDesign?.customerPriceEUR ?? 0) +
     (selectedLed?.customerPriceEUR ?? 0) +
@@ -630,7 +630,7 @@ export function PedalCustomizer({
                   type: "effect",
                   title: pedal.name,
                   subtitle: `Inspired by: ${pedal.inspired_by}`,
-                  price: pedal.price_modifier_eur,
+                  price: pedal.customer_price_eur,
                   image: `/api/enclosures/image/effects/${pedal.image}`,
                   description: pedal.description,
                   details: [
