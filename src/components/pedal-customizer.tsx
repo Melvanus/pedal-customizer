@@ -4,6 +4,8 @@ import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation } from "lucide-react";
+import { EffectSelector, type EffectPedal } from "./EffectSelector";
+import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelector";
 
 export type OptionItem = {
   id: string;
@@ -34,6 +36,8 @@ export type PaintOption = OptionItem & {
 };
 
 type PedalCustomizerProps = {
+  effectPedals: EffectPedal[];
+  enclosureSizes: EnclosureSize[];
   paintOptions: PaintOption[];
   designOptions: OptionItem[];
   ledOptions: OptionItem[];
@@ -66,6 +70,8 @@ const getFinishIcon = (finish?: string) => {
 };
 
 export function PedalCustomizer({
+  effectPedals,
+  enclosureSizes,
   paintOptions,
   designOptions,
   ledOptions,
@@ -73,7 +79,9 @@ export function PedalCustomizer({
   favouritePaintIds,
 }: PedalCustomizerProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = React.useState<"paint" | "design" | "led" | "other">("paint");
+  const [activeTab, setActiveTab] = React.useState<"effect" | "size" | "paint" | "design" | "led" | "other">("effect");
+  const [selectedEffectId, setSelectedEffectId] = React.useState(effectPedals[0]?.id ?? "");
+  const [selectedEnclosureSizeId, setSelectedEnclosureSizeId] = React.useState(enclosureSizes[0]?.name ?? "");
   const [selectedPaintId, setSelectedPaintId] = React.useState(paintOptions[0]?.id ?? "");
   const [selectedDesignId, setSelectedDesignId] = React.useState(designOptions[0]?.id ?? "");
   const [selectedLedId, setSelectedLedId] = React.useState(ledOptions[0]?.id ?? "");
@@ -91,12 +99,15 @@ export function PedalCustomizer({
   const [dragOverSku, setDragOverSku] = React.useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = React.useState<Record<string, number>>({});
 
+  const selectedEffect = effectPedals.find((item) => item.id === selectedEffectId);
+  const selectedSize = enclosureSizes.find((item) => item.name === selectedEnclosureSizeId);
   const selectedPaint = paintOptions.find((item) => item.id === selectedPaintId);
   const selectedDesign = designOptions.find((item) => item.id === selectedDesignId);
   const selectedLed = ledOptions.find((item) => item.id === selectedLedId);
   const selectedOthers = otherOptions.filter((item) => selectedOtherIds.includes(item.id));
 
   const totalPrice =
+    (selectedEffect?.price_modifier_eur ?? 0) +
     (selectedPaint?.customerPriceEUR ?? 0) +
     (selectedDesign?.customerPriceEUR ?? 0) +
     (selectedLed?.customerPriceEUR ?? 0) +
@@ -275,6 +286,8 @@ export function PedalCustomizer({
     const designPayload = selectedDesign ? { ...selectedDesign, labelText } : { labelText };
     const payload = {
       createdAt: new Date().toISOString(),
+      effect: selectedEffect ?? null,
+      enclosureSize: selectedSize ?? null,
       paint: selectedPaint ?? null,
       design: designPayload,
       led: selectedLed ?? null,
@@ -295,6 +308,8 @@ export function PedalCustomizer({
 
   const handleProceedToSummary = () => {
     const configData = {
+      effect: selectedEffect ?? null,
+      enclosureSize: selectedSize ?? null,
       paint: selectedPaint ?? null,
       design: selectedDesign ?? null,
       labelText,
@@ -354,7 +369,7 @@ export function PedalCustomizer({
           >
             {/* Tabs */}
             <div style={{ display: "flex", gap: "0.75rem", marginBottom: activeTab === "paint" ? "1rem" : 0, borderBottom: "2px solid rgba(255,255,255,0.1)", paddingBottom: "0.5rem", alignItems: "center" }}>
-              {(["paint", "design", "led", "other"] as const).map((tab) => (
+              {(["effect", "size", "paint", "design", "led", "other"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -370,6 +385,8 @@ export function PedalCustomizer({
                     transition: "all 0.3s ease",
                   }}
                 >
+                  {tab === "effect" && "Effect"}
+                  {tab === "size" && "Size"}
                   {tab === "paint" && "Paint / Finish"}
                   {tab === "design" && "Design / Labeling"}
                   {tab === "led" && "LED"}
@@ -502,6 +519,27 @@ export function PedalCustomizer({
               </div>
             )}
           </div>
+
+          {/* Effect Tab */}
+          {activeTab === "effect" && (
+            <EffectSelector
+              pedals={effectPedals}
+              categories={Array.from(new Set(effectPedals.map(p => p.category))).sort()}
+              soundCharacters={Array.from(new Set(effectPedals.flatMap(p => p.sound_characters))).sort()}
+              selectedPedalId={selectedEffectId}
+              onSelectPedal={setSelectedEffectId}
+            />
+          )}
+
+          {/* Enclosure Size Tab */}
+          {activeTab === "size" && (
+            <EnclosureSizeSelector
+              sizes={enclosureSizes}
+              selectedSize={selectedEnclosureSizeId}
+              onSelectSize={setSelectedEnclosureSizeId}
+              recommendedSize={selectedEffect?.recommended_enclosure}
+            />
+          )}
 
           {/* Paint/Finish Tab */}
           {activeTab === "paint" && (
@@ -1455,6 +1493,64 @@ export function PedalCustomizer({
             Configuration Summary
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.5rem", marginBottom: "0.75rem" }}>
+            <button
+              onClick={() => setActiveTab("effect")}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                background: activeTab === "effect" ? "#fff" : "#0f0f0f",
+                borderRadius: "5px",
+                textAlign: "center",
+                border: activeTab === "effect" ? "2px solid #fff" : "2px solid transparent",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== "effect") {
+                  e.currentTarget.style.background = "#1a1a1a";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== "effect") {
+                  e.currentTarget.style.background = "#0f0f0f";
+                }
+              }}
+            >
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "effect" ? "#000" : "#888", marginBottom: "0.25rem" }}>Effect</span>
+              <span style={{ fontSize: "0.8rem", color: activeTab === "effect" ? "#000" : "#aaa" }}>
+                {selectedEffect ? selectedEffect.name : "—"}
+              </span>
+            </button>
+            <button
+              onClick={() => setActiveTab("size")}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                background: activeTab === "size" ? "#fff" : "#0f0f0f",
+                borderRadius: "5px",
+                textAlign: "center",
+                border: activeTab === "size" ? "2px solid #fff" : "2px solid transparent",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== "size") {
+                  e.currentTarget.style.background = "#1a1a1a";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== "size") {
+                  e.currentTarget.style.background = "#0f0f0f";
+                }
+              }}
+            >
+              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "size" ? "#000" : "#888", marginBottom: "0.25rem" }}>Size</span>
+              <span style={{ fontSize: "0.8rem", color: activeTab === "size" ? "#000" : "#aaa" }}>
+                {selectedSize ? selectedSize.name : "—"}
+              </span>
+            </button>
             <button
               onClick={() => setActiveTab("paint")}
               style={{

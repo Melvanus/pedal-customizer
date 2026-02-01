@@ -2,6 +2,8 @@ import path from "path";
 import fs from "fs/promises";
 
 import { PedalCustomizer, type OptionItem, type PaintOption } from "@/components/pedal-customizer";
+import type { EffectPedal } from "@/components/EffectSelector";
+import type { EnclosureSize } from "@/components/EnclosureSizeSelector";
 
 const toNumber = (price: string | number | undefined) => {
   if (typeof price === "number") return price;
@@ -24,6 +26,8 @@ type RawOption = {
 };
 
 export default async function CustomizePage() {
+  const effectPedalsPath = path.join(process.cwd(), "data", "effect_pedals.json");
+  const enclosureSizesPath = path.join(process.cwd(), "data", "enclosure_sizes.json");
   const dataPath = path.join(process.cwd(), "data", "enclosures_data.json");
   const designPath = path.join(process.cwd(), "data", "design_labeling.json");
   const ledPath = path.join(process.cwd(), "data", "led.json");
@@ -31,7 +35,9 @@ export default async function CustomizePage() {
   const favouritesPath = path.join(process.cwd(), "data", "favourites.json");
   const imageDir = path.join(process.cwd(), "data", "images");
 
-  const [rawData, rawDesign, rawLed, rawOther, rawFavourites, imageFiles] = await Promise.all([
+  const [rawEffectPedals, rawEnclosureSizes, rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawOther, rawFavourites, imageFiles] = await Promise.all([
+    fs.readFile(effectPedalsPath, "utf-8"),
+    fs.readFile(enclosureSizesPath, "utf-8"),
     fs.readFile(dataPath, "utf-8"),
     fs.readFile(designPath, "utf-8"),
     fs.readFile(ledPath, "utf-8"),
@@ -39,6 +45,13 @@ export default async function CustomizePage() {
     fs.readFile(favouritesPath, "utf-8"),
     fs.readdir(imageDir),
   ]);
+
+  const effectPedals = (JSON.parse(rawEffectPedals) as EffectPedal[]).map(pedal => ({
+    ...pedal,
+    image: resolveImageUrl(pedal.image || "Logo.png"),
+  }));
+
+  const enclosureSizes = JSON.parse(rawEnclosureSizes) as EnclosureSize[];
 
   const data = JSON.parse(rawData) as {
     products: Array<{
@@ -118,6 +131,8 @@ export default async function CustomizePage() {
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
       <PedalCustomizer
+        effectPedals={effectPedals}
+        enclosureSizes={enclosureSizes}
         paintOptions={paintOptions}
         designOptions={designOptions}
         ledOptions={ledOptions}

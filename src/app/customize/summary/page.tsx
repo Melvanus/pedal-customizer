@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ChevronLeft, AlertTriangle, Download, Mail } from "lucide-react";
 
 type ConfigData = {
+  effect?: any;
+  enclosureSize?: any;
   paint: any;
   design: any;
   labelText: string;
@@ -149,6 +151,38 @@ export default function SummaryPage() {
           {/* Configuration Details */}
           <div>
             <h2 style={{ fontSize: "1.75rem", marginBottom: "1.5rem", color: "#fff" }}>Configuration Details</h2>
+
+            {/* Effect Pedal */}
+            {config.effect && (
+              <ConfigSection
+                title="Effect Pedal Circuit"
+                name={config.effect.name}
+                price={config.effect.price_modifier_eur}
+                shortDesc={`${config.effect.category} • Inspired by ${config.effect.inspired_by}`}
+                longDesc={config.effect.description}
+                details={[
+                  { label: "Circuit Type", value: config.effect.category },
+                  { label: "Based On", value: config.effect.inspired_by },
+                  { label: "Complexity", value: config.effect.technical_specs?.complexity || "N/A" },
+                  { label: "Sound", value: config.effect.sound_characters?.slice(0, 3).join(", ") || "N/A" },
+                ]}
+              />
+            )}
+
+            {/* Enclosure Size */}
+            {config.enclosureSize && (
+              <ConfigSection
+                title="Enclosure Size"
+                name={config.enclosureSize.name}
+                price={0}
+                shortDesc={config.enclosureSize.dimensions}
+                longDesc={config.enclosureSize.description}
+                details={[
+                  { label: "Dimensions", value: config.enclosureSize.dimensions },
+                  { label: "Capacity", value: config.enclosureSize.capacity },
+                ]}
+              />
+            )}
 
             {/* Paint/Finish */}
             {config.paint && (

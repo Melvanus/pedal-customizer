@@ -4,6 +4,8 @@ import Link from "next/link";
 import * as React from "react";
 
 type LandingPageProps = {
+  effectPedals: number;
+  enclosureSizes: number;
   availableFinishes: number;
   uniqueColors: number;
   uniqueFinishes: number;
@@ -13,6 +15,8 @@ type LandingPageProps = {
 };
 
 export function LandingPage({
+  effectPedals,
+  enclosureSizes,
   availableFinishes,
   uniqueColors,
   uniqueFinishes,
@@ -20,7 +24,7 @@ export function LandingPage({
   ledOptions,
   otherOptions,
 }: LandingPageProps) {
-  const totalCombinations = availableFinishes * designOptions * ledOptions * Math.pow(2, otherOptions);
+  const totalCombinations = effectPedals * enclosureSizes * availableFinishes * designOptions * ledOptions * Math.pow(2, otherOptions);
 
   return (
     <div
@@ -142,9 +146,10 @@ export function LandingPage({
               marginBottom: "3rem",
             }}
           >
-            <StatCard label="Enclosure Finishes" value={availableFinishes} />
+            <StatCard label="Effect Pedals" value={effectPedals} />
+            <StatCard label="Enclosure Sizes" value={enclosureSizes} />
+            <StatCard label="Paint Finishes" value={availableFinishes} />
             <StatCard label="Unique Colors" value={uniqueColors} />
-            <StatCard label="Finish Types" value={uniqueFinishes} />
             <StatCard label="Design Options" value={designOptions} />
             <StatCard label="LED Styles" value={ledOptions} />
             <StatCard label="Modifications" value={otherOptions} />
@@ -174,7 +179,7 @@ export function LandingPage({
               {totalCombinations.toLocaleString()}+
             </div>
             <div style={{ fontSize: "0.95rem", color: "#aaa", marginTop: "1rem" }}>
-              {availableFinishes} finishes × {designOptions} designs × {ledOptions} LEDs × 2<sup>{otherOptions}</sup> mod combinations
+              {effectPedals} effects × {enclosureSizes} sizes × {availableFinishes} finishes × {designOptions} designs × {ledOptions} LEDs × 2<sup>{otherOptions}</sup> mods
             </div>
           </div>
         </div>
@@ -209,21 +214,31 @@ export function LandingPage({
         >
           <StepCard
             number="1"
-            title="Choose Your Enclosure"
-            description="Select from dozens of powder-coated finishes in various colors and textures."
+            title="Choose Your Effect"
+            description="Select from classic pedal circuits—overdrives, fuzzes, delays, and more. Each with full specs and mod options."
           />
           <StepCard
             number="2"
+            title="Pick Your Size"
+            description="Select the perfect enclosure size for your build. From compact 1590A to spacious 1590XX—we'll recommend the best fit."
+          />
+          <StepCard
+            number="3"
+            title="Select Paint & Finish"
+            description="Choose from dozens of powder-coated finishes in various colors, textures, and special effects."
+          />
+          <StepCard
+            number="4"
             title="Customize Design"
             description="Add labeling, decals, engraving, or specialized finishes like relic or fluffy coating."
           />
           <StepCard
-            number="3"
-            title="Select LED Style"
+            number="5"
+            title="Add LED Style"
             description="Pick from standard holders, fancy bezels, vintage jewels, or illuminated footswitches."
           />
           <StepCard
-            number="4"
+            number="6"
             title="Add Modifications"
             description="Enhance with booster circuits, custom layouts, voltage sag controls, and more."
           />
