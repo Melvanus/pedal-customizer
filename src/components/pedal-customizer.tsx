@@ -732,7 +732,7 @@ export function PedalCustomizer({
                               fontWeight: "bold",
                             }}
                           >
-                            {adminMode ? option.supplier_sku : option.internal_product_id}
+                            {option.internal_product_id}
                           </span>
                           {(() => {
                             const { Icon, color } = getFinishIcon(option.isCustomColor ? customFinish : option.finish);
