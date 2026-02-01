@@ -2,19 +2,35 @@
 
 ## Current Features ✅
 - Dark theme with black & white design elements
-- Four-tab configuration system (Paint/Finish, Design/Labeling, LED, Other)
+- **Six-tab configuration system: Effect → Size → Paint/Finish → Design/Labeling → LED → Other** ✨ NEW
+- **Effect Pedal Selection Tab** with 12 classic circuits (TS808, RAT, Big Muff, Klon, etc.) ✨ NEW
+  - Search by name, circuit, or sound characteristics
+  - Category filters (Overdrive, Distortion, Fuzz, Boost, Modulation, etc.)
+  - Sound character tag filtering (warm, bright, aggressive, vintage, etc.)
+  - Sort by popularity, name, complexity, or size
+  - Detailed modal showing full specs, mods, and technical info
+- **Enclosure Size Selection Tab** with 6 standard sizes (1590A, 1590B, 125B, 1590BB, 1590BS, 1590XX) ✨ NEW
+  - Visual size comparison with relative scaling
+  - Funny, quirky size descriptions and analogies
+  - Capacity information and component counts
+  - Smart recommendations based on selected effect pedal
+  - "Best Fit" badge for recommended sizes
+- **Paint/Finish tab now as Step 3** (after Effect → Size workflow) ✨ NEW
 - Search, filter, and sort for paint options
 - Multi-select for "Other" category
-- Real-time price calculation in EUR
-- Configuration summary display with interactive navigation
-- Download configuration as JSON
+- Real-time price calculation in EUR (includes effect circuit price modifier)
+- Configuration summary display with interactive navigation (shows all 6 steps)
+- Download configuration as JSON (includes effect and enclosure size data)
 - Fixed layout with scrollable selection area
 - Floating tabs & filters panel at top (translucent, responsive)
 - Floating configuration summary panel at bottom-center (translucent, clickable)
 - Finish type icons on paint cards (⭐ Glossy, 🔨 Hammered, 🏖️ Sand, ☢️ Glow, ✨ Metallic, 🎨 Matte)
 - Product descriptions (short & long) on all options
 - Landing page with statistics and total combinations calculation
+  - Shows effect pedals and enclosure sizes in statistics
+  - Updated "How It Works" section with 6-step workflow
 - Final summary page with:
+  - Effect circuit and enclosure size information display
   - Long descriptions for all selected options
   - Incompatibility warning detection and display
   - Customer details form (name, email, notes)
@@ -26,90 +42,7 @@
 
 ## High Priority Features 🔴
 
-### 1. **Effect Pedal Selection Tab (Step 1)** ⭐⭐⭐ NEW
-**Problem:** Users cannot specify which effect pedal circuit they want to have built
-**Solution:**
-- **New First Tab:** Add "Effect" tab as the first step in the configuration process
-- **Data Structure:** Create `effect_pedals.json` with comprehensive pedal data:
-  - Basic info: name, description, image, "inspired_by"-field that names the original pedal
-  - Technical specs: PCB reference, schematic links, compatible mods list
-  - Hardware requirements: number of potentiometers, switches, I/O jacks
-  - Default enclosure size recommendation
-  - Sound character tags for search/filtering
-- **Categorization System:**
-  - Primary categories: Overdrive, Distortion, Fuzz, Boost, Modulation, Delay, Reverb, EQ/Filter, Routing, Utility
-  - Sound character tags: warm, bright, transparent, aggressive, vintage, modern, dark, mid-focused, scooped, etc.
-- **Search & Filter:**
-  - Search by pedal name, circuit name, or sound characteristics
-  - Multi-select category filters
-  - Filter by sound character tags
-  - Sort by popularity, name, complexity, or size requirements
-- **Detail View:**
-  - Click pedal to open detailed modal/expanded card
-  - Show full specs, PCB preview, schematic reference
-  - Display compatible mods and variations
-  - List similar/alternative circuits at bottom
-  - Show recommended enclosure size
-- **Benefits:**
-  - Complete workflow from circuit selection to finished pedal
-  - Helps users discover new circuits
-  - Provides technical information for DIY builders
-  - Enables sound-based discovery ("I want something warm and mid-focused")
-
-### 2. **Enclosure Size Selection (Step 2)** ⭐⭐⭐ NEW
-**Problem:** Current system doesn't properly handle different enclosure sizes; all products assume 125B
-**Solution:**
-- **Dedicated Enclosure Size Tab:** Add as second step, after effect selection, make sure to move the others "to the back"
-- **Data Migration:** Leverage existing `enclosure_style_data` field in enclosures_data.json
-  - 125B, 1590BB, 1590A, 1590LB, 1590B, etc.
-  - Display dimensions (LxWxH) for each size
-- **User-Friendly Size Comparisons:**
-  - Visual size comparison (relative scale diagrams)
-  - Relatable comparisons: 
-    - 1590A: "Credit card sized - perfect for a mini board"
-    - 125B: "Smartphone sized - the sweet spot for most builds"
-    - 1590BB: "Tablet sized - room for complex circuits"
-    - 1590XX: "Hardcover book sized - when you need all the space"
-  - Show what fits: "Fits X potentiometers comfortably"
-  - Also add funny, sassy, nerdy humor to comparisons. Things like "size doesnt matter", or so
-- **Smart Recommendations:**
-  - Pre-select size based on chosen effect pedal's requirements
-  - Highlight recommended size with "Best Fit" badge
-  - Show warning if selected size is too small for chosen circuit
-- **Visual Indicators:**
-  - Thumbnail images showing size relative to standard reference
-  - Color-coded by size category (mini/standard/large/XL)
-- **Current Limitation Note:**
-  - All paint/finish options currently available only in 125B
-  - As its a prototype we dont care for now
-  - Show selected enclosure size in configuration summary in the second tab
-  - Future: expand products to support all enclosure sizes
-- **Benefits:**
-  - Proper workflow: circuit → size → finish
-  - Users understand physical dimensions before committing
-  - Prevents ordering enclosures that are too small for their build
-  - Fun, accessible way to communicate technical specifications
-
-### 3. **Paint/Finish as Third Step** ⭐⭐⭐ NEW
-**Problem:** Paint selection happens before enclosure size is chosen
-**Solution:**
-- **Restructured Workflow:** Move paint/finish selection to step 3 (after Effect → Size)
-- **Context-Aware Display:**
-  - Show selected enclosure size at top of paint tab
-  - Display "Available for [selected size]" in UI
-  - For now, all options remain 125B only (pretend they exist for other sizes)
-- **Configuration Summary Update:**
-  - Clearly show selected enclosure size alongside paint choice
-  - Example: "125B Enclosure - Metallic Black"
-- **Future Expansion Ready:**
-  - Data structure prepared for multi-size product variants
-  - When adding new enclosure sizes, can filter paint options by available sizes
-- **Benefits:**
-  - Logical progression: what circuit → what size → what color
-  - Users make informed paint choices knowing their enclosure size
-  - Clear product specification in final configuration
-
-### 4. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
+### 1. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
 **Problem:** Current SKU system only references supplier SKUs directly without proper product identification
 **Solution:**
 - **SKU Structure Refactor:**
@@ -127,7 +60,7 @@
   - Easier to switch suppliers or add alternative sources
   - Professional internal product catalog independent of supplier systems
 
-### 5. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
+### 2. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
 **Problem:** Users can't see actual colors of paint options
 **Solution:**
 - **Color Data Fields:** Add to enclosures_data.json:
@@ -151,14 +84,14 @@
   - Professional color specification via Pantone codes
 
 
-### 6. **Visual Preview / 3D Mockup**
+### 3. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
 **Solution:** 
 - Generate a real-time visual preview of the pedal with selected options
 - Show enclosure color, labeling position, LED placement
 - Could be 2D illustration or simple 3D render
 
-### 7. **Save & Load Configurations**
+### 4. **Save & Load Configurations**
 **Problem:** Users can't save their work and come back to it
 **Solution:**
 - Save configurations to browser localStorage
@@ -166,7 +99,7 @@
 - Name/label saved configurations
 - Share configurations via URL parameters
 
-### 8. **Image Gallery for Each Option**
+### 5. **Image Gallery for Each Option**
 **Problem:** All options show placeholder "Logo.png" image
 **Solution:**
 - Add actual product images for each finish, LED type, etc.
@@ -177,7 +110,7 @@
 
 ## Medium Priority Features 🟡
 
-### 9. **Enclosure Dimensions Display**
+### 6. **Enclosure Dimensions Display**
 **Problem:** Users can't see physical dimensions of enclosures before ordering
 **Solution:**
 - Add dimensions to enclosure product descriptions
@@ -191,35 +124,35 @@
   - Reduces customer service inquiries about sizing
   - Professional product information presentation
 
-### 10. **Price Breakdown Display**
+### 7. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
 - Highlight price changes when selecting options
 - Show supplier cost vs customer price (admin view)
 
-### 11. **Comparison Mode**
+### 8. **Comparison Mode**
 **Problem:** Hard to compare different configurations
 **Solution:**
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
 
-### 12. **Search Across All Categories**
+### 9. **Search Across All Categories**
 **Problem:** Search only works on paint options
 **Solution:**
 - Global search across all tabs
 - Search by feature, price range, color, etc.
 - Filter results by category
 
-### 13. **Favorites / Wishlist**
+### 10. **Favorites / Wishlist**
 **Problem:** Can't mark interesting options for later
 **Solution:**
 - Heart/star icon to favorite items
 - View all favorited items
 - Create multiple wishlists
 
-### 14. **Option Dependencies & Exclusions** ⚠️
+### 11. **Option Dependencies & Exclusions** ⚠️
 **Problem:** Some options are incompatible or mutually exclusive with others
 **Solution Options:**
 
@@ -258,7 +191,7 @@
 Start with **A + D**: Simple rule-based system with visual indicators. Can migrate to matrix system if rules become complex.
 **NOTE:** Warnings system partially implemented
 
-### 15. **Validation & Warnings**
+### 12. **Validation & Warnings**
 **Problem:** No feedback if selections are incompatible
 **Solution:**
 - Warn about incompatible combinations
@@ -270,7 +203,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Low Priority / Nice-to-Have Features 🟢
 
-### 16. **Preconfigured Pedal Templates**
+### 13. **Preconfigured Pedal Templates**
 **Problem:** Users starting from scratch may feel overwhelmed by choices
 **Solution:**
 - Curated set of pre-configured "starter" pedal configurations
@@ -296,7 +229,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Modal/dropdown showing template cards with thumbnail, name, and price
 - One-click load replaces current selections (with confirmation if user has selections)
 
-### 17. **Stock Availability Indicator**
+### 14. **Stock Availability Indicator**
 **Problem:** No visibility into actual stock levels
 **Solution:**
 - Real-time stock display
