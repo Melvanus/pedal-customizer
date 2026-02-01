@@ -40,45 +40,31 @@
 
 ## High Priority Features 🔴
 
-### 1. **Standardize JSON Field Naming Convention (Snake Case)** 🔧 CRITICAL
-**Problem:** Inconsistent field naming across JSON files (camelCase vs snake_case)
-**Solution:**
-- Convert all fields in all JSON files to snake_case format
-- Fields to rename:
+### 1. **Standardize JSON Field Naming Convention (Snake Case)** ✅ RESOLVED
+**Status:** Completed - All JSON files converted to snake_case, TypeScript types updated
+**Changes:**
+- Converted all fields in all JSON files to snake_case format:
   - `customerPriceEUR` → `customer_price_eur`
-  - `supplier_sku` (already correct)
   - `shortDescription` → `short_description`
   - `longDescription` → `long_description`
   - `displayedName` → `displayed_name`
   - `isCustomColor` → `is_custom_color`
-  - Any other camelCase fields
-- Update all TypeScript types and interfaces
-- Update all component code that references these fields
-- Test thoroughly to ensure no broken references
-- **Benefits:**
-  - Consistent code style across the project
-  - Easier to maintain and debug
-  - Follows Python/JSON naming conventions
-  - Reduces confusion for future developers
+- Updated all TypeScript types (PaintOption, OptionItem)
+- Updated all component references throughout the codebase
+- Updated customize/page.tsx data mapping
+- Updated summary/page.tsx display logic
+- No TypeScript errors, all references working correctly
 
-### 2. **Consolidate Enclosure Style Data** 📦
-**Problem:** Enclosure style data is duplicated across enclosures_data.json and enclosure_sizes.json
-**Solution:**
-- Move all enclosure style data from enclosures_data.json to enclosure_sizes.json
-- Remove `enclosure_style_data` field from enclosures_data.json
-- Each size in enclosure_sizes.json should include complete specifications:
-  - Dimensions (mm and inches)
-  - Internal cavity dimensions
-  - Material specifications
-  - Mounting hole patterns (if applicable)
-  - Weight
-  - Any other technical specifications
-- Update components to read from unified source
-- **Benefits:**
-  - Single source of truth for enclosure specifications
-  - Easier to maintain and update
-  - Reduces data redundancy
-  - Cleaner JSON structure
+### 2. **Consolidate Enclosure Style Data** ✅ RESOLVED
+**Status:** Completed - Dimension data moved to enclosure_sizes.json
+**Changes:**
+- Moved all enclosure style data from enclosures_data.json to enclosure_sizes.json
+- Removed `enclosure_style_data` array from enclosures_data.json
+- Each size in enclosure_sizes.json now includes:
+  - `dimensions_mm`: length, width, height in millimeters
+  - `dimensions_inches`: length, width, height in inches (calculated)
+- Existing funny descriptions and capacity info preserved
+- Single source of truth for enclosure specifications established
 
 ### 3. **Size Selection Warning System** ⚠️
 **Problem:** Users can select enclosures smaller than recommended without warning
