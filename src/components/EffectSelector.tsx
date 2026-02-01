@@ -343,7 +343,7 @@ export function EffectSelector({
                       fontStyle: "italic",
                     }}
                   >
-                    {pedal.inspired_by}
+                    Inspired by: {pedal.inspired_by}
                   </div>
                 </div>
               </div>

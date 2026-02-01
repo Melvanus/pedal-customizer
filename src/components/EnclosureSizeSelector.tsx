@@ -290,21 +290,9 @@ export function EnclosureSizeSelector({
   );
 }
 
-// Helper function to scale visual representation
+// Helper function to scale visual representation (vertical orientation - as pedals sit on pedalboard)
 function getSizeWidth(sizeName: string): string {
   const widths: { [key: string]: string } = {
-    "1590A": "60px",
-    "1590B": "80px",
-    "125B": "85px",
-    "1590BB": "110px",
-    "1590BS": "130px",
-    "1590XX": "150px",
-  };
-  return widths[sizeName] || "80px";
-}
-
-function getSizeHeight(sizeName: string): string {
-  const heights: { [key: string]: string } = {
     "1590A": "40px",
     "1590B": "50px",
     "125B": "60px",
@@ -312,5 +300,17 @@ function getSizeHeight(sizeName: string): string {
     "1590BS": "45px",
     "1590XX": "70px",
   };
-  return heights[sizeName] || "50px";
+  return widths[sizeName] || "50px";
+}
+
+function getSizeHeight(sizeName: string): string {
+  const heights: { [key: string]: string } = {
+    "1590A": "60px",
+    "1590B": "80px",
+    "125B": "85px",
+    "1590BB": "110px",
+    "1590BS": "130px",
+    "1590XX": "150px",
+  };
+  return heights[sizeName] || "80px";
 }

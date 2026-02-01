@@ -99,6 +99,13 @@ export function PedalCustomizer({
   const [dragOverSku, setDragOverSku] = React.useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = React.useState<Record<string, number>>({});
 
+  // Auto-select recommended enclosure size when effect changes
+  React.useEffect(() => {
+    if (selectedEffect?.recommended_enclosure) {
+      setSelectedEnclosureSizeId(selectedEffect.recommended_enclosure);
+    }
+  }, [selectedEffectId, selectedEffect]);
+
   const selectedEffect = effectPedals.find((item) => item.id === selectedEffectId);
   const selectedSize = enclosureSizes.find((item) => item.name === selectedEnclosureSizeId);
   const selectedPaint = paintOptions.find((item) => item.id === selectedPaintId);
@@ -1012,6 +1019,23 @@ export function PedalCustomizer({
                       )}
                       <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
                         <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                        {/* "EXAMPLE" watermark overlay for design images */}
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "1rem",
+                            right: "0.5rem",
+                            transform: "rotate(15deg)",
+                            fontSize: "1rem",
+                            fontWeight: 700,
+                            color: "rgba(255, 255, 255, 0.3)",
+                            textShadow: "0 0 3px rgba(0, 0, 0, 0.8)",
+                            pointerEvents: "none",
+                            letterSpacing: "0.1em",
+                          }}
+                        >
+                          EXAMPLE
+                        </div>
                       </div>
                     </div>
                     <div style={{ padding: "1rem" }}>

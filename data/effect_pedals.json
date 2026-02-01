@@ -31,11 +31,11 @@
     {
       "id": "TS808",
       "name": "Screaming Green",
-      "inspired_by": "Ibanez Tube Screamer TS808",
+      "inspired_by": "Ibanez Tube Screamer TS808™",
       "category": "Overdrive",
       "description": "The legendary green machine that defined the mid-humped overdrive sound. Warm, smooth, and perfect for pushing tube amps.",
       "sound_characters": ["warm", "mid-focused", "smooth", "vintage", "compressed"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "TS808-PCB-v2",
         "schematic_link": "internal://schematics/ts808.pdf",
@@ -53,11 +53,11 @@
     {
       "id": "RAT",
       "name": "Distortion Rodent",
-      "inspired_by": "ProCo RAT",
+      "inspired_by": "ProCo RAT®",
       "category": "Distortion",
       "description": "The legendary rodent that bites hard. Aggressive, versatile distortion that cuts through any mix with surgical precision.",
       "sound_characters": ["aggressive", "bright", "cutting", "modern", "open"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "RAT-PCB-v1",
         "schematic_link": "internal://schematics/rat.pdf",
@@ -75,11 +75,11 @@
     {
       "id": "BIGMUFF",
       "name": "Big Russian Fuzz",
-      "inspired_by": "Electro-Harmonix Big Muff Pi",
+      "inspired_by": "Electro-Harmonix Big Muff Pi®",
       "category": "Fuzz",
       "description": "The wall of fuzz that launched a thousand sustain-filled solos. Thick, creamy, and gloriously woolly.",
       "sound_characters": ["warm", "thick", "compressed", "vintage", "scooped", "creamy"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "MUFF-PCB-v3",
         "schematic_link": "internal://schematics/bigmuff.pdf",
@@ -97,11 +97,11 @@
     {
       "id": "KLON",
       "name": "Golden Mythical Beast",
-      "inspired_by": "Klon Centaur",
+      "inspired_by": "Klon Centaur™",
       "category": "Overdrive",
       "description": "The stuff of legends and empty wallets. Transparent overdrive that makes your amp sound like it costs $10k more.",
       "sound_characters": ["transparent", "warm", "open", "modern", "smooth"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "KLON-PCB-v2",
         "schematic_link": "internal://schematics/klon.pdf",
@@ -119,11 +119,11 @@
     {
       "id": "SD1",
       "name": "Super Booster Drive",
-      "inspired_by": "Boss SD-1 Super Overdrive",
+      "inspired_by": "Boss SD-1 Super Overdrive®",
       "category": "Overdrive",
       "description": "The budget-friendly green box that punches way above its weight class. Asymmetrical clipping for that extra sparkle.",
       "sound_characters": ["bright", "open", "transparent", "modern"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "SD1-PCB-v1",
         "schematic_link": "internal://schematics/sd1.pdf",
@@ -141,11 +141,11 @@
     {
       "id": "FUZZFACE",
       "name": "Fuzzy Face",
-      "inspired_by": "Dallas Arbiter Fuzz Face",
+      "inspired_by": "Dallas Arbiter Fuzz Face™",
       "category": "Fuzz",
       "description": "The round fuzz that Hendrix made famous. Touch-sensitive, dynamic, and germanium goodness (or silicon if you prefer).",
       "sound_characters": ["vintage", "warm", "open", "dynamic", "smooth"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "FUZZFACE-PCB-v2",
         "schematic_link": "internal://schematics/fuzzface.pdf",
@@ -163,11 +163,11 @@
     {
       "id": "BOOSTER",
       "name": "Treble Amplifier",
-      "inspired_by": "Rangemaster Treble Booster",
+      "inspired_by": "Rangemaster Treble Booster™",
       "category": "Boost",
       "description": "The old-school British secret weapon. Simple one-transistor circuit that adds sparkle and pushes amps into overdrive heaven.",
       "sound_characters": ["bright", "transparent", "vintage", "cutting"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "BOOST-PCB-v1",
         "schematic_link": "internal://schematics/rangemaster.pdf",
@@ -185,11 +185,11 @@
     {
       "id": "BLUESBREAKER",
       "name": "Blues Driver Deluxe",
-      "inspired_by": "Marshall Bluesbreaker",
+      "inspired_by": "Marshall Bluesbreaker®",
       "category": "Overdrive",
       "description": "Marshall in a box. Classic British amp-like overdrive with that unmistakable mid-range punch. Size does matter here.",
       "sound_characters": ["mid-focused", "warm", "vintage", "open", "smooth"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "BB-PCB-v2",
         "schematic_link": "internal://schematics/bluesbreaker.pdf",
@@ -207,11 +207,11 @@
     {
       "id": "PHASE90",
       "name": "Phase Shifter 90",
-      "inspired_by": "MXR Phase 90",
+      "inspired_by": "MXR Phase 90®",
       "category": "Modulation",
       "description": "The swirly orange box that's been on every pedalboard since 1974. From subtle swoosh to full jet-plane mode.",
       "sound_characters": ["vintage", "warm", "swirly"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "P90-PCB-v1",
         "schematic_link": "internal://schematics/phase90.pdf",
@@ -229,11 +229,11 @@
     {
       "id": "CHORUS",
       "name": "Analog Chorus Deluxe",
-      "inspired_by": "Boss CE-2 Chorus",
+      "inspired_by": "Boss CE-2 Chorus®",
       "category": "Modulation",
       "description": "The 80s in a box. Lush, shimmering chorus that makes everything sound like it's wearing a tuxedo.",
       "sound_characters": ["warm", "vintage", "lush", "smooth"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "CHORUS-PCB-v2",
         "schematic_link": "internal://schematics/ce2.pdf",
@@ -251,11 +251,11 @@
     {
       "id": "DELAY",
       "name": "Analog Delay Classic",
-      "inspired_by": "MXR Carbon Copy",
+      "inspired_by": "MXR Carbon Copy™",
       "category": "Delay",
       "description": "Warm analog delay with the characteristic degradation and saturation. Because digital is for spreadsheets.",
       "sound_characters": ["warm", "dark", "vintage", "lo-fi"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "DELAY-PCB-v1",
         "schematic_link": "internal://schematics/analogdelay.pdf",
@@ -273,11 +273,11 @@
     {
       "id": "EQFILTER",
       "name": "Graphic Equalizer Six",
-      "inspired_by": "Boss GE-7 Equalizer",
+      "inspired_by": "Boss GE-7 Equalizer®",
       "category": "EQ/Filter",
       "description": "Six sliders of tonal control. Scoop the mids, boost the bass, or go full V-shape metal mode.",
       "sound_characters": ["transparent", "modern", "versatile"],
-      "image": "Logo.png",
+      "image": "Enclosure_Placeholder.png",
       "technical_specs": {
         "pcb_reference": "EQ-PCB-v1",
         "schematic_link": "internal://schematics/ge7.pdf",
@@ -294,3 +294,4 @@
     }
   ]
 }
+
