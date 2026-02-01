@@ -17,6 +17,7 @@ type EnclosureSizeSelectorProps = {
   selectedSize: string;
   onSelectSize: (size: string) => void;
   recommendedSize?: string;
+  onShowDetails?: (size: EnclosureSize) => void;
 };
 
 export function EnclosureSizeSelector({
@@ -24,6 +25,7 @@ export function EnclosureSizeSelector({
   selectedSize,
   onSelectSize,
   recommendedSize,
+  onShowDetails,
 }: EnclosureSizeSelectorProps) {
   return (
     <div>
@@ -50,7 +52,13 @@ export function EnclosureSizeSelector({
           return (
             <div
               key={size.name}
-              onClick={() => onSelectSize(size.name)}
+              onClick={() => {
+                if (onShowDetails) {
+                  onShowDetails(size);
+                } else {
+                  onSelectSize(size.name);
+                }
+              }}
               style={{
                 background: isSelected ? "#2a2a2a" : "#1a1a1a",
                 border: isSelected ? "3px solid #fff" : "2px solid #333",

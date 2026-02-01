@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation } from "lucide-react";
 import { EffectSelector, type EffectPedal } from "./EffectSelector";
 import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelector";
+import { ProductDetailModal, type ProductModalData } from "./ProductDetailModal";
 
 export type OptionItem = {
   id: string;
@@ -98,6 +99,7 @@ export function PedalCustomizer({
   const [availableImages, setAvailableImages] = React.useState<string[]>([]);
   const [dragOverSku, setDragOverSku] = React.useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = React.useState<Record<string, number>>({});
+  const [modalProduct, setModalProduct] = React.useState<ProductModalData | null>(null);
 
   // Auto-select recommended enclosure size when effect changes
   React.useEffect(() => {
@@ -119,6 +121,94 @@ export function PedalCustomizer({
     (selectedDesign?.customerPriceEUR ?? 0) +
     (selectedLed?.customerPriceEUR ?? 0) +
     selectedOthers.reduce((sum, item) => sum + item.customerPriceEUR, 0);
+
+  // Tab navigation helper
+  const advanceToNextTab = () => {
+    const tabOrder: Array<typeof activeTab> = ["effect", "size", "paint", "design", "led", "other"];
+    const currentIndex = tabOrder.indexOf(activeTab);
+    if (currentIndex < tabOrder.length - 1) {
+      setActiveTab(tabOrder[currentIndex + 1]);
+    }
+  };
+
+  const getNextTabName = (): string | undefined => {
+    const tabNames = {
+      effect: "Size",
+      size: "Paint",
+      paint: "Design",
+      design: "LED",
+      led: "Hardware",
+      other: undefined,
+    };
+    return tabNames[activeTab];
+  };
+
+  // Modal handler for select & continue
+  const handleModalSelectAndContinue = () => {
+    // Handle selection based on modal type
+    if (modalProduct) {
+      switch (modalProduct.type) {
+        case "effect":
+          // Find effect by name and select it
+          const effectPedal = effectPedals.find(
+            p => p.name === modalProduct.title
+          );
+          if (effectPedal) {
+            setSelectedEffectId(effectPedal.id);
+          }
+          break;
+        case "size":
+          // Select the size by name
+          const size = enclosureSizes.find(
+            s => s.name === modalProduct.title
+          );
+          if (size) {
+            setSelectedEnclosureSizeId(size.name);
+          }
+          break;
+        case "paint":
+          // Find the paint option and select it
+          const paintOption = paintOptions.find(
+            p => (p.displayedName || p.name) === modalProduct.title
+          );
+          if (paintOption) {
+            setSelectedPaintId(paintOption.id);
+            if (paintOption.isCustomColor) {
+              setShowColorPicker(true);
+            }
+          }
+          break;
+        case "design":
+          const designOption = designOptions.find(
+            d => d.name === modalProduct.title
+          );
+          if (designOption) {
+            setSelectedDesignId(designOption.id);
+          }
+          break;
+        case "led":
+          const ledOption = ledOptions.find(
+            l => l.name === modalProduct.title
+          );
+          if (ledOption) {
+            setSelectedLedId(ledOption.id);
+          }
+          break;
+        case "other":
+          // For "other" tab, toggle the selection (multi-select)
+          const otherOption = otherOptions.find(
+            o => o.name === modalProduct.title
+          );
+          if (otherOption) {
+            handleToggleOther(otherOption.id);
+          }
+          break;
+      }
+    }
+    
+    setModalProduct(null);
+    advanceToNextTab();
+  };
 
   const paintStats = React.useMemo(() => {
     const available = paintOptions.length;
@@ -535,6 +625,48 @@ export function PedalCustomizer({
               soundCharacters={Array.from(new Set(effectPedals.flatMap(p => p.sound_characters))).sort()}
               selectedPedalId={selectedEffectId}
               onSelectPedal={setSelectedEffectId}
+              onShowDetails={(pedal) => {
+                setModalProduct({
+                  type: "effect",
+                  title: pedal.name,
+                  subtitle: `Inspired by: ${pedal.inspired_by}`,
+                  price: pedal.price_modifier_eur,
+                  image: `/api/enclosures/image/effects/${pedal.image}`,
+                  description: pedal.description,
+                  details: [
+                    { label: "Category", value: pedal.category },
+                    { label: "Sound", value: pedal.sound_characters },
+                    { label: "Complexity", value: pedal.technical_specs.complexity },
+                    { label: "Potentiometers", value: `${pedal.technical_specs.potentiometers}` },
+                    { label: "Switches", value: `${pedal.technical_specs.switches}` },
+                    { label: "PCB Reference", value: pedal.technical_specs.pcb_reference },
+                    { label: "Recommended Size", value: pedal.recommended_enclosure },
+                  ],
+                  additionalSections: pedal.compatible_mods.length > 0 ? [
+                    {
+                      title: "Compatible Modifications",
+                      content: (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                          {pedal.compatible_mods.map((mod, i) => (
+                            <span
+                              key={i}
+                              style={{
+                                background: "#333",
+                                padding: "0.5rem 1rem",
+                                borderRadius: "12px",
+                                fontSize: "0.85rem",
+                                color: "#fff",
+                              }}
+                            >
+                              {mod}
+                            </span>
+                          ))}
+                        </div>
+                      ),
+                    },
+                  ] : undefined,
+                });
+              }}
             />
           )}
 
@@ -545,6 +677,39 @@ export function PedalCustomizer({
               selectedSize={selectedEnclosureSizeId}
               onSelectSize={setSelectedEnclosureSizeId}
               recommendedSize={selectedEffect?.recommended_enclosure}
+              onShowDetails={(size) => {
+                setModalProduct({
+                  type: "size",
+                  title: size.name,
+                  subtitle: size.dimensions,
+                  price: 0, // Enclosure size is included
+                  description: size.description,
+                  details: [
+                    { label: "Dimensions", value: size.dimensions },
+                    { label: "Capacity", value: size.capacity },
+                    { label: "Best For", value: size.best_for },
+                  ],
+                  additionalSections: [
+                    {
+                      title: "Funny Description",
+                      content: (
+                        <div
+                          style={{
+                            padding: "1rem",
+                            background: "#0a0a0a",
+                            borderRadius: "8px",
+                            border: "1px solid #333",
+                            fontStyle: "italic",
+                            color: "#ccc",
+                          }}
+                        >
+                          {size.funny_description}
+                        </div>
+                      ),
+                    },
+                  ],
+                });
+              }}
             />
           )}
 
@@ -566,9 +731,29 @@ export function PedalCustomizer({
                   <div
                     key={option.id}
                     onClick={() => {
-                      setSelectedPaintId(option.id);
-                      if (option.isCustomColor) {
-                        setShowColorPicker(true);
+                      if (!adminMode) {
+                        // Open modal for product details
+                        setModalProduct({
+                          type: "paint",
+                          title: option.displayedName || option.name,
+                          subtitle: `${option.color || ""} ${option.finish || ""}`.trim(),
+                          price: option.customerPriceEUR,
+                          image: currentImage,
+                          description: option.longDescription || option.shortDescription || option.description,
+                          details: [
+                            { label: "SKU", value: option.supplier_sku },
+                            { label: "Supplier", value: option.supplier_id },
+                            { label: "Color", value: option.color || "N/A" },
+                            { label: "Finish", value: option.finish || "N/A" },
+                            { label: "Available", value: option.available ? "Yes" : "No" },
+                          ].filter(d => d.value && d.value !== "N/A"),
+                        });
+                      } else {
+                        // Admin mode: direct selection
+                        setSelectedPaintId(option.id);
+                        if (option.isCustomColor) {
+                          setShowColorPicker(true);
+                        }
                       }
                     }}
                     onDragOver={adminMode ? (e) => handleDragOver(e, option.supplier_sku) : undefined}
@@ -874,7 +1059,23 @@ export function PedalCustomizer({
                   return (
                   <div
                     key={option.id}
-                    onClick={() => setSelectedDesignId(option.id)}
+                    onClick={() => {
+                      if (!adminMode) {
+                        setModalProduct({
+                          type: "design",
+                          title: option.name,
+                          price: option.customerPriceEUR,
+                          image: currentImage,
+                          description: option.longDescription || option.shortDescription || option.description,
+                          details: [
+                            { label: "Style", value: "Graphic Design" },
+                            { label: "Format", value: "Printed Label" },
+                          ],
+                        });
+                      } else {
+                        setSelectedDesignId(option.id);
+                      }
+                    }}
                     onDragOver={adminMode ? (e) => handleDragOver(e, option.id) : undefined}
                     onDragLeave={adminMode ? handleDragLeave : undefined}
                     onDrop={adminMode ? (e) => handleDrop(e, option.id, "design") : undefined}
@@ -1075,7 +1276,23 @@ export function PedalCustomizer({
                 return (
                 <div
                   key={option.id}
-                  onClick={() => setSelectedLedId(option.id)}
+                  onClick={() => {
+                    if (!adminMode) {
+                      setModalProduct({
+                        type: "led",
+                        title: option.name,
+                        price: option.customerPriceEUR,
+                        image: currentImage,
+                        description: option.longDescription || option.shortDescription || option.description,
+                        details: [
+                          { label: "Type", value: "LED Indicator" },
+                          { label: "Installation", value: "Pre-wired & Tested" },
+                        ],
+                      });
+                    } else {
+                      setSelectedLedId(option.id);
+                    }
+                  }}
                   style={{
                     background: "#0f0f0f",
                     borderRadius: "10px",
@@ -1293,7 +1510,23 @@ export function PedalCustomizer({
                 return (
                 <div
                   key={option.id}
-                  onClick={() => handleToggleOther(option.id)}
+                  onClick={() => {
+                    if (!adminMode) {
+                      setModalProduct({
+                        type: "other",
+                        title: option.name,
+                        price: option.customerPriceEUR,
+                        image: currentImage,
+                        description: option.longDescription || option.shortDescription || option.description,
+                        details: [
+                          { label: "Category", value: "Hardware Upgrade" },
+                          { label: "Multi-select", value: "Yes - add as many as you like" },
+                        ],
+                      });
+                    } else {
+                      handleToggleOther(option.id);
+                    }
+                  }}
                   style={{
                     background: "#0f0f0f",
                     borderRadius: "10px",
@@ -1900,6 +2133,14 @@ export function PedalCustomizer({
           </div>
         </div>
       )}
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={modalProduct}
+        onClose={() => setModalProduct(null)}
+        onSelectAndContinue={handleModalSelectAndContinue}
+        nextTabName={getNextTabName()}
+      />
     </div>
   );
 }

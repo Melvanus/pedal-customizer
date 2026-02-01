@@ -33,6 +33,7 @@ type EffectSelectorProps = {
   soundCharacters: string[];
   selectedPedalId: string;
   onSelectPedal: (id: string) => void;
+  onShowDetails?: (pedal: EffectPedal) => void;
 };
 
 export function EffectSelector({
@@ -41,6 +42,7 @@ export function EffectSelector({
   soundCharacters,
   selectedPedalId,
   onSelectPedal,
+  onShowDetails,
 }: EffectSelectorProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [categoryFilter, setCategoryFilter] = React.useState("");
@@ -257,7 +259,13 @@ export function EffectSelector({
           return (
             <div
               key={pedal.id}
-              onClick={() => onSelectPedal(pedal.id)}
+              onClick={() => {
+                if (onShowDetails) {
+                  onShowDetails(pedal);
+                } else {
+                  onSelectPedal(pedal.id);
+                }
+              }}
               style={{
                 background: isSelected ? "#2a2a2a" : "#1a1a1a",
                 border: isSelected ? "2px solid #fff" : "2px solid #333",
