@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { Search, X, Info } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 export type EffectPedal = {
   id: string;
@@ -250,7 +250,7 @@ export function EffectSelector({
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          gap: "1rem",
+          gap: "1.5rem",
           marginBottom: "2rem",
         }}
       >
@@ -267,23 +267,22 @@ export function EffectSelector({
                 }
               }}
               style={{
-                background: isSelected ? "#2a2a2a" : "#1a1a1a",
-                border: isSelected ? "2px solid #fff" : "2px solid #333",
-                borderRadius: "8px",
-                padding: "1rem",
+                background: "#0f0f0f",
+                borderRadius: "10px",
+                overflow: "hidden",
+                boxShadow: isSelected ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 cursor: "pointer",
-                transition: "all 0.3s ease",
+                border: isSelected ? "2px solid #fff" : "2px solid #2d2d2d",
                 position: "relative",
               }}
               onMouseEnter={(e) => {
-                if (!isSelected) {
-                  e.currentTarget.style.borderColor = "#666";
-                }
+                e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.boxShadow = "0 5px 20px rgba(255,255,255,0.15)";
               }}
               onMouseLeave={(e) => {
-                if (!isSelected) {
-                  e.currentTarget.style.borderColor = "#333";
-                }
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = isSelected ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
               }}
             >
               {pedal.popular && (
@@ -294,154 +293,97 @@ export function EffectSelector({
                     right: "0.5rem",
                     background: "#ffd700",
                     color: "#000",
-                    padding: "0.25rem 0.5rem",
+                    padding: "0.3rem 0.6rem",
                     borderRadius: "4px",
                     fontSize: "0.7rem",
                     fontWeight: 700,
+                    zIndex: 10,
                   }}
                 >
-                  POPULAR
+                  ⭐ POPULAR
                 </div>
               )}
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "0.75rem",
-                }}
-              >
-                <div
-                  style={{
-                    width: "60px",
-                    height: "60px",
-                    background: "#0a0a0a",
-                    borderRadius: "6px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: "0.75rem",
-                    overflow: "hidden",
-                  }}
-                >
+              <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
                   <Image
-                    src={`/api/data/image/${pedal.image}`}
+                    src={`/api/enclosures/image/effects/${pedal.image}`}
                     alt={pedal.name}
-                    width={50}
-                    height={50}
+                    fill
+                    unoptimized
                     style={{ objectFit: "contain" }}
                   />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <h3
-                    style={{
-                      margin: 0,
-                      fontSize: "1rem",
-                      fontWeight: 700,
-                      color: "#fff",
-                      marginBottom: "0.25rem",
-                    }}
-                  >
-                    {pedal.name}
-                  </h3>
+              </div>
+
+              <div style={{ padding: "1rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
                   <div
                     style={{
+                      display: "inline-block",
+                      background: "#333",
+                      color: "#fff",
+                      padding: "0.25rem 0.6rem",
+                      borderRadius: "4px",
                       fontSize: "0.7rem",
-                      color: "#888",
-                      fontStyle: "italic",
+                      fontWeight: 600,
                     }}
                   >
-                    Inspired by: {pedal.inspired_by}
+                    {pedal.category}
                   </div>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "inline-block",
-                  background: "#333",
-                  color: "#fff",
-                  padding: "0.25rem 0.5rem",
-                  borderRadius: "4px",
-                  fontSize: "0.7rem",
-                  fontWeight: 600,
-                  marginBottom: "0.5rem",
-                }}
-              >
-                {pedal.category}
-              </div>
-
-              <p
-                style={{
-                  fontSize: "0.85rem",
-                  color: "#ccc",
-                  lineHeight: 1.5,
-                  marginBottom: "0.75rem",
-                  minHeight: "3.5rem",
-                }}
-              >
-                {pedal.description.slice(0, 100)}
-                {pedal.description.length > 100 ? "..." : ""}
-              </p>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "0.25rem",
-                  marginBottom: "0.75rem",
-                }}
-              >
-                {pedal.sound_characters.slice(0, 4).map((char) => (
-                  <span
-                    key={char}
-                    style={{
-                      fontSize: "0.7rem",
-                      color: "#aaa",
-                      background: "#0a0a0a",
-                      padding: "0.2rem 0.4rem",
-                      borderRadius: "3px",
-                    }}
-                  >
-                    {char}
+                  <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
+                    €{pedal.customer_price_eur.toFixed(2)}
                   </span>
-                ))}
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  paddingTop: "0.75rem",
-                  borderTop: "1px solid #333",
-                }}
-              >
-                <div style={{ fontSize: "0.75rem", color: "#888" }}>
-                  <div>📦 {pedal.recommended_enclosure}</div>
-                  <div>⚙️ {pedal.technical_specs.complexity}</div>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDetailPedalId(pedal.id);
-                  }}
+
+                <div style={{ fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem", color: "#e0e0e0", lineHeight: 1.3 }}>
+                  {pedal.name}
+                </div>
+
+                <div
                   style={{
-                    background: "#333",
-                    border: "none",
-                    color: "#fff",
-                    padding: "0.5rem 0.75rem",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    fontSize: "0.8rem",
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.25rem",
+                    fontSize: "0.75rem",
+                    color: "#888",
+                    fontStyle: "italic",
+                    marginBottom: "0.75rem",
                   }}
                 >
-                  <Info size={14} /> Details
-                </button>
+                  Inspired by: {pedal.inspired_by}
+                </div>
+
+                <div style={{ fontSize: "0.8rem", color: "#999", marginBottom: "0.75rem", lineHeight: 1.4 }}>
+                  {pedal.description.slice(0, 80)}
+                  {pedal.description.length > 80 ? "..." : ""}
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "0.25rem",
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  {pedal.sound_characters.slice(0, 3).map((char) => (
+                    <span
+                      key={char}
+                      style={{
+                        fontSize: "0.7rem",
+                        color: "#aaa",
+                        background: "#0a0a0a",
+                        padding: "0.2rem 0.4rem",
+                        borderRadius: "3px",
+                      }}
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderTop: "1px solid #2d2d2d" }}>
+                  <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Recommended Size</span>
+                  <span style={{ color: "#aaa", fontSize: "0.8rem" }}>📦 {pedal.recommended_enclosure}</span>
+                </div>
               </div>
             </div>
           );

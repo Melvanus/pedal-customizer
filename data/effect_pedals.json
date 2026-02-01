@@ -35,7 +35,7 @@
       "category": "Overdrive",
       "description": "The legendary green machine that defined the mid-humped overdrive sound. Warm, smooth, and perfect for pushing tube amps.",
       "sound_characters": ["warm", "mid-focused", "smooth", "vintage", "compressed"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "TS808-PCB-v2",
         "schematic_link": "internal://schematics/ts808.pdf",
@@ -57,7 +57,7 @@
       "category": "Distortion",
       "description": "The legendary rodent that bites hard. Aggressive, versatile distortion that cuts through any mix with surgical precision.",
       "sound_characters": ["aggressive", "bright", "cutting", "modern", "open"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "RAT-PCB-v1",
         "schematic_link": "internal://schematics/rat.pdf",
@@ -79,7 +79,7 @@
       "category": "Fuzz",
       "description": "The wall of fuzz that launched a thousand sustain-filled solos. Thick, creamy, and gloriously woolly.",
       "sound_characters": ["warm", "thick", "compressed", "vintage", "scooped", "creamy"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "MUFF-PCB-v3",
         "schematic_link": "internal://schematics/bigmuff.pdf",
@@ -101,7 +101,7 @@
       "category": "Overdrive",
       "description": "The stuff of legends and empty wallets. Transparent overdrive that makes your amp sound like it costs $10k more.",
       "sound_characters": ["transparent", "warm", "open", "modern", "smooth"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "KLON-PCB-v2",
         "schematic_link": "internal://schematics/klon.pdf",
@@ -123,7 +123,7 @@
       "category": "Overdrive",
       "description": "The budget-friendly green box that punches way above its weight class. Asymmetrical clipping for that extra sparkle.",
       "sound_characters": ["bright", "open", "transparent", "modern"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "SD1-PCB-v1",
         "schematic_link": "internal://schematics/sd1.pdf",
@@ -145,7 +145,7 @@
       "category": "Fuzz",
       "description": "The round fuzz that Hendrix made famous. Touch-sensitive, dynamic, and germanium goodness (or silicon if you prefer).",
       "sound_characters": ["vintage", "warm", "open", "dynamic", "smooth"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "FUZZFACE-PCB-v2",
         "schematic_link": "internal://schematics/fuzzface.pdf",
@@ -167,7 +167,7 @@
       "category": "Boost",
       "description": "The old-school British secret weapon. Simple one-transistor circuit that adds sparkle and pushes amps into overdrive heaven.",
       "sound_characters": ["bright", "transparent", "vintage", "cutting"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "BOOST-PCB-v1",
         "schematic_link": "internal://schematics/rangemaster.pdf",
@@ -189,7 +189,7 @@
       "category": "Overdrive",
       "description": "Marshall in a box. Classic British amp-like overdrive with that unmistakable mid-range punch. Size does matter here.",
       "sound_characters": ["mid-focused", "warm", "vintage", "open", "smooth"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "BB-PCB-v2",
         "schematic_link": "internal://schematics/bluesbreaker.pdf",
@@ -211,7 +211,7 @@
       "category": "Modulation",
       "description": "The swirly orange box that's been on every pedalboard since 1974. From subtle swoosh to full jet-plane mode.",
       "sound_characters": ["vintage", "warm", "swirly"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "P90-PCB-v1",
         "schematic_link": "internal://schematics/phase90.pdf",
@@ -233,7 +233,7 @@
       "category": "Modulation",
       "description": "The 80s in a box. Lush, shimmering chorus that makes everything sound like it's wearing a tuxedo.",
       "sound_characters": ["warm", "vintage", "lush", "smooth"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "CHORUS-PCB-v2",
         "schematic_link": "internal://schematics/ce2.pdf",
@@ -255,7 +255,7 @@
       "category": "Delay",
       "description": "Warm analog delay with the characteristic degradation and saturation. Because digital is for spreadsheets.",
       "sound_characters": ["warm", "dark", "vintage", "lo-fi"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "DELAY-PCB-v1",
         "schematic_link": "internal://schematics/analogdelay.pdf",
@@ -277,7 +277,7 @@
       "category": "EQ/Filter",
       "description": "Six sliders of tonal control. Scoop the mids, boost the bass, or go full V-shape metal mode.",
       "sound_characters": ["transparent", "modern", "versatile"],
-      "image": "Enclosure_Placeholder.png",
+      "image": "Logo.png",
       "technical_specs": {
         "pcb_reference": "EQ-PCB-v1",
         "schematic_link": "internal://schematics/ge7.pdf",
@@ -294,4 +294,5 @@
     }
   ]
 }
+
 
