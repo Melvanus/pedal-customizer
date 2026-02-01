@@ -35,7 +35,7 @@ export default async function CustomizePage() {
   const favouritesPath = path.join(process.cwd(), "data", "favourites.json");
   const imageDir = path.join(process.cwd(), "data", "images");
 
-  const [rawEffectPedals, rawEnclosureSizes, rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawOther, rawFavourites, imageFiles] = await Promise.all([
+  const [rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawOther, rawFavourites, imageFiles] = await Promise.all([
     fs.readFile(effectPedalsPath, "utf-8"),
     fs.readFile(enclosureSizesPath, "utf-8"),
     fs.readFile(dataPath, "utf-8"),
@@ -46,7 +46,8 @@ export default async function CustomizePage() {
     fs.readdir(imageDir),
   ]);
 
-  const effectPedals = (JSON.parse(rawEffectPedals) as EffectPedal[]).map(pedal => ({
+  const effectPedalsData = JSON.parse(rawEffectPedals) as { pedals: EffectPedal[] };
+  const effectPedals = effectPedalsData.pedals.map(pedal => ({
     ...pedal,
     image: resolveImageUrl(pedal.image || "Logo.png"),
   }));
