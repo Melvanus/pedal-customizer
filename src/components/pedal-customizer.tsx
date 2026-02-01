@@ -631,7 +631,7 @@ export function PedalCustomizer({
                   title: pedal.name,
                   subtitle: `Inspired by: ${pedal.inspired_by}`,
                   price: pedal.customer_price_eur,
-                  image: `/api/enclosures/image/effects/${pedal.image}`,
+                  image: `/api/data/image/${pedal.image}`,
                   description: pedal.description,
                   details: [
                     { label: "Category", value: pedal.category },

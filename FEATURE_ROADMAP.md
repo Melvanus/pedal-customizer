@@ -118,7 +118,67 @@
 
 ## High Priority Features 🔴
 
-### 7. **Effect-Specific Mods Integration** ⭐⭐⭐
+### 1. **Standardize JSON Field Naming Convention (Snake Case)** 🔧 CRITICAL
+**Problem:** Inconsistent field naming across JSON files (camelCase vs snake_case)
+**Solution:**
+- Convert all fields in all JSON files to snake_case format
+- Fields to rename:
+  - `customerPriceEUR` → `customer_price_eur`
+  - `supplier_sku` (already correct)
+  - `shortDescription` → `short_description`
+  - `longDescription` → `long_description`
+  - `displayedName` → `displayed_name`
+  - `isCustomColor` → `is_custom_color`
+  - Any other camelCase fields
+- Update all TypeScript types and interfaces
+- Update all component code that references these fields
+- Test thoroughly to ensure no broken references
+- **Benefits:**
+  - Consistent code style across the project
+  - Easier to maintain and debug
+  - Follows Python/JSON naming conventions
+  - Reduces confusion for future developers
+
+### 2. **Consolidate Enclosure Style Data** 📦
+**Problem:** Enclosure style data is duplicated across enclosures_data.json and enclosure_sizes.json
+**Solution:**
+- Move all enclosure style data from enclosures_data.json to enclosure_sizes.json
+- Remove `enclosure_style_data` field from enclosures_data.json
+- Each size in enclosure_sizes.json should include complete specifications:
+  - Dimensions (mm and inches)
+  - Internal cavity dimensions
+  - Material specifications
+  - Mounting hole patterns (if applicable)
+  - Weight
+  - Any other technical specifications
+- Update components to read from unified source
+- **Benefits:**
+  - Single source of truth for enclosure specifications
+  - Easier to maintain and update
+  - Reduces data redundancy
+  - Cleaner JSON structure
+
+### 3. **Size Selection Warning System** ⚠️
+**Problem:** Users can select enclosures smaller than recommended without warning
+**Solution:**
+- In the sizes tab, detect when selected size is smaller than recommended size
+- Show warning badge/banner on undersized enclosures:
+  - Visual indicator: Orange/yellow warning icon
+  - Text: "⚠️ Smaller than recommended - Manual review required"
+  - Explanation tooltip: "This size may require custom modifications like top-mounted jacks or illuminated footswitch for proper fit"
+- Add price warning: "May incur additional costs for modifications"
+- Recommended approach:
+  - Size order: 1590A < 1590B = 125B < 1590BB < 1590BS < 1590XX
+  - Compare selected size index with recommended size index
+  - If selected < recommended, show warning
+- Still allow selection (don't block), but make consequences clear
+- **Benefits:**
+  - Prevents build issues from undersized enclosures
+  - Sets proper customer expectations for costs
+  - Reduces customer service inquiries
+  - Educational for users learning about enclosure requirements
+
+### 4. **Effect-Specific Mods Integration** ⭐⭐⭐
 **Problem:** Current "Other" mods are generic; should be context-aware based on selected effect
 **Solution:**
 - **Mod Selection Within Effect Details:**
@@ -141,7 +201,7 @@
   - Automatic size adjustment prevents building errors
   - Educational - users learn about circuit modifications
 
-### 8. **Improve "Other" Category UX & Multi-Select Clarity** ⚠️
+### 5. **Improve "Other" Category UX & Multi-Select Clarity** ⚠️
 **Problem:** Multi-select in "Other" tab is confusing; unclear which items can be combined
 **Solution:**
 - **Better Category Organization:**
@@ -166,7 +226,7 @@
   - Move some items to other tabs (battery → during effect selection)
   - Some items may work better as add-ons during size selection
 
-### 1. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
+### 6. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
 **Problem:** Current SKU system only references supplier SKUs directly without proper product identification
 **Solution:**
 - **SKU Structure Refactor:**
@@ -184,7 +244,7 @@
   - Easier to switch suppliers or add alternative sources
   - Professional internal product catalog independent of supplier systems
 
-### 9. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
+### 7. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
 **Problem:** Users can't see actual colors of paint options
 **Solution:**
 - **Color Data Fields:** Add to enclosures_data.json:
@@ -208,14 +268,14 @@
   - Professional color specification via Pantone codes
 
 
-### 10. **Visual Preview / 3D Mockup**
+### 8. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
 **Solution:** 
 - Generate a real-time visual preview of the pedal with selected options
 - Show enclosure color, labeling position, LED placement
 - Could be 2D illustration or simple 3D render
 
-### 11. **Save & Load Configurations**
+### 9. **Save & Load Configurations**
 **Problem:** Users can't save their work and come back to it
 **Solution:**
 - Save configurations to browser localStorage
@@ -223,7 +283,7 @@
 - Name/label saved configurations
 - Share configurations via URL parameters
 
-### 12. **Image Gallery for Each Option**
+### 10. **Image Gallery for Each Option**
 **Problem:** All options show placeholder "Logo.png" image
 **Solution:**
 - Add actual product images for each finish, LED type, etc.
@@ -234,7 +294,7 @@
 
 ## Medium Priority Features 🟡
 
-### 13. **Enclosure Dimensions Display**
+### 11. **Enclosure Dimensions Display**
 **Problem:** Users can't see physical dimensions of enclosures before ordering
 **Solution:**
 - Add dimensions to enclosure product descriptions
@@ -248,35 +308,35 @@
   - Reduces customer service inquiries about sizing
   - Professional product information presentation
 
-### 14. **Price Breakdown Display**
+### 12. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
 - Highlight price changes when selecting options
 - Show supplier cost vs customer price (admin view)
 
-### 15. **Comparison Mode**
+### 13. **Comparison Mode**
 **Problem:** Hard to compare different configurations
 **Solution:**
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
 
-### 16. **Search Across All Categories**
+### 14. **Search Across All Categories**
 **Problem:** Search only works on paint options
 **Solution:**
 - Global search across all tabs
 - Search by feature, price range, color, etc.
 - Filter results by category
 
-### 17. **Favorites / Wishlist**
+### 15. **Favorites / Wishlist**
 **Problem:** Can't mark interesting options for later
 **Solution:**
 - Heart/star icon to favorite items
 - View all favorited items
 - Create multiple wishlists
 
-### 18. **Option Dependencies & Exclusions** ⚠️
+### 16. **Option Dependencies & Exclusions** ⚠️
 **Problem:** Some options are incompatible or mutually exclusive with others
 **Solution Options:**
 
@@ -315,7 +375,7 @@
 Start with **A + D**: Simple rule-based system with visual indicators. Can migrate to matrix system if rules become complex.
 **NOTE:** Warnings system partially implemented
 
-### 19. **Validation & Warnings**
+### 17. **Validation & Warnings**
 **Problem:** No feedback if selections are incompatible
 **Solution:**
 - Warn about incompatible combinations
@@ -327,7 +387,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Low Priority / Nice-to-Have Features 🟢
 
-### 20. **Preconfigured Pedal Templates**
+### 18. **Preconfigured Pedal Templates**
 **Problem:** Users starting from scratch may feel overwhelmed by choices
 **Solution:**
 - Curated set of pre-configured "starter" pedal configurations
@@ -353,14 +413,14 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Modal/dropdown showing template cards with thumbnail, name, and price
 - One-click load replaces current selections (with confirmation if user has selections)
 
-### 21. **Stock Availability Indicator**
+### 19. **Stock Availability Indicator**
 **Problem:** No visibility into actual stock levels
 **Solution:**
 - Real-time stock display
 - "Low stock" warnings
 - "Notify when available" option
 
-### 18. **Customer Accounts**
+### 20. **Customer Accounts**
 **Problem:** No user history or repeat customer benefits
 **Solution:**
 - User registration/login
@@ -368,21 +428,21 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Saved addresses
 - Loyalty/discount system
 
-### 19. **Mobile Responsiveness Optimization**
+### 21. **Mobile Responsiveness Optimization**
 **Problem:** Layout may not be optimal on small screens
 **Solution:**
 - Optimize grid for mobile (1-2 columns)
 - Touch-friendly controls
 - Swipe gestures for tabs
 
-### 20. **Bulk/Batch Orders**
+### 22. **Bulk/Batch Orders**
 **Problem:** Can't order multiple pedals at once
 **Solution:**
 - "Add to cart" functionality
 - Configure multiple pedals
 - Bulk pricing discounts
 
-### 21. **Tutorials / Help System**
+### 23. **Tutorials / Help System**
 **Problem:** First-time users may be confused
 **Solution:**
 - Interactive tour/walkthrough
