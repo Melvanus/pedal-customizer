@@ -40,7 +40,125 @@
 ---
 
 
+## Critical Bugs & UX Improvements 🔥 URGENT
+
+### 1. **Effect Pedal Images Not Displaying** 🐛
+**Problem:** Effect pedals show missing image icons instead of actual product images
+**Solution:**
+- Verify image paths in effect_pedals.json match actual files in data/images/
+- Ensure image URLs are correctly resolved through API route
+- Add fallback image for pedals without specific images
+- Test all 12 pedal circuits to confirm images load
+
+### 2. **Trademark Compliance for Effect Names** ⚖️
+**Problem:** Direct effect naming could cause trademark issues
+**Solution:**
+- Change label from circuit name to "Inspired by: [Original Pedal Name]™"
+- Add ™ and ® symbols where legally required
+- Update effect_pedals.json with proper trademark attributions
+- Add disclaimer: "All circuit designs are transformative works"
+- Examples:
+  - "Inspired by: Ibanez Tube Screamer™"
+  - "Inspired by: ProCo RAT®"
+  - "Inspired by: Electro-Harmonix Big Muff®"
+
+### 3. **Product Selection Detail Modal with Navigation** 🎯
+**Problem:** Users can't see large product images or smoothly proceed through workflow
+**Solution:**
+- Implement modal popup on any product selection (all tabs)
+- **Modal Content:**
+  - Large product image (fill most of modal space)
+  - Product name and price prominently displayed
+  - Short and long descriptions
+  - Technical specs where applicable
+- **Navigation Buttons:**
+  - "Back" button → closes modal, returns to grid
+  - "Select & Continue" button → selects product AND advances to next tab
+  - Close on: ESC key, click outside modal, X button
+- **Benefits:**
+  - Reduces clicks needed to proceed through workflow
+  - Gives users clear view of what they're selecting
+  - Encourages forward momentum in configuration process
+  - Works consistently across all tabs (Effect, Size, Paint, Design, LED, Other)
+
+### 4. **Auto-Select Recommended Enclosure Size** 🤖
+**Problem:** After selecting effect, user must manually choose size even when recommendation exists
+**Solution:**
+- When effect is selected, automatically set enclosure size to recommended default
+- Highlight with animation/pulse to show it was auto-selected
+- Show tooltip: "We've selected [Size] based on your effect choice"
+- User can still override selection if desired
+- Smooth transition to size tab with pre-selection visible
+
+### 5. **Add "Example" Watermark to Design/Labeling Images** 📸
+**Problem:** Design preview images may be mistaken for actual customer work
+**Solution:**
+- Add semi-transparent "EXAMPLE" text overlay to all design product images
+- Position: Upper right corner, tilted ~15° clockwise
+- Style: White text with subtle shadow for visibility
+- Small and unobtrusive but clearly visible
+- Applied programmatically via CSS overlay or pre-processed images
+
+### 6. **Rotate Enclosure Icons to Vertical Orientation** 🔄
+**Problem:** Enclosure size visualizations show horizontal orientation, not how pedals are typically viewed
+**Solution:**
+- Rotate visual size indicators in size tab by 90°
+- Display enclosures in portrait/vertical orientation (as they sit on pedalboard)
+- Update dimensions display to reflect proper orientation
+- Makes size comparison more intuitive and realistic
+
+---
+
+
 ## High Priority Features 🔴
+
+### 7. **Effect-Specific Mods Integration** ⭐⭐⭐
+**Problem:** Current "Other" mods are generic; should be context-aware based on selected effect
+**Solution:**
+- **Mod Selection Within Effect Details:**
+  - Move compatible mods from "Other" tab into Effect detail modal
+  - Show only mods that work with selected effect circuit
+  - Mods listed with checkboxes in effect details view
+  - Each mod shows: name, description, price modifier, complexity impact
+- **Dynamic Size Recommendation:**
+  - Recalculate recommended enclosure size based on selected mods
+  - Example: "Tone Stack Mod" adds 2 potentiometers → recommend larger size
+  - Update "Best Fit" badge dynamically when mods are added/removed
+  - Show warning if mods make current size too small
+- **Mod Categories:**
+  - Circuit mods (clipping options, tone stacks, gain stages)
+  - Bypass mods (buffered, true bypass, soft switching)
+  - Control mods (expression pedal input, remote switching)
+- **Benefits:**
+  - Only show relevant mods for selected circuit
+  - Helps users understand what's possible with their chosen effect
+  - Automatic size adjustment prevents building errors
+  - Educational - users learn about circuit modifications
+
+### 8. **Improve "Other" Category UX & Multi-Select Clarity** ⚠️
+**Problem:** Multi-select in "Other" tab is confusing; unclear which items can be combined
+**Solution:**
+- **Better Category Organization:**
+  - Rename "Other" to "Hardware Upgrades" or "Additional Options"
+  - Group items into subcategories:
+    - **Enclosure Mods:** Top-mounted jacks, battery compartment, etc.
+    - **Hardware Upgrades:** Premium switches, illuminated footswitch
+    - **Extras:** Velcro, rubber feet, premium knobs
+- **Visual Multi-Select Indicators:**
+  - Add checkbox icon to cards that allow multi-select
+  - Single-select items show radio button icon
+  - Clear "X selected" counter at top of category
+  - Selected items show checkmark badge
+- **Compatibility Rules:**
+  - Gray out incompatible combinations
+  - Tooltip explanation: "Cannot combine with [Item]"
+  - Show suggested alternatives
+- **Help Text:**
+  - "Select all that apply" instruction at top
+  - Inline hints: "Popular combo: Top-mounted jacks + Illuminated switch"
+- **Consider Rework:**
+  - Move some items to other tabs (battery → during effect selection)
+  - Some items may work better as add-ons during size selection
 
 ### 1. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
 **Problem:** Current SKU system only references supplier SKUs directly without proper product identification
@@ -60,7 +178,7 @@
   - Easier to switch suppliers or add alternative sources
   - Professional internal product catalog independent of supplier systems
 
-### 2. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
+### 9. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
 **Problem:** Users can't see actual colors of paint options
 **Solution:**
 - **Color Data Fields:** Add to enclosures_data.json:
@@ -84,14 +202,14 @@
   - Professional color specification via Pantone codes
 
 
-### 3. **Visual Preview / 3D Mockup**
+### 10. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
 **Solution:** 
 - Generate a real-time visual preview of the pedal with selected options
 - Show enclosure color, labeling position, LED placement
 - Could be 2D illustration or simple 3D render
 
-### 4. **Save & Load Configurations**
+### 11. **Save & Load Configurations**
 **Problem:** Users can't save their work and come back to it
 **Solution:**
 - Save configurations to browser localStorage
@@ -99,7 +217,7 @@
 - Name/label saved configurations
 - Share configurations via URL parameters
 
-### 5. **Image Gallery for Each Option**
+### 12. **Image Gallery for Each Option**
 **Problem:** All options show placeholder "Logo.png" image
 **Solution:**
 - Add actual product images for each finish, LED type, etc.
@@ -110,7 +228,7 @@
 
 ## Medium Priority Features 🟡
 
-### 6. **Enclosure Dimensions Display**
+### 13. **Enclosure Dimensions Display**
 **Problem:** Users can't see physical dimensions of enclosures before ordering
 **Solution:**
 - Add dimensions to enclosure product descriptions
@@ -124,35 +242,35 @@
   - Reduces customer service inquiries about sizing
   - Professional product information presentation
 
-### 7. **Price Breakdown Display**
+### 14. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
 - Highlight price changes when selecting options
 - Show supplier cost vs customer price (admin view)
 
-### 8. **Comparison Mode**
+### 15. **Comparison Mode**
 **Problem:** Hard to compare different configurations
 **Solution:**
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
 
-### 9. **Search Across All Categories**
+### 16. **Search Across All Categories**
 **Problem:** Search only works on paint options
 **Solution:**
 - Global search across all tabs
 - Search by feature, price range, color, etc.
 - Filter results by category
 
-### 10. **Favorites / Wishlist**
+### 17. **Favorites / Wishlist**
 **Problem:** Can't mark interesting options for later
 **Solution:**
 - Heart/star icon to favorite items
 - View all favorited items
 - Create multiple wishlists
 
-### 11. **Option Dependencies & Exclusions** ⚠️
+### 18. **Option Dependencies & Exclusions** ⚠️
 **Problem:** Some options are incompatible or mutually exclusive with others
 **Solution Options:**
 
@@ -191,7 +309,7 @@
 Start with **A + D**: Simple rule-based system with visual indicators. Can migrate to matrix system if rules become complex.
 **NOTE:** Warnings system partially implemented
 
-### 12. **Validation & Warnings**
+### 19. **Validation & Warnings**
 **Problem:** No feedback if selections are incompatible
 **Solution:**
 - Warn about incompatible combinations
@@ -203,7 +321,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Low Priority / Nice-to-Have Features 🟢
 
-### 13. **Preconfigured Pedal Templates**
+### 20. **Preconfigured Pedal Templates**
 **Problem:** Users starting from scratch may feel overwhelmed by choices
 **Solution:**
 - Curated set of pre-configured "starter" pedal configurations
@@ -229,7 +347,7 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Modal/dropdown showing template cards with thumbnail, name, and price
 - One-click load replaces current selections (with confirmation if user has selections)
 
-### 14. **Stock Availability Indicator**
+### 21. **Stock Availability Indicator**
 **Problem:** No visibility into actual stock levels
 **Solution:**
 - Real-time stock display
