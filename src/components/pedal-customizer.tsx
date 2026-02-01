@@ -15,9 +15,9 @@ export type OptionItem = {
   image: string;
   images?: string[];
   description?: string;
-  customerPriceEUR: number;
-  shortDescription?: string;
-  longDescription?: string;
+  customer_price_eur: number;
+  short_description?: string;
+  long_description?: string;
 };
 
 export type PaintOption = OptionItem & {
@@ -27,13 +27,13 @@ export type PaintOption = OptionItem & {
   finish?: string;
   color?: string;
   available?: boolean;
-  displayedName: string;
-  customerPriceEUR: number;
-  shortDescription?: string;
-  longDescription?: string;
+  displayed_name: string;
+  customer_price_eur: number;
+  short_description?: string;
+  long_description?: string;
   rgb?: string;
   pantone?: string;
-  isCustomColor?: boolean;
+  is_custom_color?: boolean;
 };
 
 type PedalCustomizerProps = {
@@ -117,10 +117,10 @@ export function PedalCustomizer({
 
   const totalPrice =
     (selectedEffect?.customer_price_eur ?? 0) +
-    (selectedPaint?.customerPriceEUR ?? 0) +
-    (selectedDesign?.customerPriceEUR ?? 0) +
-    (selectedLed?.customerPriceEUR ?? 0) +
-    selectedOthers.reduce((sum, item) => sum + item.customerPriceEUR, 0);
+    (selectedPaint?.customer_price_eur ?? 0) +
+    (selectedDesign?.customer_price_eur ?? 0) +
+    (selectedLed?.customer_price_eur ?? 0) +
+    selectedOthers.reduce((sum, item) => sum + item.customer_price_eur, 0);
 
   // Tab navigation helper
   const advanceToNextTab = () => {
@@ -169,11 +169,11 @@ export function PedalCustomizer({
         case "paint":
           // Find the paint option and select it
           const paintOption = paintOptions.find(
-            p => (p.displayedName || p.name) === modalProduct.title
+            p => (p.displayed_name || p.name) === modalProduct.title
           );
           if (paintOption) {
             setSelectedPaintId(paintOption.id);
-            if (paintOption.isCustomColor) {
+            if (paintOption.is_custom_color) {
               setShowColorPicker(true);
             }
           }
@@ -214,7 +214,7 @@ export function PedalCustomizer({
     const available = paintOptions.length;
     const uniqueColors = new Set(paintOptions.map((option) => option.color).filter(Boolean)).size;
     const uniqueFinishes = new Set(paintOptions.map((option) => option.finish).filter(Boolean)).size;
-    const avgPrice = paintOptions.reduce((sum, option) => sum + option.customerPriceEUR, 0) / (paintOptions.length || 1);
+    const avgPrice = paintOptions.reduce((sum, option) => sum + option.customer_price_eur, 0) / (paintOptions.length || 1);
     return { available, uniqueColors, uniqueFinishes, avgPrice };
   }, [paintOptions]);
 
@@ -242,7 +242,7 @@ export function PedalCustomizer({
       )
       .filter((option) => (colorFilter ? option.color === colorFilter : true))
       .filter((option) => (finishFilter ? option.finish === finishFilter : true))
-      .filter((option) => hasActiveFilters ? !option.isCustomColor : true);
+      .filter((option) => hasActiveFilters ? !option.is_custom_color : true);
 
     if (sortBy === "favourites") {
       return [...filtered].sort((a, b) => {
@@ -261,7 +261,7 @@ export function PedalCustomizer({
     }
 
     return [...filtered].sort((a, b) => {
-      if (sortBy === "price") return a.customerPriceEUR - b.customerPriceEUR;
+      if (sortBy === "price") return a.customer_price_eur - b.customer_price_eur;
       if (sortBy === "sku") return a.supplier_sku.localeCompare(b.supplier_sku);
       if (sortBy === "color") return (a.color ?? "").localeCompare(b.color ?? "");
       if (sortBy === "finish") return (a.finish ?? "").localeCompare(b.finish ?? "");
@@ -735,11 +735,12 @@ export function PedalCustomizer({
                         // Open modal for product details
                         setModalProduct({
                           type: "paint",
-                          title: option.displayedName || option.name,
+                          title: option.displayed_name || option.name,
                           subtitle: `${option.color || ""} ${option.finish || ""}`.trim(),
-                          price: option.customerPriceEUR,
+                          price: option.customer_price_eur,
                           image: currentImage,
-                          description: option.longDescription || option.shortDescription || option.description,
+                          images: option.images && option.images.length > 0 ? option.images : [currentImage],
+                          description: option.long_description || option.short_description || option.description,
                           details: [
                             { label: "SKU", value: option.supplier_sku },
                             { label: "Supplier", value: option.supplier_id },
@@ -747,11 +748,16 @@ export function PedalCustomizer({
                             { label: "Finish", value: option.finish || "N/A" },
                             { label: "Available", value: option.available ? "Yes" : "No" },
                           ].filter(d => d.value && d.value !== "N/A"),
+                          is_custom_color: option.is_custom_color,
+                          customColor: customColor,
+                          customFinish: customFinish,
+                          onCustomColorChange: setCustomColor,
+                          onCustomFinishChange: setCustomFinish,
                         });
                       } else {
                         // Admin mode: direct selection
                         setSelectedPaintId(option.id);
-                        if (option.isCustomColor) {
+                        if (option.is_custom_color) {
                           setShowColorPicker(true);
                         }
                       }
@@ -933,7 +939,7 @@ export function PedalCustomizer({
                       </div>
                     </div>
                     <div style={{ padding: "1rem" }}>
-                      {option.isCustomColor && (
+                      {option.is_custom_color && (
                         <div style={{
                           background: "rgba(255, 165, 0, 0.15)",
                           border: "1px solid rgba(255, 165, 0, 0.5)",
@@ -965,7 +971,7 @@ export function PedalCustomizer({
                             {option.internal_product_id}
                           </span>
                           {(() => {
-                            const { Icon, color } = getFinishIcon(option.isCustomColor ? customFinish : option.finish);
+                            const { Icon, color } = getFinishIcon(option.is_custom_color ? customFinish : option.finish);
                             return (
                               <div
                                 style={{
@@ -978,39 +984,39 @@ export function PedalCustomizer({
                                   justifyContent: "center",
                                   border: "1px solid rgba(255, 255, 255, 0.2)",
                                 }}
-                                title={option.isCustomColor ? customFinish : (option.finish || "Standard Finish")}
+                                title={option.is_custom_color ? customFinish : (option.finish || "Standard Finish")}
                               >
                                 <Icon size={16} color={color} />
                               </div>
                             );
                           })()}
-                          {(option.rgb || option.isCustomColor) && (
+                          {(option.rgb || option.is_custom_color) && (
                             <div
                               style={{
                                 width: "28px",
                                 height: "28px",
                                 borderRadius: "50%",
-                                background: option.isCustomColor ? customColor : option.rgb,
+                                background: option.is_custom_color ? customColor : option.rgb,
                                 border: "2px solid rgba(255, 255, 255, 0.3)",
                                 boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
                               }}
-                              title={option.isCustomColor ? `Custom: ${customColor}` : (option.pantone ? `Color: ${option.color}\nPantone: ${option.pantone}` : `Color: ${option.color}`)}
+                              title={option.is_custom_color ? `Custom: ${customColor}` : (option.pantone ? `Color: ${option.color}\nPantone: ${option.pantone}` : `Color: ${option.color}`)}
                             />
                           )}
                         </div>
                         <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                          {formatPrice(option.customerPriceEUR)}
+                          {formatPrice(option.customer_price_eur)}
                         </span>
                       </div>
                       <div style={{ fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem", color: "#e0e0e0", lineHeight: 1.3 }}>
-                        {option.displayedName}
+                        {option.displayed_name}
                       </div>
-                      {option.shortDescription && (
+                      {option.short_description && (
                         <div style={{ fontSize: "0.8rem", color: "#999", marginBottom: "0.75rem", lineHeight: 1.4 }}>
-                          {option.shortDescription}
+                          {option.short_description}
                         </div>
                       )}
-                      {option.isCustomColor && (
+                      {option.is_custom_color && (
                         <div style={{
                           fontSize: "0.75rem",
                           color: "#888",
@@ -1026,11 +1032,11 @@ export function PedalCustomizer({
                       <div>
                         <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderBottom: "1px solid #2d2d2d" }}>
                           <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Color</span>
-                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.isCustomColor ? "Custom RGB" : (option.color || "—")}</span>
+                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.is_custom_color ? "Custom RGB" : (option.color || "—")}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0" }}>
                           <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Finish</span>
-                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.isCustomColor ? customFinish : (option.finish || "—")}</span>
+                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.is_custom_color ? customFinish : (option.finish || "—")}</span>
                         </div>
                       </div>
                     </div>
@@ -1064,9 +1070,10 @@ export function PedalCustomizer({
                         setModalProduct({
                           type: "design",
                           title: option.name,
-                          price: option.customerPriceEUR,
+                          price: option.customer_price_eur,
                           image: currentImage,
-                          description: option.longDescription || option.shortDescription || option.description,
+                          images: images,
+                          description: option.long_description || option.short_description || option.description,
                           details: [
                             { label: "Style", value: "Graphic Design" },
                             { label: "Format", value: "Printed Label" },
@@ -1243,12 +1250,12 @@ export function PedalCustomizer({
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                         <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
                         <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                          {formatPrice(option.customerPriceEUR)}
+                          {formatPrice(option.customer_price_eur)}
                         </span>
                       </div>
-                      {option.shortDescription && (
+                      {option.short_description && (
                         <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
-                          {option.shortDescription}
+                          {option.short_description}
                         </div>
                       )}
                     </div>
@@ -1281,9 +1288,10 @@ export function PedalCustomizer({
                       setModalProduct({
                         type: "led",
                         title: option.name,
-                        price: option.customerPriceEUR,
+                        price: option.customer_price_eur,
                         image: currentImage,
-                        description: option.longDescription || option.shortDescription || option.description,
+                        images: images,
+                        description: option.long_description || option.short_description || option.description,
                         details: [
                           { label: "Type", value: "LED Indicator" },
                           { label: "Installation", value: "Pre-wired & Tested" },
@@ -1478,12 +1486,12 @@ export function PedalCustomizer({
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                       <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
                       <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                        {formatPrice(option.customerPriceEUR)}
+                        {formatPrice(option.customer_price_eur)}
                       </span>
                     </div>
-                    {option.shortDescription && (
+                    {option.short_description && (
                       <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
-                        {option.shortDescription}
+                        {option.short_description}
                       </div>
                     )}
                   </div>
@@ -1515,9 +1523,10 @@ export function PedalCustomizer({
                       setModalProduct({
                         type: "other",
                         title: option.name,
-                        price: option.customerPriceEUR,
+                        price: option.customer_price_eur,
                         image: currentImage,
-                        description: option.longDescription || option.shortDescription || option.description,
+                        images: images,
+                        description: option.long_description || option.short_description || option.description,
                         details: [
                           { label: "Category", value: "Hardware Upgrade" },
                           { label: "Multi-select", value: "Yes - add as many as you like" },
@@ -1712,12 +1721,12 @@ export function PedalCustomizer({
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                       <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
                       <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                        {formatPrice(option.customerPriceEUR)}
+                        {formatPrice(option.customer_price_eur)}
                       </span>
                     </div>
-                    {option.shortDescription && (
+                    {option.short_description && (
                       <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
-                        {option.shortDescription}
+                        {option.short_description}
                       </div>
                     )}
                   </div>
@@ -1834,7 +1843,7 @@ export function PedalCustomizer({
             >
               <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "paint" ? "#000" : "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
               <span style={{ fontSize: "0.8rem", color: activeTab === "paint" ? "#000" : "#aaa" }}>
-                {selectedPaint ? selectedPaint.displayedName : "—"}
+                {selectedPaint ? selectedPaint.displayed_name : "—"}
               </span>
             </button>
             <button

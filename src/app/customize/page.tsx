@@ -20,9 +20,9 @@ type RawOption = {
   price: number;
   image: string;
   images?: string[];
-  customerPriceEUR: number;
-  shortDescription?: string;
-  longDescription?: string;
+  customer_price_eur: number;
+  short_description?: string;
+  long_description?: string;
 };
 
 export default async function CustomizePage() {
@@ -66,13 +66,13 @@ export default async function CustomizePage() {
       image_urls?: string[];
       finish_info?: { finish_type?: string };
       color_info?: { primary_color?: string };
-      displayedName: string;
-      customerPriceEUR: number;
-      shortDescription?: string;
-      longDescription?: string;
+      displayed_name: string;
+      customer_price_eur: number;
+      short_description?: string;
+      long_description?: string;
       rgb?: string;
       pantone?: string;
-      isCustomColor?: boolean;
+      is_custom_color?: boolean;
     }>;
   };
 
@@ -96,13 +96,13 @@ export default async function CustomizePage() {
         finish: product.finish_info?.finish_type,
         color: product.color_info?.primary_color,
         available: product.available,
-        displayedName: product.displayedName,
-        customerPriceEUR: product.customerPriceEUR,
-        shortDescription: product.shortDescription,
-        longDescription: product.longDescription,
+        displayed_name: product.displayed_name,
+        customer_price_eur: product.customer_price_eur,
+        short_description: product.short_description,
+        long_description: product.long_description,
         rgb: product.rgb,
         pantone: product.pantone,
-        isCustomColor: product.isCustomColor,
+        is_custom_color: product.is_custom_color,
       };
     });
 

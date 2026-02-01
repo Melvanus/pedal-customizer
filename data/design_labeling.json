@@ -3,9 +3,9 @@
         "name": "No Labeling / No Design",
         "price": 0,
         "image": "Example_Bare.jpg",
-        "customerPriceEUR": 0,
-        "shortDescription": "Clean enclosure without any labels or designs",
-        "longDescription": "A clean, unmarked enclosure surface. Perfect if you want to add your own labeling later or prefer a minimalist look.",
+        "customer_price_eur": 0,
+        "short_description": "Clean enclosure without any labels or designs",
+        "long_description": "A clean, unmarked enclosure surface. Perfect if you want to add your own labeling later or prefer a minimalist look.",
         "images": [
             "Example_Bare.jpg"
         ]
@@ -14,9 +14,9 @@
         "name": "Labeled Lettering",
         "price": 0.5,
         "image": "Labeled_Lettering.jpg",
-        "customerPriceEUR": 1,
-        "shortDescription": "Simple text labels for controls",
-        "longDescription": "Basic text labeling for knobs, switches, and jacks. We'll add clear, professional lettering to identify all controls on your pedal. Please specify your desired labels in the order notes.",
+        "customer_price_eur": 1,
+        "short_description": "Simple text labels for controls",
+        "long_description": "Basic text labeling for knobs, switches, and jacks. We'll add clear, professional lettering to identify all controls on your pedal. Please specify your desired labels in the order notes.",
         "images": [
             "Labeled_Lettering.jpg",
             "Labeled_Lettering_2.jpg"
@@ -26,9 +26,9 @@
         "name": "Simple Waterslide Decal Lettering",
         "price": 1,
         "image": "Example_Water_Decal_Label_1.jpg",
-        "customerPriceEUR": 2,
-        "shortDescription": "Keeep it simple with waterslide decal text",
-        "longDescription": "Waterslide decal lettering for a clean, professional look. Ideal for simple text labels without complex graphics. Please provide desired text and font style in order notes.",
+        "customer_price_eur": 2,
+        "short_description": "Keeep it simple with waterslide decal text",
+        "long_description": "Waterslide decal lettering for a clean, professional look. Ideal for simple text labels without complex graphics. Please provide desired text and font style in order notes.",
         "images": [
             "Example_Water_Decal_Label_1.jpg",
             "Example_Water_Decal_Label_2.jpg"
@@ -38,9 +38,9 @@
         "name": "Customized Waterslide Decal Graphic",
         "price": 3,
         "image": "Example_Custom_Decal_Graphic.jpg",
-        "customerPriceEUR": 3,
-        "shortDescription": "Custom waterslide decal graphic",
-        "longDescription": "Full custom waterslide decal with your own graphic design. You can provide artwork files (vector preferred) or describe your vision. Includes logo, text, and decorative elements as specified.",
+        "customer_price_eur": 3,
+        "short_description": "Custom waterslide decal graphic",
+        "long_description": "Full custom waterslide decal with your own graphic design. You can provide artwork files (vector preferred) or describe your vision. Includes logo, text, and decorative elements as specified.",
         "images": [
             "Example_Custom_Decal_Graphic.jpg"
         ]
@@ -49,9 +49,9 @@
         "name": "Engraving",
         "price": 3,
         "image": "Example_Engraving.jpg",
-        "customerPriceEUR": 3,
-        "shortDescription": "Hand engraved text labels",
-        "longDescription": "Amateurish hand engraving of text labels directly into the enclosure surface. Provides a unique, tactile labeling solution with a vintage vibe. Can also be filled with black paint or fake rust for better visibility. Please specify desired text in order notes.",
+        "customer_price_eur": 3,
+        "short_description": "Hand engraved text labels",
+        "long_description": "Amateurish hand engraving of text labels directly into the enclosure surface. Provides a unique, tactile labeling solution with a vintage vibe. Can also be filled with black paint or fake rust for better visibility. Please specify desired text in order notes.",
         "images": [
             "Example_Engraving.jpg"
         ]
@@ -60,9 +60,9 @@
         "name": "Relic",
         "price": 10,
         "image": "Example_Relic_1.jpg",
-        "customerPriceEUR": 10,
-        "shortDescription": "Vintage worn/aged appearance",
-        "longDescription": "Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique. Note: This finish cannot be combined with pristine powder coating or certain metallic finishes. Manual review may be required.",
+        "customer_price_eur": 10,
+        "short_description": "Vintage worn/aged appearance",
+        "long_description": "Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique. Note: This finish cannot be combined with pristine powder coating or certain metallic finishes. Manual review may be required.",
         "images": [
             "Example_Relic_1.jpg"
         ]

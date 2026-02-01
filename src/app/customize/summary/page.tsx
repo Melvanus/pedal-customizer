@@ -188,10 +188,10 @@ export default function SummaryPage() {
             {config.paint && (
               <ConfigSection
                 title="Enclosure Finish"
-                name={config.paint.displayedName}
-                price={config.paint.customerPriceEUR}
-                shortDesc={config.paint.shortDescription}
-                longDesc={config.paint.longDescription}
+                name={config.paint.displayed_name}
+                price={config.paint.customer_price_eur}
+                shortDesc={config.paint.short_description}
+                longDesc={config.paint.long_description}
                 details={[
                   { label: "Product ID", value: config.paint.internal_product_id },
                   { label: "Color", value: config.paint.color },
@@ -205,9 +205,9 @@ export default function SummaryPage() {
               <ConfigSection
                 title="Design & Labeling"
                 name={config.design.name}
-                price={config.design.customerPriceEUR}
-                shortDesc={config.design.shortDescription}
-                longDesc={config.design.longDescription}
+                price={config.design.customer_price_eur}
+                shortDesc={config.design.short_description}
+                longDesc={config.design.long_description}
               />
             )}
 
@@ -255,9 +255,9 @@ export default function SummaryPage() {
               <ConfigSection
                 title="LED Style"
                 name={config.led.name}
-                price={config.led.customerPriceEUR}
-                shortDesc={config.led.shortDescription}
-                longDesc={config.led.longDescription}
+                price={config.led.customer_price_eur}
+                shortDesc={config.led.short_description}
+                longDesc={config.led.long_description}
               />
             )}
 
@@ -269,13 +269,13 @@ export default function SummaryPage() {
                   <div key={i} style={{ marginBottom: i < config.other.length - 1 ? "2rem" : 0, paddingBottom: i < config.other.length - 1 ? "2rem" : 0, borderBottom: i < config.other.length - 1 ? "1px solid #2d2d2d" : "none" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem" }}>
                       <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#fff" }}>{option.name}</span>
-                      <span style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(option.customerPriceEUR)}</span>
+                      <span style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(option.customer_price_eur)}</span>
                     </div>
-                    {option.shortDescription && (
-                      <p style={{ fontSize: "0.9rem", color: "#999", marginBottom: "0.5rem" }}>{option.shortDescription}</p>
+                    {option.short_description && (
+                      <p style={{ fontSize: "0.9rem", color: "#999", marginBottom: "0.5rem" }}>{option.short_description}</p>
                     )}
-                    {option.longDescription && (
-                      <p style={{ fontSize: "0.9rem", color: "#aaa", lineHeight: 1.6 }}>{option.longDescription}</p>
+                    {option.long_description && (
+                      <p style={{ fontSize: "0.9rem", color: "#aaa", lineHeight: 1.6 }}>{option.long_description}</p>
                     )}
                   </div>
                 ))}

@@ -3,17 +3,17 @@
         "name": "Customized Layout",
         "price": 4,
         "image": "Logo.png",
-        "customerPriceEUR": 4,
-        "shortDescription": "Custom control layout design",
-        "longDescription": "Custom positioning of knobs, switches, jacks, and other controls to match your specific circuit or preferences. Includes consultation to optimize layout for ergonomics and functionality. Please provide details or sketches of your desired layout.",
+        "customer_price_eur": 4,
+        "short_description": "Custom control layout design",
+        "long_description": "Custom positioning of knobs, switches, jacks, and other controls to match your specific circuit or preferences. Includes consultation to optimize layout for ergonomics and functionality. Please provide details or sketches of your desired layout.",
         "needsReview": true
     },
     {
         "name": "Make it Ultra Compact",
         "price": 8,
-        "customerPriceEUR": 8,
-        "shortDescription": "Miniaturized enclosure build",
-        "longDescription": "Ultra-compact build using a smaller enclosure size. Requires careful component selection and tight spacing. Ideal for pedalboard space savings. Note: May not be compatible with all circuits or standard components. Some LED holder options may not fit. Manual review required for compatibility.",
+        "customer_price_eur": 8,
+        "short_description": "Miniaturized enclosure build",
+        "long_description": "Ultra-compact build using a smaller enclosure size. Requires careful component selection and tight spacing. Ideal for pedalboard space savings. Note: May not be compatible with all circuits or standard components. Some LED holder options may not fit. Manual review required for compatibility.",
         "needsReview": true,
         "images": [
             "Logo.png"
@@ -22,9 +22,9 @@
     {
         "name": "Booster Mod",
         "price": 10,
-        "customerPriceEUR": 10,
-        "shortDescription": "You want it louder? Take this integrated clean boost circuit!",
-        "longDescription": "Adds an integrated clean boost circuit to your pedal. Useful for compensating gain loss or adding extra drive. Can be footswitchable or always-on depending on your preference. Requires additional drilling for boost control(s).",
+        "customer_price_eur": 10,
+        "short_description": "You want it louder? Take this integrated clean boost circuit!",
+        "long_description": "Adds an integrated clean boost circuit to your pedal. Useful for compensating gain loss or adding extra drive. Can be footswitchable or always-on depending on your preference. Requires additional drilling for boost control(s).",
         "needsReview": true,
         "images": [
             "Logo.png"
@@ -34,32 +34,32 @@
         "name": "Volume Mod",
         "price": 5,
         "image": "Logo.png",
-        "customerPriceEUR": 5,
-        "shortDescription": "Modifiy or add a master volume control",
-        "longDescription": "Adds or modifies a master volume control to your pedal circuit. Allows you to set your desired effect level while controlling overall output volume independently. Perfect for high-gain pedals or studio use."
+        "customer_price_eur": 5,
+        "short_description": "Modifiy or add a master volume control",
+        "long_description": "Adds or modifies a master volume control to your pedal circuit. Allows you to set your desired effect level while controlling overall output volume independently. Perfect for high-gain pedals or studio use."
     },
     {
         "name": "Buffered Bypass Mod",
         "price": 10,
         "image": "Logo.png",
-        "customerPriceEUR": 10,
-        "shortDescription": "Active buffer bypass system",
-        "longDescription": "Replaces true bypass with buffered bypass switching. Helps maintain signal integrity in long cable runs and large pedalboards. Prevents tone loss and loading issues. Note: Requires power connection even when pedal is bypassed."
+        "customer_price_eur": 10,
+        "short_description": "Active buffer bypass system",
+        "long_description": "Replaces true bypass with buffered bypass switching. Helps maintain signal integrity in long cable runs and large pedalboards. Prevents tone loss and loading issues. Note: Requires power connection even when pedal is bypassed."
     },
     {
         "name": "Voltage Sag/Starve Mod",
         "price": 5,
         "image": "Logo.png",
-        "customerPriceEUR": 5,
-        "shortDescription": "'Dying battery' control knob",
-        "longDescription": "Adds a voltage sag/starve control that simulates a dying battery effect. Creates gated, sputtery tones popular in certain fuzz and overdrive circuits. Adjustable from full 9V down to heavily starved voltages for unique tonal options."
+        "customer_price_eur": 5,
+        "short_description": "'Dying battery' control knob",
+        "long_description": "Adds a voltage sag/starve control that simulates a dying battery effect. Creates gated, sputtery tones popular in certain fuzz and overdrive circuits. Adjustable from full 9V down to heavily starved voltages for unique tonal options."
     },
     {
         "name": "Internal Battery Clip",
         "price": 2,
         "image": "Logo.png",
-        "customerPriceEUR": 2,
-        "shortDescription": "9V battery mounting clip",
-        "longDescription": "Adds an internal 9V battery clip with wiring. Allows battery-powered operation in addition to standard DC power input. Includes proper switching to disconnect battery when external power is connected."
+        "customer_price_eur": 2,
+        "short_description": "9V battery mounting clip",
+        "long_description": "Adds an internal 9V battery clip with wiring. Allows battery-powered operation in addition to standard DC power input. Includes proper switching to disconnect battery when external power is connected."
     }
 ]
