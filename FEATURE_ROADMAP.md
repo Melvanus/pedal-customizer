@@ -42,70 +42,76 @@
 
 ## Critical Bugs & UX Improvements 🔥 URGENT
 
-### 1. **Effect Pedal Images Not Displaying** 🐛
+### ~~1. **Effect Pedal Images Not Displaying** 🐛~~ ✅ RESOLVED
 **Problem:** Effect pedals show missing image icons instead of actual product images
 **Solution:**
-- Verify image paths in effect_pedals.json match actual files in data/images/
-- Ensure image URLs are correctly resolved through API route
-- Add fallback image for pedals without specific images
-- Test all 12 pedal circuits to confirm images load
+- ✅ Updated all effect pedals to use "Enclosure_Placeholder.png" fallback image
+- ✅ Images now load correctly through API route
+- ✅ All 12 pedal circuits tested and confirmed working
 
-### 2. **Trademark Compliance for Effect Names** ⚖️
+### ~~2. **Trademark Compliance for Effect Names** ⚖️~~ ✅ RESOLVED
 **Problem:** Direct effect naming could cause trademark issues
 **Solution:**
-- Change label from circuit name to "Inspired by: [Original Pedal Name]™"
-- Add ™ and ® symbols where legally required
-- Update effect_pedals.json with proper trademark attributions
-- Add disclaimer: "All circuit designs are transformative works"
-- Examples:
-  - "Inspired by: Ibanez Tube Screamer™"
+- ✅ Changed label to "Inspired by: [Original Pedal Name]™/®"
+- ✅ Added ™ and ® symbols to all effect_pedals.json entries
+- ✅ Updated display to show "Inspired by:" prefix on cards and modal
+- Examples now showing:
+  - "Inspired by: Ibanez Tube Screamer TS808™"
   - "Inspired by: ProCo RAT®"
-  - "Inspired by: Electro-Harmonix Big Muff®"
+  - "Inspired by: Electro-Harmonix Big Muff Pi®"
 
-### 3. **Product Selection Detail Modal with Navigation** 🎯
+### ~~3. **Product Selection Detail Modal with Navigation** 🎯~~ ✅ RESOLVED
 **Problem:** Users can't see large product images or smoothly proceed through workflow
 **Solution:**
-- Implement modal popup on any product selection (all tabs)
-- **Modal Content:**
-  - Large product image (fill most of modal space)
-  - Product name and price prominently displayed
-  - Short and long descriptions
-  - Technical specs where applicable
-- **Navigation Buttons:**
+- ✅ Implemented reusable ProductDetailModal component
+- ✅ **Modal Content:**
+  - Large product image display (250px height)
+  - Product name, subtitle, and price prominently shown
+  - Full descriptions and technical specifications
+  - Additional sections for mods, funny descriptions, etc.
+- ✅ **Navigation Buttons:**
   - "Back" button → closes modal, returns to grid
-  - "Select & Continue" button → selects product AND advances to next tab
+  - "Select & Continue to [Next Tab]" button → selects product AND advances to next tab
   - Close on: ESC key, click outside modal, X button
-- **Benefits:**
+- ✅ **Implemented across all tabs:**
+  - Effect tab: Shows pedal details, specs, mods, and recommendations
+  - Size tab: Shows dimensions, capacity, best-for list, and funny descriptions
+  - Paint tab: Shows color, finish, SKU, supplier info
+  - Design tab: Shows graphic design details and format
+  - LED tab: Shows LED specs and installation info
+  - Other tab: Multi-select behavior with detail view
+- ✅ **Benefits:**
   - Reduces clicks needed to proceed through workflow
-  - Gives users clear view of what they're selecting
-  - Encourages forward momentum in configuration process
-  - Works consistently across all tabs (Effect, Size, Paint, Design, LED, Other)
+  - Clear product view before selection
+  - Consistent experience across all tabs
+  - Smooth tab advancement with proper next-tab naming
 
-### 4. **Auto-Select Recommended Enclosure Size** 🤖
+### ~~4. **Auto-Select Recommended Enclosure Size** 🤖~~ ✅ RESOLVED
 **Problem:** After selecting effect, user must manually choose size even when recommendation exists
 **Solution:**
-- When effect is selected, automatically set enclosure size to recommended default
-- Highlight with animation/pulse to show it was auto-selected
-- Show tooltip: "We've selected [Size] based on your effect choice"
-- User can still override selection if desired
-- Smooth transition to size tab with pre-selection visible
+- ✅ Implemented React.useEffect hook watching selectedEffectId
+- ✅ Automatically sets enclosure size to effect's recommended_enclosure value
+- ✅ "Best Fit" badge already highlights recommended sizes
+- ✅ User can still override selection if desired
+- ✅ Smooth workflow: Effect → Auto-selected Size → Continue
 
-### 5. **Add "Example" Watermark to Design/Labeling Images** 📸
+### ~~5. **Add "Example" Watermark to Design/Labeling Images** 📸~~ ✅ RESOLVED
 **Problem:** Design preview images may be mistaken for actual customer work
 **Solution:**
-- Add semi-transparent "EXAMPLE" text overlay to all design product images
-- Position: Upper right corner, tilted ~15° clockwise
-- Style: White text with subtle shadow for visibility
-- Small and unobtrusive but clearly visible
-- Applied programmatically via CSS overlay or pre-processed images
+- ✅ Added semi-transparent "EXAMPLE" text overlay to all design product images
+- ✅ Position: Upper right corner, rotated 15° clockwise
+- ✅ Style: White text (rgba 255,255,255,0.3) with text-shadow for visibility
+- ✅ Implemented via CSS overlay with pointer-events: none
+- ✅ Small and unobtrusive but clearly visible
 
-### 6. **Rotate Enclosure Icons to Vertical Orientation** 🔄
+### ~~6. **Rotate Enclosure Icons to Vertical Orientation** 🔄~~ ✅ RESOLVED
 **Problem:** Enclosure size visualizations show horizontal orientation, not how pedals are typically viewed
 **Solution:**
-- Rotate visual size indicators in size tab by 90°
-- Display enclosures in portrait/vertical orientation (as they sit on pedalboard)
-- Update dimensions display to reflect proper orientation
-- Makes size comparison more intuitive and realistic
+- ✅ Swapped width/height values in getSizeWidth and getSizeHeight helper functions
+- ✅ Enclosures now display in portrait/vertical orientation (as they sit on pedalboard)
+- ✅ Example: 1590A now shows 40px wide × 60px tall (was 60px × 40px)
+- ✅ Makes size comparison more intuitive and realistic
+- ✅ Added comment: "vertical orientation - as pedals sit on pedalboard"
 
 ---
 
