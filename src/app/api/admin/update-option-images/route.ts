@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Read the current data
-    const dataPath = path.join(process.cwd(), "Enclosures", fileName);
+    const dataPath = path.join(process.cwd(), "data", fileName);
     const rawData = await fs.readFile(dataPath, "utf-8");
     const data = JSON.parse(rawData);
 
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify all image files exist
-    const imageDir = path.join(process.cwd(), "Enclosures", "images");
+    const imageDir = path.join(process.cwd(), "data", "images");
     const existingFiles = await fs.readdir(imageDir);
     
     const validFilenames = imageFilenames.filter((filename) =>

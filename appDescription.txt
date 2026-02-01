@@ -28,7 +28,7 @@ Technical Structure (current implementation)
 - Next.js App Router with TypeScript.
 - src/app/page.tsx loads JSON data server-side, maps image URLs to a local API route, and passes options to a client component.
 - src/components/pedal-customizer.tsx implements UI, tab logic, filtering, selection state, and JSON download.
-- src/app/api/enclosures/image/[...path]/route.ts serves local images from Enclosures/images.
+- src/app/api/data/image/[...path]/route.ts serves local images from data/images.
 
 Download File Format
 - JSON with:

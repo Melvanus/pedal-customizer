@@ -4,7 +4,7 @@ import path from "path";
 
 export async function GET() {
   try {
-    const imageDir = path.join(process.cwd(), "Enclosures", "images");
+    const imageDir = path.join(process.cwd(), "data", "images");
     const files = await fs.readdir(imageDir);
     
     // Filter only image files

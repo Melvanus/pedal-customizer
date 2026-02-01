@@ -242,8 +242,8 @@ export function PedalCustomizer({
 
     // Extract just the filenames from various path formats
     const filenames = updatedImages.map((img: string) => {
-      // Handle /api/enclosures/image/, /api/enclosures/images/, /api/images/, or plain filename
-      const match = img.match(/(?:\/api\/(?:enclosures\/)?images?\/)?(.+)$/);
+      // Handle /api/data/image/, /api/data/images/, /api/images/, or plain filename
+      const match = img.match(/(?:\/api\/(?:data\/)?images?\/)?(.+)$/);
       return match ? decodeURIComponent(match[1]) : img;
     });
 

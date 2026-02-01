@@ -11,7 +11,7 @@ const toNumber = (price: string | number | undefined) => {
 };
 
 const resolveImageUrl = (fileName: string) =>
-  `/api/enclosures/image/${encodeURIComponent(fileName)}`;
+  `/api/data/image/${encodeURIComponent(fileName)}`;
 
 type RawOption = {
   name: string;
@@ -24,12 +24,12 @@ type RawOption = {
 };
 
 export default async function CustomizePage() {
-  const dataPath = path.join(process.cwd(), "Enclosures", "enclosures_data.json");
-  const designPath = path.join(process.cwd(), "Enclosures", "design_labeling.json");
-  const ledPath = path.join(process.cwd(), "Enclosures", "led.json");
-  const otherPath = path.join(process.cwd(), "Enclosures", "other.json");
-  const favouritesPath = path.join(process.cwd(), "Enclosures", "favourites.json");
-  const imageDir = path.join(process.cwd(), "Enclosures", "images");
+  const dataPath = path.join(process.cwd(), "data", "enclosures_data.json");
+  const designPath = path.join(process.cwd(), "data", "design_labeling.json");
+  const ledPath = path.join(process.cwd(), "data", "led.json");
+  const otherPath = path.join(process.cwd(), "data", "other.json");
+  const favouritesPath = path.join(process.cwd(), "data", "favourites.json");
+  const imageDir = path.join(process.cwd(), "data", "images");
 
   const [rawData, rawDesign, rawLed, rawOther, rawFavourites, imageFiles] = await Promise.all([
     fs.readFile(dataPath, "utf-8"),

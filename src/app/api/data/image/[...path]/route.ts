@@ -14,7 +14,7 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { path: string[] } }
 ) {
-  const imagesRoot = path.join(process.cwd(), "Enclosures", "images");
+  const imagesRoot = path.join(process.cwd(), "data", "images");
   const rawPath = params.path.map(decodeURIComponent).join("/");
   const safePath = path.normalize(rawPath).replace(/^([.][.][\/])+/g, "");
   const filePath = path.join(imagesRoot, safePath);

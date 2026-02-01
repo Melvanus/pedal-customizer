@@ -4,10 +4,10 @@ import fs from "fs/promises";
 import { LandingPage } from "./landing-page";
 
 export default async function HomePage() {
-  const dataPath = path.join(process.cwd(), "Enclosures", "enclosures_data.json");
-  const designPath = path.join(process.cwd(), "Enclosures", "design_labeling.json");
-  const ledPath = path.join(process.cwd(), "Enclosures", "led.json");
-  const otherPath = path.join(process.cwd(), "Enclosures", "other.json");
+  const dataPath = path.join(process.cwd(), "data", "enclosures_data.json");
+  const designPath = path.join(process.cwd(), "data", "design_labeling.json");
+  const ledPath = path.join(process.cwd(), "data", "led.json");
+  const otherPath = path.join(process.cwd(), "data", "other.json");
 
   const [rawData, rawDesign, rawLed, rawOther] = await Promise.all([
     fs.readFile(dataPath, "utf-8"),

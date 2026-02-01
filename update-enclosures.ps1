@@ -1,5 +1,5 @@
 # Read the JSON file
-$json = Get-Content "Enclosures\enclosures_data.json" -Raw | ConvertFrom-Json
+$json = Get-Content "data\enclosures_data.json" -Raw | ConvertFrom-Json
 
 # Find the base price (bare metal enclosure)
 $baseProduct = $json.products | Where-Object { $_.name -eq "125B Style Aluminum Diecast Enclosure" }
@@ -28,6 +28,6 @@ foreach ($product in $json.products) {
 Write-Host "Processing complete. Saving to updated file..."
 
 # Save to new file
-$json | ConvertTo-Json -Depth 20 | Set-Content "Enclosures\enclosures_data_updated.json"
+$json | ConvertTo-Json -Depth 20 | Set-Content "data\enclosures_data_updated.json"
 
 Write-Host "Done! File saved as enclosures_data_updated.json"

@@ -49,7 +49,7 @@ def refactor_sku_system(json_file_path: str):
 
 if __name__ == "__main__":
     # Path to the enclosures data file
-    enclosures_file = Path(__file__).parent / "Enclosures" / "enclosures_data.json"
+    enclosures_file = Path(__file__).parent / "data" / "enclosures_data.json"
     
     if not enclosures_file.exists():
         print(f"❌ Error: File not found: {enclosures_file}")
