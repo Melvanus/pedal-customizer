@@ -1,13 +1,4 @@
 {
-    "scraper_info": {
-        "version": "offline_mode",
-        "total_products": 79,
-        "available_products": 70,
-        "unavailable_products": 9,
-        "scrape_date": "2026-01-30",
-        "data_source": "local_html_file_only",
-        "note": "Data extracted from local HTML without accessing individual product pages. Includes custom paint option and furry finish."
-    },
     "enclosure_style_data": [
         {
             "style_name": "125B",
