@@ -86,6 +86,8 @@ export function PedalCustomizer({
   const [selectedPaintId, setSelectedPaintId] = React.useState(paintOptions[0]?.id ?? "");
   const [selectedDesignId, setSelectedDesignId] = React.useState(designOptions[0]?.id ?? "");
   const [selectedLedId, setSelectedLedId] = React.useState(ledOptions[0]?.id ?? "");
+  const [selectedLedColor, setSelectedLedColor] = React.useState<string>("Red");
+  const [customLedColor, setCustomLedColor] = React.useState<string>("#ff0000");
   const [selectedOtherIds, setSelectedOtherIds] = React.useState<string[]>([]);
   const [labelText, setLabelText] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -411,6 +413,7 @@ export function PedalCustomizer({
       design: selectedDesign ?? null,
       labelText,
       led: selectedLed ?? null,
+      ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
       other: selectedOthers,
       totalPrice,
     };
@@ -1499,6 +1502,178 @@ export function PedalCustomizer({
                 );
               })}
             </div>
+            
+            {/* LED Color Picker - only show if an LED option is selected */}
+            {selectedLed && !selectedLed.name.includes("No LED") && (
+              <div style={{ 
+                marginTop: "2rem", 
+                background: "#0f0f0f", 
+                borderRadius: "15px", 
+                padding: "1.5rem",
+                border: "2px solid #2d2d2d",
+                boxShadow: "0 5px 20px rgba(0,0,0,0.3)"
+              }}>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: "1rem", color: "#fff" }}>
+                  💡 LED Color Selection
+                </h3>
+                <p style={{ fontSize: "0.85rem", color: "#999", marginBottom: "1rem" }}>
+                  Choose the color of your LED indicator
+                </p>
+                
+                {/* Standard Color Options */}
+                <div style={{ 
+                  display: "grid", 
+                  gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", 
+                  gap: "0.75rem",
+                  marginBottom: "1rem"
+                }}>
+                  {["Red", "Blue", "Green", "Yellow", "White", "Amber", "UV"].map((color) => {
+                    const colorMap: Record<string, string> = {
+                      "Red": "#ff0000",
+                      "Blue": "#0066ff",
+                      "Green": "#00ff00",
+                      "Yellow": "#ffff00",
+                      "White": "#ffffff",
+                      "Amber": "#ffbf00",
+                      "UV": "#bf00ff"
+                    };
+                    
+                    return (
+                      <div
+                        key={color}
+                        onClick={() => setSelectedLedColor(color)}
+                        style={{
+                          background: "#1a1a1a",
+                          borderRadius: "8px",
+                          padding: "0.75rem",
+                          cursor: "pointer",
+                          border: selectedLedColor === color ? "2px solid #fff" : "2px solid #333",
+                          boxShadow: selectedLedColor === color ? "0 3px 10px rgba(255, 255, 255, 0.2)" : "none",
+                          transition: "all 0.2s ease",
+                          textAlign: "center"
+                        }}
+                        onMouseEnter={(e) => {
+                          if (selectedLedColor !== color) {
+                            e.currentTarget.style.borderColor = "#666";
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (selectedLedColor !== color) {
+                            e.currentTarget.style.borderColor = "#333";
+                          }
+                        }}
+                      >
+                        <div style={{
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "50%",
+                          background: colorMap[color],
+                          margin: "0 auto 0.5rem",
+                          boxShadow: `0 0 15px ${colorMap[color]}`,
+                          border: color === "White" ? "1px solid #666" : "none"
+                        }} />
+                        <div style={{ fontSize: "0.8rem", color: "#e0e0e0", fontWeight: selectedLedColor === color ? 600 : 400 }}>
+                          {color}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  
+                  {/* Custom Color Option */}
+                  <div
+                    onClick={() => setSelectedLedColor("Custom")}
+                    style={{
+                      background: "#1a1a1a",
+                      borderRadius: "8px",
+                      padding: "0.75rem",
+                      cursor: "pointer",
+                      border: selectedLedColor === "Custom" ? "2px solid #fff" : "2px solid #333",
+                      boxShadow: selectedLedColor === "Custom" ? "0 3px 10px rgba(255, 255, 255, 0.2)" : "none",
+                      transition: "all 0.2s ease",
+                      textAlign: "center"
+                    }}
+                    onMouseEnter={(e) => {
+                      if (selectedLedColor !== "Custom") {
+                        e.currentTarget.style.borderColor = "#666";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedLedColor !== "Custom") {
+                        e.currentTarget.style.borderColor = "#333";
+                      }
+                    }}
+                  >
+                    <div style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      background: `linear-gradient(135deg, #ff0000 0%, #00ff00 33%, #0000ff 66%, #ff00ff 100%)`,
+                      margin: "0 auto 0.5rem",
+                      border: "2px solid #666"
+                    }} />
+                    <div style={{ fontSize: "0.8rem", color: "#e0e0e0", fontWeight: selectedLedColor === "Custom" ? 600 : 400 }}>
+                      Custom
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Custom Color Picker */}
+                {selectedLedColor === "Custom" && (
+                  <div style={{ 
+                    marginTop: "1rem", 
+                    padding: "1rem", 
+                    background: "#1a1a1a", 
+                    borderRadius: "8px",
+                    border: "1px solid #333"
+                  }}>
+                    <label style={{ fontSize: "0.85rem", color: "#e0e0e0", display: "block", marginBottom: "0.5rem" }}>
+                      Custom RGB Color:
+                    </label>
+                    <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                      <input
+                        type="color"
+                        value={customLedColor}
+                        onChange={(e) => setCustomLedColor(e.target.value)}
+                        style={{
+                          width: "60px",
+                          height: "60px",
+                          border: "2px solid #666",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          background: "transparent"
+                        }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <input
+                          type="text"
+                          value={customLedColor}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (/^#[0-9A-Fa-f]{0,6}$/.test(val)) {
+                              setCustomLedColor(val);
+                            }
+                          }}
+                          placeholder="#ff0000"
+                          style={{
+                            width: "100%",
+                            padding: "0.75rem",
+                            background: "#0a0a0a",
+                            border: "1px solid #666",
+                            borderRadius: "5px",
+                            color: "#e0e0e0",
+                            fontSize: "0.9rem",
+                            fontFamily: "monospace"
+                          }}
+                        />
+                        <div style={{ fontSize: "0.75rem", color: "#777", marginTop: "0.25rem" }}>
+                          Enter hex color code (e.g., #ff0000)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           )}
 
           {/* Other Tab */}

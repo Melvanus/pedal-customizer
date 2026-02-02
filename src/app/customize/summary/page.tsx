@@ -11,6 +11,7 @@ type ConfigData = {
   design: any;
   labelText: string;
   led: any;
+  ledColor?: string;
   other: any[];
   totalPrice: number;
 };
@@ -261,6 +262,11 @@ export default function SummaryPage() {
                 price={config.led.customer_price_eur}
                 shortDesc={config.led.short_description}
                 longDesc={config.led.long_description}
+                details={
+                  config.ledColor && !config.led.name.includes("No LED") 
+                    ? [{ label: "LED Color", value: config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor }]
+                    : undefined
+                }
               />
             )}
 
