@@ -144,8 +144,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -154,7 +154,7 @@
                          "rgb":  "rgb(128, 128, 128)",
                          "pantone":  "PMS Cool Gray 8 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Matte Gray Hammer",
+                         "displayed_name":  "Matte Gray Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish in Gray",
@@ -243,8 +243,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -253,7 +253,7 @@
                          "rgb":  "rgb(128, 0, 128)",
                          "pantone":  "PMS 2602 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Purple Hammer",
+                         "displayed_name":  "Purple Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish in Purple",
@@ -342,8 +342,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -352,7 +352,7 @@
                          "rgb":  "rgb(45, 45, 45)",
                          "pantone":  "PMS Black 7 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Black Hammer",
+                         "displayed_name":  "Black Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish in Black",
@@ -507,8 +507,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -517,7 +517,7 @@
                          "rgb":  "rgb(169, 169, 169)",
                          "pantone":  "PMS 877 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Silver Gray Hammer",
+                         "displayed_name":  "Silver Gray Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish in Silver Gray",
@@ -540,8 +540,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -550,7 +550,7 @@
                          "rgb":  "rgb(245, 245, 245)",
                          "pantone":  "PMS Cool Gray 1 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "White Hammer",
+                         "displayed_name":  "White Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish in White",
@@ -573,8 +573,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -583,7 +583,7 @@
                          "rgb":  "rgb(0, 71, 171)",
                          "pantone":  "PMS 2945 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Blue Hammer",
+                         "displayed_name":  "Blue Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish in Blue",
@@ -936,8 +936,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -946,7 +946,7 @@
                          "rgb":  "rgb(192, 192, 192)",
                          "pantone":  "PMS 877 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Silver Hammer",
+                         "displayed_name":  "Silver Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish in Silver",
@@ -1629,8 +1629,8 @@
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Hammer",
-                                             "texture":  "Hammer",
+                                             "finish_type":  "Hammered",
+                                             "texture":  "Hammered",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
@@ -1639,7 +1639,7 @@
                          "rgb":  "rgb(184, 115, 51)",
                          "pantone":  "PMS 7516 C",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Copper Hammer",
+                         "displayed_name":  "Copper Hammered",
                          "supplierPriceUSD":  "$6.99",
                          "customer_price_eur":  2,
                          "short_description":  "Professional Hammer finish",
