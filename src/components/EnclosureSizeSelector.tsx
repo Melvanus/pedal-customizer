@@ -3,6 +3,18 @@
 import * as React from "react";
 import { CheckCircle2 } from "lucide-react";
 
+type BananaPhysics = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  isDragging: boolean;
+  dragOffsetX: number;
+  dragOffsetY: number;
+  lastX: number;
+  lastY: number;
+};
+
 export type EnclosureSize = {
   name: string;
   dimensions: string;
@@ -27,8 +39,144 @@ export function EnclosureSizeSelector({
   recommendedSize,
   onShowDetails,
 }: EnclosureSizeSelectorProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const animationFrameRef = React.useRef<number | null>(null);
+  
+  const [banana, setBanana] = React.useState<BananaPhysics>({
+    x: 200,
+    y: 150,
+    vx: 0.5,
+    vy: 0.3,
+    isDragging: false,
+    dragOffsetX: 0,
+    dragOffsetY: 0,
+    lastX: 200,
+    lastY: 150,
+  });
+
+  // Physics simulation
+  React.useEffect(() => {
+    const DRAG = 0.98;
+    const BOUNCE_DAMPING = 0.7;
+    const BANANA_SIZE = 120; // Approximate banana size
+
+    const animate = () => {
+      setBanana((prev) => {
+        if (prev.isDragging) {
+          return prev;
+        }
+
+        const container = containerRef.current;
+        if (!container) return prev;
+
+        const bounds = container.getBoundingClientRect();
+        let { x, y, vx, vy } = prev;
+
+        // Apply drag
+        vx *= DRAG;
+        vy *= DRAG;
+
+        // Update position
+        x += vx;
+        y += vy;
+
+        // Wall collisions with bounce
+        if (x <= 0) {
+          x = 0;
+          vx = Math.abs(vx) * BOUNCE_DAMPING;
+        }
+        if (x >= bounds.width - BANANA_SIZE) {
+          x = bounds.width - BANANA_SIZE;
+          vx = -Math.abs(vx) * BOUNCE_DAMPING;
+        }
+        if (y <= 0) {
+          y = 0;
+          vy = Math.abs(vy) * BOUNCE_DAMPING;
+        }
+        if (y >= bounds.height - BANANA_SIZE) {
+          y = bounds.height - BANANA_SIZE;
+          vy = -Math.abs(vy) * BOUNCE_DAMPING;
+        }
+
+        // Stop if velocity is very small
+        if (Math.abs(vx) < 0.01) vx = 0;
+        if (Math.abs(vy) < 0.01) vy = 0;
+
+        return { ...prev, x, y, vx, vy };
+      });
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
+
+  // Mouse event handlers
+  const handleBananaMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const bananaElement = e.currentTarget as HTMLDivElement;
+    const rect = bananaElement.getBoundingClientRect();
+    
+    setBanana((prev) => ({
+      ...prev,
+      isDragging: true,
+      dragOffsetX: e.clientX - rect.left,
+      dragOffsetY: e.clientY - rect.top,
+      vx: 0,
+      vy: 0,
+    }));
+  };
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setBanana((prev) => {
+        if (!prev.isDragging || !containerRef.current) return prev;
+        
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newX = e.clientX - containerRect.left - prev.dragOffsetX;
+        const newY = e.clientY - containerRect.top - prev.dragOffsetY;
+        
+        // Track velocity while dragging
+        const vx = newX - prev.x;
+        const vy = newY - prev.y;
+        
+        return { ...prev, x: newX, y: newY, vx, vy, lastX: prev.x, lastY: prev.y };
+      });
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      setBanana((prev) => {
+        if (!prev.isDragging) return prev;
+
+        // Keep the velocity from dragging for throwing effect (2x multiplier)
+        return {
+          ...prev,
+          isDragging: false,
+          vx: prev.vx * 1.5,
+          vy: prev.vy * 1.5,
+        };
+      });
+    };
+
+    if (banana.isDragging) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [banana.isDragging]);
+
   return (
-    <div>
+    <div ref={containerRef} style={{ position: "relative" }}>
       <div style={{ marginBottom: "2rem" }}>
         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", marginBottom: "0.5rem" }}>
           Choose Your Enclosure Size
@@ -279,6 +427,61 @@ export function EnclosureSizeSelector({
           <div>
             <strong style={{ color: "#fff" }}>1590XX:</strong> Massive enclosure for multi-effect units or complex setups.
           </div>
+        </div>
+      </div>
+
+      {/* Floating Banana for Scale */}
+      <div
+        onMouseDown={handleBananaMouseDown}
+        style={{
+          position: "absolute",
+          left: `${banana.x}px`,
+          top: `${banana.y}px`,
+          width: "160px",
+          height: "160px",
+          fontSize: "90px",
+          cursor: banana.isDragging ? "grabbing" : "grab",
+          userSelect: "none",
+          zIndex: 1000,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))",
+          transition: banana.isDragging ? "none" : "filter 0.2s",
+        }}
+        onMouseEnter={(e) => {
+          if (!banana.isDragging) {
+            e.currentTarget.style.filter = "drop-shadow(0 4px 12px rgba(255,215,0,0.4))";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!banana.isDragging) {
+            e.currentTarget.style.filter = "drop-shadow(0 2px 8px rgba(0,0,0,0.3))";
+          }
+        }}
+      >
+        <img 
+          src="/api/data/image/banana.svg" 
+          alt="Banana for scale"
+          style={{
+            width: "120px",
+            height: "120px",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            color: "#fff",
+            marginTop: "0.25rem",
+            textAlign: "center",
+            pointerEvents: "none",
+            textShadow: "0 1px 3px rgba(0,0,0,0.8)",
+          }}
+        >
+          for scale
         </div>
       </div>
     </div>
