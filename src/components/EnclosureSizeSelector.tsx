@@ -32,6 +32,8 @@ type EnclosureSizeSelectorProps = {
   onShowDetails?: (size: EnclosureSize) => void;
 };
 
+const BANANA_SIZE = 140; // Approximate banana size
+
 export function EnclosureSizeSelector({
   sizes,
   selectedSize,
@@ -41,6 +43,7 @@ export function EnclosureSizeSelector({
 }: EnclosureSizeSelectorProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const animationFrameRef = React.useRef<number | null>(null);
+  const [hasBeenTouched, setHasBeenTouched] = React.useState(false);
   
   const [banana, setBanana] = React.useState<BananaPhysics>({
     x: 200,
@@ -54,11 +57,13 @@ export function EnclosureSizeSelector({
     lastY: 150,
   });
 
-  // Physics simulation
+  // Physics simulation with repelling forces and gravitational attraction
   React.useEffect(() => {
     const DRAG = 0.98;
     const BOUNCE_DAMPING = 0.7;
-    const BANANA_SIZE = 120; // Approximate banana size
+    const REPEL_DISTANCE = 100; // Distance at which repelling starts (shorter range)
+    const REPEL_FORCE = 0.25; // Strength of repelling force
+    const GRAVITY_FORCE = 1.0; // Strength of gravitational attraction to target
 
     const animate = () => {
       setBanana((prev) => {
@@ -71,6 +76,85 @@ export function EnclosureSizeSelector({
 
         const bounds = container.getBoundingClientRect();
         let { x, y, vx, vy } = prev;
+
+        // Calculate banana center position (absolute coords)
+        const bananaCenterX = bounds.left + x + BANANA_SIZE / 2;
+        const bananaCenterY = bounds.top + y + BANANA_SIZE / 2;
+
+        // Calculate gravitational attraction to target position (if not touched)
+        if (!hasBeenTouched) {
+          const selectedCard = container.querySelector('[data-enclosure-card][data-selected="true"]');
+          if (selectedCard) {
+            const sizeBox = selectedCard.querySelector('[data-size-box]');
+            if (sizeBox) {
+              const sizeBoxRect = sizeBox.getBoundingClientRect();
+              
+              // Target position: right of the actual size box
+              const targetX = sizeBoxRect.right - bounds.left + 15 + BANANA_SIZE / 2;
+              const targetY = sizeBoxRect.top - bounds.top + (sizeBoxRect.height / 2);
+              
+              // Calculate distance to target
+              const dx = targetX - (x + BANANA_SIZE / 2);
+              const dy = targetY - (y + BANANA_SIZE / 2);
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              
+              // Apply gravitational force (with damping near target to reduce overshoot)
+              if (distance > 5) {
+                // Scale force down when getting close to reduce overshoot
+                const distanceScale = Math.min(1, distance / 200);
+                const dampingFactor = distance < 200 ? (distance / 200) ** 2 : 1;
+                const forceMagnitude = GRAVITY_FORCE * distanceScale * dampingFactor;
+                vx += (dx / distance) * forceMagnitude;
+                vy += (dy / distance) * forceMagnitude;
+                
+                // Apply extra drag when moving toward target to reduce overshoot
+                vx *= 0.92;
+                vy *= 0.92;
+              } else {
+                // Strong damping when very close
+                vx *= 0.3;
+                vy *= 0.3;
+              }
+            }
+          }
+        }
+
+        // Apply repelling forces from text elements only
+        let repelForceX = 0;
+        let repelForceY = 0;
+
+        // Find only text elements (not the cards themselves, so user can place banana near scale visualizations)
+        const textElements = container.querySelectorAll('h2, h3, h4, p, span, div[style*="fontSize"]');
+
+        textElements.forEach((element) => {
+          const rect = (element as HTMLElement).getBoundingClientRect();
+          
+          // Skip if element has no dimensions (might be hidden or empty)
+          if (rect.width === 0 || rect.height === 0) return;
+          
+          // Calculate element center
+          const elementCenterX = rect.left + rect.width / 2;
+          const elementCenterY = rect.top + rect.height / 2;
+
+          // Calculate distance from banana center to element center
+          const dx = bananaCenterX - elementCenterX;
+          const dy = bananaCenterY - elementCenterY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          // Apply repelling force if within repel distance
+          if (distance < REPEL_DISTANCE && distance > 0) {
+            // Force gets stronger the closer we are (inverse square-ish)
+            const forceMagnitude = REPEL_FORCE * (1 - distance / REPEL_DISTANCE) ** 2;
+            
+            // Normalize direction and apply force
+            repelForceX += (dx / distance) * forceMagnitude;
+            repelForceY += (dy / distance) * forceMagnitude;
+          }
+        });
+
+        // Apply repelling forces to velocity
+        vx += repelForceX;
+        vy += repelForceY;
 
         // Apply drag
         vx *= DRAG;
@@ -115,11 +199,12 @@ export function EnclosureSizeSelector({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, []);
+  }, [hasBeenTouched, selectedSize]);
 
   // Mouse event handlers
   const handleBananaMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
+    setHasBeenTouched(true);
     const bananaElement = e.currentTarget as HTMLDivElement;
     const rect = bananaElement.getBoundingClientRect();
     
@@ -154,12 +239,20 @@ export function EnclosureSizeSelector({
       setBanana((prev) => {
         if (!prev.isDragging) return prev;
 
+        // Quadratic throw effect based on last velocity
+        // when the mouse is moved slowly the banana should not fly off too fast
+        // Should be a value between 0 and 2
+        let totalVelocity = Math.sqrt(prev.vx * prev.vx + prev.vy * prev.vy);
+        
+        // Quadratic scaling
+        let multiplier = Math.min(2, (totalVelocity) ** 2);
+
         // Keep the velocity from dragging for throwing effect (2x multiplier)
         return {
           ...prev,
           isDragging: false,
-          vx: prev.vx * 1.5,
-          vy: prev.vy * 1.5,
+          vx: prev.vx * multiplier,
+          vy: prev.vy * multiplier,
         };
       });
     };
@@ -200,6 +293,8 @@ export function EnclosureSizeSelector({
           return (
             <div
               key={size.name}
+              data-enclosure-card
+              data-selected={isSelected}
               onClick={() => {
                 if (onShowDetails) {
                   onShowDetails(size);
@@ -256,6 +351,7 @@ export function EnclosureSizeSelector({
 
               {/* Visual size representation */}
               <div
+                data-visual-representation
                 style={{
                   width: "100%",
                   height: "160px",
@@ -269,6 +365,7 @@ export function EnclosureSizeSelector({
                 }}
               >
                 <div
+                  data-size-box
                   style={{
                     width: getSizeWidth(size.name),
                     height: getSizeHeight(size.name),
@@ -465,8 +562,8 @@ export function EnclosureSizeSelector({
           src="/api/data/image/banana.svg" 
           alt="Banana for scale"
           style={{
-            width: "120px",
-            height: "120px",
+            width: BANANA_SIZE + "px",
+            height: BANANA_SIZE + "px",
             pointerEvents: "none",
           }}
         />
