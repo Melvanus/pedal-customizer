@@ -15,7 +15,10 @@ type ConfigData = {
   totalPrice: number;
 };
 
-const formatPrice = (value: number) => `€${value.toFixed(2)}`;
+const formatPrice = (value: number | undefined) => {
+  if (value === undefined || value === null) return "€0.00";
+  return `€${value.toFixed(2)}`;
+};
 
 export default function SummaryPage() {
   const [config, setConfig] = React.useState<ConfigData | null>(null);
@@ -403,7 +406,7 @@ function ConfigSection({
 }: {
   title: string;
   name: string;
-  price: number;
+  price?: number;
   shortDesc?: string;
   longDesc?: string;
   details?: { label: string; value?: string }[];

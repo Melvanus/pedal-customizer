@@ -63,7 +63,7 @@ export function EnclosureSizeSelector({
                 background: isSelected ? "#2a2a2a" : "#1a1a1a",
                 border: isSelected ? "3px solid #fff" : "2px solid #333",
                 borderRadius: "12px",
-                padding: "1.5rem",
+                padding: "1rem",
                 cursor: "pointer",
                 transition: "all 0.3s ease",
                 position: "relative",
@@ -110,11 +110,11 @@ export function EnclosureSizeSelector({
               <div
                 style={{
                   width: "100%",
-                  height: "120px",
+                  height: "160px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom: "1rem",
+                  marginBottom: "0.5rem",
                   background: "#0a0a0a",
                   borderRadius: "8px",
                   position: "relative",
@@ -133,6 +133,7 @@ export function EnclosureSizeSelector({
                     fontSize: "0.7rem",
                     color: isSelected ? "#000" : "#888",
                     fontWeight: 700,
+                    boxSizing: "border-box",
                   }}
                 >
                   {size.name}
@@ -141,10 +142,11 @@ export function EnclosureSizeSelector({
 
               <h3
                 style={{
-                  fontSize: "1.3rem",
+                  fontSize: "1.25rem",
                   fontWeight: 700,
                   color: "#fff",
-                  marginBottom: "0.5rem",
+                  marginBottom: "0.7rem",
+                  marginTop: "0rem",
                   textAlign: "center",
                 }}
               >
@@ -156,7 +158,7 @@ export function EnclosureSizeSelector({
                   fontSize: "0.85rem",
                   color: "#aaa",
                   textAlign: "center",
-                  marginBottom: "0.75rem",
+                  marginBottom: "0.25rem",
                   fontFamily: "monospace",
                   background: "#0a0a0a",
                   padding: "0.5rem",
@@ -171,32 +173,17 @@ export function EnclosureSizeSelector({
                   fontSize: "0.9rem",
                   color: "#ccc",
                   lineHeight: 1.5,
-                  marginBottom: "1rem",
+                  marginBottom: "0.25rem",
                   flex: 1,
+                  textAlign: "center",
                 }}
               >
-                {size.description}
+                {size.funny_description}
               </p>
 
               <div
                 style={{
-                  background: "#ffd70033",
-                  border: "1px solid #ffd700",
-                  borderRadius: "6px",
-                  padding: "0.75rem",
-                  marginBottom: "1rem",
-                  fontSize: "0.85rem",
-                  color: "#ffd700",
-                  fontStyle: "italic",
-                  textAlign: "center",
-                }}
-              >
-                💬 {size.funny_description}
-              </div>
-
-              <div
-                style={{
-                  marginBottom: "1rem",
+                  marginBottom: "0.75rem",
                 }}
               >
                 <div
@@ -298,27 +285,31 @@ export function EnclosureSizeSelector({
   );
 }
 
-// Helper function to scale visual representation (vertical orientation - as pedals sit on pedalboard)
+// Helper function to scale visual representation (top-down view - as pedals sit on pedalboard)
+// Using actual dimensions from dimensions_mm: length × width × height
+// We display length (depth) as CSS height, width as CSS width, at 0.85 scale
 function getSizeWidth(sizeName: string): string {
+  // Width (side-to-side on pedalboard)
   const widths: { [key: string]: string } = {
-    "1590A": "40px",
-    "1590B": "50px",
-    "125B": "60px",
-    "1590BB": "50px",
-    "1590BS": "45px",
-    "1590XX": "70px",
+    "1590A": "35.1px",   // 39mm × 0.9
+    "1590B": "54.9px",   // 61mm × 0.9
+    "125B": "60.3px",    // 67mm × 0.9
+    "1590BB": "84.6px",  // 94mm × 0.9
+    "1590BS": "85.5px",  // 95mm × 0.9
+    "1590XX": "108px",   // 120mm × 0.9
   };
-  return widths[sizeName] || "50px";
+  return widths[sizeName] || "60px";
 }
 
 function getSizeHeight(sizeName: string): string {
+  // Length (depth on pedalboard)
   const heights: { [key: string]: string } = {
-    "1590A": "60px",
-    "1590B": "80px",
-    "125B": "85px",
-    "1590BB": "110px",
-    "1590BS": "130px",
-    "1590XX": "150px",
+    "1590A": "83.7px",   // 93mm × 0.9
+    "1590B": "99.9px",   // 111mm × 0.9
+    "125B": "109.8px",   // 122mm × 0.9
+    "1590BB": "107.1px", // 119mm × 0.9
+    "1590BS": "112.5px", // 125mm × 0.9
+    "1590XX": "130.5px", // 145mm × 0.9
   };
   return heights[sizeName] || "80px";
 }
