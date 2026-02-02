@@ -21,6 +21,19 @@ const formatPrice = (value: number | undefined) => {
   return `€${value.toFixed(2)}`;
 };
 
+const getLedColorHex = (color: string): string => {
+  const colorMap: Record<string, string> = {
+    "Red": "#ff0000",
+    "Blue": "#0066ff",
+    "Green": "#00ff00",
+    "Yellow": "#ffff00",
+    "White": "#ffffff",
+    "Amber": "#ffbf00",
+    "UV": "#bf00ff"
+  };
+  return color.startsWith("#") ? color : (colorMap[color] || "#ff0000");
+};
+
 export default function SummaryPage() {
   const [config, setConfig] = React.useState<ConfigData | null>(null);
   const [customerName, setCustomerName] = React.useState("");
@@ -351,18 +364,37 @@ export default function SummaryPage() {
                     ✏️ Edit Color
                   </button>
                 )}
-                <ConfigSection
-                  title="LED Style"
-                  name={config.led.name}
-                  price={config.led.customer_price_eur}
-                  shortDesc={config.led.short_description}
-                  longDesc={config.led.long_description}
-                  details={
-                    config.ledColor && !config.led.name.includes("No LED") 
-                      ? [{ label: "LED Color", value: config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor }]
-                      : undefined
-                  }
-                />
+                <div style={{ position: "relative" }}>
+                  <ConfigSection
+                    title="LED Style"
+                    name={config.led.name}
+                    price={config.led.customer_price_eur}
+                    shortDesc={config.led.short_description}
+                    longDesc={config.led.long_description}
+                    details={
+                      config.ledColor && !config.led.name.includes("No LED") 
+                        ? [
+                            { 
+                              label: "LED Color", 
+                              value: (
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                  <div style={{
+                                    width: "24px",
+                                    height: "24px",
+                                    borderRadius: "50%",
+                                    background: getLedColorHex(config.ledColor),
+                                    boxShadow: `0 0 10px ${getLedColorHex(config.ledColor)}`,
+                                    border: config.ledColor === "White" ? "1px solid #666" : "none"
+                                  }} />
+                                  <span>{config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor}</span>
+                                </div>
+                              ) as any
+                            }
+                          ]
+                        : undefined
+                    }
+                  />
+                </div>
               </div>
             )}
 
@@ -832,7 +864,7 @@ function ConfigSection({
   price?: number;
   shortDesc?: string;
   longDesc?: string;
-  details?: { label: string; value?: string }[];
+  details?: { label: string; value?: string | React.ReactNode }[];
   extra?: { label: string; value: string }[];
 }) {
   return (

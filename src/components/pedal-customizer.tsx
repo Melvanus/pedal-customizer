@@ -1300,6 +1300,10 @@ export function PedalCustomizer({
                           { label: "Type", value: "LED Indicator" },
                           { label: "Installation", value: "Pre-wired & Tested" },
                         ],
+                        ledColor: selectedLedColor,
+                        customLedColor: customLedColor,
+                        onLedColorChange: (color: string) => setSelectedLedColor(color),
+                        onCustomLedColorChange: (color: string) => setCustomLedColor(color),
                       });
                     } else {
                       setSelectedLedId(option.id);
