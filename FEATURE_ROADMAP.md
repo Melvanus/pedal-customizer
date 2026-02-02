@@ -40,7 +40,54 @@
 
 ## High Priority Features 🔴
 
-### 1. **Standardize JSON Field Naming Convention (Snake Case)** ✅ RESOLVED
+### 1. **Improve Tab Spacing and Layout** ⚠️
+**Problem:** Products at the bottom of tabs are hidden by the floating summary panel
+**Solution:**
+- Add adequate bottom padding to all tab content areas (paint, design, LED, other)
+- Ensure minimum 200-250px of space below the last product card
+- Adjust scrollable area height calculation to account for summary panel
+- Test with various screen sizes to ensure visibility
+- **Benefits:**
+  - All products remain accessible and visible
+  - Prevents user frustration from hidden content
+  - Better overall UX and accessibility
+  - Professional polish to the interface
+
+### 2. **LED Color Selection Feature** ⭐⭐⭐
+**Problem:** When choosing LED options, users cannot specify the LED color
+**Solution:**
+- Add LED color picker to LED tab options
+- Implement interactive color selector for each LED type:
+  - Standard colors: Red, Blue, Green, Yellow, White, Amber, UV
+  - RGB value input for custom colors
+  - Visual color preview on LED option cards
+- Store selected color in configuration data
+- Display selected LED color on summary page
+- Update price if premium LED colors cost more
+- **Benefits:**
+  - Complete LED customization workflow
+  - Users get exactly the LED color they want
+  - Reduces post-order clarification emails
+  - Matches professional pedal builder offerings
+
+### 3. **Make Additional Options Editable on Summary Page** ⭐⭐
+**Problem:** Final summary page doesn't allow editing of additional options like custom paint color or LED color
+**Solution:**
+- Add edit buttons next to each configurable option on summary page:
+  - Custom paint color → opens color picker modal
+  - LED color → opens LED color selector
+  - Other conditional options → opens relevant editor
+- Implement inline editing or modal-based editing
+- Update summary display in real-time when edits are made
+- Maintain price recalculation with edits
+- **Benefits:**
+  - Users can fine-tune details without navigating back
+  - Streamlined final review process
+  - Reduced friction in configuration workflow
+  - Better user experience for detail-oriented customers
+
+### 4. **Standardize JSON Field Naming Convention (Snake Case)** ✅ RESOLVED
+### 4. **Standardize JSON Field Naming Convention (Snake Case)** ✅ RESOLVED
 **Status:** Completed - All JSON files converted to snake_case, TypeScript types updated
 **Changes:**
 - Converted all fields in all JSON files to snake_case format:
@@ -55,7 +102,8 @@
 - Updated summary/page.tsx display logic
 - No TypeScript errors, all references working correctly
 
-### 2. **Consolidate Enclosure Style Data** ✅ RESOLVED
+### 5. **Consolidate Enclosure Style Data** ✅ RESOLVED
+### 5. **Consolidate Enclosure Style Data** ✅ RESOLVED
 **Status:** Completed - Dimension data moved to enclosure_sizes.json
 **Changes:**
 - Moved all enclosure style data from enclosures_data.json to enclosure_sizes.json
@@ -66,7 +114,8 @@
 - Existing funny descriptions and capacity info preserved
 - Single source of truth for enclosure specifications established
 
-### 3. **Size Selection Warning System** ⚠️
+### 6. **Size Selection Warning System** ⚠️
+### 6. **Size Selection Warning System** ⚠️
 **Problem:** Users can select enclosures smaller than recommended without warning
 **Solution:**
 - In the sizes tab, detect when selected size is smaller than recommended size
@@ -86,7 +135,7 @@
   - Reduces customer service inquiries
   - Educational for users learning about enclosure requirements
 
-### 4. **Effect-Specific Mods Integration** ⭐⭐⭐
+### 7. **Effect-Specific Mods Integration** ⭐⭐⭐
 **Problem:** Current "Other" mods are generic; should be context-aware based on selected effect
 **Solution:**
 - **Mod Selection Within Effect Details:**
