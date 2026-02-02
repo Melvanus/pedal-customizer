@@ -10,3 +10,9 @@ High Prio:
 Mid Prio:
 
 Lowest Prio:
+
+
+
+Please work on following points:
+- On the summary page the cost of the Effect Pedal Circuit isnt displayed. it currently shows 0€.
+- In the summary of the Effect Pedal Circuit i dont want to have "based on ..." but "inspired by", so the same as on the first tab

@@ -212,12 +212,12 @@ export default function SummaryPage() {
               <ConfigSection
                 title="Effect Pedal Circuit"
                 name={config.effect.name}
-                price={config.effect.price_modifier_eur}
+                price={config.effect.customer_price_eur}
                 shortDesc={`${config.effect.category} • Inspired by ${config.effect.inspired_by}`}
                 longDesc={config.effect.description}
                 details={[
                   { label: "Circuit Type", value: config.effect.category },
-                  { label: "Based On", value: config.effect.inspired_by },
+                  { label: "Inspired By", value: config.effect.inspired_by },
                   { label: "Complexity", value: config.effect.technical_specs?.complexity || "N/A" },
                   { label: "Sound", value: config.effect.sound_characters?.slice(0, 3).join(", ") || "N/A" },
                 ]}
