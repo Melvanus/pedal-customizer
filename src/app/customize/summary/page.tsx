@@ -29,6 +29,11 @@ export default function SummaryPage() {
   const [pedalName, setPedalName] = React.useState("");
   const [knobLabels, setKnobLabels] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [editingLedColor, setEditingLedColor] = React.useState(false);
+  const [editingPaintColor, setEditingPaintColor] = React.useState(false);
+  const [tempLedColor, setTempLedColor] = React.useState("");
+  const [tempCustomLedColor, setTempCustomLedColor] = React.useState("#ff0000");
+  const [tempPaintColor, setTempPaintColor] = React.useState("#808080");
 
   React.useEffect(() => {
     const storedConfig = sessionStorage.getItem("pedalConfiguration");
@@ -117,6 +122,39 @@ export default function SummaryPage() {
     handleDownloadJSON();
   };
 
+  const handleEditLedColor = () => {
+    if (config) {
+      setTempLedColor(config.ledColor || "Red");
+      setTempCustomLedColor(config.ledColor?.startsWith("#") ? config.ledColor : "#ff0000");
+      setEditingLedColor(true);
+    }
+  };
+
+  const handleSaveLedColor = () => {
+    if (config) {
+      const newColor = tempLedColor === "Custom" ? tempCustomLedColor : tempLedColor;
+      setConfig({ ...config, ledColor: newColor });
+      sessionStorage.setItem("pedalConfiguration", JSON.stringify({ ...config, ledColor: newColor }));
+      setEditingLedColor(false);
+    }
+  };
+
+  const handleEditPaintColor = () => {
+    if (config && config.paint.is_custom_color) {
+      setTempPaintColor(config.paint.rgb || "#808080");
+      setEditingPaintColor(true);
+    }
+  };
+
+  const handleSavePaintColor = () => {
+    if (config) {
+      const updatedPaint = { ...config.paint, rgb: tempPaintColor };
+      setConfig({ ...config, paint: updatedPaint });
+      sessionStorage.setItem("pedalConfiguration", JSON.stringify({ ...config, paint: updatedPaint }));
+      setEditingPaintColor(false);
+    }
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
       {/* Header */}
@@ -190,18 +228,47 @@ export default function SummaryPage() {
 
             {/* Paint/Finish */}
             {config.paint && (
-              <ConfigSection
-                title="Enclosure Finish"
-                name={config.paint.displayed_name}
-                price={config.paint.customer_price_eur}
-                shortDesc={config.paint.short_description}
-                longDesc={config.paint.long_description}
-                details={[
-                  { label: "Product ID", value: config.paint.internal_product_id },
-                  { label: "Color", value: config.paint.color },
-                  { label: "Finish", value: config.paint.finish },
-                ]}
-              />
+              <div style={{ position: "relative" }}>
+                {config.paint.is_custom_color && (
+                  <button
+                    onClick={handleEditPaintColor}
+                    style={{
+                      position: "absolute",
+                      top: "1rem",
+                      right: "1rem",
+                      background: "#2d2d2d",
+                      color: "#fff",
+                      border: "1px solid #666",
+                      borderRadius: "5px",
+                      padding: "0.5rem 1rem",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      transition: "all 0.2s ease",
+                      zIndex: 10,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#3d3d3d";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "#2d2d2d";
+                    }}
+                  >
+                    ✏️ Edit Color
+                  </button>
+                )}
+                <ConfigSection
+                  title="Enclosure Finish"
+                  name={config.paint.displayed_name}
+                  price={config.paint.customer_price_eur}
+                  shortDesc={config.paint.short_description}
+                  longDesc={config.paint.long_description}
+                  details={[
+                    { label: "Product ID", value: config.paint.internal_product_id },
+                    { label: "Color", value: config.paint.color },
+                    { label: "Finish", value: config.paint.finish },
+                  ]}
+                />
+              </div>
             )}
 
             {/* Design/Labeling */}
@@ -256,18 +323,47 @@ export default function SummaryPage() {
 
             {/* LED */}
             {config.led && (
-              <ConfigSection
-                title="LED Style"
-                name={config.led.name}
-                price={config.led.customer_price_eur}
-                shortDesc={config.led.short_description}
-                longDesc={config.led.long_description}
-                details={
-                  config.ledColor && !config.led.name.includes("No LED") 
-                    ? [{ label: "LED Color", value: config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor }]
-                    : undefined
-                }
-              />
+              <div style={{ position: "relative" }}>
+                {config.ledColor && !config.led.name.includes("No LED") && (
+                  <button
+                    onClick={handleEditLedColor}
+                    style={{
+                      position: "absolute",
+                      top: "1rem",
+                      right: "1rem",
+                      background: "#2d2d2d",
+                      color: "#fff",
+                      border: "1px solid #666",
+                      borderRadius: "5px",
+                      padding: "0.5rem 1rem",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      transition: "all 0.2s ease",
+                      zIndex: 10,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#3d3d3d";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "#2d2d2d";
+                    }}
+                  >
+                    ✏️ Edit Color
+                  </button>
+                )}
+                <ConfigSection
+                  title="LED Style"
+                  name={config.led.name}
+                  price={config.led.customer_price_eur}
+                  shortDesc={config.led.short_description}
+                  longDesc={config.led.long_description}
+                  details={
+                    config.ledColor && !config.led.name.includes("No LED") 
+                      ? [{ label: "LED Color", value: config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor }]
+                      : undefined
+                  }
+                />
+              </div>
             )}
 
             {/* Other Options */}
@@ -396,6 +492,327 @@ export default function SummaryPage() {
             </div>
           </div>
         </div>
+
+        {/* LED Color Edit Modal */}
+        {editingLedColor && (
+          <div
+            onClick={() => setEditingLedColor(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "#1a1a1a",
+                borderRadius: "15px",
+                padding: "2rem",
+                maxWidth: "600px",
+                width: "90%",
+                border: "2px solid #fff",
+                boxShadow: "0 10px 50px rgba(0,0,0,0.5)",
+              }}
+            >
+              <h2 style={{ fontSize: "1.5rem", marginBottom: "1.5rem", color: "#fff" }}>
+                Edit LED Color
+              </h2>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
+                  gap: "0.75rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                {["Red", "Blue", "Green", "Yellow", "White", "Amber", "UV", "Custom"].map((color) => {
+                  const colorMap: Record<string, string> = {
+                    Red: "#ff0000",
+                    Blue: "#0066ff",
+                    Green: "#00ff00",
+                    Yellow: "#ffff00",
+                    White: "#ffffff",
+                    Amber: "#ffbf00",
+                    UV: "#bf00ff",
+                  };
+
+                  return (
+                    <div
+                      key={color}
+                      onClick={() => setTempLedColor(color)}
+                      style={{
+                        background: "#0f0f0f",
+                        borderRadius: "8px",
+                        padding: "0.75rem",
+                        cursor: "pointer",
+                        border: tempLedColor === color ? "2px solid #fff" : "2px solid #333",
+                        transition: "all 0.2s ease",
+                        textAlign: "center",
+                      }}
+                    >
+                      {color === "Custom" ? (
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            background: `linear-gradient(135deg, #ff0000 0%, #00ff00 33%, #0000ff 66%, #ff00ff 100%)`,
+                            margin: "0 auto 0.5rem",
+                            border: "2px solid #666",
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            background: colorMap[color],
+                            margin: "0 auto 0.5rem",
+                            boxShadow: `0 0 15px ${colorMap[color]}`,
+                            border: color === "White" ? "1px solid #666" : "none",
+                          }}
+                        />
+                      )}
+                      <div style={{ fontSize: "0.8rem", color: "#e0e0e0" }}>{color}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {tempLedColor === "Custom" && (
+                <div
+                  style={{
+                    marginTop: "1rem",
+                    padding: "1rem",
+                    background: "#0f0f0f",
+                    borderRadius: "8px",
+                    border: "1px solid #333",
+                  }}
+                >
+                  <label
+                    style={{
+                      fontSize: "0.85rem",
+                      color: "#e0e0e0",
+                      display: "block",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    Custom RGB Color:
+                  </label>
+                  <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                    <input
+                      type="color"
+                      value={tempCustomLedColor}
+                      onChange={(e) => setTempCustomLedColor(e.target.value)}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        border: "2px solid #666",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <input
+                      type="text"
+                      value={tempCustomLedColor}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^#[0-9A-Fa-f]{0,6}$/.test(val)) {
+                          setTempCustomLedColor(val);
+                        }
+                      }}
+                      placeholder="#ff0000"
+                      style={{
+                        flex: 1,
+                        padding: "0.75rem",
+                        background: "#0a0a0a",
+                        border: "1px solid #666",
+                        borderRadius: "5px",
+                        color: "#e0e0e0",
+                        fontSize: "0.9rem",
+                        fontFamily: "monospace",
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+                <button
+                  onClick={() => setEditingLedColor(false)}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#2d2d2d",
+                    color: "#fff",
+                    border: "1px solid #666",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveLedColor}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#fff",
+                    color: "#000",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Paint Color Edit Modal */}
+        {editingPaintColor && (
+          <div
+            onClick={() => setEditingPaintColor(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "#1a1a1a",
+                borderRadius: "15px",
+                padding: "2rem",
+                maxWidth: "500px",
+                width: "90%",
+                border: "2px solid #fff",
+                boxShadow: "0 10px 50px rgba(0,0,0,0.5)",
+              }}
+            >
+              <h2 style={{ fontSize: "1.5rem", marginBottom: "1.5rem", color: "#fff" }}>
+                Edit Custom Paint Color
+              </h2>
+
+              <div
+                style={{
+                  padding: "1.5rem",
+                  background: "#0f0f0f",
+                  borderRadius: "8px",
+                  border: "1px solid #333",
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "#e0e0e0",
+                    display: "block",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  Custom RGB Color:
+                </label>
+                <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                  <input
+                    type="color"
+                    value={tempPaintColor}
+                    onChange={(e) => setTempPaintColor(e.target.value)}
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      border: "2px solid #666",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <input
+                      type="text"
+                      value={tempPaintColor}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^#[0-9A-Fa-f]{0,6}$/.test(val)) {
+                          setTempPaintColor(val);
+                        }
+                      }}
+                      placeholder="#808080"
+                      style={{
+                        width: "100%",
+                        padding: "0.75rem",
+                        background: "#0a0a0a",
+                        border: "1px solid #666",
+                        borderRadius: "5px",
+                        color: "#e0e0e0",
+                        fontSize: "0.9rem",
+                        fontFamily: "monospace",
+                      }}
+                    />
+                    <div style={{ fontSize: "0.75rem", color: "#777", marginTop: "0.5rem" }}>
+                      Enter hex color code (e.g., #808080)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+                <button
+                  onClick={() => setEditingPaintColor(false)}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#2d2d2d",
+                    color: "#fff",
+                    border: "1px solid #666",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSavePaintColor}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#fff",
+                    color: "#000",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
