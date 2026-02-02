@@ -15,6 +15,7 @@ export type ProductModalData = {
   details?: Array<{ label: string; value: string | string[] }>;
   additionalSections?: Array<{ title: string; content: React.ReactNode }>;
   isCustomColor?: boolean;
+  is_custom_color?: boolean;
   customColor?: string;
   customFinish?: "Matte" | "Glossy";
   onCustomColorChange?: (color: string) => void;
