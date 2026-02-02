@@ -1499,7 +1499,7 @@ export function PedalCustomizer({
                     )}
                   </div>
                 </div>
-                );
+              );
               })}
             </div>
             
@@ -1674,7 +1674,6 @@ export function PedalCustomizer({
                 )}
               </div>
             )}
-          )}
 
           {/* Other Tab */}
           {activeTab === "other" && (
