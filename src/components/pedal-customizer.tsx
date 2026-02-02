@@ -443,7 +443,7 @@ export function PedalCustomizer({
 
       {/* Scrollable Content Area */}
       <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", position: "relative" }}>
-        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: "0", paddingBottom: "200px" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: "0", paddingBottom: "250px" }}>
           {/* Floating Tabs & Filters Panel */}
           <div
             style={{
