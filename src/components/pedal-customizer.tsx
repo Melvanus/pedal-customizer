@@ -1271,6 +1271,7 @@ export function PedalCustomizer({
 
           {/* LED Tab */}
           {activeTab === "led" && (
+            <>
             <div
               style={{
                 display: "grid",
@@ -1674,6 +1675,8 @@ export function PedalCustomizer({
                 )}
               </div>
             )}
+            </>
+          )}
 
           {/* Other Tab */}
           {activeTab === "other" && (
