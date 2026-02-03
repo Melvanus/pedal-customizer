@@ -465,13 +465,13 @@ export function ProductDetailModal({
               </h3>
               <div
                 style={{
-                  padding: "1rem",
+                  padding: "0.75rem",
                   background: "#0a0a0a",
                   borderRadius: "8px",
                   border: "1px solid #333",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "0.75rem",
+                  gap: "0.5rem",
                 }}
               >
                 {/* First Row: Category and Recommended Size */}
@@ -480,17 +480,17 @@ export function ProductDetailModal({
                     style={{
                       display: "grid",
                       gridTemplateColumns: product.category && product.recommendedSize ? "repeat(2, 1fr)" : "1fr",
-                      gap: "0.75rem",
+                      gap: "0.5rem",
                     }}
                   >
                     {product.category && (
                       <div style={{ textAlign: "center" }}>
                         <div
                           style={{
-                            fontSize: "0.75rem",
+                            fontSize: "0.7rem",
                             fontWeight: 600,
                             color: "#888",
-                            marginBottom: "0.5rem",
+                            marginBottom: "0.25rem",
                             textTransform: "uppercase",
                             letterSpacing: "0.5px",
                           }}
@@ -512,10 +512,10 @@ export function ProductDetailModal({
                       <div style={{ textAlign: "center" }}>
                         <div
                           style={{
-                            fontSize: "0.75rem",
+                            fontSize: "0.7rem",
                             fontWeight: 600,
                             color: "#888",
-                            marginBottom: "0.5rem",
+                            marginBottom: "0.25rem",
                             textTransform: "uppercase",
                             letterSpacing: "0.5px",
                           }}
@@ -541,16 +541,16 @@ export function ProductDetailModal({
                     style={{
                       display: "grid",
                       gridTemplateColumns: "repeat(4, 1fr)",
-                      gap: "0.75rem",
+                      gap: "0.5rem",
                     }}
                   >
                     <div style={{ textAlign: "center" }}>
                       <div
                         style={{
-                          fontSize: "0.75rem",
+                          fontSize: "0.7rem",
                           fontWeight: 600,
                           color: "#888",
-                          marginBottom: "0.5rem",
+                          marginBottom: "0.25rem",
                           textTransform: "uppercase",
                           letterSpacing: "0.5px",
                         }}
@@ -559,8 +559,8 @@ export function ProductDetailModal({
                       </div>
                       <div
                         style={{
-                          fontSize: "1.5rem",
-                          fontWeight: 700,
+                          fontSize: "0.95rem",
+                          fontWeight: 600,
                           color: "#fff",
                         }}
                       >
@@ -570,10 +570,10 @@ export function ProductDetailModal({
                     <div style={{ textAlign: "center" }}>
                       <div
                         style={{
-                          fontSize: "0.75rem",
+                          fontSize: "0.7rem",
                           fontWeight: 600,
                           color: "#888",
-                          marginBottom: "0.5rem",
+                          marginBottom: "0.25rem",
                           textTransform: "uppercase",
                           letterSpacing: "0.5px",
                         }}
@@ -582,8 +582,8 @@ export function ProductDetailModal({
                       </div>
                       <div
                         style={{
-                          fontSize: "1.5rem",
-                          fontWeight: 700,
+                          fontSize: "0.95rem",
+                          fontWeight: 600,
                           color: "#fff",
                         }}
                       >
@@ -593,10 +593,10 @@ export function ProductDetailModal({
                     <div style={{ textAlign: "center" }}>
                       <div
                         style={{
-                          fontSize: "0.75rem",
+                          fontSize: "0.7rem",
                           fontWeight: 600,
                           color: "#888",
-                          marginBottom: "0.5rem",
+                          marginBottom: "0.25rem",
                           textTransform: "uppercase",
                           letterSpacing: "0.5px",
                         }}
@@ -605,8 +605,8 @@ export function ProductDetailModal({
                       </div>
                       <div
                         style={{
-                          fontSize: "1.5rem",
-                          fontWeight: 700,
+                          fontSize: "0.95rem",
+                          fontWeight: 600,
                           color: "#fff",
                         }}
                       >
@@ -616,10 +616,10 @@ export function ProductDetailModal({
                     <div style={{ textAlign: "center" }}>
                       <div
                         style={{
-                          fontSize: "0.75rem",
+                          fontSize: "0.7rem",
                           fontWeight: 600,
                           color: "#888",
-                          marginBottom: "0.5rem",
+                          marginBottom: "0.25rem",
                           textTransform: "uppercase",
                           letterSpacing: "0.5px",
                         }}
@@ -628,8 +628,8 @@ export function ProductDetailModal({
                       </div>
                       <div
                         style={{
-                          fontSize: "1.5rem",
-                          fontWeight: 700,
+                          fontSize: "0.95rem",
+                          fontWeight: 600,
                           color: "#fff",
                         }}
                       >
