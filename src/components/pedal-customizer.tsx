@@ -433,9 +433,10 @@ export function PedalCustomizer({
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: "#e0e0e0", background: "#0a0a0a" }}>
+    <div data-section="pedal-customizer-main" style={{ display: "flex", flexDirection: "column", height: "100vh", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: "#e0e0e0", background: "#0a0a0a" }}>
       {/* Floating Admin Button - Top Right */}
       <button
+        data-section="admin-toggle-button"
         onClick={() => setAdminMode(!adminMode)}
         style={{
           position: "fixed",
@@ -464,6 +465,7 @@ export function PedalCustomizer({
       
       {/* Ultra-Compact Header */}
       <div
+        data-section="header"
         style={{
           background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
           color: "white",
@@ -474,16 +476,17 @@ export function PedalCustomizer({
           flexShrink: 0,
         }}
       >
-        <h1 style={{ fontSize: "1.25rem", margin: 0, fontWeight: 400 }}>
+        <h1 data-section="header-title" style={{ fontSize: "1.25rem", margin: 0, fontWeight: 400 }}>
           Fuzzy Engineering Pedal Customizer
         </h1>
       </div>
 
       {/* Scrollable Content Area */}
-      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", position: "relative" }}>
+      <div data-section="content-area" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", position: "relative" }}>
         {/* Configuration Summary - Fixed at top */}
         <div
           ref={summaryRef}
+          data-section="configuration-summary"
           style={{
             position: "absolute",
             top: "1rem",
@@ -504,6 +507,7 @@ export function PedalCustomizer({
           }}
         >
                 <button
+                  data-section="tab-effect"
                   onClick={() => setActiveTab("effect")}
                   style={{
                     display: "flex",
@@ -533,6 +537,7 @@ export function PedalCustomizer({
                   </span>
                 </button>
                 <button
+                  data-section="tab-size"
                   onClick={() => setActiveTab("size")}
                   style={{
                     display: "flex",
@@ -562,6 +567,7 @@ export function PedalCustomizer({
                   </span>
                 </button>
                 <button
+                  data-section="tab-paint"
                   onClick={() => setActiveTab("paint")}
                   style={{
                     display: "flex",
@@ -591,6 +597,7 @@ export function PedalCustomizer({
                   </span>
                 </button>
                 <button
+                  data-section="tab-design"
                   onClick={() => setActiveTab("design")}
                   style={{
                     display: "flex",
@@ -618,6 +625,7 @@ export function PedalCustomizer({
                   <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{selectedDesign?.name || "—"}</span>
                 </button>
                 <button
+                  data-section="tab-led"
                   onClick={() => setActiveTab("led")}
                   style={{
                     display: "flex",
@@ -647,10 +655,11 @@ export function PedalCustomizer({
         </div>
 
         {/* Scrollable Content */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px" }}>
+        <div data-section="tab-content-scrollable" style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px" }}>
           {/* Filters for Paint Tab - Separate Panel */}
           {activeTab === "paint" && (
             <div
+              data-section="paint-filters-panel"
               style={{
                 position: "sticky",
                 top: 0,
@@ -772,6 +781,7 @@ export function PedalCustomizer({
 
           {/* Effect Tab */}
           {activeTab === "effect" && (
+            <div data-section="tab-content-effect">
             <EffectSelector
               pedals={effectPedals}
               categories={Array.from(new Set(effectPedals.map(p => p.category))).sort()}
@@ -806,10 +816,12 @@ export function PedalCustomizer({
                 });
               }}
             />
+            </div>
           )}
 
           {/* Enclosure Size Tab */}
           {activeTab === "size" && (
+            <div data-section="tab-content-size">
             <EnclosureSizeSelector
               sizes={enclosureSizes}
               selectedSize={selectedEnclosureSizeId}
@@ -859,11 +871,13 @@ export function PedalCustomizer({
                 });
               }}
             />
+            </div>
           )}
 
           {/* Paint/Finish Tab */}
           {activeTab === "paint" && (
             <div
+              data-section="tab-content-paint"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -1195,8 +1209,9 @@ export function PedalCustomizer({
 
           {/* Design/Labeling Tab */}
           {activeTab === "design" && (
-            <div>
+            <div data-section="tab-content-design">
               <div
+                data-section="design-options-grid"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -1417,6 +1432,7 @@ export function PedalCustomizer({
           {activeTab === "led" && (
             <>
             <div
+              data-section="tab-content-led"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -1836,6 +1852,7 @@ export function PedalCustomizer({
 
         {/* Bottom Action Bar - Total Price & Review Button */}
         <div
+          data-section="bottom-action-bar"
           style={{
             position: "fixed",
             bottom: "1rem",
@@ -1857,11 +1874,12 @@ export function PedalCustomizer({
             flexWrap: "wrap",
           }}
         >
-          <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+          <div data-section="total-price-display" style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
             <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#fff" }}>Total:</span>
             <span style={{ fontSize: "1.4rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
           </div>
           <button
+            data-section="review-submit-button"
             onClick={handleProceedToSummary}
             style={{
               padding: "0.7rem 1.6rem",

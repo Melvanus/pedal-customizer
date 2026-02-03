@@ -266,25 +266,25 @@ export default function SummaryPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
+    <div data-section="summary-page" style={{ minHeight: "100vh", background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
       {/* Header */}
-      <div style={{ background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)", color: "white", padding: "1rem 2rem", borderBottom: "2px solid #333" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div data-section="summary-header" style={{ background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)", color: "white", padding: "1rem 2rem", borderBottom: "2px solid #333" }}>
+        <div data-section="header-container" style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <Link href="/customize" style={{ color: "#fff", display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+            <Link href="/customize" data-section="back-link" style={{ color: "#fff", display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
               <ChevronLeft size={20} />
               Back to Customizer
             </Link>
           </div>
-          <h1 style={{ fontSize: "1.5rem", margin: 0 }}>Order Summary</h1>
+          <h1 data-section="page-title" style={{ fontSize: "1.5rem", margin: 0 }}>Order Summary</h1>
           <div style={{ width: "150px" }} />
         </div>
       </div>
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem" }}>
+      <div data-section="summary-content" style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem" }}>
         {/* Warnings */}
         {warnings.length > 0 && (
-          <div style={{ background: "#2d1a00", border: "2px solid #ff9500", borderRadius: "10px", padding: "1.5rem", marginBottom: "2rem" }}>
+          <div data-section="warnings-panel" style={{ background: "#2d1a00", border: "2px solid #ff9500", borderRadius: "10px", padding: "1.5rem", marginBottom: "2rem" }}>
             <div style={{ display: "flex", gap: "1rem", alignItems: "start" }}>
               <AlertTriangle size={24} color="#ff9500" style={{ flexShrink: 0, marginTop: "0.25rem" }} />
               <div>
@@ -299,10 +299,10 @@ export default function SummaryPage() {
           </div>
         )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: "2rem" }}>
+        <div data-section="main-layout" style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: "2rem" }}>
           {/* Configuration Details */}
-          <div>
-            <h2 style={{ fontSize: "1.75rem", marginBottom: "1.5rem", color: "#fff" }}>Configuration Details</h2>
+          <div data-section="configuration-details">
+            <h2 data-section="configuration-title" style={{ fontSize: "1.75rem", marginBottom: "1.5rem", color: "#fff" }}>Configuration Details</h2>
 
             {/* Effect Pedal */}
             {config.effect && (
@@ -323,8 +323,8 @@ export default function SummaryPage() {
 
             {/* Selected Mods */}
             {config.effectMods && config.effectMods.length > 0 && (
-              <div style={{ background: "#1a1a1a", padding: "1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
-                <h3 style={{ fontSize: "1.2rem", marginBottom: "1rem", color: "#fff" }}>
+              <div data-section="selected-mods" style={{ background: "#1a1a1a", padding: "1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
+                <h3 data-section="mods-title" style={{ fontSize: "1.2rem", marginBottom: "1rem", color: "#fff" }}>
                   Effect Modifications
                   <span style={{ fontSize: "1rem", fontWeight: 600, color: "#4ade80", marginLeft: "0.75rem" }}>
                     (+€{config.effectMods.reduce((sum, { mod }) => sum + mod.customer_price_eur, 0).toFixed(2)})
@@ -595,15 +595,16 @@ export default function SummaryPage() {
           </div>
 
           {/* Order Form */}
-          <div>
-            <div style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", border: "1px solid #333", position: "sticky", top: "2rem" }}>
-              <h3 style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#fff" }}>Your Information</h3>
+          <div data-section="order-form-sidebar">
+            <div data-section="order-form-card" style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", border: "1px solid #333", position: "sticky", top: "2rem" }}>
+              <h3 data-section="form-title" style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#fff" }}>Your Information</h3>
               
-              <div style={{ marginBottom: "1.5rem" }}>
-                <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
+              <div data-section="name-field" style={{ marginBottom: "1.5rem" }}>
+                <label data-section="name-label" style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
                   Name *
                 </label>
                 <input
+                  data-section="name-input"
                   type="text"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
@@ -612,11 +613,12 @@ export default function SummaryPage() {
                 />
               </div>
 
-              <div style={{ marginBottom: "1.5rem" }}>
-                <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
+              <div data-section="email-field" style={{ marginBottom: "1.5rem" }}>
+                <label data-section="email-label" style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
                   Email *
                 </label>
                 <input
+                  data-section="email-input"
                   type="email"
                   value={customerEmail}
                   onChange={(e) => setCustomerEmail(e.target.value)}
@@ -625,11 +627,12 @@ export default function SummaryPage() {
                 />
               </div>
 
-              <div style={{ marginBottom: "2rem" }}>
-                <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
+              <div data-section="notes-field" style={{ marginBottom: "2rem" }}>
+                <label data-section="notes-label" style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
                   Additional Notes
                 </label>
                 <textarea
+                  data-section="notes-textarea"
                   value={customerNotes}
                   onChange={(e) => setCustomerNotes(e.target.value)}
                   placeholder="Any special requests or questions..."
@@ -638,7 +641,7 @@ export default function SummaryPage() {
                 />
               </div>
 
-              <div style={{ background: "#0f0f0f", padding: "1.5rem", borderRadius: "8px", marginBottom: "2rem", border: "2px solid #fff" }}>
+              <div data-section="order-summary-totals" style={{ background: "#0f0f0f", padding: "1.5rem", borderRadius: "8px", marginBottom: "2rem", border: "2px solid #fff" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                   <span style={{ color: "#999" }}>Configuration Total:</span>
                   <span style={{ color: "#fff", fontWeight: 600 }}>{formatPrice(config.totalPrice)}</span>
@@ -650,6 +653,7 @@ export default function SummaryPage() {
               </div>
 
               <button
+                data-section="submit-order-button"
                 onClick={handleSubmitOrder}
                 disabled={isSubmitting}
                 style={{
@@ -675,6 +679,7 @@ export default function SummaryPage() {
               </button>
 
               <button
+                data-section="download-config-button"
                 onClick={handleDownloadJSON}
                 style={{
                   width: "100%",

@@ -266,7 +266,7 @@ export function ProductDetailModal({
         </button>
 
         {/* Content */}
-        <div data-section="modal-body" style={{ padding: "2rem" }}>
+        <div data-section="modal-body" style={{ padding: "1rem" }}>
           {/* Image Section */}
           {currentImage && (
             <div
@@ -702,7 +702,7 @@ export function ProductDetailModal({
                         lineHeight: 1.4,
                       }}
                     >
-                      {control.description}
+                        {control.description === "POTENTIOMETER" ? "Pot" : control.description}
                     </div>
                   </div>
                 ))}

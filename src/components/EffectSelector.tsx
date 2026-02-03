@@ -127,6 +127,7 @@ export function EffectSelector({
     <>
       {/* Filters */}
       <div
+        data-section="effect-filters"
         style={{
           display: "grid",
           gridTemplateColumns: "1.5fr 1fr 1fr 0.8fr",
@@ -136,6 +137,7 @@ export function EffectSelector({
       >
         <div>
           <label
+            data-section="search-label"
             style={{
               fontWeight: 600,
               color: "#ccc",
@@ -148,6 +150,7 @@ export function EffectSelector({
             Search Pedals
           </label>
           <input
+            data-section="search-input"
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -166,6 +169,7 @@ export function EffectSelector({
 
         <div>
           <label
+            data-section="category-label"
             style={{
               fontWeight: 600,
               color: "#ccc",
@@ -177,6 +181,7 @@ export function EffectSelector({
             Category
           </label>
           <select
+            data-section="category-select"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
             style={{
@@ -200,6 +205,7 @@ export function EffectSelector({
 
         <div>
           <label
+            data-section="sound-character-label"
             style={{
               fontWeight: 600,
               color: "#ccc",
@@ -211,6 +217,7 @@ export function EffectSelector({
             Sound Character
           </label>
           <select
+            data-section="sound-character-select"
             value={characterFilter}
             onChange={(e) => setCharacterFilter(e.target.value)}
             style={{
@@ -234,6 +241,7 @@ export function EffectSelector({
 
         <div>
           <label
+            data-section="sort-label"
             style={{
               fontWeight: 600,
               color: "#ccc",
@@ -245,6 +253,7 @@ export function EffectSelector({
             Sort By
           </label>
           <select
+            data-section="sort-select"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
             style={{
@@ -266,12 +275,13 @@ export function EffectSelector({
       </div>
 
       {/* Results count */}
-      <div style={{ marginBottom: "1rem", color: "#888", fontSize: "0.85rem" }}>
+      <div data-section="results-count" style={{ marginBottom: "1rem", color: "#888", fontSize: "0.85rem" }}>
         Showing {filteredPedals.length} of {pedals.length} pedals
       </div>
 
       {/* Pedal Grid */}
       <div
+        data-section="pedal-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -284,6 +294,7 @@ export function EffectSelector({
           return (
             <div
               key={pedal.id}
+              data-section="pedal-card"
               onClick={() => {
                 if (onShowDetails) {
                   onShowDetails(pedal);

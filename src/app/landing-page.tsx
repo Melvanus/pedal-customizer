@@ -26,6 +26,7 @@ export function LandingPage({
 
   return (
     <div
+      data-section="landing-page"
       style={{
         minHeight: "100vh",
         background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)",
@@ -35,6 +36,7 @@ export function LandingPage({
     >
       {/* Hero Section */}
       <div
+        data-section="hero-section"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -46,6 +48,7 @@ export function LandingPage({
         }}
       >
         <h1
+          data-section="main-title"
           style={{
             fontSize: "4rem",
             fontWeight: "bold",
@@ -59,6 +62,7 @@ export function LandingPage({
           Fuzzy Engineering
         </h1>
         <h2
+          data-section="subtitle"
           style={{
             fontSize: "2rem",
             fontWeight: 300,
@@ -69,6 +73,7 @@ export function LandingPage({
           Custom Pedal Builder
         </h2>
         <p
+          data-section="hero-description"
           style={{
             fontSize: "1.2rem",
             maxWidth: "600px",
@@ -84,6 +89,7 @@ export function LandingPage({
         {/* CTA Button */}
         <Link
           href="/customize"
+          data-section="cta-button"
           style={{
             display: "inline-block",
             padding: "1.25rem 3rem",
@@ -111,6 +117,7 @@ export function LandingPage({
 
       {/* Statistics Section */}
       <div
+        data-section="statistics-section"
         style={{
           background: "#1a1a1a",
           padding: "4rem 2rem",
@@ -119,12 +126,14 @@ export function LandingPage({
         }}
       >
         <div
+          data-section="statistics-container"
           style={{
             maxWidth: "1200px",
             margin: "0 auto",
           }}
         >
           <h3
+            data-section="statistics-title"
             style={{
               fontSize: "2rem",
               fontWeight: 600,
@@ -137,6 +146,7 @@ export function LandingPage({
           </h3>
 
           <div
+            data-section="stat-cards-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -154,6 +164,7 @@ export function LandingPage({
 
           {/* Total Combinations */}
           <div
+            data-section="total-combinations"
             style={{
               background: "linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)",
               padding: "2rem",
@@ -184,6 +195,7 @@ export function LandingPage({
 
       {/* How It Works Section */}
       <div
+        data-section="how-it-works-section"
         style={{
           maxWidth: "1000px",
           margin: "0 auto",
@@ -191,6 +203,7 @@ export function LandingPage({
         }}
       >
         <h3
+          data-section="how-it-works-title"
           style={{
             fontSize: "2rem",
             fontWeight: 600,
@@ -203,6 +216,7 @@ export function LandingPage({
         </h3>
 
         <div
+          data-section="steps-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
@@ -244,6 +258,7 @@ export function LandingPage({
         <div style={{ textAlign: "center", marginTop: "3rem" }}>
           <Link
             href="/customize"
+            data-section="bottom-cta-button"
             style={{
               display: "inline-block",
               padding: "1rem 2.5rem",
@@ -264,6 +279,7 @@ export function LandingPage({
 
       {/* Footer */}
       <div
+        data-section="footer"
         style={{
           background: "#0a0a0a",
           padding: "2rem",
@@ -282,6 +298,7 @@ export function LandingPage({
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
     <div
+      data-section="stat-card"
       style={{
         background: "#0f0f0f",
         padding: "1.5rem",
@@ -300,6 +317,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
       }}
     >
       <div
+        data-section="stat-value"
         style={{
           fontSize: "2.5rem",
           fontWeight: "bold",
@@ -309,7 +327,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
       >
         {value}
       </div>
-      <div style={{ fontSize: "0.9rem", color: "#999" }}>{label}</div>
+      <div data-section="stat-label" style={{ fontSize: "0.9rem", color: "#999" }}>{label}</div>
     </div>
   );
 }
@@ -317,6 +335,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
 function StepCard({ number, title, description }: { number: string; title: string; description: string }) {
   return (
     <div
+      data-section="step-card"
       style={{
         background: "#0f0f0f",
         padding: "2rem",
@@ -332,6 +351,7 @@ function StepCard({ number, title, description }: { number: string; title: strin
       }}
     >
       <div
+        data-section="step-number"
         style={{
           width: "50px",
           height: "50px",
@@ -348,8 +368,8 @@ function StepCard({ number, title, description }: { number: string; title: strin
       >
         {number}
       </div>
-      <h4 style={{ fontSize: "1.2rem", fontWeight: 600, marginBottom: "0.75rem", color: "#fff" }}>{title}</h4>
-      <p style={{ fontSize: "0.95rem", color: "#999", lineHeight: 1.5 }}>{description}</p>
+      <h4 data-section="step-title" style={{ fontSize: "1.2rem", fontWeight: 600, marginBottom: "0.75rem", color: "#fff" }}>{title}</h4>
+      <p data-section="step-description" style={{ fontSize: "0.95rem", color: "#999", lineHeight: 1.5 }}>{description}</p>
     </div>
   );
 }

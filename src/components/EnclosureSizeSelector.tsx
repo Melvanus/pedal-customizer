@@ -268,17 +268,18 @@ export function EnclosureSizeSelector({
   }, [banana.isDragging]);
 
   return (
-    <div ref={containerRef} style={{ position: "relative" }}>
-      <div style={{ marginBottom: "2rem" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", marginBottom: "0.5rem" }}>
+    <div ref={containerRef} data-section="enclosure-size-selector" style={{ position: "relative" }}>
+      <div data-section="size-header" style={{ marginBottom: "2rem" }}>
+        <h2 data-section="size-title" style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", marginBottom: "0.5rem" }}>
           Choose Your Enclosure Size
         </h2>
-        <p style={{ color: "#888", fontSize: "0.95rem" }}>
+        <p data-section="size-description" style={{ color: "#888", fontSize: "0.95rem" }}>
           Select the perfect size for your pedal. {recommendedSize && `We recommend ${recommendedSize} for your selected effect.`}
         </p>
       </div>
 
       <div
+        data-section="size-cards-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
@@ -293,6 +294,7 @@ export function EnclosureSizeSelector({
             <div
               key={size.name}
               data-enclosure-card
+              data-section="size-card"
               data-selected={isSelected}
               onClick={() => {
                 if (onShowDetails) {
@@ -542,6 +544,7 @@ export function EnclosureSizeSelector({
 
       {/* Floating Banana for Scale */}
       <div
+        data-section="banana-for-scale"
         onMouseDown={handleBananaMouseDown}
         style={{
           position: "fixed",
