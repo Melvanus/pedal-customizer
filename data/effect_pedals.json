@@ -36,7 +36,6 @@
       "description": "The sonic annihilator that crushes everything in its path. Massive, aggressive fuzz with a wide tonal palette. Based on version 1 of the legendary Fuzz War. Completly different circuit than later versions, which are more simmilar to a Big Muff.",
       "sound_characters": ["aggressive", "harsh", "thick", "modern", "compressed"],
       "controls": [
-        { "label": "Fuzz", "type": "Potentiometer", "description": "Makes it go bzzzzzzzz." },
         { "label": "Tone", "type": "Potentiometer", "description": "Makes it go even more bzzzzzzzz." },
         { "label": "Volume", "type": "Potentiometer", "description": "Makes the bzzzzzzzz go louder ." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
@@ -45,14 +44,38 @@
       "technical_specs": {
         "pcb_supplier": "Moonn Electronics",
         "schematic_link": "internal://schematics/fuzzwarschematic.pdf",
-        "potentiometers": 3,
+        "potentiometers": 2,
         "switches": 0,
         "io_jacks": 2,
         "led_count": 1,
         "complexity": "intermediate"
       },
       "recommended_enclosure": "125B",
-      "compatible_mods": ["Tone Stack Mod", "Bias Control Mod"],
+      "compatible_mods": 
+      [
+        {
+          "name": "Fuzz Control Mod", 
+          "description": "Adds an potentiometer to control the amount of bzzzzzzzz.",
+          "customer_price_eur": 8,
+          "adds_technical_specs": {
+            "potentiometers": 1
+          },
+          "adds_controls": [
+            { "label": "Fuzz", "type": "Potentiometer", "description": "Controls the amount of fuzz." }
+          ]
+        },
+        {
+          "name": "Bias Control Mod",
+          "description": "Adds a potentiometer to fine-tune the bias of the transistors for different kinds of bzzzzzzzz.",
+          "customer_price_eur": 7,
+          "adds_technical_specs": {
+            "potentiometers": 1
+          },
+          "adds_controls": [
+            { "label": "Bias", "type": "Potentiometer", "description": "Adjusts the transistor bias for tonal variations." }
+          ]
+        }
+      ],
       "pcb_supplier_id":  "moonn",
       "pcb_supplier_sku":  "Antique Wall Of Fuzz",
       "pcb_supplier_price_eur": 5.50,
@@ -86,7 +109,33 @@
         "complexity": "intermediate"
       },
       "recommended_enclosure": "125B",
-      "compatible_mods": ["Fader Mod", "Volume Curve Mod", "Frequency Adjustment Mod"],
+      "compatible_mods": 
+      [
+        {
+          "name": "Fader Mod", 
+          "description": "Replaces the output potentiometer with a fader.", 
+          "customer_price_eur": 10,
+          "adds_technical_specs": {
+            "potentiometers": -1,
+            "faders": 1
+          },
+          "removes_controls": [
+            { "label": "Output" }
+          ],
+          "adds_controls": [
+            { "label": "Output", "type": "Fader", "description": "Sets the output volume level with a fader." }
+          ]
+        },
+        {
+          "name": "Frequency Adjustment Mod", 
+          "description": "Replaces the High and Low Frequency center to your custom values.", 
+          "customer_price_eur": 7,
+          "additional_options": [
+            { "label": "High Frequency", "type": "NumberRange", "range": [5000, 20000], "default": 10000 },
+            { "label": "Low Frequency", "type": "NumberRange", "range": [40, 500], "default": 100 }
+          ]
+        }
+      ],
       "pcb_supplier_id":  "aionfx",
       "pcb_supplier_sku":  "424 Preamp",
       "pcb_supplier_price_eur": 10.60,
@@ -122,7 +171,23 @@
         "complexity": "complex"
       },
       "recommended_enclosure": "1590BB",
-      "compatible_mods": ["Custom frequency centers", "More bands", "Q adjustment", "Clean blend"],
+      "compatible_mods": 
+      [
+        {
+          "name": "Custom Frequency Centers", 
+          "description": "Allows selection of different center frequencies for each band.",
+          "hint": "Specify the desired center frequency for each band within the allowed range.",
+          "customer_price_eur": 10,
+          "additional_options": [
+            { "label": "1. Band", "description": "Adjust the center frequency for the 100Hz band.", "type": "NumberRange", "range": [50, 150], "default": 100 },
+            { "label": "2. Band", "description": "Adjust the center frequency for the 200Hz band.", "type": "NumberRange", "range": [150, 300], "default": 200 },
+            { "label": "3. Band", "description": "Adjust the center frequency for the 400Hz band.", "type": "NumberRange", "range": [300, 600], "default": 400 },
+            { "label": "4. Band", "description": "Adjust the center frequency for the 800Hz band.", "type": "NumberRange", "range": [600, 1200], "default": 800 },
+            { "label": "5. Band", "description": "Adjust the center frequency for the 1.6kHz band.", "type": "NumberRange", "range": [1200, 2400], "default": 1600 },
+            { "label": "6. Band", "description": "Adjust the center frequency for the 3.2kHz band.", "type": "NumberRange", "range": [2400, 4800], "default": 3200 }
+          ]
+        }
+      ],
       "pcb_supplier_id": "pedalpcb",
       "pcb_supplier_sku": "EQ Seven",
       "pcb_supplier_price_eur": 11.50,
@@ -130,39 +195,6 @@
       "customer_price_eur": 72.90,
       "popular": true,
       "mockup": false
-    },
-    {
-      "id": "TS808",
-      "name": "Screaming Green",
-      "inspired_by": "Ibanez Tube Screamer TS808™",
-      "category": "Overdrive",
-      "description": "The legendary green machine that defined the mid-humped overdrive sound. Warm, smooth, and perfect for pushing tube amps.",
-      "sound_characters": ["warm", "mid-focused", "smooth", "vintage", "compressed"],
-      "controls": [
-        { "label": "Drive", "type": "Pot", "description": "Controls the amount of overdrive." },
-        { "label": "Tone", "type": "Pot", "description": "Adjusts high-frequency content." },
-        { "label": "Level", "type": "Pot", "description": "Sets the output volume." },
-        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
-      ],
-      "image": "Logo.png",
-      "technical_specs": {
-        "pcb_supplier": "PedalPCB",
-        "schematic_link": "internal://schematics/ts808.pdf",
-        "potentiometers": 3,
-        "switches": 1,
-        "io_jacks": 2,
-        "led_count": 1,
-        "complexity": "beginner"
-      },
-      "recommended_enclosure": "125B",
-      "compatible_mods": ["TS9 mode", "808+ bass boost", "Analogman Silver mod"],
-      "pcb_supplier_id": "pedalpcb",
-      "pcb_supplier_sku": "Verdant",
-      "pcb_supplier_price_eur": 6.50,
-      "electrical_components_price_eur": 8.00,
-      "customer_price_eur": 48.90,
-      "popular": false,
-      "mockup": true
     },
     {
       "id": "RAT",
@@ -188,10 +220,42 @@
         "complexity": "beginner"
       },
       "recommended_enclosure": "125B",
-      "compatible_mods": ["Turbo RAT mode", "LM308 chip swap", "Clipping options"],
+      "compatible_mods": 
+      [
+        { 
+          "name": "Turbo RAT Mode", 
+          "description": "Adds a switch to toggle between standard and Turbo RAT modes for more gain and bite.", 
+          "customer_price_eur": 8,
+          "adds_technical_specs": {
+            "switches": 1
+          },
+          "adds_controls": [
+            { "label": "Mode", "type": "Switch", "description": "Toggles between Standard and Turbo RAT modes." }
+          ]
+        },
+        {  
+          "name": "LM308 Chip Swap", 
+          "description": "Upgrades the op-amp to the original LM308 for that classic RAT tone.", 
+          "customer_price_eur": 10
+        },
+        {  
+          "name": "Clipping Options", 
+          "description": "Adds a switch to select between diode clipping options: silicon, LED, or no diodes for different distortion characteristics.", 
+          "customer_price_eur": 10,
+          "adds_technical_specs": {
+            "switches": 1
+          },
+          "adds_controls": [
+            { "label": "Clipping", "type": "Switch", "description": "Selects between multiple clipping options." }
+          ],
+          "additional_options": [
+            { "label": "Clipping Options", "description":"Select up to 4 different options", "type": "MultiSelect", "options": ["Silicon", "LED", "Germanium", "No Clip"], "default": ["Silicon", "LED"], "max_selections": 4 }
+          ]
+        }
+      ],
       "pcb_supplier_id": "pedalpcb",
-      "pcb_supplier_sku": "Rat Tail",
-      "pcb_supplier_price_eur": 6.50,
+      "pcb_supplier_sku": "PCB038",
+      "pcb_supplier_price_eur": 8.00,
       "electrical_components_price_eur": 9.00,
       "customer_price_eur": 49.90,
       "popular": false,
@@ -221,7 +285,28 @@
         "complexity": "intermediate"
       },
       "recommended_enclosure": "1590BB",
-      "compatible_mods": ["Triangle era mod", "Ram's Head mod", "Tone wicker switch"],
+      "compatible_mods":
+      [
+        { 
+          "name": "Triangle to Ram's Head Mod", 
+          "description": "Switches the circuit from the original Triangle version to the later Ram's Head version for different tonal characteristics.", 
+          "customer_price_eur": 10 
+        },
+        { 
+          "name": "Tone Wicker Switch", 
+          "description": "Adds a switch to toggle between the standard tone control and a 'wicker' tone circuit for more tonal options.", 
+          "customer_price_eur": 10 ,
+          "adds_technical_specs": {
+            "switches": 1
+          },
+          "adds_controls": [
+            { "label": "Tone Mode", "type": "Switch", "description": "Toggles between Standard and Wicker tone circuits." }
+          ]
+        },
+        {
+
+        }
+      ],
       "pcb_supplier_id": "aionfx",
       "pcb_supplier_sku": "Alchemy",
       "pcb_supplier_price_eur": 10.60,
@@ -254,47 +339,37 @@
         "complexity": "intermediate"
       },
       "recommended_enclosure": "1590BB",
-      "compatible_mods": ["Germanium diode option", "LED clipping", "Bass contour"],
+      "compatible_mods": [
+        { 
+          "name": "Moooore Gain Mod", 
+          "description": "Increases the maximum gain for more overdrive options.", 
+          "customer_price_eur": 8,
+          "adds_technical_specs": {
+            "switches": 1
+          },
+          "adds_controls": [
+            { "label": "Gain Mode", "type": "Switch", "description": "Toggles between Standard and High Gain modes." }
+          ]
+        },
+        { 
+          "name": "Bass Boost Mod",
+          "description": "Adds a bass boost circuit for a fuller low-end response.",
+          "customer_price_eur": 7,
+          "adds_technical_specs": {
+            "switches": 1
+          },
+          "adds_controls": [
+            { "label": "Bass Boost", "type": "Switch", "description": "Engages or disengages the bass boost." }
+          ]
+        }
+      ],
       "pcb_supplier_id": "pedalpcb",
-      "pcb_supplier_sku": "Parentheses",
-      "pcb_supplier_price_eur": 11.50,
+      "pcb_supplier_sku": "PCB003",
+      "pcb_supplier_price_eur": 12.00,
       "electrical_components_price_eur": 14.00,
       "customer_price_eur": 64.90,
       "popular": false,
-      "mockup": true
-    },
-    {
-      "id": "SD1",
-      "name": "Super Booster Drive",
-      "inspired_by": "Boss SD-1 Super Overdrive®",
-      "category": "Overdrive",
-      "description": "The budget-friendly green box that punches way above its weight class. Asymmetrical clipping for that extra sparkle.",
-      "sound_characters": ["bright", "open", "transparent", "modern"],
-      "controls": [
-        { "label": "Drive", "type": "Pot", "description": "Controls the overdrive intensity." },
-        { "label": "Tone", "type": "Pot", "description": "Adjusts the tonal balance." },
-        { "label": "Level", "type": "Pot", "description": "Sets the output volume." },
-        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
-      ],
-      "image": "Logo.png",
-      "technical_specs": {
-        "pcb_supplier": "PedalPCB",
-        "schematic_link": "internal://schematics/sd1.pdf",
-        "potentiometers": 3,
-        "switches": 1,
-        "io_jacks": 2,
-        "led_count": 1,
-        "complexity": "beginner"
-      },
-      "recommended_enclosure": "125B",
-      "compatible_mods": ["JHS Strong mod", "Keeley mod", "Seeing Eye mod"],
-      "pcb_supplier_id": "pedalpcb",
-      "pcb_supplier_sku": "Super Drive",
-      "pcb_supplier_price_eur": 6.50,
-      "electrical_components_price_eur": 7.50,
-      "customer_price_eur": 46.90,
-      "popular": false,
-      "mockup": true
+      "mockup": false
     },
     {
       "id": "FUZZFACE",
@@ -319,14 +394,42 @@
         "complexity": "beginner"
       },
       "recommended_enclosure": "125B",
-      "compatible_mods": ["Silicon/Germanium switch", "External bias", "Input impedance mod"],
+      "compatible_mods": [
+        { 
+          "name": "External Bias Control",
+          "description": "Adds an external bias control potentiometer for fine-tuning the transistor bias.",
+          "customer_price_eur": 9,
+          "adds_technical_specs": {
+            "potentiometers": 1
+          },
+          "adds_controls": [
+            { "label": "Bias", "type": "Potentiometer", "description": "Adjusts the transistor bias for tonal variations." }
+          ]
+        },
+        { 
+          "name": "Tone Control Mod", 
+          "description": "Adds a tone control potentiometer for more tonal shaping options.", 
+          "customer_price_eur": 8,
+          "adds_technical_specs": {
+            "potentiometers": 1
+          },
+          "adds_controls": [
+            { "label": "Tone", "type": "Potentiometer", "description": "Adjusts the tonal character of the fuzz." }
+          ]
+        },
+        {
+          "name": "Input Impedance Mod",
+          "description": "Modifies the input impedance by adding a transformer for better interaction with different guitars and pedals in front of it.",
+          "customer_price_eur": 15
+        }
+      ],
       "pcb_supplier_id": "pedalpcb",
-      "pcb_supplier_sku": "Fuzzly Bear",
-      "pcb_supplier_price_eur": 6.50,
+      "pcb_supplier_sku": "PCB582",
+      "pcb_supplier_price_eur": 8.00,
       "electrical_components_price_eur": 6.50,
       "customer_price_eur": 44.90,
       "popular": false,
-      "mockup": true
+      "mockup": false
     },
     {
       "id": "BOOSTER",
@@ -350,7 +453,7 @@
         "complexity": "beginner"
       },
       "recommended_enclosure": "1590A",
-      "compatible_mods": ["Full range option", "Different transistors", "Variable frequency cut"],
+      "compatible_mods": [],
       "pcb_supplier_id": "aionfx",
       "pcb_supplier_sku": "Refractor",
       "pcb_supplier_price_eur": 10.60,
@@ -383,7 +486,7 @@
         "complexity": "intermediate"
       },
       "recommended_enclosure": "125B",
-      "compatible_mods": ["Snub filter mod", "Different op-amps", "More gain mod"],
+      "compatible_mods": [],
       "pcb_supplier_id": "aionfx",
       "pcb_supplier_sku": "Stratus",
       "pcb_supplier_price_eur": 10.60,
@@ -414,7 +517,7 @@
         "complexity": "intermediate"
       },
       "recommended_enclosure": "125B",
-      "compatible_mods": ["Script mod", "R28 mod", "Univibe mode"],
+      "compatible_mods": [],
       "pcb_supplier_id": "pedalpcb",
       "pcb_supplier_sku": "Phase II",
       "pcb_supplier_price_eur": 11.50,
@@ -446,7 +549,7 @@
         "complexity": "advanced"
       },
       "recommended_enclosure": "1590BB",
-      "compatible_mods": ["Depth control", "Vibrato mode", "Mix control"],
+      "compatible_mods": [],
       "pcb_supplier_id": "aionfx",
       "pcb_supplier_sku": "Andromeda",
       "pcb_supplier_price_eur": 10.60,
@@ -479,7 +582,7 @@
         "complexity": "advanced"
       },
       "recommended_enclosure": "1590BB",
-      "compatible_mods": ["Modulation depth", "Extended delay time", "Bright switch"],
+      "compatible_mods": [],
       "pcb_supplier_id": "pedalpcb",
       "pcb_supplier_sku": "Echo Park",
       "pcb_supplier_price_eur": 11.50,

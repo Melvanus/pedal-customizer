@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation } from "lucide-react";
 import { EffectSelector, type EffectPedal } from "./EffectSelector";
 import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelector";
-import { ProductDetailModal, type ProductModalData } from "./ProductDetailModal";
+import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 
 export type OptionItem = {
   id: string;
@@ -86,6 +86,7 @@ export function PedalCustomizer({
   const [selectedLedId, setSelectedLedId] = React.useState(ledOptions[0]?.id ?? "");
   const [selectedLedColor, setSelectedLedColor] = React.useState<string>("Red");
   const [customLedColor, setCustomLedColor] = React.useState<string>("#ff0000");
+  const [selectedEffectMods, setSelectedEffectMods] = React.useState<SelectedModWithOptions[]>([]);
   const [labelText, setLabelText] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
   const [colorFilter, setColorFilter] = React.useState("");
@@ -114,6 +115,8 @@ export function PedalCustomizer({
     if (selectedEffect?.recommended_enclosure) {
       setSelectedEnclosureSizeId(selectedEffect.recommended_enclosure);
     }
+    // Reset mods when effect changes
+    setSelectedEffectMods([]);
   }, [selectedEffectId, selectedEffect]);
 
   // Measure configuration summary height and update padding
@@ -132,8 +135,14 @@ export function PedalCustomizer({
     return () => window.removeEventListener('resize', measureHeight);
   }, []);
 
+  // Calculate mod costs
+  const modsTotalPrice = React.useMemo(() => {
+    return selectedEffectMods.reduce((sum, { mod }) => sum + mod.customer_price_eur, 0);
+  }, [selectedEffectMods]);
+
   const totalPrice =
     (selectedEffect?.customer_price_eur ?? 0) +
+    modsTotalPrice +
     (selectedPaint?.customer_price_eur ?? 0) +
     (selectedDesign?.customer_price_eur ?? 0) +
     (selectedLed?.customer_price_eur ?? 0);
@@ -406,6 +415,7 @@ export function PedalCustomizer({
   const handleProceedToSummary = () => {
     const configData = {
       effect: selectedEffect ?? null,
+      effectMods: selectedEffectMods,
       enclosureSize: selectedSize ?? null,
       paint: selectedPaint ?? null,
       design: selectedDesign ?? null,
@@ -777,7 +787,7 @@ export function PedalCustomizer({
                   image: pedal.image,
                   description: pedal.description,
                   category: pedal.category,
-                  pcbSupplier: pedal.technical_specs.pcb_supplier,
+                  pcbSupplier: pedal.technical_specs.pcb_reference,
                   recommendedSize: pedal.recommended_enclosure,
                   details: [
                     { label: "Sound", value: pedal.sound_characters },
@@ -790,29 +800,9 @@ export function PedalCustomizer({
                     complexity: pedal.technical_specs.complexity,
                   },
                   controls: pedal.controls,
-                  additionalSections: pedal.compatible_mods.length > 0 ? [
-                    {
-                      title: "Compatible Modifications",
-                      content: (
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                          {pedal.compatible_mods.map((mod, i) => (
-                            <span
-                              key={i}
-                              style={{
-                                background: "#333",
-                                padding: "0.5rem 1rem",
-                                borderRadius: "12px",
-                                fontSize: "0.85rem",
-                                color: "#fff",
-                              }}
-                            >
-                              {mod}
-                            </span>
-                          ))}
-                        </div>
-                      ),
-                    },
-                  ] : undefined,
+                  compatibleMods: pedal.compatible_mods,
+                  selectedMods: selectedEffectMods,
+                  onModsChange: setSelectedEffectMods,
                 });
               }}
             />

@@ -3,6 +3,12 @@
 import * as React from "react";
 import Image from "next/image";
 import { X, ArrowRight } from "lucide-react";
+import type { CompatibleMod } from "./EffectSelector";
+
+export type SelectedModWithOptions = {
+  mod: CompatibleMod;
+  options?: Record<string, any>; // Stores user selections for additional_options
+};
 
 export type ProductModalData = {
   type: "effect" | "size" | "paint" | "design" | "led" | "other";
@@ -24,6 +30,9 @@ export type ProductModalData = {
     complexity: string;
   };
   controls?: Array<{ label: string; type: string; description: string }>;
+  compatibleMods?: CompatibleMod[];
+  selectedMods?: SelectedModWithOptions[];
+  onModsChange?: (mods: SelectedModWithOptions[]) => void;
   additionalSections?: Array<{ title: string; content: React.ReactNode }>;
   isCustomColor?: boolean;
   is_custom_color?: boolean;
@@ -51,6 +60,85 @@ export function ProductDetailModal({
   nextTabName,
 }: ProductDetailModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+  const [localSelectedMods, setLocalSelectedMods] = React.useState<SelectedModWithOptions[]>([]);
+
+  // Initialize local mods from product when it changes
+  React.useEffect(() => {
+    if (product?.selectedMods) {
+      setLocalSelectedMods(product.selectedMods);
+    } else {
+      setLocalSelectedMods([]);
+    }
+  }, [product]);
+
+  // Compute effective controls based on selected mods
+  const effectiveControls = React.useMemo(() => {
+    if (!product?.controls) return [];
+    
+    let controls = [...product.controls];
+    
+    localSelectedMods.forEach(({ mod }) => {
+      // Remove controls specified in removes_controls
+      if (mod.removes_controls) {
+        controls = controls.filter(c => !mod.removes_controls!.includes(c.label));
+      }
+      // Add new controls from adds_controls
+      if (mod.adds_controls) {
+        controls = [...controls, ...mod.adds_controls];
+      }
+    });
+    
+    return controls;
+  }, [product?.controls, localSelectedMods]);
+
+  // Compute total mod price
+  const modsTotalPrice = React.useMemo(() => {
+    return localSelectedMods.reduce((sum, { mod }) => sum + mod.customer_price_eur, 0);
+  }, [localSelectedMods]);
+
+  const handleModToggle = (mod: CompatibleMod) => {
+    setLocalSelectedMods(prev => {
+      const isSelected = prev.some(m => m.mod.name === mod.name);
+      if (isSelected) {
+        return prev.filter(m => m.mod.name !== mod.name);
+      } else {
+        // Initialize with default values for additional_options
+        const defaultOptions: Record<string, any> = {};
+        if (mod.additional_options) {
+          mod.additional_options.forEach(opt => {
+            if (opt.type === "NumberRange" && opt.default !== undefined) {
+              defaultOptions[opt.label] = opt.default;
+            } else if (opt.type === "MultiSelect" && opt.default !== undefined) {
+              defaultOptions[opt.label] = opt.default;
+            }
+          });
+        }
+        return [...prev, { mod, options: defaultOptions }];
+      }
+    });
+  };
+
+  const handleModOptionChange = (modName: string, optionLabel: string, value: any) => {
+    setLocalSelectedMods(prev => prev.map(item => {
+      if (item.mod.name === modName) {
+        return {
+          ...item,
+          options: {
+            ...item.options,
+            [optionLabel]: value,
+          },
+        };
+      }
+      return item;
+    }));
+  };
+
+  // Notify parent of changes
+  React.useEffect(() => {
+    if (product?.onModsChange) {
+      product.onModsChange(localSelectedMods);
+    }
+  }, [localSelectedMods, product?.onModsChange]);
 
   React.useEffect(() => {
     if (!product) return;
@@ -281,15 +369,22 @@ export function ProductDetailModal({
                 {product.title}
               </h2>
               {product.price !== undefined && (
-                <div
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: 700,
-                    color: "#4ade80",
-                    marginTop: 0,
-                  }}
-                >
-                  {product.price > 0 ? `${product.price.toFixed(2)}€` : "Included"}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                  <div
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      color: "#4ade80",
+                      marginTop: 0,
+                    }}
+                  >
+                    {product.price > 0 ? `€${(product.price + modsTotalPrice).toFixed(2)}` : modsTotalPrice > 0 ? `€${modsTotalPrice.toFixed(2)}` : "Included"}
+                  </div>
+                  {modsTotalPrice > 0 && (
+                    <div style={{ fontSize: "0.75rem", color: "#888" }}>
+                      Base: €{product.price.toFixed(2)} + Mods: €{modsTotalPrice.toFixed(2)}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -551,7 +646,7 @@ export function ProductDetailModal({
           )}
 
           {/* Controls Section (for effect pedals) */}
-          {product.type === "effect" && product.controls && product.controls.length > 0 && (
+          {product.type === "effect" && effectiveControls && effectiveControls.length > 0 && (
             <div style={{ marginBottom: "0.5rem" }}>
               <h3
                 style={{
@@ -574,15 +669,15 @@ export function ProductDetailModal({
                   gap: "0.75rem",
                 }}
               >
-                {product.controls.map((control, idx) => (
+                {effectiveControls.map((control, idx) => (
                   <div
                     key={idx}
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: "1rem",
-                      paddingBottom: idx < product.controls!.length - 1 ? "0.75rem" : "0",
-                      borderBottom: idx < product.controls!.length - 1 ? "1px solid #333" : "none",
+                      paddingBottom: idx < effectiveControls.length - 1 ? "0.75rem" : "0",
+                      borderBottom: idx < effectiveControls.length - 1 ? "1px solid #333" : "none",
                     }}
                   >
                     <div
@@ -626,6 +721,200 @@ export function ProductDetailModal({
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Compatible Mods Section (for effect pedals) */}
+          {product.type === "effect" && product.compatibleMods && product.compatibleMods.length > 0 && (
+            <div style={{ marginBottom: "0.5rem" }}>
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Compatible Modifications
+                {localSelectedMods.length > 0 && (
+                  <span style={{ fontSize: "0.95rem", fontWeight: 600, color: "#4ade80", marginLeft: "0.5rem" }}>
+                    (+€{modsTotalPrice.toFixed(2)})
+                  </span>
+                )}
+              </h3>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
+              >
+                {product.compatibleMods.map((mod, idx) => {
+                  const isSelected = localSelectedMods.some(m => m.mod.name === mod.name);
+                  const selectedMod = localSelectedMods.find(m => m.mod.name === mod.name);
+                  
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        padding: "1rem",
+                        background: isSelected ? "#0f2a0f" : "#0a0a0a",
+                        borderRadius: "8px",
+                        border: isSelected ? "2px solid #4ade80" : "1px solid #333",
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleModToggle(mod)}
+                          style={{
+                            width: "20px",
+                            height: "20px",
+                            marginTop: "0.2rem",
+                            cursor: "pointer",
+                            accentColor: "#4ade80",
+                          }}
+                        />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+                            <div style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>
+                              {mod.name}
+                            </div>
+                            <div style={{ fontSize: "1rem", fontWeight: 700, color: "#4ade80" }}>
+                              +€{mod.customer_price_eur.toFixed(2)}
+                            </div>
+                          </div>
+                          <div style={{ fontSize: "0.85rem", color: "#aaa", lineHeight: 1.5, marginBottom: mod.hint || (mod.additional_options && isSelected) ? "0.75rem" : 0 }}>
+                            {mod.description}
+                          </div>
+                          
+                          {mod.hint && (
+                            <div style={{ 
+                              fontSize: "0.8rem", 
+                              color: "#ffaa00", 
+                              background: "rgba(255, 170, 0, 0.1)",
+                              padding: "0.5rem",
+                              borderRadius: "4px",
+                              border: "1px solid rgba(255, 170, 0, 0.3)",
+                              marginBottom: mod.additional_options && isSelected ? "0.75rem" : 0,
+                            }}>
+                              💡 {mod.hint}
+                            </div>
+                          )}
+
+                          {/* Additional Options for this mod */}
+                          {isSelected && mod.additional_options && mod.additional_options.length > 0 && (
+                            <div style={{ 
+                              marginTop: "0.75rem",
+                              paddingTop: "0.75rem",
+                              borderTop: "1px solid #333",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "0.75rem",
+                            }}>
+                              {mod.additional_options.map((option, optIdx) => {
+                                const currentValue = selectedMod?.options?.[option.label];
+                                
+                                return (
+                                  <div key={optIdx}>
+                                    <label style={{ 
+                                      display: "block", 
+                                      fontSize: "0.85rem", 
+                                      fontWeight: 600, 
+                                      color: "#ccc", 
+                                      marginBottom: "0.25rem" 
+                                    }}>
+                                      {option.label}
+                                    </label>
+                                    <div style={{ fontSize: "0.75rem", color: "#888", marginBottom: "0.5rem" }}>
+                                      {option.description}
+                                    </div>
+
+                                    {option.type === "NumberRange" && option.range && (
+                                      <div>
+                                        <input
+                                          type="number"
+                                          min={option.range[0]}
+                                          max={option.range[1]}
+                                          value={currentValue ?? option.default ?? option.range[0]}
+                                          onChange={(e) => handleModOptionChange(mod.name, option.label, Number(e.target.value))}
+                                          style={{
+                                            width: "100%",
+                                            padding: "0.5rem",
+                                            background: "#0a0a0a",
+                                            border: "1px solid #555",
+                                            borderRadius: "4px",
+                                            color: "#fff",
+                                            fontSize: "0.9rem",
+                                          }}
+                                        />
+                                        <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "0.25rem" }}>
+                                          Range: {option.range[0]} - {option.range[1]} Hz
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {option.type === "MultiSelect" && option.options && (
+                                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                        {option.options.map((choice, choiceIdx) => {
+                                          const selectedChoices = (currentValue as string[]) || option.default || [];
+                                          const isChoiceSelected = selectedChoices.includes(choice);
+                                          const canSelect = !isChoiceSelected && (!option.max_selections || selectedChoices.length < option.max_selections);
+                                          
+                                          return (
+                                            <label
+                                              key={choiceIdx}
+                                              style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "0.5rem",
+                                                padding: "0.5rem",
+                                                background: isChoiceSelected ? "#0f2a0f" : "#0a0a0a",
+                                                border: isChoiceSelected ? "1px solid #4ade80" : "1px solid #555",
+                                                borderRadius: "4px",
+                                                cursor: isChoiceSelected || canSelect ? "pointer" : "not-allowed",
+                                                opacity: isChoiceSelected || canSelect ? 1 : 0.5,
+                                              }}
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                checked={isChoiceSelected}
+                                                disabled={!isChoiceSelected && !canSelect}
+                                                onChange={(e) => {
+                                                  const newSelections = e.target.checked
+                                                    ? [...selectedChoices, choice]
+                                                    : selectedChoices.filter(c => c !== choice);
+                                                  handleModOptionChange(mod.name, option.label, newSelections);
+                                                }}
+                                                style={{
+                                                  width: "16px",
+                                                  height: "16px",
+                                                  cursor: "pointer",
+                                                  accentColor: "#4ade80",
+                                                }}
+                                              />
+                                              <span style={{ fontSize: "0.85rem", color: "#fff" }}>{choice}</span>
+                                            </label>
+                                          );
+                                        })}
+                                        <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "0.25rem" }}>
+                                          {option.max_selections && `Select up to ${option.max_selections} options`}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

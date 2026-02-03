@@ -4,6 +4,28 @@ import * as React from "react";
 import Image from "next/image";
 import { Search, X } from "lucide-react";
 
+export type CompatibleMod = {
+  name: string;
+  description: string;
+  hint?: string;
+  customer_price_eur: number;
+  adds_technical_specs?: {
+    potentiometers?: number;
+    switches?: number;
+  };
+  adds_controls?: Array<{ label: string; type: string; description: string }>;
+  removes_controls?: string[];
+  additional_options?: Array<{
+    label: string;
+    description: string;
+    type: "NumberRange" | "MultiSelect";
+    range?: [number, number];
+    default?: number | string[];
+    options?: string[];
+    max_selections?: number;
+  }>;
+};
+
 export type EffectPedal = {
   id: string;
   name: string;
@@ -11,6 +33,7 @@ export type EffectPedal = {
   category: string;
   description: string;
   sound_characters: string[];
+  controls: Array<{ label: string; type: string; description: string }>;
   image: string;
   technical_specs: {
     pcb_reference: string;
@@ -22,7 +45,7 @@ export type EffectPedal = {
     complexity: string;
   };
   recommended_enclosure: string;
-  compatible_mods: string[];
+  compatible_mods: CompatibleMod[];
   customer_price_eur: number;
   popular: boolean;
 };
@@ -563,7 +586,7 @@ export function EffectSelector({
               <ul style={{ margin: 0, paddingLeft: "1.5rem", color: "#ccc" }}>
                 {detailPedal.compatible_mods.map((mod, idx) => (
                   <li key={idx} style={{ marginBottom: "0.25rem" }}>
-                    {mod}
+                    {mod.name}
                   </li>
                 ))}
               </ul>

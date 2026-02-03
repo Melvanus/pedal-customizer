@@ -4,8 +4,26 @@ import * as React from "react";
 import Link from "next/link";
 import { ChevronLeft, AlertTriangle, Download, Mail } from "lucide-react";
 
+type SelectedModWithOptions = {
+  mod: {
+    name: string;
+    description: string;
+    customer_price_eur: number;
+    adds_controls?: Array<{ label: string; type: string; description: string }>;
+    removes_controls?: string[];
+    additional_options?: Array<{
+      label: string;
+      type: string;
+      range?: [number, number];
+      options?: string[];
+    }>;
+  };
+  options?: Record<string, any>;
+};
+
 type ConfigData = {
   effect?: any;
+  effectMods?: SelectedModWithOptions[];
   enclosureSize?: any;
   paint: any;
   design: any;
@@ -39,7 +57,7 @@ export default function SummaryPage() {
   const [customerEmail, setCustomerEmail] = React.useState("");
   const [customerNotes, setCustomerNotes] = React.useState("");
   const [pedalName, setPedalName] = React.useState("");
-  const [knobLabels, setKnobLabels] = React.useState("");
+  const [controlLabels, setControlLabels] = React.useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [editingLedColor, setEditingLedColor] = React.useState(false);
   const [editingPaintColor, setEditingPaintColor] = React.useState(false);
@@ -47,15 +65,66 @@ export default function SummaryPage() {
   const [tempCustomLedColor, setTempCustomLedColor] = React.useState("#ff0000");
   const [tempPaintColor, setTempPaintColor] = React.useState("#808080");
 
+  // Compute effective controls considering mods
+  const effectiveControls = React.useMemo(() => {
+    if (!config?.effect?.controls) return [];
+    
+    let controls = [...config.effect.controls];
+    
+    if (config.effectMods) {
+      config.effectMods.forEach(({ mod }) => {
+        // Remove controls specified in removes_controls
+        if (mod.removes_controls) {
+          controls = controls.filter((c: any) => !mod.removes_controls!.includes(c.label));
+        }
+        // Add new controls from adds_controls
+        if (mod.adds_controls) {
+          controls = [...controls, ...mod.adds_controls];
+        }
+      });
+    }
+    
+    return controls;
+  }, [config?.effect, config?.effectMods]);
+
   React.useEffect(() => {
     const storedConfig = sessionStorage.getItem("pedalConfiguration");
     if (storedConfig) {
       const parsed = JSON.parse(storedConfig);
       setConfig(parsed);
+      
+      // Initialize control labels with their default values (the label itself)
+      if (parsed.effect?.controls) {
+        const initialLabels: Record<string, string> = {};
+        
+        // Start with base controls
+        let controls = [...parsed.effect.controls];
+        
+        // Apply mod changes
+        if (parsed.effectMods) {
+          parsed.effectMods.forEach((modWithOpts: SelectedModWithOptions) => {
+            // Remove controls
+            if (modWithOpts.mod.removes_controls) {
+              controls = controls.filter((c: any) => !modWithOpts.mod.removes_controls!.includes(c.label));
+            }
+            // Add new controls
+            if (modWithOpts.mod.adds_controls) {
+              controls = [...controls, ...modWithOpts.mod.adds_controls];
+            }
+          });
+        }
+        
+        // Set default labels
+        controls.forEach((control: any) => {
+          initialLabels[control.label] = control.label;
+        });
+        
+        setControlLabels(initialLabels);
+      }
+      
       // Parse the old labelText format if it exists
       const labelText = parsed.labelText || "";
       setPedalName(labelText);
-      setKnobLabels("");
     }
   }, []);
 
@@ -86,7 +155,7 @@ export default function SummaryPage() {
       createdAt: new Date().toISOString(),
       ...config,
       pedalName,
-      knobLabels,
+      controlLabels,
       labelText: pedalName, // Keep backward compatibility
       customer: {
         name: customerName,
@@ -213,6 +282,58 @@ export default function SummaryPage() {
               />
             )}
 
+            {/* Selected Mods */}
+            {config.effectMods && config.effectMods.length > 0 && (
+              <div style={{ background: "#1a1a1a", padding: "1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
+                <h3 style={{ fontSize: "1.2rem", marginBottom: "1rem", color: "#fff" }}>
+                  Effect Modifications
+                  <span style={{ fontSize: "1rem", fontWeight: 600, color: "#4ade80", marginLeft: "0.75rem" }}>
+                    (+€{config.effectMods.reduce((sum, { mod }) => sum + mod.customer_price_eur, 0).toFixed(2)})
+                  </span>
+                </h3>
+                {config.effectMods.map((modWithOpts, idx) => (
+                  <div 
+                    key={idx} 
+                    style={{ 
+                      marginBottom: idx < config.effectMods!.length - 1 ? "1.5rem" : 0,
+                      paddingBottom: idx < config.effectMods!.length - 1 ? "1.5rem" : 0,
+                      borderBottom: idx < config.effectMods!.length - 1 ? "1px solid #2d2d2d" : "none",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                      <span style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>{modWithOpts.mod.name}</span>
+                      <span style={{ fontSize: "1rem", fontWeight: 700, color: "#4ade80" }}>+€{modWithOpts.mod.customer_price_eur.toFixed(2)}</span>
+                    </div>
+                    <p style={{ fontSize: "0.85rem", color: "#aaa", marginBottom: modWithOpts.options && Object.keys(modWithOpts.options).length > 0 ? "0.75rem" : 0 }}>
+                      {modWithOpts.mod.description}
+                    </p>
+                    
+                    {/* Display additional options if any */}
+                    {modWithOpts.options && Object.keys(modWithOpts.options).length > 0 && (
+                      <div style={{ 
+                        background: "#0f0f0f", 
+                        padding: "0.75rem", 
+                        borderRadius: "6px",
+                        border: "1px solid #2d2d2d",
+                      }}>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "#888", marginBottom: "0.5rem" }}>
+                          Selected Options:
+                        </div>
+                        {Object.entries(modWithOpts.options).map(([key, value], optIdx) => (
+                          <div key={optIdx} style={{ fontSize: "0.8rem", color: "#ccc", marginBottom: "0.25rem" }}>
+                            <span style={{ color: "#888" }}>{key}:</span>{" "}
+                            <span style={{ color: "#fff", fontWeight: 600 }}>
+                              {Array.isArray(value) ? value.join(", ") : value}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Enclosure Size */}
             {config.enclosureSize && (
               <ConfigSection
@@ -305,21 +426,42 @@ export default function SummaryPage() {
                   </p>
                 </div>
 
-                <div>
-                  <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
-                    Knob Labels
-                  </label>
-                  <input
-                    type="text"
-                    value={knobLabels}
-                    onChange={(e) => setKnobLabels(e.target.value)}
-                    placeholder="e.g. Volume, Drive, Tone, ..."
-                    style={{ width: "100%", padding: "0.75rem", background: "#0f0f0f", border: "2px solid #2d2d2d", borderRadius: "5px", color: "#e0e0e0", fontSize: "1rem", boxSizing: "border-box" }}
-                  />
-                  <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.5rem", marginBottom: 0 }}>
-                    List the names of your knobs/controls separated by commas. You can also leave this empty if you want to leave them with their original labels.
-                  </p>
-                </div>
+                {/* Control Labels */}
+                {effectiveControls.length > 0 && (
+                  <div>
+                    <label style={{ display: "block", marginBottom: "0.75rem", fontSize: "0.9rem", color: "#ccc" }}>
+                      Control Labels
+                    </label>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                      {effectiveControls.map((control: any, idx: number) => (
+                        <div key={idx}>
+                          <label style={{ display: "block", marginBottom: "0.25rem", fontSize: "0.8rem", color: "#aaa" }}>
+                            {control.type} {idx + 1} - {control.label}
+                          </label>
+                          <input
+                            type="text"
+                            value={controlLabels[control.label] || control.label}
+                            onChange={(e) => setControlLabels(prev => ({ ...prev, [control.label]: e.target.value }))}
+                            placeholder={control.label}
+                            style={{ 
+                              width: "100%", 
+                              padding: "0.5rem", 
+                              background: "#0f0f0f", 
+                              border: "1px solid #2d2d2d", 
+                              borderRadius: "4px", 
+                              color: "#e0e0e0", 
+                              fontSize: "0.9rem", 
+                              boxSizing: "border-box" 
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.75rem", marginBottom: 0 }}>
+                      Customize the label for each control. The default value is the control's original name.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
