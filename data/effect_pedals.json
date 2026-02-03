@@ -36,8 +36,8 @@
       "description": "The sonic annihilator that crushes everything in its path. Massive, aggressive fuzz with a wide tonal palette. Based on version 1 of the legendary Fuzz War. Completly different circuit than later versions, which are more simmilar to a Big Muff.",
       "sound_characters": ["aggressive", "harsh", "thick", "modern", "compressed"],
       "controls": [
-        { "label": "Tone", "type": "Potentiometer", "description": "Makes it go even more bzzzzzzzz." },
-        { "label": "Volume", "type": "Potentiometer", "description": "Makes the bzzzzzzzz go louder ." },
+        { "label": "Tone", "type": "Pot", "description": "Makes it go even more bzzzzzzzz." },
+        { "label": "Volume", "type": "Pot", "description": "Makes the bzzzzzzzz go louder ." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
       "image": "Logo.png",
@@ -61,7 +61,7 @@
             "potentiometers": 1
           },
           "adds_controls": [
-            { "label": "Fuzz", "type": "Potentiometer", "description": "Controls the amount of fuzz." }
+            { "label": "Fuzz", "type": "Pot", "description": "Controls the amount of fuzz." }
           ]
         },
         {
@@ -72,7 +72,7 @@
             "potentiometers": 1
           },
           "adds_controls": [
-            { "label": "Bias", "type": "Potentiometer", "description": "Adjusts the transistor bias for tonal variations." }
+            { "label": "Bias", "type": "Pot", "description": "Adjusts the transistor bias for tonal variations." }
           ]
         }
       ],
@@ -403,7 +403,7 @@
             "potentiometers": 1
           },
           "adds_controls": [
-            { "label": "Bias", "type": "Potentiometer", "description": "Adjusts the transistor bias for tonal variations." }
+            { "label": "Bias", "type": "Pot", "description": "Adjusts the transistor bias for tonal variations." }
           ]
         },
         { 
@@ -414,7 +414,7 @@
             "potentiometers": 1
           },
           "adds_controls": [
-            { "label": "Tone", "type": "Potentiometer", "description": "Adjusts the tonal character of the fuzz." }
+            { "label": "Tone", "type": "Pot", "description": "Adjusts the tonal character of the fuzz." }
           ]
         },
         {

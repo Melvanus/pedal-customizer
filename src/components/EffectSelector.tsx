@@ -37,6 +37,7 @@ export type EffectPedal = {
   sound_characters: string[];
   controls: Array<{ label: string; type: string; description: string }>;
   image: string;
+  images?: string[];
   technical_specs: {
     pcb_reference: string;
     schematic_link: string;
@@ -59,6 +60,13 @@ type EffectSelectorProps = {
   selectedPedalId: string;
   onSelectPedal: (id: string) => void;
   onShowDetails?: (pedal: EffectPedal) => void;
+  adminMode?: boolean;
+  dragOverSku?: string | null;
+  currentImageIndex?: Record<string, number>;
+  onDragOver?: (e: React.DragEvent<HTMLDivElement>, identifier: string) => void;
+  onDragLeave?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop?: (e: React.DragEvent<HTMLDivElement>, identifier: string, category: string) => void;
+  onDeleteImage?: (e: React.MouseEvent, identifier: string, category: string, imageToDelete: string) => void;
 };
 
 export function EffectSelector({
@@ -68,6 +76,13 @@ export function EffectSelector({
   selectedPedalId,
   onSelectPedal,
   onShowDetails,
+  adminMode = false,
+  dragOverSku = null,
+  currentImageIndex = {},
+  onDragOver,
+  onDragLeave,
+  onDrop,
+  onDeleteImage,
 }: EffectSelectorProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [categoryFilter, setCategoryFilter] = React.useState("");
@@ -291,17 +306,31 @@ export function EffectSelector({
       >
         {filteredPedals.map((pedal) => {
           const isSelected = pedal.id === selectedPedalId;
+          const isDragOver = adminMode && dragOverSku === pedal.id;
+          const displayedImage = pedal.images && pedal.images.length > 0
+            ? pedal.images[currentImageIndex[pedal.id] || 0]
+            : pedal.image;
+          const hasMultipleImages = pedal.images && pedal.images.length > 1;
+          
           return (
             <div
               key={pedal.id}
               data-section="pedal-card"
-              onClick={() => {
+              onClick={(e) => {
+                if (adminMode) {
+                  e.stopPropagation();
+                  onSelectPedal(pedal.id);
+                  return;
+                }
                 if (onShowDetails) {
                   onShowDetails(pedal);
                 } else {
                   onSelectPedal(pedal.id);
                 }
               }}
+              onDragOver={adminMode && onDragOver ? (e) => onDragOver(e, pedal.id) : undefined}
+              onDragLeave={adminMode && onDragLeave ? onDragLeave : undefined}
+              onDrop={adminMode && onDrop ? (e) => onDrop(e, pedal.id, "effect") : undefined}
               style={{
                 background: "#0f0f0f",
                 borderRadius: "10px",
@@ -309,7 +338,11 @@ export function EffectSelector({
                 boxShadow: isSelected ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 cursor: "pointer",
-                border: isSelected ? "2px solid #fff" : "2px solid #2d2d2d",
+                border: isDragOver 
+                  ? "2px dashed #4ade80" 
+                  : isSelected 
+                  ? "2px solid #fff" 
+                  : "2px solid #2d2d2d",
                 position: "relative",
               }}
               onMouseEnter={(e) => {
@@ -321,6 +354,25 @@ export function EffectSelector({
                 e.currentTarget.style.boxShadow = isSelected ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
               }}
             >
+              {adminMode && isDragOver && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "0.5rem",
+                    left: "0.5rem",
+                    background: "#4ade80",
+                    color: "#000",
+                    padding: "0.3rem 0.6rem",
+                    borderRadius: "4px",
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    zIndex: 10,
+                  }}
+                >
+                  📁 Drop images here
+                </div>
+              )}
+
               {pedal.popular && (
                 <div
                   style={{
@@ -341,9 +393,93 @@ export function EffectSelector({
               )}
 
               <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                {adminMode && onDeleteImage && displayedImage && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteImage(e, pedal.id, "effect", displayedImage);
+                    }}
+                    style={{
+                      position: "absolute",
+                      top: "0.5rem",
+                      left: "0.5rem",
+                      background: "#ef4444",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      padding: "0.3rem 0.5rem",
+                      cursor: "pointer",
+                      fontSize: "0.8rem",
+                      fontWeight: 700,
+                      zIndex: 20,
+                    }}
+                  >
+                    ×
+                  </button>
+                )}
+                
+                {hasMultipleImages && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newIndex = ((currentImageIndex[pedal.id] || 0) - 1 + pedal.images!.length) % pedal.images!.length;
+                        // Would need parent to handle this - for now just visual
+                      }}
+                      style={{
+                        position: "absolute",
+                        left: "0.5rem",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        background: "rgba(0,0,0,0.6)",
+                        color: "#fff",
+                        border: "1px solid #fff",
+                        borderRadius: "50%",
+                        width: "24px",
+                        height: "24px",
+                        cursor: "pointer",
+                        fontSize: "0.8rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 15,
+                      }}
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newIndex = ((currentImageIndex[pedal.id] || 0) + 1) % pedal.images!.length;
+                        // Would need parent to handle this - for now just visual
+                      }}
+                      style={{
+                        position: "absolute",
+                        right: "0.5rem",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        background: "rgba(0,0,0,0.6)",
+                        color: "#fff",
+                        border: "1px solid #fff",
+                        borderRadius: "50%",
+                        width: "24px",
+                        height: "24px",
+                        cursor: "pointer",
+                        fontSize: "0.8rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 15,
+                      }}
+                    >
+                      ›
+                    </button>
+                  </>
+                )}
+                
                 <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
                   <Image
-                    src={pedal.image}
+                    src={displayedImage}
                     alt={pedal.name}
                     fill
                     unoptimized

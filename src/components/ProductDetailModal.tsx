@@ -238,8 +238,8 @@ export function ProductDetailModal({
           onClick={onClose}
           style={{
             position: "absolute",
-            top: "1rem",
-            right: "1rem",
+            top: "0.25rem",
+            right: "0.25rem",
             background: "#333",
             border: "none",
             color: "#fff",
@@ -276,7 +276,7 @@ export function ProductDetailModal({
                 height: "250px",
                 background: "#0a0a0a",
                 borderRadius: "12px",
-                marginBottom: "1.5rem",
+                marginBottom: "0.5rem",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -388,7 +388,7 @@ export function ProductDetailModal({
           <div data-section="title-price" style={{ marginBottom: "1.5rem" }}>
             <div style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start", marginBottom: "0.5rem" }}>
               {/* Left: Title and Subtitle (takes most space, can overlap with price) */}
-              <div style={{ flex: "1 1 auto", minWidth: 0 }}>
+              <div style={{ flex: "1 1 auto", minWidth: 0, marginBottom: "1rem" }}>
                 <h2
                   style={{
                     fontSize: "1.75rem",
@@ -406,7 +406,7 @@ export function ProductDetailModal({
                   </div>
                 )}
                 {product.subtitle && product.type !== "effect" && (
-                  <p style={{ color: "#888", fontSize: "0.95rem", margin: 0, marginTop: "0.25rem" }}>
+                  <p style={{ color: "#888", fontSize: "0.85rem", margin: 0, marginTop: "0.25rem" }}>
                     {product.subtitle}
                   </p>
                 )}
@@ -441,7 +441,7 @@ export function ProductDetailModal({
             <div
               data-section="product-description"
               style={{
-                marginTop: "-0.5rem",
+                marginTop: "-1.75rem",
                 marginBottom: "1rem",
                 padding: "1rem",
                 background: "#0a0a0a",
@@ -629,87 +629,6 @@ export function ProductDetailModal({
             </div>
           )}
 
-          {/* Controls Section (for effect pedals) */}
-          {product.type === "effect" && effectiveControls && effectiveControls.length > 0 && (
-            <div data-section="controls" style={{ marginBottom: "0.5rem" }}>
-              <h3
-                style={{
-                  fontSize: "1.1rem",
-                  fontWeight: 600,
-                  color: "#fff",
-                  marginBottom: "0.25rem",
-                }}
-              >
-                Controls
-              </h3>
-              <div
-                style={{
-                  padding: "1rem",
-                  background: "#0a0a0a",
-                  borderRadius: "8px",
-                  border: "1px solid #333",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.75rem",
-                }}
-              >
-                {effectiveControls.map((control, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "1rem",
-                      paddingBottom: idx < effectiveControls.length - 1 ? "0.5rem" : "0",
-                      borderBottom: idx < effectiveControls.length - 1 ? "1px solid #333" : "none",
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: "0 0 auto",
-                        display: "flex",
-                        alignItems: "baseline",
-                        gap: "0.5rem",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "0.9rem",
-                          fontWeight: 600,
-                          color: "#fff",
-                        }}
-                      >
-                        {control.label}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: "0.75rem",
-                          fontWeight: 600,
-                          color: "#666",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.5px",
-                        }}
-                      >
-                        ({control.type})
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        fontSize: "0.85rem",
-                        color: "#aaa",
-                        lineHeight: 1.4,
-                      }}
-                    >
-                        {control.description === "POTENTIOMETER" ? "Pot" : control.description}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Compatible Mods Section (for effect pedals) */}
           {product.type === "effect" && product.compatibleMods && product.compatibleMods.length > 0 && (
             <div data-section="compatible-mods" style={{ marginBottom: "0.5rem" }}>
@@ -793,8 +712,8 @@ export function ProductDetailModal({
                           {/* Additional Options for this mod */}
                           {isSelected && mod.additional_options && mod.additional_options.length > 0 && (
                             <div style={{ 
-                              marginTop: "0.75rem",
-                              paddingTop: "0.75rem",
+                              marginTop: "0.1rem",
+                              paddingTop: "0.1rem",
                               borderTop: "1px solid #333",
                               display: "flex",
                               flexDirection: "column",
@@ -805,21 +724,33 @@ export function ProductDetailModal({
                                 
                                 return (
                                   <div key={optIdx}>
-                                    <label style={{ 
-                                      display: "block", 
-                                      fontSize: "0.85rem", 
-                                      fontWeight: 600, 
-                                      color: "#ccc", 
-                                      marginBottom: "0.25rem" 
+                                    <div style={{ 
+                                      display: "flex", 
+                                      alignItems: "baseline", 
+                                      gap: "0.75rem",
+                                      marginBottom: "0.1rem" 
                                     }}>
-                                      {option.label}
-                                    </label>
-                                    <div style={{ fontSize: "0.75rem", color: "#888", marginBottom: "0.5rem" }}>
-                                      {option.description}
+                                      <label style={{ 
+                                        fontSize: "0.85rem", 
+                                        fontWeight: 600, 
+                                        color: "#ccc",
+                                        whiteSpace: "nowrap"
+                                      }}>
+                                        {option.label}
+                                      </label>
+                                      <div style={{ fontSize: "0.75rem", color: "#888" }}>
+                                        {option.description}
+                                      </div>
                                     </div>
 
                                     {option.type === "NumberRange" && option.range && (
-                                      <div>
+                                      <div style={{ 
+                                        display: "flex", 
+                                        alignItems: "center", 
+                                        gap: "0.75rem",
+                                        marginBottom: "0.1rem",
+                                        marginTop: "0.1rem",
+                                        }}>
                                         <input
                                           type="number"
                                           min={option.range[0]}
@@ -827,8 +758,8 @@ export function ProductDetailModal({
                                           value={currentValue ?? option.default ?? option.range[0]}
                                           onChange={(e) => handleModOptionChange(mod.name, option.label, Number(e.target.value))}
                                           style={{
-                                            width: "100%",
-                                            padding: "0.5rem",
+                                            width: "100px",
+                                            padding: "0.2rem",
                                             background: "#0a0a0a",
                                             border: "1px solid #555",
                                             borderRadius: "4px",
@@ -836,7 +767,7 @@ export function ProductDetailModal({
                                             fontSize: "0.9rem",
                                           }}
                                         />
-                                        <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "0.25rem" }}>
+                                        <div style={{ fontSize: "0.7rem", color: "#666" }}>
                                           Range: {option.range[0]} - {option.range[1]} Hz
                                         </div>
                                       </div>
@@ -904,9 +835,9 @@ export function ProductDetailModal({
             </div>
           )}
 
-          {/* Details Grid */}
-          {product.details && product.details.length > 0 && (
-            <div data-section="details-grid" style={{ marginBottom: "0.5rem" }}>
+          {/* Controls Section (for effect pedals) */}
+          {product.type === "effect" && effectiveControls && effectiveControls.length > 0 && (
+            <div data-section="controls" style={{ marginBottom: "0.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -915,8 +846,79 @@ export function ProductDetailModal({
                   marginBottom: "0.25rem",
                 }}
               >
-                Specifications
+                Controls
               </h3>
+              <div
+                style={{
+                  padding: "1rem",
+                  background: "#0a0a0a",
+                  borderRadius: "8px",
+                  border: "1px solid #333",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
+              >
+                {effectiveControls.map((control, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: "1rem",
+                      paddingBottom: idx < effectiveControls.length - 1 ? "0.5rem" : "0",
+                      borderBottom: idx < effectiveControls.length - 1 ? "1px solid #333" : "none",
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: "0 0 auto",
+                        display: "flex",
+                        alignItems: "baseline",
+                        gap: "0.5rem",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.9rem",
+                          fontWeight: 600,
+                          color: "#fff",
+                        }}
+                      >
+                        {control.label}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          color: "#666",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        ({control.type})
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        fontSize: "0.85rem",
+                        color: "#aaa",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                        {control.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Details Grid */}
+          {product.details && product.details.length > 0 && (
+            <div data-section="details-grid" style={{ marginBottom: "0.5rem" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {product.details.map((detail, idx) => (
                   <div
@@ -931,7 +933,7 @@ export function ProductDetailModal({
                   >
                     <div
                       style={{
-                        flex: "0 0 140px",
+                        flex: "0 0 80px",
                         fontWeight: 600,
                         color: "#888",
                         fontSize: "0.85rem",

@@ -351,6 +351,8 @@ export function PedalCustomizer({
       option = designOptions.find((p) => p.id === identifier);
     } else if (category === "led") {
       option = ledOptions.find((p) => p.id === identifier);
+    } else if (category === "effect") {
+      option = effectPedals.find((p) => p.id === identifier);
     }
 
     if (!option) {
@@ -788,6 +790,13 @@ export function PedalCustomizer({
               soundCharacters={Array.from(new Set(effectPedals.flatMap(p => p.sound_characters))).sort()}
               selectedPedalId={selectedEffectId}
               onSelectPedal={setSelectedEffectId}
+              adminMode={adminMode}
+              dragOverSku={dragOverSku}
+              currentImageIndex={currentImageIndex}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onDeleteImage={handleDeleteImage}
               onShowDetails={(pedal) => {
                 setModalProduct({
                   type: "effect",

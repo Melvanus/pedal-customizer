@@ -6,6 +6,7 @@ const categoryFileMap: Record<string, string> = {
   paint: "enclosures_data.json",
   design: "design_labeling.json",
   led: "led.json",
+  effect: "effect_pedals.json",
 };
 
 export async function POST(request: NextRequest) {
