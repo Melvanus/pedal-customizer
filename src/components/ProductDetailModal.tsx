@@ -785,11 +785,11 @@ export function ProductDetailModal({
                               +€{mod.customer_price_eur.toFixed(2)}
                             </div>
                           </div>
-                          <div style={{ fontSize: "0.85rem", color: "#aaa", lineHeight: 1.5, marginBottom: mod.hint || (mod.additional_options && isSelected) ? "0.75rem" : 0 }}>
+                          <div style={{ fontSize: "0.85rem", color: "#aaa", lineHeight: 1.5, marginBottom: (isSelected && mod.hint) || (mod.additional_options && isSelected) ? "0.75rem" : 0 }}>
                             {mod.description}
                           </div>
                           
-                          {mod.hint && (
+                          {isSelected && mod.hint && (
                             <div style={{ 
                               fontSize: "0.8rem", 
                               color: "#ffaa00", 
