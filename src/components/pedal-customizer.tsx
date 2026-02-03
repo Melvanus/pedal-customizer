@@ -499,7 +499,7 @@ export function PedalCustomizer({
             zIndex: 100,
             padding: "1rem",
             display: "grid",
-            gridTemplateColumns: "repeat(6, 1fr)",
+            gridTemplateColumns: "repeat(5, 1fr)",
             gap: "0.5rem",
           }}
         >

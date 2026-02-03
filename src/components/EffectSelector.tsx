@@ -12,6 +12,8 @@ export type CompatibleMod = {
   adds_technical_specs?: {
     potentiometers?: number;
     switches?: number;
+    io_jacks?: number;
+    led_count?: number;
   };
   adds_controls?: Array<{ label: string; type: string; description: string }>;
   removes_controls?: string[];

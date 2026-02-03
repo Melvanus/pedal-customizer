@@ -96,6 +96,32 @@ export function ProductDetailModal({
     return localSelectedMods.reduce((sum, { mod }) => sum + mod.customer_price_eur, 0);
   }, [localSelectedMods]);
 
+  // Compute effective technical specs based on selected mods
+  const effectiveTechnicalSpecs = React.useMemo(() => {
+    if (!product?.technicalSpecs) return null;
+    
+    const specs = { ...product.technicalSpecs };
+    
+    localSelectedMods.forEach(({ mod }) => {
+      if (mod.adds_technical_specs) {
+        if (mod.adds_technical_specs.potentiometers) {
+          specs.potentiometers += mod.adds_technical_specs.potentiometers;
+        }
+        if (mod.adds_technical_specs.switches) {
+          specs.switches += mod.adds_technical_specs.switches;
+        }
+        if (mod.adds_technical_specs.io_jacks) {
+          specs.io_jacks += mod.adds_technical_specs.io_jacks;
+        }
+        if (mod.adds_technical_specs.led_count) {
+          specs.led_count += mod.adds_technical_specs.led_count;
+        }
+      }
+    });
+    
+    return specs;
+  }, [product?.technicalSpecs, localSelectedMods]);
+
   const handleModToggle = (mod: CompatibleMod) => {
     setLocalSelectedMods(prev => {
       const isSelected = prev.some(m => m.mod.name === mod.name);
@@ -356,48 +382,54 @@ export function ProductDetailModal({
 
           {/* Title & Price */}
           <div style={{ marginBottom: "1.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
-              <h2
-                style={{
-                  fontSize: "1.75rem",
-                  fontWeight: 700,
-                  color: "#fff",
-                  lineHeight: 1.2,
-                  margin: 0,
-                }}
-              >
-                {product.title}
-              </h2>
-              {product.price !== undefined && (
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                  <div
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      color: "#4ade80",
-                      marginTop: 0,
-                    }}
-                  >
-                    {product.price > 0 ? `€${(product.price + modsTotalPrice).toFixed(2)}` : modsTotalPrice > 0 ? `€${modsTotalPrice.toFixed(2)}` : "Included"}
+            <div style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+              {/* Left: Title and Subtitle (takes most space, can overlap with price) */}
+              <div style={{ flex: "1 1 auto", minWidth: 0 }}>
+                <h2
+                  style={{
+                    fontSize: "1.75rem",
+                    fontWeight: 700,
+                    color: "#fff",
+                    lineHeight: 1.2,
+                    margin: 0,
+                  }}
+                >
+                  {product.title}
+                </h2>
+                {product.subtitle && product.type === "effect" && (
+                  <div style={{ fontSize: "0.85rem", color: "#888", fontStyle: "italic", marginTop: "0.25rem" }}>
+                    Inspired by: {product.subtitle.replace("Inspired by: ", "")}
                   </div>
-                  {modsTotalPrice > 0 && (
-                    <div style={{ fontSize: "0.75rem", color: "#888" }}>
-                      Base: €{product.price.toFixed(2)} + Mods: €{modsTotalPrice.toFixed(2)}
+                )}
+                {product.subtitle && product.type !== "effect" && (
+                  <p style={{ color: "#888", fontSize: "0.95rem", margin: 0, marginTop: "0.25rem" }}>
+                    {product.subtitle}
+                  </p>
+                )}
+              </div>
+              {/* Right: Price (fixed width, won't force text wrap) */}
+              {product.price !== undefined && (
+                <div style={{ flex: "0 0 auto", minWidth: "180px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                    <div
+                      style={{
+                        fontSize: "1.5rem",
+                        fontWeight: 700,
+                        color: "#4ade80",
+                        marginTop: 0,
+                      }}
+                    >
+                      {product.price > 0 ? `€${(product.price + modsTotalPrice).toFixed(2)}` : modsTotalPrice > 0 ? `€${modsTotalPrice.toFixed(2)}` : "Included"}
                     </div>
-                  )}
+                    {modsTotalPrice > 0 && (
+                      <div style={{ fontSize: "0.75rem", color: "#888", textAlign: "right", whiteSpace: "nowrap" }}>
+                        Base: €{product.price.toFixed(2)}<br/>+ Mods: €{modsTotalPrice.toFixed(2)}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
-            {product.subtitle && product.type === "effect" && (
-              <div style={{ fontSize: "0.85rem", color: "#888", fontStyle: "italic", marginBottom: "0.25rem" }}>
-                Inspired by: {product.subtitle.replace("Inspired by: ", "")}
-              </div>
-            )}
-            {product.subtitle && product.type !== "effect" && (
-              <p style={{ color: "#888", fontSize: "0.95rem", margin: 0 }}>
-                {product.subtitle}
-              </p>
-            )}
           </div>
 
           {/* Description */}
@@ -418,115 +450,8 @@ export function ProductDetailModal({
             </div>
           )}
 
-          {/* General Info Grid (for effect pedals) */}
-          {product.type === "effect" && (product.category || product.pcbSupplier || product.recommendedSize) && (
-            <div style={{ marginBottom: "1rem" }}>
-              <h3
-                style={{
-                  fontSize: "1.1rem",
-                  fontWeight: 600,
-                  color: "#fff",
-                  marginBottom: "0.25rem",
-                }}
-              >
-                General Information
-              </h3>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "0.75rem",
-                  padding: "1rem",
-                  background: "#0a0a0a",
-                  borderRadius: "8px",
-                  border: "1px solid #333",
-                }}
-              >
-                {product.category && (
-                  <div style={{ textAlign: "center" }}>
-                    <div
-                      style={{
-                        fontSize: "0.75rem",
-                        fontWeight: 600,
-                        color: "#888",
-                        marginBottom: "0.5rem",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                      }}
-                    >
-                      Category
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "0.95rem",
-                        fontWeight: 600,
-                        color: "#fff",
-                      }}
-                    >
-                      {product.category}
-                    </div>
-                  </div>
-                )}
-                {product.pcbSupplier && (
-                  <div style={{ textAlign: "center" }}>
-                    <div
-                      style={{
-                        fontSize: "0.75rem",
-                        fontWeight: 600,
-                        color: "#888",
-                        marginBottom: "0.5rem",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                      }}
-                    >
-                      PCB Supplier
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "0.95rem",
-                        fontWeight: 600,
-                        color: "#fff",
-                      }}
-                    >
-                      {product.pcbSupplier}
-                    </div>
-                  </div>
-                )}
-                {product.recommendedSize && (
-                  <div style={{ textAlign: "center" }}>
-                    <div
-                      style={{
-                        fontSize: "0.75rem",
-                        fontWeight: 600,
-                        color: "#888",
-                        marginBottom: "0.5rem",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                      }}
-                    >
-                      Recommended Size
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "0.95rem",
-                        fontWeight: 600,
-                        color: "#fff",
-                      }}
-                    >
-                      {product.recommendedSize}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Controls */}
-
-
-
-          {/* Technical Specs Grid (for effect pedals) */}
-          {product.type === "effect" && product.technicalSpecs && (
+          {/* Specifications (for effect pedals) - Combined General Info + Technical Specs */}
+          {product.type === "effect" && (product.category || product.recommendedSize || effectiveTechnicalSpecs) && (
             <div style={{ marginBottom: "0.5rem" }}>
               <h3
                 style={{
@@ -536,111 +461,183 @@ export function ProductDetailModal({
                   marginBottom: "0.25rem",
                 }}
               >
-                Technical Specifications
+                Specifications
               </h3>
               <div
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(4, 1fr)",
-                  gap: "0.75rem",
                   padding: "1rem",
                   background: "#0a0a0a",
                   borderRadius: "8px",
                   border: "1px solid #333",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
                 }}
               >
-                <div style={{ textAlign: "center" }}>
+                {/* First Row: Category and Recommended Size */}
+                {(product.category || product.recommendedSize) && (
                   <div
                     style={{
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      color: "#888",
-                      marginBottom: "0.5rem",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
+                      display: "grid",
+                      gridTemplateColumns: product.category && product.recommendedSize ? "repeat(2, 1fr)" : "1fr",
+                      gap: "0.75rem",
                     }}
                   >
-                    Pots
+                    {product.category && (
+                      <div style={{ textAlign: "center" }}>
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            fontWeight: 600,
+                            color: "#888",
+                            marginBottom: "0.5rem",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.5px",
+                          }}
+                        >
+                          Category
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "0.95rem",
+                            fontWeight: 600,
+                            color: "#fff",
+                          }}
+                        >
+                          {product.category}
+                        </div>
+                      </div>
+                    )}
+                    {product.recommendedSize && (
+                      <div style={{ textAlign: "center" }}>
+                        <div
+                          style={{
+                            fontSize: "0.75rem",
+                            fontWeight: 600,
+                            color: "#888",
+                            marginBottom: "0.5rem",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.5px",
+                          }}
+                        >
+                          Recommended Size
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "0.95rem",
+                            fontWeight: 600,
+                            color: "#fff",
+                          }}
+                        >
+                          {product.recommendedSize}
+                        </div>
+                      </div>
+                    )}
                   </div>
+                )}
+                {/* Second Row: Technical Specs (Pots, Switches, I/O, LEDs) */}
+                {effectiveTechnicalSpecs && (
                   <div
                     style={{
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      color: "#fff",
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gap: "0.75rem",
                     }}
                   >
-                    {product.technicalSpecs.potentiometers}
+                    <div style={{ textAlign: "center" }}>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          color: "#888",
+                          marginBottom: "0.5rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Pots
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: 700,
+                          color: "#fff",
+                        }}
+                      >
+                        {effectiveTechnicalSpecs.potentiometers}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          color: "#888",
+                          marginBottom: "0.5rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Switches
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: 700,
+                          color: "#fff",
+                        }}
+                      >
+                        {effectiveTechnicalSpecs.switches}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          color: "#888",
+                          marginBottom: "0.5rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        In/Outputs
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: 700,
+                          color: "#fff",
+                        }}
+                      >
+                        {effectiveTechnicalSpecs.io_jacks}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          color: "#888",
+                          marginBottom: "0.5rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        LEDs
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "1.5rem",
+                          fontWeight: 700,
+                          color: "#fff",
+                        }}
+                      >
+                        {effectiveTechnicalSpecs.led_count}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      color: "#888",
-                      marginBottom: "0.5rem",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    Switches
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      color: "#fff",
-                    }}
-                  >
-                    {product.technicalSpecs.switches}
-                  </div>
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      color: "#888",
-                      marginBottom: "0.5rem",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    In/Outputs
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      color: "#fff",
-                    }}
-                  >
-                    {product.technicalSpecs.io_jacks}
-                  </div>
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      color: "#888",
-                      marginBottom: "0.5rem",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    LEDs
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      color: "#fff",
-                    }}
-                  >
-                    {product.technicalSpecs.led_count}
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           )}
