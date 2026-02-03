@@ -11,7 +11,6 @@ type LandingPageProps = {
   uniqueFinishes: number;
   designOptions: number;
   ledOptions: number;
-  otherOptions: number;
 };
 
 export function LandingPage({
@@ -22,9 +21,8 @@ export function LandingPage({
   uniqueFinishes,
   designOptions,
   ledOptions,
-  otherOptions,
 }: LandingPageProps) {
-  const totalCombinations = effectPedals * enclosureSizes * availableFinishes * designOptions * ledOptions * Math.pow(2, otherOptions);
+  const totalCombinations = effectPedals * enclosureSizes * availableFinishes * designOptions * ledOptions;
 
   return (
     <div
@@ -152,7 +150,6 @@ export function LandingPage({
             <StatCard label="Unique Colors" value={uniqueColors} />
             <StatCard label="Design Options" value={designOptions} />
             <StatCard label="LED Styles" value={ledOptions} />
-            <StatCard label="Modifications" value={otherOptions} />
           </div>
 
           {/* Total Combinations */}
@@ -179,7 +176,7 @@ export function LandingPage({
               {totalCombinations.toLocaleString()}+
             </div>
             <div style={{ fontSize: "0.95rem", color: "#aaa", marginTop: "1rem" }}>
-              {effectPedals} effects × {enclosureSizes} sizes × {availableFinishes} finishes × {designOptions} designs × {ledOptions} LEDs × 2<sup>{otherOptions}</sup> mods
+              {effectPedals} effects × {enclosureSizes} sizes × {availableFinishes} finishes × {designOptions} designs × {ledOptions} LEDs
             </div>
           </div>
         </div>

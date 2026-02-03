@@ -379,11 +379,12 @@ export function EffectSelector({
                     </span>
                   ))}
                 </div>
-
+                {/*}
                 <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderTop: "1px solid #2d2d2d" }}>
                   <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Recommended Size</span>
                   <span style={{ color: "#aaa", fontSize: "0.8rem" }}>📦 {pedal.recommended_enclosure}</span>
                 </div>
+                */}
               </div>
             </div>
           );

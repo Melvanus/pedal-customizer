@@ -46,14 +46,14 @@ export function EnclosureSizeSelector({
   const [hasBeenTouched, setHasBeenTouched] = React.useState(false);
   
   const [banana, setBanana] = React.useState<BananaPhysics>({
-    x: 200,
+    x: 600,
     y: 150,
     vx: 0.5,
     vy: 0.3,
     isDragging: false,
     dragOffsetX: 0,
     dragOffsetY: 0,
-    lastX: 200,
+    lastX: 600,
     lastY: 150,
   });
 
@@ -74,12 +74,11 @@ export function EnclosureSizeSelector({
         const container = containerRef.current;
         if (!container) return prev;
 
-        const bounds = container.getBoundingClientRect();
         let { x, y, vx, vy } = prev;
 
-        // Calculate banana center position (absolute coords)
-        const bananaCenterX = bounds.left + x + BANANA_SIZE / 2;
-        const bananaCenterY = bounds.top + y + BANANA_SIZE / 2;
+        // Calculate banana center position (fixed coords relative to viewport)
+        const bananaCenterX = x + BANANA_SIZE / 2;
+        const bananaCenterY = y + BANANA_SIZE / 2;
 
         // Calculate gravitational attraction to target position (if not touched)
         if (!hasBeenTouched) {
@@ -89,9 +88,9 @@ export function EnclosureSizeSelector({
             if (sizeBox) {
               const sizeBoxRect = sizeBox.getBoundingClientRect();
               
-              // Target position: right of the actual size box
-              const targetX = sizeBoxRect.right - bounds.left + 15 + BANANA_SIZE / 2;
-              const targetY = sizeBoxRect.top - bounds.top + (sizeBoxRect.height / 2);
+              // Target position: right of the actual size box (in viewport coordinates)
+              const targetX = sizeBoxRect.right + 15 + BANANA_SIZE / 2;
+              const targetY = sizeBoxRect.top + (sizeBoxRect.height / 2);
               
               // Calculate distance to target
               const dx = targetX - (x + BANANA_SIZE / 2);
@@ -164,21 +163,21 @@ export function EnclosureSizeSelector({
         x += vx;
         y += vy;
 
-        // Wall collisions with bounce
+        // Wall collisions with bounce (using window dimensions)
         if (x <= 0) {
           x = 0;
           vx = Math.abs(vx) * BOUNCE_DAMPING;
         }
-        if (x >= bounds.width - BANANA_SIZE) {
-          x = bounds.width - BANANA_SIZE;
+        if (x >= window.innerWidth - BANANA_SIZE) {
+          x = window.innerWidth - BANANA_SIZE;
           vx = -Math.abs(vx) * BOUNCE_DAMPING;
         }
         if (y <= 0) {
           y = 0;
           vy = Math.abs(vy) * BOUNCE_DAMPING;
         }
-        if (y >= bounds.height - BANANA_SIZE) {
-          y = bounds.height - BANANA_SIZE;
+        if (y >= window.innerHeight - BANANA_SIZE) {
+          y = window.innerHeight - BANANA_SIZE;
           vy = -Math.abs(vy) * BOUNCE_DAMPING;
         }
 
@@ -221,11 +220,11 @@ export function EnclosureSizeSelector({
   React.useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setBanana((prev) => {
-        if (!prev.isDragging || !containerRef.current) return prev;
+        if (!prev.isDragging) return prev;
         
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const newX = e.clientX - containerRect.left - prev.dragOffsetX;
-        const newY = e.clientY - containerRect.top - prev.dragOffsetY;
+        // Use viewport coordinates directly for fixed positioning
+        const newX = e.clientX - prev.dragOffsetX;
+        const newY = e.clientY - prev.dragOffsetY;
         
         // Track velocity while dragging
         const vx = newX - prev.x;
@@ -398,6 +397,20 @@ export function EnclosureSizeSelector({
                 {size.name}
               </h3>
 
+              {!isRecommended && (
+                <div
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: 700,
+                    color: "#ffaa00",
+                    textAlign: "center",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  +€5.00
+                </div>
+              )}
+
               <div
                 style={{
                   fontSize: "0.85rem",
@@ -531,7 +544,7 @@ export function EnclosureSizeSelector({
       <div
         onMouseDown={handleBananaMouseDown}
         style={{
-          position: "absolute",
+          position: "fixed",
           left: `${banana.x}px`,
           top: `${banana.y}px`,
           width: "160px",

@@ -42,7 +42,6 @@ type PedalCustomizerProps = {
   paintOptions: PaintOption[];
   designOptions: OptionItem[];
   ledOptions: OptionItem[];
-  otherOptions: OptionItem[];
   favouritePaintIds: string[];
 };
 
@@ -76,11 +75,10 @@ export function PedalCustomizer({
   paintOptions,
   designOptions,
   ledOptions,
-  otherOptions,
   favouritePaintIds,
 }: PedalCustomizerProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = React.useState<"effect" | "size" | "paint" | "design" | "led" | "other">("effect");
+  const [activeTab, setActiveTab] = React.useState<"effect" | "size" | "paint" | "design" | "led">("effect");
   const [selectedEffectId, setSelectedEffectId] = React.useState(effectPedals[0]?.id ?? "");
   const [selectedEnclosureSizeId, setSelectedEnclosureSizeId] = React.useState(enclosureSizes[0]?.name ?? "");
   const [selectedPaintId, setSelectedPaintId] = React.useState(paintOptions[0]?.id ?? "");
@@ -88,7 +86,6 @@ export function PedalCustomizer({
   const [selectedLedId, setSelectedLedId] = React.useState(ledOptions[0]?.id ?? "");
   const [selectedLedColor, setSelectedLedColor] = React.useState<string>("Red");
   const [customLedColor, setCustomLedColor] = React.useState<string>("#ff0000");
-  const [selectedOtherIds, setSelectedOtherIds] = React.useState<string[]>([]);
   const [labelText, setLabelText] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
   const [colorFilter, setColorFilter] = React.useState("");
@@ -97,18 +94,20 @@ export function PedalCustomizer({
   const [showColorPicker, setShowColorPicker] = React.useState(false);
   const [customColor, setCustomColor] = React.useState("#808080");
   const [customFinish, setCustomFinish] = React.useState<"Matte" | "Glossy">("Matte");
+  const [hasInteractedWithCustomPaint, setHasInteractedWithCustomPaint] = React.useState(false);
   const [adminMode, setAdminMode] = React.useState(false);
   const [availableImages, setAvailableImages] = React.useState<string[]>([]);
   const [dragOverSku, setDragOverSku] = React.useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = React.useState<Record<string, number>>({});
   const [modalProduct, setModalProduct] = React.useState<ProductModalData | null>(null);
+  const [summaryHeight, setSummaryHeight] = React.useState(0);
+  const summaryRef = React.useRef<HTMLDivElement>(null);
 
   const selectedEffect = effectPedals.find((item) => item.id === selectedEffectId);
   const selectedSize = enclosureSizes.find((item) => item.name === selectedEnclosureSizeId);
   const selectedPaint = paintOptions.find((item) => item.id === selectedPaintId);
   const selectedDesign = designOptions.find((item) => item.id === selectedDesignId);
   const selectedLed = ledOptions.find((item) => item.id === selectedLedId);
-  const selectedOthers = otherOptions.filter((item) => selectedOtherIds.includes(item.id));
 
   // Auto-select recommended enclosure size when effect changes
   React.useEffect(() => {
@@ -117,16 +116,31 @@ export function PedalCustomizer({
     }
   }, [selectedEffectId, selectedEffect]);
 
+  // Measure configuration summary height and update padding
+  React.useEffect(() => {
+    const measureHeight = () => {
+      if (summaryRef.current) {
+        const height = summaryRef.current.offsetHeight;
+        setSummaryHeight(height + 32); // +32 for top margin (1rem) + some extra spacing
+      }
+    };
+    
+    // Measure on mount and when window resizes
+    measureHeight();
+    window.addEventListener('resize', measureHeight);
+    
+    return () => window.removeEventListener('resize', measureHeight);
+  }, []);
+
   const totalPrice =
     (selectedEffect?.customer_price_eur ?? 0) +
     (selectedPaint?.customer_price_eur ?? 0) +
     (selectedDesign?.customer_price_eur ?? 0) +
-    (selectedLed?.customer_price_eur ?? 0) +
-    selectedOthers.reduce((sum, item) => sum + item.customer_price_eur, 0);
+    (selectedLed?.customer_price_eur ?? 0);
 
   // Tab navigation helper
   const advanceToNextTab = () => {
-    const tabOrder: Array<typeof activeTab> = ["effect", "size", "paint", "design", "led", "other"];
+    const tabOrder: Array<typeof activeTab> = ["effect", "size", "paint", "design", "led"];
     const currentIndex = tabOrder.indexOf(activeTab);
     if (currentIndex < tabOrder.length - 1) {
       setActiveTab(tabOrder[currentIndex + 1]);
@@ -139,7 +153,7 @@ export function PedalCustomizer({
       size: "Paint",
       paint: "Design",
       design: "LED",
-      led: "Hardware",
+      led: "Other",
       other: undefined,
     };
     return tabNames[activeTab];
@@ -175,7 +189,7 @@ export function PedalCustomizer({
           );
           if (paintOption) {
             setSelectedPaintId(paintOption.id);
-            if (paintOption.is_custom_color) {
+            if (paintOption.is_custom_color && !hasInteractedWithCustomPaint) {
               setShowColorPicker(true);
             }
           }
@@ -194,15 +208,6 @@ export function PedalCustomizer({
           );
           if (ledOption) {
             setSelectedLedId(ledOption.id);
-          }
-          break;
-        case "other":
-          // For "other" tab, toggle the selection (multi-select)
-          const otherOption = otherOptions.find(
-            o => o.name === modalProduct.title
-          );
-          if (otherOption) {
-            handleToggleOther(otherOption.id);
           }
           break;
       }
@@ -337,8 +342,6 @@ export function PedalCustomizer({
       option = designOptions.find((p) => p.id === identifier);
     } else if (category === "led") {
       option = ledOptions.find((p) => p.id === identifier);
-    } else if (category === "other") {
-      option = otherOptions.find((p) => p.id === identifier);
     }
 
     if (!option) {
@@ -377,10 +380,6 @@ export function PedalCustomizer({
     }
   };
 
-  const handleToggleOther = (id: string) => {
-    setSelectedOtherIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
-  };
-
   const handleDownload = () => {
     const designPayload = selectedDesign ? { ...selectedDesign, labelText } : { labelText };
     const payload = {
@@ -390,7 +389,6 @@ export function PedalCustomizer({
       paint: selectedPaint ?? null,
       design: designPayload,
       led: selectedLed ?? null,
-      other: selectedOthers,
       totalPrice,
     };
 
@@ -414,7 +412,6 @@ export function PedalCustomizer({
       labelText,
       led: selectedLed ?? null,
       ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
-      other: selectedOthers,
       totalPrice,
     };
     
@@ -427,6 +424,34 @@ export function PedalCustomizer({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: "#e0e0e0", background: "#0a0a0a" }}>
+      {/* Floating Admin Button - Top Right */}
+      <button
+        onClick={() => setAdminMode(!adminMode)}
+        style={{
+          position: "fixed",
+          top: "1rem",
+          right: "1rem",
+          padding: "0.6rem 1.2rem",
+          border: "2px solid #4ade80",
+          background: adminMode ? "#4ade80" : "rgba(0, 0, 0, 0.7)",
+          color: adminMode ? "#000" : "#4ade80",
+          fontWeight: 600,
+          fontSize: "0.85rem",
+          cursor: "pointer",
+          borderRadius: "6px",
+          transition: "all 0.3s ease",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          zIndex: 9999,
+          backdropFilter: "blur(10px)",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+        }}
+        title="Toggle admin mode for drag & drop image management"
+      >
+        {adminMode ? "🔓" : "🔒"} Admin
+      </button>
+      
       {/* Ultra-Compact Header */}
       <div
         style={{
@@ -446,78 +471,193 @@ export function PedalCustomizer({
 
       {/* Scrollable Content Area */}
       <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", position: "relative" }}>
-        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: "0", paddingBottom: "250px" }}>
-          {/* Floating Tabs & Filters Panel */}
-          <div
-            style={{
-              position: "sticky",
-              top: "1rem",
-              width: "100%",
-              maxWidth: "800px",
-              background: "rgba(26, 26, 26, 0.85)",
-              backdropFilter: "blur(10px)",
-              boxShadow: "0 6px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              borderRadius: "10px",
-              zIndex: 100,
-              padding: "1rem",
-              marginBottom: "2rem",
-              marginTop: "1rem",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            {/* Tabs */}
-            <div style={{ display: "flex", gap: "0.75rem", marginBottom: activeTab === "paint" ? "1rem" : 0, borderBottom: "2px solid rgba(255,255,255,0.1)", paddingBottom: "0.5rem", alignItems: "center" }}>
-              {(["effect", "size", "paint", "design", "led", "other"] as const).map((tab) => (
+        {/* Configuration Summary - Fixed at top */}
+        <div
+          ref={summaryRef}
+          style={{
+            position: "absolute",
+            top: "1rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "calc(100% - 3rem)",
+            maxWidth: "800px",
+            background: "rgba(26, 26, 26, 0.85)",
+            backdropFilter: "blur(10px)",
+            boxShadow: "0 6px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "10px",
+            zIndex: 100,
+            padding: "1rem",
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: "0.5rem",
+          }}
+        >
                 <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => setActiveTab("effect")}
                   style={{
-                    padding: "0.6rem 1.2rem",
-                    border: "none",
-                    background: activeTab === tab ? "#fff" : "transparent",
-                    color: activeTab === tab ? "#000" : "#888",
-                    fontWeight: 600,
-                    fontSize: "0.9rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0.5rem",
+                    background: activeTab === "effect" ? "#fff" : "#0f0f0f",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                    border: activeTab === "effect" ? "2px solid #fff" : "2px solid transparent",
                     cursor: "pointer",
-                    borderRadius: "6px",
-                    transition: "all 0.3s ease",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== "effect") {
+                      e.currentTarget.style.background = "#1a1a1a";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== "effect") {
+                      e.currentTarget.style.background = "#0f0f0f";
+                    }
                   }}
                 >
-                  {tab === "effect" && "Effect"}
-                  {tab === "size" && "Size"}
-                  {tab === "paint" && "Paint / Finish"}
-                  {tab === "design" && "Design / Labeling"}
-                  {tab === "led" && "LED"}
-                  {tab === "other" && "Other"}
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "effect" ? "#000" : "#888", marginBottom: "0.25rem" }}>Effect</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "effect" ? "#000" : "#aaa" }}>
+                    {selectedEffect ? selectedEffect.name : "—"}
+                  </span>
                 </button>
-              ))}
-              <button
-                onClick={() => setAdminMode(!adminMode)}
-                style={{
-                  marginLeft: "auto",
-                  padding: "0.6rem 1.2rem",
-                  border: "2px solid #4ade80",
-                  background: adminMode ? "#4ade80" : "transparent",
-                  color: adminMode ? "#000" : "#4ade80",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
-                  cursor: "pointer",
-                  borderRadius: "6px",
-                  transition: "all 0.3s ease",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                }}
-                title="Toggle admin mode for drag & drop image management"
-              >
-                {adminMode ? "🔓" : "🔒"} Admin
-              </button>
-            </div>
+                <button
+                  onClick={() => setActiveTab("size")}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0.5rem",
+                    background: activeTab === "size" ? "#fff" : "#0f0f0f",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                    border: activeTab === "size" ? "2px solid #fff" : "2px solid transparent",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== "size") {
+                      e.currentTarget.style.background = "#1a1a1a";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== "size") {
+                      e.currentTarget.style.background = "#0f0f0f";
+                    }
+                  }}
+                >
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "size" ? "#000" : "#888", marginBottom: "0.25rem" }}>Size</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "size" ? "#000" : "#aaa" }}>
+                    {selectedSize ? selectedSize.name : "—"}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("paint")}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0.5rem",
+                    background: activeTab === "paint" ? "#fff" : "#0f0f0f",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                    border: activeTab === "paint" ? "2px solid #fff" : "2px solid transparent",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== "paint") {
+                      e.currentTarget.style.background = "#1a1a1a";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== "paint") {
+                      e.currentTarget.style.background = "#0f0f0f";
+                    }
+                  }}
+                >
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "paint" ? "#000" : "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "paint" ? "#000" : "#aaa" }}>
+                    {selectedPaint ? selectedPaint.displayed_name : "—"}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("design")}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0.5rem",
+                    background: activeTab === "design" ? "#fff" : "#0f0f0f",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                    border: activeTab === "design" ? "2px solid #fff" : "2px solid transparent",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== "design") {
+                      e.currentTarget.style.background = "#1a1a1a";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== "design") {
+                      e.currentTarget.style.background = "#0f0f0f";
+                    }
+                  }}
+                >
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{selectedDesign?.name || "—"}</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("led")}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0.5rem",
+                    background: activeTab === "led" ? "#fff" : "#0f0f0f",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                    border: activeTab === "led" ? "2px solid #fff" : "2px solid transparent",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== "led") {
+                      e.currentTarget.style.background = "#1a1a1a";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== "led") {
+                      e.currentTarget.style.background = "#0f0f0f";
+                    }
+                  }}
+                >
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "led" ? "#000" : "#888", marginBottom: "0.25rem" }}>LED</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "led" ? "#000" : "#aaa" }}>{selectedLed?.name || "—"}</span>
+                </button>
+        </div>
 
-            {/* Filters for Paint Tab */}
-            {activeTab === "paint" && (
+        {/* Scrollable Content */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px" }}>
+          {/* Filters for Paint Tab - Separate Panel */}
+          {activeTab === "paint" && (
+            <div
+              style={{
+                position: "sticky",
+                top: 0,
+                width: "100%",
+                maxWidth: "800px",
+                background: "rgba(26, 26, 26, 0.85)",
+                backdropFilter: "blur(10px)",
+                boxShadow: "0 6px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                borderRadius: "10px",
+                zIndex: 99,
+                padding: "1rem",
+                marginBottom: "2rem",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
               <div
                 style={{
                   display: "grid",
@@ -533,7 +673,7 @@ export function PedalCustomizer({
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search by name, SKU, color..."
+                    placeholder="Search by name, color, finish..."
                     style={{
                       width: "100%",
                       padding: "0.5rem",
@@ -617,8 +757,8 @@ export function PedalCustomizer({
                   </select>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Effect Tab */}
           {activeTab === "effect" && (
@@ -636,15 +776,20 @@ export function PedalCustomizer({
                   price: pedal.customer_price_eur,
                   image: pedal.image,
                   description: pedal.description,
+                  category: pedal.category,
+                  pcbSupplier: pedal.technical_specs.pcb_supplier,
+                  recommendedSize: pedal.recommended_enclosure,
                   details: [
-                    { label: "Category", value: pedal.category },
                     { label: "Sound", value: pedal.sound_characters },
-                    { label: "Complexity", value: pedal.technical_specs.complexity },
-                    { label: "Potentiometers", value: `${pedal.technical_specs.potentiometers}` },
-                    { label: "Switches", value: `${pedal.technical_specs.switches}` },
-                    { label: "PCB Reference", value: pedal.technical_specs.pcb_reference },
-                    { label: "Recommended Size", value: pedal.recommended_enclosure },
                   ],
+                  technicalSpecs: {
+                    potentiometers: pedal.technical_specs.potentiometers,
+                    switches: pedal.technical_specs.switches,
+                    io_jacks: pedal.technical_specs.io_jacks,
+                    led_count: pedal.technical_specs.led_count,
+                    complexity: pedal.technical_specs.complexity,
+                  },
+                  controls: pedal.controls,
                   additionalSections: pedal.compatible_mods.length > 0 ? [
                     {
                       title: "Compatible Modifications",
@@ -681,11 +826,13 @@ export function PedalCustomizer({
               onSelectSize={setSelectedEnclosureSizeId}
               recommendedSize={selectedEffect?.recommended_enclosure}
               onShowDetails={(size) => {
+                const isRecommended = size.name === selectedEffect?.recommended_enclosure;
+                const additionalCost = isRecommended ? 0 : 5;
                 setModalProduct({
                   type: "size",
                   title: size.name,
                   subtitle: size.dimensions,
-                  price: 0, // Enclosure size is included
+                  price: additionalCost,
                   description: size.description,
                   details: [
                     { label: "Dimensions", value: size.dimensions },
@@ -693,6 +840,14 @@ export function PedalCustomizer({
                     { label: "Best For", value: size.best_for },
                   ],
                   additionalSections: [
+                    ...(additionalCost > 0 ? [{
+                      title: "⚠️ Note",
+                      content: (
+                        <div style={{ fontSize: "0.85rem", color: "#ffaa00", lineHeight: 1.5 }}>
+                          Non-standard size for this effect. Additional €5.00 charge applies.
+                        </div>
+                      ),
+                    }] : []),
                     {
                       title: "Funny Description",
                       content: (
@@ -745,17 +900,33 @@ export function PedalCustomizer({
                           images: option.images && option.images.length > 0 ? option.images : [currentImage],
                           description: option.long_description || option.short_description || option.description,
                           details: [
-                            { label: "SKU", value: option.supplier_sku },
-                            { label: "Supplier", value: option.supplier_id },
-                            { label: "Color", value: option.color || "N/A" },
-                            { label: "Finish", value: option.finish || "N/A" },
-                            { label: "Available", value: option.available ? "Yes" : "No" },
-                          ].filter(d => d.value && d.value !== "N/A"),
+                            { label: "Color", value: option.color || "Custom" },
+                            { label: "Finish", value: option.finish || "Custom" },
+                            { label: "Dimensions", value: "120mm × 94mm × 34mm (L×W×H)" },
+                          ],
                           is_custom_color: option.is_custom_color,
                           customColor: customColor,
                           customFinish: customFinish,
-                          onCustomColorChange: setCustomColor,
-                          onCustomFinishChange: setCustomFinish,
+                          onCustomColorChange: (color: string) => {
+                            setCustomColor(color);
+                            setHasInteractedWithCustomPaint(true);
+                            setModalProduct((prev) => prev ? { ...prev, customColor: color } : null);
+                          },
+                          onCustomFinishChange: (finish: "Matte" | "Glossy") => {
+                            setCustomFinish(finish);
+                            setHasInteractedWithCustomPaint(true);
+                            setModalProduct((prev) => prev ? { ...prev, customFinish: finish } : null);
+                          },
+                          additionalSections: option.is_custom_color ? [
+                            {
+                              title: "⚠️ Note",
+                              content: (
+                                <div style={{ fontSize: "0.85rem", color: "#ffaa00", lineHeight: 1.5 }}>
+                                  Custom paint requires manual review and has extended production time (5-7 business days).
+                                </div>
+                              ),
+                            },
+                          ] : undefined,
                         });
                       } else {
                         // Admin mode: direct selection
@@ -942,23 +1113,6 @@ export function PedalCustomizer({
                       </div>
                     </div>
                     <div style={{ padding: "1rem" }}>
-                      {option.is_custom_color && (
-                        <div style={{
-                          background: "rgba(255, 165, 0, 0.15)",
-                          border: "1px solid rgba(255, 165, 0, 0.5)",
-                          borderRadius: "5px",
-                          padding: "0.5rem",
-                          marginBottom: "0.75rem",
-                          fontSize: "0.75rem",
-                          color: "#ffaa00",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                        }}>
-                          <span style={{ fontSize: "1rem" }}>⚠️</span>
-                          <span>Requires Manual Review</span>
-                        </div>
-                      )}
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                           <span
@@ -1302,8 +1456,14 @@ export function PedalCustomizer({
                         ],
                         ledColor: selectedLedColor,
                         customLedColor: customLedColor,
-                        onLedColorChange: (color: string) => setSelectedLedColor(color),
-                        onCustomLedColorChange: (color: string) => setCustomLedColor(color),
+                        onLedColorChange: (color: string) => {
+                          setSelectedLedColor(color);
+                          setModalProduct((prev) => prev ? { ...prev, ledColor: color } : null);
+                        },
+                        onCustomLedColorChange: (color: string) => {
+                          setCustomLedColor(color);
+                          setModalProduct((prev) => prev ? { ...prev, customLedColor: color } : null);
+                        },
                       });
                     } else {
                       setSelectedLedId(option.id);
@@ -1682,243 +1842,9 @@ export function PedalCustomizer({
             </>
           )}
 
-          {/* Other Tab */}
-          {activeTab === "other" && (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                gap: "1.5rem",
-              }}
-            >
-              {otherOptions.map((option) => {
-                const currentImageIdx = currentImageIndex[option.id] ?? 0;
-                const images = option.images || [option.image];
-                const currentImage = images[currentImageIdx];
-                
-                return (
-                <div
-                  key={option.id}
-                  onClick={() => {
-                    if (!adminMode) {
-                      setModalProduct({
-                        type: "other",
-                        title: option.name,
-                        price: option.customer_price_eur,
-                        image: currentImage,
-                        images: images,
-                        description: option.long_description || option.short_description || option.description,
-                        details: [
-                          { label: "Category", value: "Hardware Upgrade" },
-                          { label: "Multi-select", value: "Yes - add as many as you like" },
-                        ],
-                      });
-                    } else {
-                      handleToggleOther(option.id);
-                    }
-                  }}
-                  style={{
-                    background: "#0f0f0f",
-                    borderRadius: "10px",
-                    overflow: "hidden",
-                    boxShadow: selectedOtherIds.includes(option.id) ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    cursor: adminMode ? "copy" : "pointer",
-                    border: dragOverSku === option.id ? "2px dashed #4ade80" : selectedOtherIds.includes(option.id) ? "2px solid #fff" : "2px solid #2d2d2d",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-3px)";
-                    e.currentTarget.style.boxShadow = "0 5px 20px rgba(255,255,255,0.15)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = selectedOtherIds.includes(option.id) ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
-                  }}
-                  onDragOver={adminMode ? (e) => handleDragOver(e, option.id) : undefined}
-                  onDragLeave={adminMode ? handleDragLeave : undefined}
-                  onDrop={adminMode ? (e) => handleDrop(e, option.id, "other") : undefined}
-                >
-                  <div style={{ 
-                    width: "100%", 
-                    height: "160px", 
-                    background: "#1a1a1a",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    overflow: "hidden"
-                  }}>
-                    {adminMode && (
-                      <>
-                        <div style={{
-                          position: "absolute",
-                          top: "0.5rem",
-                          left: "0.5rem",
-                          background: "rgba(0, 0, 0, 0.8)",
-                          color: "#4ade80",
-                          padding: "0.25rem 0.5rem",
-                          borderRadius: "5px",
-                          fontSize: "0.7rem",
-                          zIndex: 10,
-                          border: "1px solid #4ade80",
-                        }}>
-                          🔧 Drop images here
-                        </div>
-                        <button
-                          onClick={(e) => handleDeleteImage(e, option.id, "other", currentImage)}
-                          style={{
-                            position: "absolute",
-                            top: "0.5rem",
-                            right: "0.5rem",
-                            width: "24px",
-                            height: "24px",
-                            borderRadius: "50%",
-                            background: "rgba(220, 38, 38, 0.9)",
-                            border: "1px solid rgba(255, 255, 255, 0.3)",
-                            color: "#fff",
-                            fontSize: "0.85rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 10,
-                            transition: "all 0.2s ease",
-                            fontWeight: "bold",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
-                            e.currentTarget.style.transform = "scale(1.1)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
-                            e.currentTarget.style.transform = "scale(1)";
-                          }}
-                        >
-                          ×
-                        </button>
-                      </>
-                    )}
-                    
-                    {images.length > 1 && (
-                      <>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCurrentImageIndex(prev => ({
-                              ...prev,
-                              [option.id]: currentImageIdx > 0 ? currentImageIdx - 1 : images.length - 1
-                            }));
-                          }}
-                          style={{
-                            position: "absolute",
-                            left: "0.5rem",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
-                            background: "rgba(26, 26, 26, 0.8)",
-                            border: "2px solid rgba(255, 255, 255, 0.3)",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 10,
-                            transition: "all 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
-                            e.currentTarget.style.borderColor = "#fff";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
-                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
-                          }}
-                        >
-                          ←
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCurrentImageIndex(prev => ({
-                              ...prev,
-                              [option.id]: currentImageIdx < images.length - 1 ? currentImageIdx + 1 : 0
-                            }));
-                          }}
-                          style={{
-                            position: "absolute",
-                            right: "0.5rem",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
-                            background: "rgba(26, 26, 26, 0.8)",
-                            border: "2px solid rgba(255, 255, 255, 0.3)",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 10,
-                            transition: "all 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
-                            e.currentTarget.style.borderColor = "#fff";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
-                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
-                          }}
-                        >
-                          →
-                        </button>
-                        <div style={{
-                          position: "absolute",
-                          bottom: "0.5rem",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          background: "rgba(26, 26, 26, 0.8)",
-                          padding: "0.25rem 0.5rem",
-                          borderRadius: "4px",
-                          fontSize: "0.75rem",
-                          color: "#999",
-                          zIndex: 10,
-                        }}>
-                          {currentImageIdx + 1} / {images.length}
-                        </div>
-                      </>
-                    )}
-                    
-                    <div style={{ padding: "0.75rem", position: "relative", width: "100%", height: "100%" }}>
-                      <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
-                    </div>
-                  </div>
-                  <div style={{ padding: "1rem" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                      <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
-                      <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                        {formatPrice(option.customer_price_eur)}
-                      </span>
-                    </div>
-                    {option.short_description && (
-                      <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
-                        {option.short_description}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                );
-              })}
-            </div>
-          )}
         </div>
 
-        {/* Floating Configuration Summary Panel */}
+        {/* Bottom Action Bar - Total Price & Review Button */}
         <div
           style={{
             position: "fixed",
@@ -1934,246 +1860,46 @@ export function PedalCustomizer({
             border: "1px solid rgba(255,255,255,0.15)",
             zIndex: 1000,
             backdropFilter: "blur(10px)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+            flexWrap: "wrap",
           }}
         >
-          <h2 style={{ fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.75rem", color: "#fff", textAlign: "center" }}>
-            Configuration Summary
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.5rem", marginBottom: "0.75rem" }}>
-            <button
-              onClick={() => setActiveTab("effect")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                background: activeTab === "effect" ? "#fff" : "#0f0f0f",
-                borderRadius: "5px",
-                textAlign: "center",
-                border: activeTab === "effect" ? "2px solid #fff" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== "effect") {
-                  e.currentTarget.style.background = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== "effect") {
-                  e.currentTarget.style.background = "#0f0f0f";
-                }
-              }}
-            >
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "effect" ? "#000" : "#888", marginBottom: "0.25rem" }}>Effect</span>
-              <span style={{ fontSize: "0.8rem", color: activeTab === "effect" ? "#000" : "#aaa" }}>
-                {selectedEffect ? selectedEffect.name : "—"}
-              </span>
-            </button>
-            <button
-              onClick={() => setActiveTab("size")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                background: activeTab === "size" ? "#fff" : "#0f0f0f",
-                borderRadius: "5px",
-                textAlign: "center",
-                border: activeTab === "size" ? "2px solid #fff" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== "size") {
-                  e.currentTarget.style.background = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== "size") {
-                  e.currentTarget.style.background = "#0f0f0f";
-                }
-              }}
-            >
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "size" ? "#000" : "#888", marginBottom: "0.25rem" }}>Size</span>
-              <span style={{ fontSize: "0.8rem", color: activeTab === "size" ? "#000" : "#aaa" }}>
-                {selectedSize ? selectedSize.name : "—"}
-              </span>
-            </button>
-            <button
-              onClick={() => setActiveTab("paint")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                background: activeTab === "paint" ? "#fff" : "#0f0f0f",
-                borderRadius: "5px",
-                textAlign: "center",
-                border: activeTab === "paint" ? "2px solid #fff" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== "paint") {
-                  e.currentTarget.style.background = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== "paint") {
-                  e.currentTarget.style.background = "#0f0f0f";
-                }
-              }}
-            >
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "paint" ? "#000" : "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
-              <span style={{ fontSize: "0.8rem", color: activeTab === "paint" ? "#000" : "#aaa" }}>
-                {selectedPaint ? selectedPaint.displayed_name : "—"}
-              </span>
-            </button>
-            <button
-              onClick={() => setActiveTab("design")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                background: activeTab === "design" ? "#fff" : "#0f0f0f",
-                borderRadius: "5px",
-                textAlign: "center",
-                border: activeTab === "design" ? "2px solid #fff" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== "design") {
-                  e.currentTarget.style.background = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== "design") {
-                  e.currentTarget.style.background = "#0f0f0f";
-                }
-              }}
-            >
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design</span>
-              <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{selectedDesign?.name || "—"}</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("led")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                background: activeTab === "led" ? "#fff" : "#0f0f0f",
-                borderRadius: "5px",
-                textAlign: "center",
-                border: activeTab === "led" ? "2px solid #fff" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== "led") {
-                  e.currentTarget.style.background = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== "led") {
-                  e.currentTarget.style.background = "#0f0f0f";
-                }
-              }}
-            >
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "led" ? "#000" : "#888", marginBottom: "0.25rem" }}>LED</span>
-              <span style={{ fontSize: "0.8rem", color: activeTab === "led" ? "#000" : "#aaa" }}>{selectedLed?.name || "—"}</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("other")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                background: activeTab === "other" ? "#fff" : "#0f0f0f",
-                borderRadius: "5px",
-                textAlign: "center",
-                border: activeTab === "other" ? "2px solid #fff" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== "other") {
-                  e.currentTarget.style.background = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== "other") {
-                  e.currentTarget.style.background = "#0f0f0f";
-                }
-              }}
-            >
-              <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "other" ? "#000" : "#888", marginBottom: "0.25rem" }}>Other Options</span>
-              <span style={{ fontSize: "0.8rem", color: activeTab === "other" ? "#000" : "#aaa" }}>{selectedOthers.length ? selectedOthers.map((o) => o.name).join(", ") : "None"}</span>
-            </button>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#fff" }}>Total:</span>
+            <span style={{ fontSize: "1.4rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.75rem", padding: "0.5rem 0", marginBottom: "0.5rem", borderTop: "2px solid #fff", flexWrap: "wrap" }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
-              <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#fff" }}>Total:</span>
-              <span style={{ fontSize: "1.3rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(totalPrice)}</span>
-            </div>
-            <button
-              onClick={handleProceedToSummary}
-              style={{
-                padding: "0.6rem 1.4rem",
-                background: "#fff",
-                color: "#000",
-                border: "none",
-                borderRadius: "8px",
-                fontSize: "0.95rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem",
-                transition: "transform 0.2s ease, background 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.background = "#e0e0e0";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.background = "#fff";
-              }}
-            >
-              Review & Submit
-              <ChevronRight size={16} />
-            </button>
-            <button
-              onClick={handleDownload}
-              style={{
-                padding: "0.6rem 1.2rem",
-                background: "transparent",
-                color: "#fff",
-                border: "2px solid #fff",
-                borderRadius: "8px",
-                fontSize: "0.9rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem",
-                transition: "transform 0.2s ease, background 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.background = "transparent";
-              }}
-            >
-              <Download size={16} />
-              Download JSON
-            </button>
-          </div>
+          <button
+            onClick={handleProceedToSummary}
+            style={{
+              padding: "0.7rem 1.6rem",
+              background: "#fff",
+              color: "#000",
+              border: "none",
+              borderRadius: "8px",
+              fontSize: "1rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.5rem",
+              transition: "transform 0.2s ease, background 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.background = "#e0e0e0";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.background = "#fff";
+            }}
+          >
+            Review & Submit
+            <ChevronRight size={16} />
+          </button>
         </div>
       </div>
 

@@ -1,40 +1,41 @@
 [
     {
-        "name": "No LED Holder",
+        "name": "No LED Bezel",
         "price": 0,
-        "image": "Logo.png",
+        "image": "LED_Through_Hole.jpg",
         "customer_price_eur": 0,
-        "short_description": "Just a plain LED through a hole",
-        "long_description": "No LED holder or mounting hardware included. Choose this if you don't need an LED indicator or plan to install your own LED mounting solution."
+        "short_description": "Just a plain LED through a hole. Position can be customized to your graphics.",
+        "long_description": "No LED bezel or mounting hardware included. The LED will be mounted directly through the enclosure. Choose this if you want a minimalist look or plan to position the LED based on your custom graphics.",
+        "images": [
+            "LED_Through_Hole.jpg"
+        ]
     },
     {
         "name": "No LED",
         "price": 0,
-        "image": "Logo.png",
+        "image": "LED_No_No.jpg",
         "customer_price_eur": 0,
         "short_description": "I dont know why youd want that, but ok.",
-        "long_description": "No LED indicator light included with your pedal. The enclosure will be prepared without any LED drilling or mounting provisions."
+        "long_description": "No LED indicator light included with your pedal. The enclosure will be prepared without any LED drilling or mounting provisions.",
+        "images": [
+            "LED_No_No.jpg"
+        ]
     },
     {
-        "name": "Standard LED Holder",
+        "name": "Simple LED Bezel",
         "price": 1,
-        "image": "Logo.png",
+        "image": "LED_Simple_Bezel.jpg",
         "customer_price_eur": 1,
-        "short_description": "Youre a basic bitch? Take this basic LED mounting bezel",
-        "long_description": "Standard chrome or black plastic LED holder bezel. Provides a clean, professional mounting solution for 3mm or 5mm LEDs. Includes mounting hardware and necessary drilling."
-    },
-    {
-        "name": "Fancy LED Holder",
-        "price": 2,
-        "image": "Logo.png",
-        "customer_price_eur": 2,
-        "short_description": "Premium decorative LED bezel",
-        "long_description": "Upgraded decorative LED holder with enhanced styling. Available in various finishes including chrome, gold, and colored options. Adds a premium touch to your pedal's appearance."
+        "short_description": "You're a basic bitch? Take this basic LED mounting bezel",
+        "long_description": "Simple chrome or black plastic LED bezel. Provides a clean, professional mounting solution for 3mm or 5mm LEDs. Includes mounting hardware and necessary drilling.",
+        "images": [
+            "LED_Simple_Bezel.jpg"
+        ]
     },
     {
         "name": "Fender Style Jewel",
         "price": 4,
-        "image": "Logo.png",
+        "image": "LED_Fender_Jewel.png",
         "customer_price_eur": 4,
         "short_description": "Man you got style!",
         "long_description": "Classic Fender amplifier-style jewel indicator light. Features a domed lens that diffuses LED light beautifully. Available in various colors (red, amber, green, blue). Adds authentic vintage aesthetics to your build."
@@ -42,9 +43,12 @@
     {
         "name": "Illuminated Footswitch",
         "price": 3,
-        "image": "Logo.png",
+        "image": "LED_Footswitch.jpg",
         "customer_price_eur": 3,
         "short_description": "You're all in for that high tech stuff, huh?",
-        "long_description": "Footswitch with integrated LED illumination. The switch itself lights up when the pedal is active. Modern, clean look that eliminates the need for a separate indicator LED. Note: Requires specific footswitch wiring - please specify in order notes if you need wiring assistance."
+        "long_description": "Footswitch with integrated LED illumination. The switch itself lights up when the pedal is active. Modern, clean look that eliminates the need for a separate indicator LED. Note: Requires specific footswitch wiring - please specify in order notes if you need wiring assistance.",
+        "images": [
+            "LED_Footswitch.jpg"
+        ]
     }
 ]

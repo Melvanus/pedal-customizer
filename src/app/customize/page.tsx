@@ -31,17 +31,15 @@ export default async function CustomizePage() {
   const dataPath = path.join(process.cwd(), "data", "enclosures_data.json");
   const designPath = path.join(process.cwd(), "data", "design_labeling.json");
   const ledPath = path.join(process.cwd(), "data", "led.json");
-  const otherPath = path.join(process.cwd(), "data", "other.json");
   const favouritesPath = path.join(process.cwd(), "data", "favourites.json");
   const imageDir = path.join(process.cwd(), "data", "images");
 
-  const [rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawOther, rawFavourites, imageFiles] = await Promise.all([
+  const [rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawFavourites, imageFiles] = await Promise.all([
     fs.readFile(effectPedalsPath, "utf-8"),
     fs.readFile(enclosureSizesPath, "utf-8"),
     fs.readFile(dataPath, "utf-8"),
     fs.readFile(designPath, "utf-8"),
     fs.readFile(ledPath, "utf-8"),
-    fs.readFile(otherPath, "utf-8"),
     fs.readFile(favouritesPath, "utf-8"),
     fs.readdir(imageDir),
   ]);
@@ -120,13 +118,6 @@ export default async function CustomizePage() {
     images: item.images?.map(mapOptionImage),
   }));
 
-  const otherOptions = (JSON.parse(rawOther) as RawOption[]).map((item) => ({
-    ...item,
-    id: item.name.toLowerCase().replace(/\s+/g, "-"),
-    image: mapOptionImage(item.image),
-    images: item.images?.map(mapOptionImage),
-  }));
-
   const favourites = JSON.parse(rawFavourites) as { paintFinishFavourites: string[] };
 
   return (
@@ -137,7 +128,6 @@ export default async function CustomizePage() {
         paintOptions={paintOptions}
         designOptions={designOptions}
         ledOptions={ledOptions}
-        otherOptions={otherOptions}
         favouritePaintIds={favourites.paintFinishFavourites}
       />
     </main>

@@ -12,7 +12,6 @@ type ConfigData = {
   labelText: string;
   led: any;
   ledColor?: string;
-  other: any[];
   totalPrice: number;
 };
 
@@ -76,20 +75,10 @@ export default function SummaryPage() {
   const warnings: string[] = [];
   
   // Check for incompatibilities
-  if (config.other.some((o) => o.name === "Make it Ultra Compact")) {
-    if (config.led && (config.led.name.includes("Fender") || config.led.name.includes("Fancy"))) {
-      warnings.push("Ultra Compact enclosure may not accommodate the selected LED holder. Manual review required.");
-    }
-  }
-
   if (config.design && config.design.name === "Relic") {
     if (config.paint && config.paint.finish?.includes("Metallic")) {
       warnings.push("Relic finish may not combine well with certain metallic powder coatings. Manual review recommended.");
     }
-  }
-
-  if (config.other.some((o) => o.name === "Buffered Bypass Mod")) {
-    warnings.push("Buffered Bypass requires power connection even when pedal is bypassed.");
   }
 
   const handleDownloadJSON = () => {
@@ -395,27 +384,6 @@ export default function SummaryPage() {
                     }
                   />
                 </div>
-              </div>
-            )}
-
-            {/* Other Options */}
-            {config.other.length > 0 && (
-              <div style={{ background: "#1a1a1a", padding: "0.1rem 1.5rem 1.5rem 1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
-                <h3 style={{ fontSize: "1.2rem", marginBottom: "0.75rem", color: "#fff" }}>Additional Modifications</h3>
-                {config.other.map((option, i) => (
-                  <div key={i} style={{ marginBottom: i < config.other.length - 1 ? "2rem" : 0, paddingBottom: i < config.other.length - 1 ? "2rem" : 0, borderBottom: i < config.other.length - 1 ? "1px solid #2d2d2d" : "none" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-                      <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#fff" }}>{option.name}</span>
-                      <span style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(option.customer_price_eur)}</span>
-                    </div>
-                    {option.short_description && (
-                      <p style={{ fontSize: "0.9rem", color: "#999", marginBottom: "0.5rem" }}>{option.short_description}</p>
-                    )}
-                    {option.long_description && (
-                      <p style={{ fontSize: "0.9rem", color: "#aaa", lineHeight: 1.6 }}>{option.long_description}</p>
-                    )}
-                  </div>
-                ))}
               </div>
             )}
           </div>

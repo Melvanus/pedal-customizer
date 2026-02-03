@@ -1,0 +1,22 @@
+{
+    "pedalpcb": {
+        "name": "PedalPCB",
+        "website": "https://www.pedalpcbs.com/"
+    },
+    "aionfx": {
+        "name": "Aion FX",
+        "website": "https://www.aionfx.com/"
+    },
+    "moonn": {
+        "name": "Moonn",
+        "website": "https://moonnelectronics.bigcartel.com/"
+    },
+    "tayda": {
+        "name": "Tayda Electronics",
+        "website": "https://www.taydaelectronics.com/"
+    },
+    "smallbear": {
+        "name": "SmallBear Electronics",
+        "website": "https://smallbear-electronics.mybigcommerce.com/"
+    }
+}

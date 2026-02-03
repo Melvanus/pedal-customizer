@@ -2,20 +2,20 @@
 
 ## Current Features ✅
 - Dark theme with black & white design elements
-- **Six-tab configuration system: Effect → Size → Paint/Finish → Design/Labeling → LED → Other** ✨ NEW
-- **Effect Pedal Selection Tab** with 12 classic circuits (TS808, RAT, Big Muff, Klon, etc.) ✨ NEW
+- **Six-tab configuration system: Effect → Size → Paint/Finish → Design/Labeling → LED → Other**
+- **Effect Pedal Selection Tab**
   - Search by name, circuit, or sound characteristics
   - Category filters (Overdrive, Distortion, Fuzz, Boost, Modulation, etc.)
   - Sound character tag filtering (warm, bright, aggressive, vintage, etc.)
   - Sort by popularity, name, complexity, or size
   - Detailed modal showing full specs, mods, and technical info
-- **Enclosure Size Selection Tab** with 6 standard sizes (1590A, 1590B, 125B, 1590BB, 1590BS, 1590XX) ✨ NEW
+- **Enclosure Size Selection Tab**
   - Visual size comparison with relative scaling
   - Funny, quirky size descriptions and analogies
   - Capacity information and component counts
   - Smart recommendations based on selected effect pedal
   - "Best Fit" badge for recommended sizes
-- **Paint/Finish tab now as Step 3** (after Effect → Size workflow) ✨ NEW
+- **Paint/Finish tab now as Step 3**
 - Search, filter, and sort for paint options
 - Multi-select for "Other" category
 - Real-time price calculation in EUR (includes effect circuit price modifier)
@@ -36,18 +36,18 @@
   - Customer details form (name, email, notes)
   - Order submission workflow
   - Configuration download as JSON backup
-- **LED Color Selection** with standard colors (Red, Blue, Green, Yellow, White, Amber, UV) and custom RGB input ✨ NEW
+- **LED Color Selection** with standard colors (Red, Blue, Green, Yellow, White, Amber, UV) and custom RGB input
   - Color picker in customizer LED tab (appears after selecting LED option)
   - Color picker in LED product detail modal
   - Visual blooming color indicator in summary page
   - Editable LED color on summary page with modal editor
   - Default red LED color
-- **Editable Options on Summary Page** ✨ NEW
+- **Editable Options on Summary Page**
   - Edit LED color from summary with full color picker modal
   - Edit custom paint colors from summary with RGB color picker
   - Real-time configuration updates
   - Changes persist in sessionStorage
-- **Improved Tab Spacing** - adequate bottom padding (250px) prevents products from being hidden by floating summary panel ✨ NEW
+- **Improved Tab Spacing** - adequate bottom padding (250px) prevents products from being hidden by floating summary panel
 
 
 ## High Priority Features 🔴
@@ -138,29 +138,6 @@
   - Easier to switch suppliers or add alternative sources
   - Professional internal product catalog independent of supplier systems
 
-### 5. **Visual Color Representation & Custom Color Picker** ⭐⭐⭐
-**Problem:** Users can't see actual colors of paint options
-**Solution:**
-- **Color Data Fields:** Add to enclosures_data.json:
-  - `pantone`: Pantone color code for professional color matching
-  - `rgb`: RGB color values (e.g., "rgb(255, 100, 50)")
-  - Display small color swatch on product cards using RGB value
-  - Show color preview in each item in the product grid on a circle like the finish type
-- **Custom Color Option:** New special paint option
-  - Interactive color picker on one item of the item list.
-  - Matte or Glossy can be selected on the item
-  - The name of the item should be "Aluminium Enclosure Custom Paint"
-  - Price: €4.00 (higher due to manual spray painting)
-  - Marked as "Requires Manual Review" with warning indicator
-  - Stores selected RGB value and finish type (matte/glossy) in configuration
-  - Clear note: "Custom colors are hand-sprayed and require 5-7 business days"
-  - Use the "A-5168 125B Style Aluminum Diecast Enclosure Custom Paint.jpg" as product image and multipy the image with the custom color
-- **Benefits:**
-  - Visual identification of finish characteristics at a glance
-  - Accurate color representation reduces customer uncertainty
-  - Custom color option expands product offerings
-  - Professional color specification via Pantone codes
-
 
 ### 6. **Visual Preview / 3D Mockup**
 **Problem:** Users can't see what their configured pedal will look like
@@ -177,30 +154,9 @@
 - Name/label saved configurations
 - Share configurations via URL parameters
 
-### 8. **Image Gallery for Each Option**
-**Problem:** All options show placeholder "Logo.png" image
-**Solution:**
-- Add actual product images for each finish, LED type, etc.
-- Show hover/zoom on images
-- Multiple angles where available
-
 ---
 
 ## Medium Priority Features 🟡
-
-### 9. **Enclosure Dimensions Display**
-**Problem:** Users can't see physical dimensions of enclosures before ordering
-**Solution:**
-- Add dimensions to enclosure product descriptions
-- Extract dimension data from existing `enclosure_style_data` field in enclosures_data.json
-- Match each enclosure's `style` field to corresponding entry in `enclosure_style_data`
-- Display dimensions in metric and imperial (mm/inches)
-- Show dimensions in product card hover state and full description
-- Include internal cavity dimensions where applicable
-- **Benefits:**
-  - Helps users verify compatibility with their circuit boards
-  - Reduces customer service inquiries about sizing
-  - Professional product information presentation
 
 ### 13. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs

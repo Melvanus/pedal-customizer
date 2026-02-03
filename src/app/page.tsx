@@ -9,15 +9,13 @@ export default async function HomePage() {
   const dataPath = path.join(process.cwd(), "data", "enclosures_data.json");
   const designPath = path.join(process.cwd(), "data", "design_labeling.json");
   const ledPath = path.join(process.cwd(), "data", "led.json");
-  const otherPath = path.join(process.cwd(), "data", "other.json");
 
-  const [rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawOther] = await Promise.all([
+  const [rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed] = await Promise.all([
     fs.readFile(effectPedalsPath, "utf-8"),
     fs.readFile(enclosureSizesPath, "utf-8"),
     fs.readFile(dataPath, "utf-8"),
     fs.readFile(designPath, "utf-8"),
     fs.readFile(ledPath, "utf-8"),
-    fs.readFile(otherPath, "utf-8"),
   ]);
 
   const effectPedals = JSON.parse(rawEffectPedals).length;
@@ -41,7 +39,6 @@ export default async function HomePage() {
 
   const designOptions = JSON.parse(rawDesign).length;
   const ledOptions = JSON.parse(rawLed).length;
-  const otherOptions = JSON.parse(rawOther).length;
 
   return (
     <LandingPage
@@ -52,7 +49,6 @@ export default async function HomePage() {
       uniqueFinishes={uniqueFinishes}
       designOptions={designOptions}
       ledOptions={ledOptions}
-      otherOptions={otherOptions}
     />
   );
 }

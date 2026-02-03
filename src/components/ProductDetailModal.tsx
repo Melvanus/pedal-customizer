@@ -12,7 +12,18 @@ export type ProductModalData = {
   image?: string;
   images?: string[];
   description?: string;
+  category?: string;
+  pcbSupplier?: string;
+  recommendedSize?: string;
   details?: Array<{ label: string; value: string | string[] }>;
+  technicalSpecs?: {
+    potentiometers: number;
+    switches: number;
+    io_jacks: number;
+    led_count: number;
+    complexity: string;
+  };
+  controls?: Array<{ label: string; type: string; description: string }>;
   additionalSections?: Array<{ title: string; content: React.ReactNode }>;
   isCustomColor?: boolean;
   is_custom_color?: boolean;
@@ -257,33 +268,40 @@ export function ProductDetailModal({
 
           {/* Title & Price */}
           <div style={{ marginBottom: "1.5rem" }}>
-            <h2
-              style={{
-                fontSize: "1.75rem",
-                fontWeight: 700,
-                color: "#fff",
-                marginBottom: "0.5rem",
-                lineHeight: 1.2,
-              }}
-            >
-              {product.title}
-            </h2>
-            {product.subtitle && (
-              <p style={{ color: "#888", fontSize: "0.95rem", marginBottom: "0.75rem" }}>
-                {product.subtitle}
-              </p>
-            )}
-            {product.price !== undefined && (
-              <div
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+              <h2
                 style={{
-                  fontSize: "1.5rem",
+                  fontSize: "1.75rem",
                   fontWeight: 700,
-                  color: "#4ade80",
-                  marginTop: "0.5rem",
+                  color: "#fff",
+                  lineHeight: 1.2,
+                  margin: 0,
                 }}
               >
-                {product.price > 0 ? `+€${product.price.toFixed(2)}` : "Included"}
+                {product.title}
+              </h2>
+              {product.price !== undefined && (
+                <div
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                    color: "#4ade80",
+                    marginTop: 0,
+                  }}
+                >
+                  {product.price > 0 ? `${product.price.toFixed(2)}€` : "Included"}
+                </div>
+              )}
+            </div>
+            {product.subtitle && product.type === "effect" && (
+              <div style={{ fontSize: "0.85rem", color: "#888", fontStyle: "italic", marginBottom: "0.25rem" }}>
+                Inspired by: {product.subtitle.replace("Inspired by: ", "")}
               </div>
+            )}
+            {product.subtitle && product.type !== "effect" && (
+              <p style={{ color: "#888", fontSize: "0.95rem", margin: 0 }}>
+                {product.subtitle}
+              </p>
             )}
           </div>
 
@@ -291,28 +309,336 @@ export function ProductDetailModal({
           {product.description && (
             <div
               style={{
-                marginBottom: "1.5rem",
+                marginTop: "-0.5rem",
+                marginBottom: "1rem",
                 padding: "1rem",
                 background: "#0a0a0a",
                 borderRadius: "8px",
                 border: "1px solid #333",
               }}
             >
-              <p style={{ color: "#ccc", fontSize: "0.95rem", lineHeight: 1.6 }}>
+              <p style={{marginTop: "-0.25rem", marginBottom: "-0.25rem", color: "#ccc", fontSize: "0.95rem", lineHeight: 1.6 }}>
                 {product.description}
               </p>
             </div>
           )}
 
-          {/* Details Grid */}
-          {product.details && product.details.length > 0 && (
-            <div style={{ marginBottom: "1.5rem" }}>
+          {/* General Info Grid (for effect pedals) */}
+          {product.type === "effect" && (product.category || product.pcbSupplier || product.recommendedSize) && (
+            <div style={{ marginBottom: "1rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: 600,
                   color: "#fff",
-                  marginBottom: "1rem",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                General Information
+              </h3>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "0.75rem",
+                  padding: "1rem",
+                  background: "#0a0a0a",
+                  borderRadius: "8px",
+                  border: "1px solid #333",
+                }}
+              >
+                {product.category && (
+                  <div style={{ textAlign: "center" }}>
+                    <div
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        color: "#888",
+                        marginBottom: "0.5rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      Category
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.95rem",
+                        fontWeight: 600,
+                        color: "#fff",
+                      }}
+                    >
+                      {product.category}
+                    </div>
+                  </div>
+                )}
+                {product.pcbSupplier && (
+                  <div style={{ textAlign: "center" }}>
+                    <div
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        color: "#888",
+                        marginBottom: "0.5rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      PCB Supplier
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.95rem",
+                        fontWeight: 600,
+                        color: "#fff",
+                      }}
+                    >
+                      {product.pcbSupplier}
+                    </div>
+                  </div>
+                )}
+                {product.recommendedSize && (
+                  <div style={{ textAlign: "center" }}>
+                    <div
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        color: "#888",
+                        marginBottom: "0.5rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      Recommended Size
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.95rem",
+                        fontWeight: 600,
+                        color: "#fff",
+                      }}
+                    >
+                      {product.recommendedSize}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Controls */}
+
+
+
+          {/* Technical Specs Grid (for effect pedals) */}
+          {product.type === "effect" && product.technicalSpecs && (
+            <div style={{ marginBottom: "0.5rem" }}>
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Technical Specifications
+              </h3>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4, 1fr)",
+                  gap: "0.75rem",
+                  padding: "1rem",
+                  background: "#0a0a0a",
+                  borderRadius: "8px",
+                  border: "1px solid #333",
+                }}
+              >
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      color: "#888",
+                      marginBottom: "0.5rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    Pots
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      color: "#fff",
+                    }}
+                  >
+                    {product.technicalSpecs.potentiometers}
+                  </div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      color: "#888",
+                      marginBottom: "0.5rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    Switches
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      color: "#fff",
+                    }}
+                  >
+                    {product.technicalSpecs.switches}
+                  </div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      color: "#888",
+                      marginBottom: "0.5rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    In/Outputs
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      color: "#fff",
+                    }}
+                  >
+                    {product.technicalSpecs.io_jacks}
+                  </div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      color: "#888",
+                      marginBottom: "0.5rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    LEDs
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      color: "#fff",
+                    }}
+                  >
+                    {product.technicalSpecs.led_count}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Controls Section (for effect pedals) */}
+          {product.type === "effect" && product.controls && product.controls.length > 0 && (
+            <div style={{ marginBottom: "0.5rem" }}>
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Controls
+              </h3>
+              <div
+                style={{
+                  padding: "1rem",
+                  background: "#0a0a0a",
+                  borderRadius: "8px",
+                  border: "1px solid #333",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
+              >
+                {product.controls.map((control, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                      paddingBottom: idx < product.controls!.length - 1 ? "0.75rem" : "0",
+                      borderBottom: idx < product.controls!.length - 1 ? "1px solid #333" : "none",
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: "0 0 120px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.25rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "0.95rem",
+                          fontWeight: 600,
+                          color: "#fff",
+                        }}
+                      >
+                        {control.label}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          fontWeight: 600,
+                          color: "#666",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        {control.type}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        fontSize: "0.85rem",
+                        color: "#aaa",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {control.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Details Grid */}
+          {product.details && product.details.length > 0 && (
+            <div style={{ marginBottom: "0.5rem" }}>
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  marginBottom: "0.25rem",
                 }}
               >
                 Specifications
@@ -366,15 +692,126 @@ export function ProductDetailModal({
             </div>
           )}
 
-          {/* Additional Sections */}
-          {product.additionalSections?.map((section, idx) => (
-            <div key={idx} style={{ marginBottom: "1.5rem" }}>
+          {/* Custom Paint Color & Finish Selector */}
+          {product.type === "paint" && product.is_custom_color && product.onCustomColorChange && product.onCustomFinishChange && (
+            <div style={{ marginBottom: "1.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: 600,
                   color: "#fff",
                   marginBottom: "1rem",
+                }}
+              >
+                Customize Your Paint
+              </h3>
+              
+              {/* Color Picker */}
+              <div style={{ 
+                marginBottom: "1.5rem", 
+                padding: "1rem", 
+                background: "#0a0a0a", 
+                borderRadius: "8px",
+                border: "1px solid #333"
+              }}>
+                <label style={{ fontSize: "0.95rem", fontWeight: 600, color: "#fff", display: "block", marginBottom: "0.75rem" }}>
+                  Custom Color:
+                </label>
+                <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                  <input
+                    type="color"
+                    value={product.customColor || "#000000"}
+                    onChange={(e) => product.onCustomColorChange!(e.target.value)}
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      border: "2px solid #666",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      background: "transparent"
+                    }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <input
+                      type="text"
+                      value={product.customColor || "#000000"}
+                      onChange={(e) => product.onCustomColorChange!(e.target.value)}
+                      placeholder="#000000"
+                      style={{
+                        width: "100%",
+                        padding: "0.75rem",
+                        background: "#1a1a1a",
+                        border: "1px solid #666",
+                        borderRadius: "6px",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        fontFamily: "monospace"
+                      }}
+                    />
+                    <div style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.5rem" }}>
+                      Enter hex color code or use the picker
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Finish Selector */}
+              <div style={{ 
+                padding: "1rem", 
+                background: "#0a0a0a", 
+                borderRadius: "8px",
+                border: "1px solid #333"
+              }}>
+                <label style={{ fontSize: "0.95rem", fontWeight: 600, color: "#fff", display: "block", marginBottom: "0.75rem" }}>
+                  Finish Type:
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                  {(["Matte", "Glossy"] as const).map((finish) => (
+                    <div
+                      key={finish}
+                      onClick={() => product.onCustomFinishChange!(finish)}
+                      style={{
+                        background: "#1a1a1a",
+                        borderRadius: "8px",
+                        padding: "1rem",
+                        cursor: "pointer",
+                        border: product.customFinish === finish ? "2px solid #4ade80" : "2px solid #333",
+                        transition: "all 0.2s ease",
+                        textAlign: "center"
+                      }}
+                      onMouseEnter={(e) => {
+                        if (product.customFinish !== finish) {
+                          e.currentTarget.style.borderColor = "#666";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (product.customFinish !== finish) {
+                          e.currentTarget.style.borderColor = "#333";
+                        }
+                      }}
+                    >
+                      <div style={{ fontSize: "1rem", fontWeight: 600, color: product.customFinish === finish ? "#4ade80" : "#fff" }}>
+                        {finish}
+                      </div>
+                      <div style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.25rem" }}>
+                        {finish === "Matte" ? "Smooth, non-reflective" : "Shiny, reflective"}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Additional Sections */}
+          {product.additionalSections?.map((section, idx) => (
+            <div key={idx} style={{ marginBottom: "0.5rem" }}>
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  marginBottom: "0.25rem",
                 }}
               >
                 {section.title}
@@ -384,7 +821,7 @@ export function ProductDetailModal({
           ))}
 
           {/* LED Color Picker */}
-          {product.type === "led" && !product.title.includes("No LED") && product.onLedColorChange && product.onCustomLedColorChange && (
+          {product.type === "led" && product.onLedColorChange && product.onCustomLedColorChange && (
             <div style={{ marginBottom: "1.5rem" }}>
               <h3
                 style={{

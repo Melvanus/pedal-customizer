@@ -5,17 +5,17 @@ Purpose
 
 Core UX Requirements
 - App Router (Next.js) + Tailwind CSS + shadcn/ui components.
-- Four tabs: Paint/Finish, Design/Labeling, LED, Other.
+- Three tabs: Paint/Finish, Design/Labeling, LED.
 - Paint/Finish options are loaded from Enclosures/enclosures_data.json.
-- Design/Labeling, LED, and Other options are loaded from Enclosures/design_labeling.json, Enclosures/led.json, Enclosures/other.json.
+- Design/Labeling and LED options are loaded from Enclosures/design_labeling.json, Enclosures/led.json.
 - Each option contains: name, price, image (placeholder uses Logo.png located in Enclosures/images).
-- The “Other” category supports multi-select; all other categories are single-select.
+- All categories are single-select.
 - A download button generates a JSON configuration file containing the current selections and total price.
 
 Data Sources
 - Enclosures/enclosures_data.json (Tayda enclosure data). Use the “products” array, read name, sku, price, finish_info.finish_type, color_info.primary_color, and available.
 - Enclosures/images folder contains local product images named with SKU prefixes (e.g., A-8455 ...). Use a match by SKU to display the correct image, else fallback to Logo.png.
-- Enclosures/design_labeling.json, Enclosures/led.json, Enclosures/other.json: list of option objects.
+- Enclosures/design_labeling.json, Enclosures/led.json: list of option objects.
 
 UI Structure
 - Hero header with gradient background, app title, and quick badges.

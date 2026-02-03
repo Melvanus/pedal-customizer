@@ -29,15 +29,124 @@
   ],
   "pedals": [
     {
+      "id": "WARMACHINE",
+      "name": "War Machine",
+      "inspired_by": "Death by Audio Fuzz War™ (V1)",
+      "category": "Fuzz",
+      "description": "The sonic annihilator that crushes everything in its path. Massive, aggressive fuzz with a wide tonal palette. Based on version 1 of the legendary Fuzz War. Completly different circuit than later versions, which are more simmilar to a Big Muff.",
+      "sound_characters": ["aggressive", "harsh", "thick", "modern", "compressed"],
+      "controls": [
+        { "label": "Fuzz", "type": "Potentiometer", "description": "Makes it go bzzzzzzzz." },
+        { "label": "Tone", "type": "Potentiometer", "description": "Makes it go even more bzzzzzzzz." },
+        { "label": "Volume", "type": "Potentiometer", "description": "Makes the bzzzzzzzz go louder ." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
+      "image": "Logo.png",
+      "technical_specs": {
+        "pcb_supplier": "Moonn Electronics",
+        "schematic_link": "internal://schematics/fuzzwarschematic.pdf",
+        "potentiometers": 3,
+        "switches": 0,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "intermediate"
+      },
+      "recommended_enclosure": "125B",
+      "compatible_mods": ["Tone Stack Mod", "Bias Control Mod"],
+      "pcb_supplier_id":  "moonn",
+      "pcb_supplier_sku":  "Antique Wall Of Fuzz",
+      "pcb_supplier_price_eur": 5.50,
+      "electrical_components_price_eur": 10.00,
+      "customer_price_eur": 59.90,
+      "popular": true,
+      "mockup": false
+    },
+    {
+      "id": "424",
+      "name": "Mk.424",
+      "inspired_by": "Tascam 424 Portastudio™",
+      "category": "Preamp",
+      "description": "The ultimate preamp for drive, distortion and fuzz. Ask Mk.gee, he knows.",
+      "sound_characters": ["warm", "smooth", "vintage", "transparent", "compressed"],
+      "controls": [
+        { "label": "Input", "type": "Pot", "description": "Sets the input gain level, you can get crunchy with this one." },
+        { "label": "Output", "type": "Pot", "description": "Adjusts the output volume level." },
+        { "label": "High", "type": "Pot", "description": "Adjusts high-frequency content around 10kHz." },
+        { "label": "Low", "type": "Pot", "description": "Adjusts low-mid frequencies around 100Hz" },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
+      "image": "Logo.png",
+      "technical_specs": {
+        "pcb_supplier": "Aion FX",
+        "schematic_link": "internal://schematics/424schematic.pdf",
+        "potentiometers": 4,
+        "switches": 0,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "intermediate"
+      },
+      "recommended_enclosure": "125B",
+      "compatible_mods": ["Fader Mod", "Volume Curve Mod", "Frequency Adjustment Mod"],
+      "pcb_supplier_id":  "aionfx",
+      "pcb_supplier_sku":  "424 Preamp",
+      "pcb_supplier_price_eur": 10.60,
+      "electrical_components_price_eur": 12.00,
+      "customer_price_eur": 69.90,
+      "popular": true,
+      "mockup": false
+    },
+    {
+      "id": "EQFILTER",
+      "name": "Six Seven EQ",
+      "inspired_by": "Boss GE-7 Equalizer®",
+      "category": "EQ/Filter",
+      "description": "Six sliders of tonal control. Scoop the mids, boost the bass, or go full V-shape metal mode.",
+      "sound_characters": ["transparent", "modern", "versatile"],
+      "controls": [
+        { "label": "100Hz", "type": "Pot", "description": "Boosts or cuts low frequencies." },
+        { "label": "200Hz", "type": "Pot", "description": "Adjusts low-mid frequencies." },
+        { "label": "400Hz", "type": "Pot", "description": "Controls mid frequencies." },
+        { "label": "800Hz", "type": "Pot", "description": "Adjusts upper-mid frequencies." },
+        { "label": "1.6kHz", "type": "Pot", "description": "Controls presence frequencies." },
+        { "label": "3.2kHz", "type": "Pot", "description": "Adjusts high-mid frequencies." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
+      "image": "Logo.png",
+      "technical_specs": {
+        "pcb_supplier": "PedalPCB",
+        "schematic_link": "internal://schematics/ge7.pdf",
+        "potentiometers": 6,
+        "switches": 1,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "complex"
+      },
+      "recommended_enclosure": "1590BB",
+      "compatible_mods": ["Custom frequency centers", "More bands", "Q adjustment", "Clean blend"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "EQ Seven",
+      "pcb_supplier_price_eur": 11.50,
+      "electrical_components_price_eur": 16.00,
+      "customer_price_eur": 72.90,
+      "popular": true,
+      "mockup": false
+    },
+    {
       "id": "TS808",
       "name": "Screaming Green",
       "inspired_by": "Ibanez Tube Screamer TS808™",
       "category": "Overdrive",
       "description": "The legendary green machine that defined the mid-humped overdrive sound. Warm, smooth, and perfect for pushing tube amps.",
       "sound_characters": ["warm", "mid-focused", "smooth", "vintage", "compressed"],
+      "controls": [
+        { "label": "Drive", "type": "Pot", "description": "Controls the amount of overdrive." },
+        { "label": "Tone", "type": "Pot", "description": "Adjusts high-frequency content." },
+        { "label": "Level", "type": "Pot", "description": "Sets the output volume." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "TS808-PCB-v2",
+        "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/ts808.pdf",
         "potentiometers": 3,
         "switches": 1,
@@ -47,8 +156,13 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["TS9 mode", "808+ bass boost", "Analogman Silver mod"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "Verdant",
+      "pcb_supplier_price_eur": 6.50,
+      "electrical_components_price_eur": 8.00,
       "customer_price_eur": 48.90,
-      "popular": true
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "RAT",
@@ -57,9 +171,15 @@
       "category": "Distortion",
       "description": "The legendary rodent that bites hard. Aggressive, versatile distortion that cuts through any mix with surgical precision.",
       "sound_characters": ["aggressive", "bright", "cutting", "modern", "open"],
+      "controls": [
+        { "label": "Distortion", "type": "Pot", "description": "Controls the amount of gain." },
+        { "label": "Filter", "type": "Pot", "description": "Adjusts tone from dark to bright." },
+        { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "RAT-PCB-v1",
+        "pcb_supplier": "pedalpcb",
         "schematic_link": "internal://schematics/rat.pdf",
         "potentiometers": 3,
         "switches": 1,
@@ -69,19 +189,30 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Turbo RAT mode", "LM308 chip swap", "Clipping options"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "Rat Tail",
+      "pcb_supplier_price_eur": 6.50,
+      "electrical_components_price_eur": 9.00,
       "customer_price_eur": 49.90,
-      "popular": true
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "BIGMUFF",
-      "name": "Big Russian Fuzz",
+      "name": "Red Square Fuzz",
       "inspired_by": "Electro-Harmonix Big Muff Pi®",
       "category": "Fuzz",
-      "description": "The wall of fuzz that launched a thousand sustain-filled solos. Thick, creamy, and gloriously woolly.",
+      "description": "Emits a wall of fuzz that will even get comrade Lenin out of his grave. Thick, creamy sustain with that iconic scooped mid tone.",
       "sound_characters": ["warm", "thick", "compressed", "vintage", "scooped", "creamy"],
+      "controls": [
+        { "label": "Sustain", "type": "Pot", "description": "Controls the amount of fuzz and sustain." },
+        { "label": "Tone", "type": "Pot", "description": "Sweeps from dark to bright." },
+        { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "MUFF-PCB-v3",
+        "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/bigmuff.pdf",
         "potentiometers": 3,
         "switches": 1,
@@ -89,10 +220,15 @@
         "led_count": 1,
         "complexity": "intermediate"
       },
-      "recommended_enclosure": "125B",
+      "recommended_enclosure": "1590BB",
       "compatible_mods": ["Triangle era mod", "Ram's Head mod", "Tone wicker switch"],
+      "pcb_supplier_id": "aionfx",
+      "pcb_supplier_sku": "Alchemy",
+      "pcb_supplier_price_eur": 10.60,
+      "electrical_components_price_eur": 11.00,
       "customer_price_eur": 58.90,
-      "popular": true
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "KLON",
@@ -101,9 +237,15 @@
       "category": "Overdrive",
       "description": "The stuff of legends and empty wallets. Transparent overdrive that makes your amp sound like it costs $10k more.",
       "sound_characters": ["transparent", "warm", "open", "modern", "smooth"],
+      "controls": [
+        { "label": "Gain", "type": "Pot", "description": "Controls the overdrive amount." },
+        { "label": "Treble", "type": "Pot", "description": "Adjusts high-frequency response." },
+        { "label": "Output", "type": "Pot", "description": "Sets the output volume." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "KLON-PCB-v2",
+        "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/klon.pdf",
         "potentiometers": 3,
         "switches": 1,
@@ -111,10 +253,15 @@
         "led_count": 1,
         "complexity": "intermediate"
       },
-      "recommended_enclosure": "125B",
+      "recommended_enclosure": "1590BB",
       "compatible_mods": ["Germanium diode option", "LED clipping", "Bass contour"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "Parentheses",
+      "pcb_supplier_price_eur": 11.50,
+      "electrical_components_price_eur": 14.00,
       "customer_price_eur": 64.90,
-      "popular": true
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "SD1",
@@ -123,9 +270,15 @@
       "category": "Overdrive",
       "description": "The budget-friendly green box that punches way above its weight class. Asymmetrical clipping for that extra sparkle.",
       "sound_characters": ["bright", "open", "transparent", "modern"],
+      "controls": [
+        { "label": "Drive", "type": "Pot", "description": "Controls the overdrive intensity." },
+        { "label": "Tone", "type": "Pot", "description": "Adjusts the tonal balance." },
+        { "label": "Level", "type": "Pot", "description": "Sets the output volume." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "SD1-PCB-v1",
+        "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/sd1.pdf",
         "potentiometers": 3,
         "switches": 1,
@@ -135,8 +288,13 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["JHS Strong mod", "Keeley mod", "Seeing Eye mod"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "Super Drive",
+      "pcb_supplier_price_eur": 6.50,
+      "electrical_components_price_eur": 7.50,
       "customer_price_eur": 46.90,
-      "popular": true
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "FUZZFACE",
@@ -145,9 +303,14 @@
       "category": "Fuzz",
       "description": "The round fuzz that Hendrix made famous. Touch-sensitive, dynamic, and germanium goodness (or silicon if you prefer).",
       "sound_characters": ["vintage", "warm", "open", "dynamic", "smooth"],
+      "controls": [
+        { "label": "Fuzz", "type": "Pot", "description": "Controls the fuzz intensity." },
+        { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "FUZZFACE-PCB-v2",
+        "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/fuzzface.pdf",
         "potentiometers": 2,
         "switches": 1,
@@ -157,8 +320,13 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Silicon/Germanium switch", "External bias", "Input impedance mod"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "Fuzzly Bear",
+      "pcb_supplier_price_eur": 6.50,
+      "electrical_components_price_eur": 6.50,
       "customer_price_eur": 44.90,
-      "popular": true
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "BOOSTER",
@@ -167,9 +335,13 @@
       "category": "Boost",
       "description": "The old-school British secret weapon. Simple one-transistor circuit that adds sparkle and pushes amps into overdrive heaven.",
       "sound_characters": ["bright", "transparent", "vintage", "cutting"],
+      "controls": [
+        { "label": "Boost", "type": "Pot", "description": "Controls the treble boost amount." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "BOOST-PCB-v1",
+        "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/rangemaster.pdf",
         "potentiometers": 1,
         "switches": 1,
@@ -179,8 +351,13 @@
       },
       "recommended_enclosure": "1590A",
       "compatible_mods": ["Full range option", "Different transistors", "Variable frequency cut"],
+      "pcb_supplier_id": "aionfx",
+      "pcb_supplier_sku": "Refractor",
+      "pcb_supplier_price_eur": 10.60,
+      "electrical_components_price_eur": 5.00,
       "customer_price_eur": 38.90,
-      "popular": false
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "BLUESBREAKER",
@@ -189,9 +366,15 @@
       "category": "Overdrive",
       "description": "Marshall in a box. Classic British amp-like overdrive with that unmistakable mid-range punch. Size does matter here.",
       "sound_characters": ["mid-focused", "warm", "vintage", "open", "smooth"],
+      "controls": [
+        { "label": "Drive", "type": "Pot", "description": "Controls the overdrive amount." },
+        { "label": "Tone", "type": "Pot", "description": "Adjusts the tonal character." },
+        { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "BB-PCB-v2",
+        "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/bluesbreaker.pdf",
         "potentiometers": 3,
         "switches": 1,
@@ -201,8 +384,13 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Snub filter mod", "Different op-amps", "More gain mod"],
+      "pcb_supplier_id": "aionfx",
+      "pcb_supplier_sku": "Stratus",
+      "pcb_supplier_price_eur": 10.60,
+      "electrical_components_price_eur": 10.00,
       "customer_price_eur": 56.90,
-      "popular": false
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "PHASE90",
@@ -211,9 +399,13 @@
       "category": "Modulation",
       "description": "The swirly orange box that's been on every pedalboard since 1974. From subtle swoosh to full jet-plane mode.",
       "sound_characters": ["vintage", "warm", "swirly"],
+      "controls": [
+        { "label": "Speed", "type": "Pot", "description": "Controls the rate of the phaser effect." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "P90-PCB-v1",
+        "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/phase90.pdf",
         "potentiometers": 1,
         "switches": 1,
@@ -223,19 +415,29 @@
       },
       "recommended_enclosure": "125B",
       "compatible_mods": ["Script mod", "R28 mod", "Univibe mode"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "Phase II",
+      "pcb_supplier_price_eur": 11.50,
+      "electrical_components_price_eur": 13.00,
       "customer_price_eur": 62.90,
-      "popular": false
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "CHORUS",
       "name": "Analog Chorus Deluxe",
       "inspired_by": "Boss CE-2 Chorus®",
       "category": "Modulation",
-      "description": "The 80s in a box. Lush, shimmering chorus that makes everything sound like it's wearing a tuxedo.",
+      "description": "The sound of the 80s condensed in a box. Lush, shimmering chorus that makes everything sound like it's wearing a tuxedo.",
       "sound_characters": ["warm", "vintage", "lush", "smooth"],
+      "controls": [
+        { "label": "Rate", "type": "Pot", "description": "Controls the speed of the chorus effect." },
+        { "label": "Depth", "type": "Pot", "description": "Sets the intensity of the modulation." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "CHORUS-PCB-v2",
+        "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/ce2.pdf",
         "potentiometers": 2,
         "switches": 1,
@@ -243,10 +445,15 @@
         "led_count": 1,
         "complexity": "advanced"
       },
-      "recommended_enclosure": "125B",
+      "recommended_enclosure": "1590BB",
       "compatible_mods": ["Depth control", "Vibrato mode", "Mix control"],
+      "pcb_supplier_id": "aionfx",
+      "pcb_supplier_sku": "Andromeda",
+      "pcb_supplier_price_eur": 10.60,
+      "electrical_components_price_eur": 18.00,
       "customer_price_eur": 78.90,
-      "popular": false
+      "popular": false,
+      "mockup": true
     },
     {
       "id": "DELAY",
@@ -255,9 +462,15 @@
       "category": "Delay",
       "description": "Warm analog delay with the characteristic degradation and saturation. Because digital is for spreadsheets.",
       "sound_characters": ["warm", "dark", "vintage", "lo-fi"],
+      "controls": [
+        { "label": "Delay", "type": "Pot", "description": "Controls the delay time." },
+        { "label": "Mix", "type": "Pot", "description": "Blends dry and delayed signals." },
+        { "label": "Regen", "type": "Pot", "description": "Sets the number of repeats/feedback." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
       "image": "Logo.png",
       "technical_specs": {
-        "pcb_reference": "DELAY-PCB-v1",
+        "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/analogdelay.pdf",
         "potentiometers": 3,
         "switches": 1,
@@ -267,30 +480,13 @@
       },
       "recommended_enclosure": "1590BB",
       "compatible_mods": ["Modulation depth", "Extended delay time", "Bright switch"],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "Echo Park",
+      "pcb_supplier_price_eur": 11.50,
+      "electrical_components_price_eur": 22.00,
       "customer_price_eur": 89.90,
-      "popular": false
-    },
-    {
-      "id": "EQFILTER",
-      "name": "Graphic Equalizer Six",
-      "inspired_by": "Boss GE-7 Equalizer®",
-      "category": "EQ/Filter",
-      "description": "Six sliders of tonal control. Scoop the mids, boost the bass, or go full V-shape metal mode.",
-      "sound_characters": ["transparent", "modern", "versatile"],
-      "image": "Logo.png",
-      "technical_specs": {
-        "pcb_reference": "EQ-PCB-v1",
-        "schematic_link": "internal://schematics/ge7.pdf",
-        "potentiometers": 7,
-        "switches": 1,
-        "io_jacks": 2,
-        "led_count": 1,
-        "complexity": "intermediate"
-      },
-      "recommended_enclosure": "1590BB",
-      "compatible_mods": ["More bands", "Q adjustment", "Clean blend"],
-      "customer_price_eur": 72.90,
-      "popular": false
+      "popular": false,
+      "mockup": true
     }
   ]
 }
