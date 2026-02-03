@@ -88,7 +88,7 @@
       "id": "424",
       "name": "Mk.424",
       "inspired_by": "Tascam 424 Portastudio™",
-      "categories": ["Fuzz", "Distortion", "Overdrive", "Boost", "EQ/Filter"],
+      "categories": ["Fuzz", "Distortion", "Overdrive", "Boost"],
       "description": "The ultimate preamp for drive, distortion and fuzz. Ask Mk.gee, he knows.",
       "sound_characters": ["warm", "smooth", "vintage", "transparent", "compressed"],
       "controls": [

@@ -478,13 +478,25 @@ export function EffectSelector({
                 )}
                 
                 <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
-                  <Image
-                    src={displayedImage}
-                    alt={pedal.name}
-                    fill
-                    unoptimized
-                    style={{ objectFit: "contain" }}
-                  />
+                  {displayedImage.toLowerCase().endsWith('.svg') ? (
+                    <img
+                      src={displayedImage}
+                      alt={pedal.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      src={displayedImage}
+                      alt={pedal.name}
+                      fill
+                      unoptimized
+                      style={{ objectFit: "contain" }}
+                    />
+                  )}
                 </div>
               </div>
 

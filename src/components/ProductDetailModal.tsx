@@ -285,17 +285,29 @@ export function ProductDetailModal({
                 position: "relative",
               }}
             >
-              <Image
-                src={currentImage}
-                alt={product.title}
-                width={400}
-                height={250}
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain",
-                }}
-              />
+              {currentImage.toLowerCase().endsWith('.svg') ? (
+                <img
+                  src={currentImage}
+                  alt={product.title}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                  }}
+                />
+              ) : (
+                <Image
+                  src={currentImage}
+                  alt={product.title}
+                  width={400}
+                  height={250}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                  }}
+                />
+              )}
               
               {/* Image Navigation */}
               {hasMultipleImages && (

@@ -1122,7 +1122,11 @@ export function PedalCustomizer({
                         </>
                       )}
                       <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
-                        <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                        {currentImage.toLowerCase().endsWith('.svg') ? (
+                          <img src={currentImage} alt={option.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                        ) : (
+                          <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                        )}
                       </div>
                     </div>
                     <div style={{ padding: "1rem" }}>
@@ -1397,7 +1401,11 @@ export function PedalCustomizer({
                         </>
                       )}
                       <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
-                        <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                        {currentImage.toLowerCase().endsWith('.svg') ? (
+                          <img src={currentImage} alt={option.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                        ) : (
+                          <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                        )}
                         {/* "EXAMPLE" watermark overlay for design images */}
                         <div
                           style={{
@@ -1662,7 +1670,11 @@ export function PedalCustomizer({
                     )}
                     
                     <div style={{ padding: "0.75rem", position: "relative", width: "100%", height: "100%" }}>
-                      <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      {currentImage.toLowerCase().endsWith('.svg') ? (
+                        <img src={currentImage} alt={option.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                      ) : (
+                        <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
+                      )}
                     </div>
                   </div>
                   <div style={{ padding: "1rem" }}>
