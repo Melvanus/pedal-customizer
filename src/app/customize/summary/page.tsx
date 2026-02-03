@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ChevronLeft, AlertTriangle, Download, Mail } from "lucide-react";
+import { EnclosureVisualizer } from "@/components/EnclosureVisualizer";
 
 type SelectedModWithOptions = {
   mod: {
@@ -69,6 +70,8 @@ export default function SummaryPage() {
   const [tempPaintColor, setTempPaintColor] = React.useState("#808080");
   const [editingModIndex, setEditingModIndex] = React.useState<number | null>(null);
   const [tempModOptions, setTempModOptions] = React.useState<Record<string, any>>({});
+  const [isVisualizerMaximized, setIsVisualizerMaximized] = React.useState(false);
+  const [layoutsData, setLayoutsData] = React.useState<any[]>([]);
 
   // Compute effective controls considering mods
   const effectiveControls = React.useMemo(() => {
@@ -93,6 +96,12 @@ export default function SummaryPage() {
   }, [config?.effect, config?.effectMods]);
 
   React.useEffect(() => {
+    // Load layouts data
+    fetch("/api/data/layouts")
+      .then(res => res.json())
+      .then(data => setLayoutsData(data))
+      .catch(err => console.error("Failed to load layouts:", err));
+    
     const storedConfig = sessionStorage.getItem("pedalConfiguration");
     if (storedConfig) {
       const parsed = JSON.parse(storedConfig);
@@ -145,7 +154,58 @@ export default function SummaryPage() {
       </div>
     );
   }
-
+  
+  // Select appropriate layout based on control count
+  const selectedLayout = React.useMemo(() => {
+    if (!config || !config.effect || layoutsData.length === 0) return null;
+    
+    const enclosureType = config.enclosureSize?.name || "125B";
+    
+    // Count effective controls
+    let potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
+    let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
+    let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
+    
+    // Find matching layout
+    let bestMatch = layoutsData.find((layout: any) => 
+      layout.enclosure_type === enclosureType &&
+      layout.potentiometer_count === potCount &&
+      layout.switch_count === switchCount &&
+      layout.fader_count === faderCount
+    );
+    
+    // Fallback: find closest match by enclosure type and pot count
+    if (!bestMatch) {
+      bestMatch = layoutsData.find((layout: any) => 
+        layout.enclosure_type === enclosureType &&
+        layout.potentiometer_count >= potCount
+      );
+    }
+    
+    // Final fallback: just get first layout for the enclosure type
+    if (!bestMatch) {
+      bestMatch = layoutsData.find((layout: any) => 
+        layout.enclosure_type === enclosureType
+      );
+    }
+    
+    return bestMatch || layoutsData[0];
+  }, [config, effectiveControls, layoutsData]);
+  
+  // Get paint color
+  const paintColor = React.useMemo(() => {
+    if (!config?.paint) return "#808080";
+    if (config.paint.is_custom_color && config.paint.rgb) {
+      return config.paint.rgb;
+    }
+    return config.paint.color_info?.hex || "#808080";
+  }, [config?.paint]);
+  
+  // Get finish type
+  const finishType = React.useMemo(() => {
+    return config?.paint?.finish_info?.finish_type || "";
+  }, [config?.paint]);
+  
   const warnings: string[] = [];
   
   // Check for incompatibilities
@@ -596,6 +656,23 @@ export default function SummaryPage() {
 
           {/* Order Form */}
           <div data-section="order-form-sidebar">
+            {/* Enclosure Visualizer */}
+            {selectedLayout && (
+              <div data-section="enclosure-visualizer" style={{ marginBottom: "2rem" }}>
+                <EnclosureVisualizer
+                  layout={selectedLayout}
+                  enclosureColor={paintColor}
+                  finishType={finishType}
+                  ledColor={config.ledColor || "#ff0000"}
+                  pedalName={pedalName || "Custom Pedal"}
+                  controlLabels={controlLabels}
+                  controls={effectiveControls}
+                  isMaximized={isVisualizerMaximized}
+                  onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}
+                />
+              </div>
+            )}
+            
             <div data-section="order-form-card" style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", border: "1px solid #333", position: "sticky", top: "2rem" }}>
               <h3 data-section="form-title" style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#fff" }}>Your Information</h3>
               

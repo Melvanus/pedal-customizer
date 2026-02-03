@@ -1,0 +1,200 @@
+[
+  {
+    "id": "125B-1pot",
+    "enclosure_type": "125B",
+    "potentiometer_count": 1,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 67, "length": 122 },
+    "potentiometer_positions": [
+      { "x": 0, "y": 40, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -30 },
+    "led_position": { "x": 0, "y": -10 },
+    "input_jack_position": { "x": -28, "y": 0 },
+    "output_jack_position": { "x": 28, "y": 0 },
+    "pedal_name_position": { "x": 0, "y": -45 }
+  },
+  {
+    "id": "125B-2pot",
+    "enclosure_type": "125B",
+    "potentiometer_count": 2,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 67, "length": 122 },
+    "potentiometer_positions": [
+      { "x": -18, "y": 40, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 18, "y": 40, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -30 },
+    "led_position": { "x": 0, "y": -10 },
+    "input_jack_position": { "x": -28, "y": 0 },
+    "output_jack_position": { "x": 28, "y": 0 },
+    "pedal_name_position": { "x": 0, "y": -45 }
+  },
+  {
+    "id": "125B-3pot",
+    "enclosure_type": "125B",
+    "potentiometer_count": 3,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 67, "length": 122 },
+    "potentiometer_positions": [
+      { "x": -24, "y": 40, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 0, "y": 40, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 24, "y": 40, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -30 },
+    "led_position": { "x": 0, "y": -10 },
+    "input_jack_position": { "x": -28, "y": 0 },
+    "output_jack_position": { "x": 28, "y": 0 },
+    "pedal_name_position": { "x": 0, "y": -45 }
+  },
+  {
+    "id": "125B-4pot",
+    "enclosure_type": "125B",
+    "potentiometer_count": 4,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 67, "length": 122 },
+    "potentiometer_positions": [
+      { "x": -24, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": -8, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 8, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 24, "y": 45, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -30 },
+    "led_position": { "x": 0, "y": 15 },
+    "input_jack_position": { "x": -28, "y": -10 },
+    "output_jack_position": { "x": 28, "y": -10 },
+    "pedal_name_position": { "x": 0, "y": -48 }
+  },
+  {
+    "id": "125B-4pot-2sw",
+    "enclosure_type": "125B",
+    "potentiometer_count": 4,
+    "switch_count": 2,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 67, "length": 122 },
+    "potentiometer_positions": [
+      { "x": -24, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": -8, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 8, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 24, "y": 48, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [
+      { "x": -16, "y": 20, "label_offset": { "x": 0, "y": -12 } },
+      { "x": 16, "y": 20, "label_offset": { "x": 0, "y": -12 } }
+    ],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -30 },
+    "led_position": { "x": 0, "y": 5 },
+    "input_jack_position": { "x": -28, "y": -10 },
+    "output_jack_position": { "x": 28, "y": -10 },
+    "pedal_name_position": { "x": 0, "y": -50 }
+  },
+  {
+    "id": "1590BB-6pot",
+    "enclosure_type": "1590BB",
+    "potentiometer_count": 6,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 95, "length": 119 },
+    "potentiometer_positions": [
+      { "x": -32, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": -16, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 0, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 16, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 32, "y": 45, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 0, "y": 20, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -35 },
+    "led_position": { "x": 0, "y": -10 },
+    "input_jack_position": { "x": -42, "y": 0 },
+    "output_jack_position": { "x": 42, "y": 0 },
+    "pedal_name_position": { "x": 0, "y": -50 }
+  },
+  {
+    "id": "1590BB-7pot-2sw",
+    "enclosure_type": "1590BB",
+    "potentiometer_count": 7,
+    "switch_count": 2,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 95, "length": 119 },
+    "potentiometer_positions": [
+      { "x": -32, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": -16, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 0, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 16, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 32, "y": 48, "label_offset": { "x": 0, "y": -15 } },
+      { "x": -12, "y": 25, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 12, "y": 25, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [
+      { "x": -26, "y": 8, "label_offset": { "x": 0, "y": -12 } },
+      { "x": 26, "y": 8, "label_offset": { "x": 0, "y": -12 } }
+    ],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -35 },
+    "led_position": { "x": 0, "y": -10 },
+    "input_jack_position": { "x": -42, "y": -5 },
+    "output_jack_position": { "x": 42, "y": -5 },
+    "pedal_name_position": { "x": 0, "y": -52 }
+  },
+  {
+    "id": "1590A-1pot",
+    "enclosure_type": "1590A",
+    "potentiometer_count": 1,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 39, "length": 93 },
+    "potentiometer_positions": [
+      { "x": 0, "y": 25, "label_offset": { "x": 0, "y": -12 } }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -20 },
+    "led_position": { "x": 0, "y": 0 },
+    "input_jack_position": { "x": -15, "y": 10 },
+    "output_jack_position": { "x": 15, "y": 10 },
+    "pedal_name_position": { "x": 0, "y": -35 }
+  },
+  {
+    "id": "1590BBS-7pot-3sw",
+    "enclosure_type": "1590BBS",
+    "potentiometer_count": 7,
+    "switch_count": 3,
+    "fader_count": 0,
+    "dimensions_mm": { "width": 95, "length": 119 },
+    "potentiometer_positions": [
+      { "x": -32, "y": 50, "label_offset": { "x": 0, "y": -15 } },
+      { "x": -16, "y": 50, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 0, "y": 50, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 16, "y": 50, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 32, "y": 50, "label_offset": { "x": 0, "y": -15 } },
+      { "x": -12, "y": 28, "label_offset": { "x": 0, "y": -15 } },
+      { "x": 12, "y": 28, "label_offset": { "x": 0, "y": -15 } }
+    ],
+    "switch_positions": [
+      { "x": -28, "y": 10, "label_offset": { "x": 0, "y": -12 } },
+      { "x": 0, "y": 10, "label_offset": { "x": 0, "y": -12 } },
+      { "x": 28, "y": 10, "label_offset": { "x": 0, "y": -12 } }
+    ],
+    "fader_positions": [],
+    "footswitch_position": { "x": 0, "y": -38 },
+    "led_position": { "x": 0, "y": -12 },
+    "input_jack_position": { "x": -42, "y": -8 },
+    "output_jack_position": { "x": 42, "y": -8 },
+    "pedal_name_position": { "x": 0, "y": -54 }
+  }
+]
