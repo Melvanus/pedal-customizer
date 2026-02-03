@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation } from "lucide-react";
+import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation, Cat, Sun, LucideCircleSlash2, Circle } from "lucide-react";
 import { EffectSelector, type EffectPedal } from "./EffectSelector";
 import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelector";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
@@ -55,7 +55,9 @@ const getFinishIcon = (finish?: string) => {
   const finishLower = finish.toLowerCase();
   
   if (finishLower.includes("gloss")) {
-    return { Icon: Star, color: "#ffd700" }; // Gold for glossy
+    return { Icon: Sun, color: "#ffd700" }; // Gold for glossy
+  } else if (finishLower.includes("matte")) {
+    return { Icon: Circle, color: "#555" }; // Dark gray for matte
   } else if (finishLower.includes("hammer")) {
     return { Icon: Hammer, color: "#a0a0a0" }; // Gray for hammered
   } else if (finishLower.includes("sand") || finishLower.includes("texture")) {
@@ -64,6 +66,8 @@ const getFinishIcon = (finish?: string) => {
     return { Icon: Radiation, color: "#00ff00" }; // Green for glow-in-the-dark
   } else if (finishLower.includes("metallic")) {
     return { Icon: Sparkles, color: "#c0c0c0" }; // Silver for metallic
+  } else if (finishLower.includes("furry")) {
+    return { Icon: Cat, color: "#d2691e" }; // Brown for furry
   } else {
     return { Icon: Palette, color: "#888" }; // Default for matte/standard
   }
@@ -502,7 +506,7 @@ export function PedalCustomizer({
             border: "1px solid rgba(255,255,255,0.15)",
             borderRadius: "10px",
             zIndex: 100,
-            padding: "1rem",
+            padding: "0.5rem",
             display: "grid",
             gridTemplateColumns: "repeat(5, 1fr)",
             gap: "0.5rem",
@@ -1130,20 +1134,28 @@ export function PedalCustomizer({
                       </div>
                     </div>
                     <div style={{ padding: "1rem" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                          <span
-                            style={{
-                              background: "#fff",
-                              color: "#000",
-                              padding: "0.25rem 0.6rem",
-                              borderRadius: "15px",
-                              fontSize: "0.75rem",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {option.internal_product_id}
-                          </span>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", gap: "0.5rem" }}>
+                        <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0", lineHeight: 1.3, flex: "1 1 auto", minWidth: 0 }}>
+                          {option.displayed_name}
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: "0 0 auto" }}>
+                          {
+                            adminMode == true ? 
+                              <span
+                                style={{
+                                  background: "#fff",
+                                  color: "#000",
+                                  padding: "0.25rem 0.6rem",
+                                  borderRadius: "15px",
+                                  fontSize: "0.75rem",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {option.internal_product_id}
+                              </span>
+                              : null
+                          }
+  
                           {(() => {
                             const { Icon, color } = getFinishIcon(option.is_custom_color ? customFinish : option.finish);
                             return (
@@ -1177,30 +1189,14 @@ export function PedalCustomizer({
                               title={option.is_custom_color ? `Custom: ${customColor}` : (option.pantone ? `Color: ${option.color}\nPantone: ${option.pantone}` : `Color: ${option.color}`)}
                             />
                           )}
+                          <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff", whiteSpace: "nowrap" }}>
+                            {formatPrice(option.customer_price_eur)}
+                          </span>
                         </div>
-                        <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                          {formatPrice(option.customer_price_eur)}
-                        </span>
-                      </div>
-                      <div style={{ fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem", color: "#e0e0e0", lineHeight: 1.3 }}>
-                        {option.displayed_name}
                       </div>
                       {option.short_description && (
                         <div style={{ fontSize: "0.8rem", color: "#999", marginBottom: "0.75rem", lineHeight: 1.4 }}>
                           {option.short_description}
-                        </div>
-                      )}
-                      {option.is_custom_color && (
-                        <div style={{
-                          fontSize: "0.75rem",
-                          color: "#888",
-                          fontStyle: "italic",
-                          marginBottom: "0.75rem",
-                          padding: "0.5rem",
-                          background: "rgba(255, 255, 255, 0.05)",
-                          borderRadius: "5px",
-                        }}>
-                          📅 Custom colors are hand-sprayed and require 5-7 business days
                         </div>
                       )}
                       <div>

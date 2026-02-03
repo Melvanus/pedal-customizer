@@ -1,37 +1,37 @@
 {
     "products":  [
                      {
-                         "product_id":  "10558",
-                         "name":  "125B Style Aluminum Diecast Enclosure METALLIC Black",
-                         "price":  "$6.99",
+                         "product_id":  "2855",
+                         "name":  "125B Style Aluminum Diecast Enclosure",
+                         "price":  "$5.49",
                          "available":  true,
                          "color_info":  {
-                                            "primary_color":  "Black",
+                                            "primary_color":  "Aluminum Silver",
                                             "color_description":  "",
                                             "color_family":  ""
                                         },
                          "finish_info":  {
-                                             "finish_type":  "Metallic",
+                                             "finish_type":  "Bare",
                                              "texture":  "",
                                              "description":  ""
                                          },
                          "material":  "Aluminum Diecast",
                          "style":  "125B",
                          "pantone_code":  "",
-                         "rgb":  "rgb(30, 30, 30)",
-                         "pantone":  "PMS Black 6 C",
+                         "rgb":  "rgb(200, 200, 200)",
+                         "pantone":  "",
                          "scraped_from":  "local_html_only",
-                         "displayed_name":  "Metallic Black",
-                         "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
-                         "short_description":  "Professional Metallic finish in Black",
-                         "long_description":  "This Aluminium Enclosure METALLIC Black features a premium Metallic powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
+                         "displayed_name":  "Bare Aluminium",
+                         "supplierPriceUSD":  "$5.49",
+                         "customer_price_eur":  9,
+                         "short_description":  "Professional Bare finish",
+                         "long_description":  "This Aluminium Enclosure  features a premium Bare powder coating. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
-                                            "A-8455 125B Style Aluminum Diecast Enclosure METALLIC Black.png"
+                                            "A-5165 125B Style Aluminum Diecast Enclosure.png"
                                         ],
-                         "supplier_sku":  "A-8455",
+                         "supplier_sku":  "A-5165",
                          "supplier_id":  "tayda",
-                         "internal_product_id":  "PED-ENC-001"
+                         "internal_product_id":  "PED-ENC-070"
                      },
                      {
                          "product_id":  "CUSTOM",
@@ -56,7 +56,7 @@
                          "scraped_from":  "custom",
                          "displayed_name":  "Custom Paint",
                          "supplierPriceUSD":  "$10.00",
-                         "customer_price_eur":  4,
+                         "customer_price_eur":  13,
                          "short_description":  "Hand-sprayed custom color (any RGB color, Matte or Glossy)",
                          "long_description":  "Create your perfect pedal with a completely custom hand-sprayed finish in any RGB color you desire. Choose between Matte or Glossy finish to match your aesthetic. Each custom-painted enclosure is carefully hand-sprayed by our skilled technicians. ⚠️ Requires manual review and has an extended production time of 5-7 business days. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and includes 4 steel mounting screws.",
                          "is_custom_color":  true,
@@ -90,7 +90,7 @@
                          "scraped_from":  "custom",
                          "displayed_name":  "Make It Furry",
                          "supplierPriceUSD":  "$12.00",
-                         "customer_price_eur":  5,
+                         "customer_price_eur":  14,
                          "short_description":  "You\u0027re gonna make a new best friend with this one!",
                          "long_description":  "A unique furry finish that gives your pedal a soft, fuzzy appearance and feel. Creates a distinctive tactile experience and vintage aesthetic. Note: This specialty finish may require additional care, careful handling, mealtimes, playing and lot of attention.",
                          "image_urls":  [
@@ -99,6 +99,39 @@
                          "supplier_sku":  "FURRY-001",
                          "supplier_id":  "tayda",
                          "internal_product_id":  "PED-ENC-003"
+                     },
+                     {
+                         "product_id":  "10558",
+                         "name":  "125B Style Aluminum Diecast Enclosure METALLIC Black",
+                         "price":  "$6.99",
+                         "available":  true,
+                         "color_info":  {
+                                            "primary_color":  "Black",
+                                            "color_description":  "",
+                                            "color_family":  ""
+                                        },
+                         "finish_info":  {
+                                             "finish_type":  "Metallic",
+                                             "texture":  "",
+                                             "description":  ""
+                                         },
+                         "material":  "Aluminum Diecast",
+                         "style":  "125B",
+                         "pantone_code":  "",
+                         "rgb":  "rgb(30, 30, 30)",
+                         "pantone":  "PMS Black 6 C",
+                         "scraped_from":  "local_html_only",
+                         "displayed_name":  "Metallic Black",
+                         "supplierPriceUSD":  "$6.99",
+                         "customer_price_eur":  11,
+                         "short_description":  "Professional Metallic finish in Black",
+                         "long_description":  "This Aluminium Enclosure METALLIC Black features a premium Metallic powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
+                         "image_urls":  [
+                                            "A-8455 125B Style Aluminum Diecast Enclosure METALLIC Black.png"
+                                        ],
+                         "supplier_sku":  "A-8455",
+                         "supplier_id":  "tayda",
+                         "internal_product_id":  "PED-ENC-001"
                      },
                      {
                          "product_id":  "10551",
@@ -123,7 +156,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Champagne",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Champagne",
                          "long_description":  "This Aluminium Enclosure CHAMPAGNE features a premium Glossy powder coating in Champagne. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -156,7 +189,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Gray Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish in Gray",
                          "long_description":  "This Aluminium Enclosure Matte Gray Hammer features a premium Hammer powder coating in Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -189,7 +222,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Sulphur Yellow Sand Texture",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Sand Texture finish in Sulphur Yellow",
                          "long_description":  "This Aluminium Enclosure Sulphur Yellow sand texture features a premium Sand Texture powder coating in Sulphur Yellow. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -222,7 +255,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Golden Water Texture",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Golden",
                          "long_description":  "This Aluminium Enclosure Metallic Golden water texture features a premium Metallic powder coating in Golden. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -255,7 +288,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Purple Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish in Purple",
                          "long_description":  "This Aluminium Enclosure Purple Hammer features a premium Hammer powder coating in Purple. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -288,7 +321,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Chrome Green",
                          "supplierPriceUSD":  "$7.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Chrome Green",
                          "long_description":  "This Aluminium Enclosure Chrome green features a premium Glossy powder coating in Chrome Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -321,7 +354,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Brown",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Brown",
                          "long_description":  "This Aluminium Enclosure Metallic Brown features a premium Metallic powder coating in Brown. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -354,7 +387,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Black Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish in Black",
                          "long_description":  "This Aluminium Enclosure Black Hammer features a premium Hammer powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -387,7 +420,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Pink Sand Texture",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Sand Texture finish in Pink",
                          "long_description":  "This Aluminium Enclosure Matte Pink Sand Texture features a premium Sand Texture powder coating in Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -420,7 +453,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Sky Blue Sand Texture",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Sand Texture finish in Sky Blue",
                          "long_description":  "This Aluminium Enclosure Matte Sky Blue Sand Texture features a premium Sand Texture powder coating in Sky Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -453,7 +486,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Brown Sand Texture",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Sand Texture finish in Brown",
                          "long_description":  "This Aluminium Enclosure Matte Brown Sand Texture features a premium Sand Texture powder coating in Brown. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -486,7 +519,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Green Sand Texture",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Sand Texture finish in Green",
                          "long_description":  "This Aluminium Enclosure Matte Green Sand Texture features a premium Sand Texture powder coating in Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -519,7 +552,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Silver Gray Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish in Silver Gray",
                          "long_description":  "This Aluminium Enclosure Silver Gray Hammer features a premium Hammer powder coating in Silver Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -552,7 +585,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "White Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish in White",
                          "long_description":  "This Aluminium Enclosure White Hammer features a premium Hammer powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -585,7 +618,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Blue Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish in Blue",
                          "long_description":  "This Aluminium Enclosure BLUE HAMMER features a premium Hammer powder coating in Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -618,7 +651,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Glowing Light Green",
                          "supplierPriceUSD":  "$7.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Glowing Light Green",
                          "long_description":  "This Aluminium Enclosure GLOWING LIGHT GREEN features a premium Glossy powder coating in Glowing Light Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -651,7 +684,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Green",
                          "supplierPriceUSD":  "$7.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Candy Green",
                          "long_description":  "This Aluminium Enclosure METALLIC CANDY GREEN features a premium Metallic powder coating in Candy Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -684,7 +717,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Clear",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Clear",
                          "long_description":  "This Aluminium Enclosure METALLIC CLEAR features a premium Metallic powder coating in Clear. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -717,7 +750,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Pink",
                          "supplierPriceUSD":  "$7.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Candy Pink",
                          "long_description":  "This Aluminium Enclosure METALLIC CANDY PINK features a premium Metallic powder coating in Candy Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -750,7 +783,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Viva Magenta",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Viva Magenta",
                          "long_description":  "This Aluminium Enclosure VIVA MAGENTA features a premium Glossy powder coating in Viva Magenta. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -783,7 +816,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Purple",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Candy Purple",
                          "long_description":  "This Aluminium Enclosure METALLIC CANDY PURPLE features a premium Metallic powder coating in Candy Purple. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -816,7 +849,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Blue",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Candy Blue",
                          "long_description":  "This Aluminium Enclosure METALLIC CANDY BLUE features a premium Metallic powder coating in Candy Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -849,7 +882,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Red",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Candy Red",
                          "long_description":  "This Aluminium Enclosure METALLIC CANDY RED features a premium Metallic powder coating in Candy Red. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -882,7 +915,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Glossy Clear",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Glossy Clear",
                          "long_description":  "This Aluminium Enclosure GLOSSY CLEAR features a premium Glossy powder coating in Glossy Clear. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -915,7 +948,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Dark Champagne",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Dark Champagne",
                          "long_description":  "This Aluminium Enclosure METALLIC DARK CHAMPAGNE features a premium Metallic powder coating in Dark Champagne. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -948,7 +981,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Silver Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish in Silver",
                          "long_description":  "This Aluminium Enclosure SILVER HAMMER features a premium Hammer powder coating in Silver. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -981,7 +1014,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Glow In The Dark",
                          "supplierPriceUSD":  "$7.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Glow In The Dark",
                          "long_description":  "This Aluminium Enclosure Glow in the dark features a premium Glossy powder coating in Glow In The Dark. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1014,7 +1047,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Pastel Pink",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Pastel Pink",
                          "long_description":  "This Aluminium Enclosure Pastel Pink features a premium Glossy powder coating in Pastel Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1047,7 +1080,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Clear",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Matte finish in Clear",
                          "long_description":  "This Aluminium Enclosure Matte Clear features a premium Matte powder coating in Clear. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1080,7 +1113,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Pearl Gray",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Pearl Gray",
                          "long_description":  "This Aluminium Enclosure Pearl Gray features a premium Glossy powder coating in Pearl Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1113,7 +1146,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Pastel Light Green",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Pastel Light Green",
                          "long_description":  "This Aluminium Enclosure Pastel Light Green features a premium Glossy powder coating in Pastel Light Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1146,7 +1179,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Gold",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Candy Gold",
                          "long_description":  "This Aluminium Enclosure METALLIC CANDY GOLD features a premium Metallic powder coating in Candy Gold. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1179,7 +1212,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Pastel Violet",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Pastel Violet",
                          "long_description":  "This Aluminium Enclosure Pastel Violet features a premium Glossy powder coating in Pastel Violet. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1212,7 +1245,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Grey Sand Texture",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Sand Texture finish in Gray",
                          "long_description":  "This Aluminium Enclosure MATTE GREY SAND TEXTURE features a premium Sand Texture powder coating in Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1245,7 +1278,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Orange Sand Texture",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Sand Texture finish in Orange",
                          "long_description":  "This Aluminium Enclosure MATTE ORANGE SAND TEXTURE features a premium Sand Texture powder coating in Orange. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1278,7 +1311,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Red Sand Texture",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Sand Texture finish in Red",
                          "long_description":  "This Aluminium Enclosure MATTE RED SAND TEXTURE features a premium Sand Texture powder coating in Red. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1311,7 +1344,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte White Sand Texture",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Sand Texture finish in White",
                          "long_description":  "This Aluminium Enclosure MATTE WHITE SAND TEXTURE features a premium Sand Texture powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1344,7 +1377,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Yellow",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Candy Yellow",
                          "long_description":  "This Aluminium Enclosure METALLIC CANDY YELLOW features a premium Metallic powder coating in Candy Yellow. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1377,7 +1410,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Dark Gold",
                          "supplierPriceUSD":  "$7.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Dark Gold",
                          "long_description":  "This Aluminium Enclosure METALLIC DARK GOLD features a premium Metallic powder coating in Dark Gold. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1410,7 +1443,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Light Gold",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Metallic finish in Light Gold",
                          "long_description":  "This Aluminium Enclosure METALLIC LIGHT GOLD features a premium Metallic powder coating in Light Gold. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The metallic finish provides a shimmering, professional appearance with excellent durability. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1443,7 +1476,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Chromium",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Glossy finish in Chromium",
                          "long_description":  "This Aluminium Enclosure CHROMIUM features a premium Glossy powder coating in Chromium. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1476,7 +1509,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Glimmer Brown Sugar",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Glimmer Brown Sugar",
                          "long_description":  "This Aluminium Enclosure GLIMMER BROWN SUGAR features a premium Glossy powder coating in Glimmer Brown Sugar. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1509,7 +1542,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Winked Silver",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Winked Silver",
                          "long_description":  "This Aluminium Enclosure WINKED SILVER features a premium Glossy powder coating in Winked Silver. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1542,7 +1575,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Army Green",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Matte finish in Army Green",
                          "long_description":  "This Aluminium Enclosure MATTE ARMY GREEN features a premium Matte powder coating in Army Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1575,7 +1608,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte White",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Sand Texture finish in White",
                          "long_description":  "This Aluminium Enclosure Matte White features a premium Sand Texture powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1608,7 +1641,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Black Sand Texture",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Sand Texture finish in Black",
                          "long_description":  "This Aluminium Enclosure Matte Black Sand Texture features a premium Sand Texture powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1641,7 +1674,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Copper Hammered",
                          "supplierPriceUSD":  "$6.99",
-                         "customer_price_eur":  2,
+                         "customer_price_eur":  11,
                          "short_description":  "Professional Hammer finish",
                          "long_description":  "This Aluminium Enclosure Copper Hammer features a premium Hammer powder coating. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1674,7 +1707,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Orange",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Matte finish in Orange",
                          "long_description":  "This Aluminium Enclosure Matte Orange features a premium Matte powder coating in Orange. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1707,7 +1740,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Black",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Sand Texture finish in Black",
                          "long_description":  "This Aluminium Enclosure Matte Black features a premium Sand Texture powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1740,7 +1773,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Dark Gray",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Matte finish in Dark Gray",
                          "long_description":  "This Aluminium Enclosure Matte Dark Gray features a premium Matte powder coating in Dark Gray. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1773,7 +1806,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Violet",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Matte finish in Violet",
                          "long_description":  "This Aluminium Enclosure Matte Violet features a premium Matte powder coating in Violet. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1806,7 +1839,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Matte Light Blue",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Matte finish in Light Blue",
                          "long_description":  "This Aluminium Enclosure Matte Light Blue features a premium Matte powder coating in Light Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1839,7 +1872,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Lawn Green",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Lawn Green",
                          "long_description":  "This Aluminium Enclosure Lawn Green features a premium Glossy powder coating in Lawn Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1872,7 +1905,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Cream",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Cream",
                          "long_description":  "This Aluminium Enclosure CREAM features a premium Glossy powder coating in Cream. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1905,7 +1938,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Grey",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Grey",
                          "long_description":  "This Aluminium Enclosure GREY features a premium Glossy powder coating in Grey. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1938,7 +1971,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Ball Silver",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Ball Silver",
                          "long_description":  "This Aluminium Enclosure Ball Silver features a premium Glossy powder coating in Ball Silver. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -1971,7 +2004,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Violet",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Violet",
                          "long_description":  "This Aluminium Enclosure Violet features a premium Glossy powder coating in Violet. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2004,7 +2037,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Light Sky Blue",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Light Sky Blue",
                          "long_description":  "This Aluminium Enclosure Light Sky Blue features a premium Glossy powder coating in Light Sky Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2037,7 +2070,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Light Pink",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Light Pink",
                          "long_description":  "This Aluminium Enclosure Light Pink features a premium Glossy powder coating in Light Pink. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2070,7 +2103,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Burnt Orange",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Burnt Orange",
                          "long_description":  "This Aluminium Enclosure Burnt Orange features a premium Glossy powder coating in Burnt Orange. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2103,7 +2136,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Red",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Red",
                          "long_description":  "This Aluminium Enclosure Red features a premium Glossy powder coating in Red. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2136,7 +2169,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Green",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Green",
                          "long_description":  "This Aluminium Enclosure Green features a premium Glossy powder coating in Green. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2169,7 +2202,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Yellow",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Yellow",
                          "long_description":  "This Aluminium Enclosure Yellow features a premium Glossy powder coating in Yellow. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2202,7 +2235,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Blue",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Blue",
                          "long_description":  "This Aluminium Enclosure Blue features a premium Glossy powder coating in Blue. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2235,7 +2268,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Black",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in Black",
                          "long_description":  "This Aluminium Enclosure Black features a premium Glossy powder coating in Black. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2268,7 +2301,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "White",
                          "supplierPriceUSD":  "$5.99",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "short_description":  "Professional Glossy finish in White",
                          "long_description":  "This Aluminium Enclosure White features a premium Glossy powder coating in White. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. The high-gloss finish delivers a smooth, reflective surface perfect for modern pedal designs. Production may require 3-4 business days.",
                          "image_urls":  [
@@ -2277,39 +2310,6 @@
                          "supplier_sku":  "A-5168",
                          "supplier_id":  "tayda",
                          "internal_product_id":  "PED-ENC-069"
-                     },
-                     {
-                         "product_id":  "2855",
-                         "name":  "125B Style Aluminum Diecast Enclosure",
-                         "price":  "$5.49",
-                         "available":  true,
-                         "color_info":  {
-                                            "primary_color":  "Aluminum Silver",
-                                            "color_description":  "",
-                                            "color_family":  ""
-                                        },
-                         "finish_info":  {
-                                             "finish_type":  "Bare",
-                                             "texture":  "",
-                                             "description":  ""
-                                         },
-                         "material":  "Aluminum Diecast",
-                         "style":  "125B",
-                         "pantone_code":  "",
-                         "rgb":  "rgb(200, 200, 200)",
-                         "pantone":  "",
-                         "scraped_from":  "local_html_only",
-                         "displayed_name":  "",
-                         "supplierPriceUSD":  "$5.49",
-                         "customer_price_eur":  0,
-                         "short_description":  "Professional Bare finish",
-                         "long_description":  "This Aluminium Enclosure  features a premium Bare powder coating. The 125B enclosure measures 120mm x 94mm x 34mm (LxWxH) and is constructed from durable aluminum diecast. Includes 4 steel mounting screws. This powder-coated finish provides excellent protection against wear and scratches. Production may require 3-4 business days.",
-                         "image_urls":  [
-                                            "A-5165 125B Style Aluminum Diecast Enclosure.png"
-                                        ],
-                         "supplier_sku":  "A-5165",
-                         "supplier_id":  "tayda",
-                         "internal_product_id":  "PED-ENC-070"
                      },
                      {
                          "product_id":  "",
@@ -2334,7 +2334,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Candy Orange",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2365,7 +2365,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Light Green",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2396,7 +2396,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Candy Copper",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2427,7 +2427,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Gold",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2458,7 +2458,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Metallic Champagne",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2489,7 +2489,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Light Violet",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2520,7 +2520,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Viola Pink",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2551,7 +2551,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Lime Green",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],
@@ -2580,7 +2580,7 @@
                          "scraped_from":  "local_html_only",
                          "displayed_name":  "Fine Buffed 125b Enclosure",
                          "supplierPriceUSD":  "",
-                         "customer_price_eur":  1,
+                         "customer_price_eur":  10,
                          "image_urls":  [
                                             "Logo.png"
                                         ],

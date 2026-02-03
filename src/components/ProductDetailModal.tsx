@@ -274,7 +274,7 @@ export function ProductDetailModal({
               style={{
                 width: "100%",
                 height: "250px",
-                background: "#0a0a0a",
+                background: product.type === "effect" ? "#ffffff" : "#0a0a0a",
                 borderRadius: "12px",
                 marginBottom: "0.5rem",
                 display: "flex",
@@ -503,7 +503,7 @@ export function ProductDetailModal({
                         letterSpacing: "0.5px",
                       }}
                     >
-                      {Array.isArray(product.category) && product.category.length > 1 ? "Categories" : "Category"}
+                      {"Category"}
                     </div>
                     <div
                       style={{
@@ -516,7 +516,7 @@ export function ProductDetailModal({
                       }}
                     >
                       {Array.isArray(product.category) 
-                        ? product.category.join(", ")
+                        ? product.category[0]
                         : product.category}
                     </div>
                   </div>

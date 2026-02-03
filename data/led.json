@@ -1,6 +1,6 @@
 [
     {
-        "name": "No LED Bezel",
+        "name": "No Bezel",
         "price": 0,
         "image": "LED_Through_Hole.jpg",
         "customer_price_eur": 0,
@@ -15,7 +15,7 @@
         "price": 0,
         "image": "LED_No_No.jpg",
         "customer_price_eur": 0,
-        "short_description": "I dont know why youd want that, but ok.",
+        "short_description": "I dont know why you'd want that, but ok.",
         "long_description": "No LED indicator light included with your pedal. The enclosure will be prepared without any LED drilling or mounting provisions.",
         "images": [
             "LED_No_No.jpg"

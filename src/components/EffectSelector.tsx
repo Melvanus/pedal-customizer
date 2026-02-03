@@ -392,7 +392,7 @@ export function EffectSelector({
                 </div>
               )}
 
-              <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+              <div style={{ width: "100%", height: "160px", background: "rgb(255,255,255)", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                 {adminMode && onDeleteImage && displayedImage && (
                   <button
                     onClick={(e) => {
@@ -485,7 +485,7 @@ export function EffectSelector({
                       style={{
                         width: "100%",
                         height: "100%",
-                        objectFit: "contain",
+                        objectFit: "cover",
                       }}
                     />
                   ) : (

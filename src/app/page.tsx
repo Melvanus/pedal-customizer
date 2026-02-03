@@ -18,7 +18,7 @@ export default async function HomePage() {
     fs.readFile(ledPath, "utf-8"),
   ]);
 
-  const effectPedals = JSON.parse(rawEffectPedals).length;
+  const effectPedals = JSON.parse(rawEffectPedals).pedals.length;
   const enclosureSizes = JSON.parse(rawEnclosureSizes).length;
   
   const data = JSON.parse(rawData) as {

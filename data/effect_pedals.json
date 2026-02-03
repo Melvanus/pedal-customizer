@@ -1,5 +1,6 @@
 {
   "categories": [
+    "Bass",
     "Overdrive",
     "Distortion",
     "Fuzz",
@@ -7,6 +8,7 @@
     "Modulation",
     "Delay",
     "Reverb",
+    "Preamp",
     "EQ/Filter",
     "Routing",
     "Utility"
@@ -40,7 +42,7 @@
         { "label": "Volume", "type": "Pot", "description": "Makes the bzzzzzzzz go louder ." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "warmachine.svg",
       "technical_specs": {
         "pcb_supplier": "Moonn Electronics",
         "schematic_link": "internal://schematics/fuzzwarschematic.pdf",
@@ -88,7 +90,7 @@
       "id": "424",
       "name": "Mk.424",
       "inspired_by": "Tascam 424 Portastudio™",
-      "categories": ["Fuzz", "Distortion", "Overdrive", "Boost"],
+      "categories": ["Preamp", "Fuzz", "Distortion", "Overdrive", "Boost"],
       "description": "The ultimate preamp for drive, distortion and fuzz. Ask Mk.gee, he knows.",
       "sound_characters": ["warm", "smooth", "vintage", "transparent", "compressed"],
       "controls": [
@@ -98,7 +100,7 @@
         { "label": "Low", "type": "Pot", "description": "Adjusts low-mid frequencies around 100Hz" },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "mk424.svg",
       "technical_specs": {
         "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/424schematic.pdf",
@@ -160,7 +162,7 @@
         { "label": "3.2kHz", "type": "Pot", "description": "Adjusts high-mid frequencies." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "sixseveneq.svg",
       "technical_specs": {
         "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/ge7.pdf",
@@ -197,6 +199,81 @@
       "mockup": false
     },
     {
+      "id": "MIRAPRIMUS",
+      "name": "Mira Primus",
+      "inspired_by": "Darkglass Alpha Omicron™",
+      "categories": ["Bass", "Distortion", "Preamp"],
+      "description": "Dual-engine bass distortion that destroys the competition. Alpha path delivers punchy and tight destruction, Omega path brings brutal and raw annihilation. Perfect for when you need your bass to sound like it's tearing through the fabric of spacetime.",
+      "sound_characters": ["aggressive", "modern", "tight", "brutal", "compressed"],
+      "controls": [
+        { "label": "Drive", "type": "Pot", "description": "Controls the amount of gain fed through both distortion stages." },
+        { "label": "Mod", "type": "Pot", "description": "Blends between Alpha (refined) and Omega (raw) distortion circuits." },
+        { "label": "Level", "type": "Pot", "description": "Sets the overall output of the drive signal before clean blend." },
+        { "label": "Blend", "type": "Pot", "description": "Mixes between buffered clean signal and drive signal." },
+        { "label": "Low", "type": "Switch", "description": "Adds bass frequencies before the gain stage." },
+        { "label": "Hi-Mid", "type": "Switch", "description": "Engages a 2.8kHz midrange boost." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
+      "image": "effectspedalplaceholder.svg",
+      "technical_specs": {
+        "pcb_supplier": "Aion FX",
+        "schematic_link": "internal://schematics/mira-primus.pdf",
+        "potentiometers": 4,
+        "switches": 3,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "advanced"
+      },
+      "recommended_enclosure": "125B",
+      "compatible_mods": [],
+      "pcb_supplier_id": "aionfx",
+      "pcb_supplier_sku": "Empyrean Dual Distortion",
+      "pcb_supplier_price_eur": 11.50,
+      "electrical_components_price_eur": 24.00,
+      "customer_price_eur": 80.00,
+      "popular": true,
+      "mockup": false
+    },
+    {
+      "id": "MIRAULTIMA",
+      "name": "Mira Ultima",
+      "inspired_by": "Darkglass Alpha Omega™",
+      "categories": ["Bass","Distortion","Preamp"],
+      "description": "The ultimate bass preamp/distortion monster. Everything from the Empyrean Dual, plus a full 3-band EQ for surgical tone shaping. When your bass needs to sound like it costs more than your car.",
+      "sound_characters": ["aggressive", "modern", "tight", "brutal", "versatile", "compressed"],
+      "controls": [
+        { "label": "Drive", "type": "Pot", "description": "Controls the amount of gain fed through both distortion stages." },
+        { "label": "Mod", "type": "Pot", "description": "Blends between Alpha (refined) and Omega (raw) distortion circuits." },
+        { "label": "Level", "type": "Pot", "description": "Sets the overall output of the drive signal before clean blend." },
+        { "label": "Blend", "type": "Pot", "description": "Mixes between buffered clean signal and drive signal." },
+        { "label": "Bass", "type": "Pot", "description": "Boosts or cuts bass frequencies at 80Hz by ±12dB." },
+        { "label": "Mid", "type": "Pot", "description": "Boosts or cuts midrange frequencies at 500Hz by ±12dB." },
+        { "label": "Treble", "type": "Pot", "description": "Boosts or cuts treble frequencies at 5kHz by ±12dB." },
+        { "label": "Low", "type": "Switch", "description": "Adds bass frequencies before the gain stage." },
+        { "label": "Hi-Mid", "type": "Switch", "description": "Engages a 2.8kHz midrange boost." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
+      "image": "effectspedalplaceholder.svg",
+      "technical_specs": {
+        "pcb_supplier": "Aion FX",
+        "schematic_link": "internal://schematics/mira-ultima.pdf",
+        "potentiometers": 7,
+        "switches": 3,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "advanced"
+      },
+      "recommended_enclosure": "1590BBS",
+      "compatible_mods": [],
+      "pcb_supplier_id": "aionfx",
+      "pcb_supplier_sku": "Empyrean Deluxe Distortion",
+      "pcb_supplier_price_eur": 16.50,
+      "electrical_components_price_eur": 28.00,
+      "customer_price_eur": 90.00,
+      "popular": true,
+      "mockup": false
+    },
+    {
       "id": "RAT",
       "name": "Distortion Rodent",
       "inspired_by": "ProCo RAT®",
@@ -209,7 +286,7 @@
         { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "pedalpcb",
         "schematic_link": "internal://schematics/rat.pdf",
@@ -274,7 +351,7 @@
         { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/bigmuff.pdf",
@@ -328,7 +405,7 @@
         { "label": "Output", "type": "Pot", "description": "Sets the output volume." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/klon.pdf",
@@ -383,7 +460,7 @@
         { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/fuzzface.pdf",
@@ -442,7 +519,7 @@
         { "label": "Boost", "type": "Pot", "description": "Controls the treble boost amount." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/rangemaster.pdf",
@@ -475,7 +552,7 @@
         { "label": "Volume", "type": "Pot", "description": "Sets the output level." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/bluesbreaker.pdf",
@@ -506,7 +583,7 @@
         { "label": "Speed", "type": "Pot", "description": "Controls the rate of the phaser effect." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/phase90.pdf",
@@ -538,7 +615,7 @@
         { "label": "Depth", "type": "Pot", "description": "Sets the intensity of the modulation." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/ce2.pdf",
@@ -571,7 +648,7 @@
         { "label": "Regen", "type": "Pot", "description": "Sets the number of repeats/feedback." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "Logo.png",
+      "image": "effectspedalplaceholder.svg",
       "technical_specs": {
         "pcb_supplier": "PedalPCB",
         "schematic_link": "internal://schematics/analogdelay.pdf",
