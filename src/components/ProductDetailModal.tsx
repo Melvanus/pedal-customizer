@@ -200,6 +200,7 @@ export function ProductDetailModal({
 
   return (
     <div
+      data-section="modal-overlay"
       onClick={onClose}
       style={{
         position: "fixed",
@@ -217,6 +218,7 @@ export function ProductDetailModal({
       }}
     >
       <div
+        data-section="modal-content"
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#1a1a1a",
@@ -232,6 +234,7 @@ export function ProductDetailModal({
       >
         {/* Close Button */}
         <button
+          data-section="close-button"
           onClick={onClose}
           style={{
             position: "absolute",
@@ -263,10 +266,11 @@ export function ProductDetailModal({
         </button>
 
         {/* Content */}
-        <div style={{ padding: "2rem" }}>
+        <div data-section="modal-body" style={{ padding: "2rem" }}>
           {/* Image Section */}
           {currentImage && (
             <div
+              data-section="product-image"
               style={{
                 width: "100%",
                 height: "250px",
@@ -381,7 +385,7 @@ export function ProductDetailModal({
           )}
 
           {/* Title & Price */}
-          <div style={{ marginBottom: "1.5rem" }}>
+          <div data-section="title-price" style={{ marginBottom: "1.5rem" }}>
             <div style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start", marginBottom: "0.5rem" }}>
               {/* Left: Title and Subtitle (takes most space, can overlap with price) */}
               <div style={{ flex: "1 1 auto", minWidth: 0 }}>
@@ -435,6 +439,7 @@ export function ProductDetailModal({
           {/* Description */}
           {product.description && (
             <div
+              data-section="product-description"
               style={{
                 marginTop: "-0.5rem",
                 marginBottom: "1rem",
@@ -452,7 +457,7 @@ export function ProductDetailModal({
 
           {/* Specifications (for effect pedals) - Combined General Info + Technical Specs */}
           {product.type === "effect" && (product.category || product.recommendedSize || effectiveTechnicalSpecs) && (
-            <div style={{ marginBottom: "0.5rem" }}>
+            <div data-section="specifications" style={{ marginBottom: "0.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -511,7 +516,7 @@ export function ProductDetailModal({
                         letterSpacing: "0.5px",
                       }}
                     >
-                      Recommended Size
+                      Rec. Size
                     </div>
                     <div
                       style={{
@@ -626,7 +631,7 @@ export function ProductDetailModal({
 
           {/* Controls Section (for effect pedals) */}
           {product.type === "effect" && effectiveControls && effectiveControls.length > 0 && (
-            <div style={{ marginBottom: "0.5rem" }}>
+            <div data-section="controls" style={{ marginBottom: "0.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -707,7 +712,7 @@ export function ProductDetailModal({
 
           {/* Compatible Mods Section (for effect pedals) */}
           {product.type === "effect" && product.compatibleMods && product.compatibleMods.length > 0 && (
-            <div style={{ marginBottom: "0.5rem" }}>
+            <div data-section="compatible-mods" style={{ marginBottom: "0.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -901,7 +906,7 @@ export function ProductDetailModal({
 
           {/* Details Grid */}
           {product.details && product.details.length > 0 && (
-            <div style={{ marginBottom: "0.5rem" }}>
+            <div data-section="details-grid" style={{ marginBottom: "0.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -963,7 +968,7 @@ export function ProductDetailModal({
 
           {/* Custom Paint Color & Finish Selector */}
           {product.type === "paint" && product.is_custom_color && product.onCustomColorChange && product.onCustomFinishChange && (
-            <div style={{ marginBottom: "1.5rem" }}>
+            <div data-section="custom-paint" style={{ marginBottom: "1.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -1091,7 +1096,7 @@ export function ProductDetailModal({
 
           {/* LED Color Picker */}
           {product.type === "led" && product.onLedColorChange && product.onCustomLedColorChange && (
-            <div style={{ marginBottom: "1.5rem" }}>
+            <div data-section="led-color-picker" style={{ marginBottom: "1.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -1259,7 +1264,7 @@ export function ProductDetailModal({
 
           {/* Custom Color Picker */}
           {product.isCustomColor && product.onCustomColorChange && product.onCustomFinishChange && (
-            <div style={{ marginBottom: "1.5rem" }}>
+            <div data-section="custom-color-picker" style={{ marginBottom: "1.5rem" }}>
               <h3
                 style={{
                   fontSize: "1.1rem",
@@ -1397,6 +1402,7 @@ export function ProductDetailModal({
 
         {/* Action Buttons */}
         <div
+          data-section="action-buttons"
           style={{
             padding: "1.5rem 2rem",
             borderTop: "1px solid #333",
