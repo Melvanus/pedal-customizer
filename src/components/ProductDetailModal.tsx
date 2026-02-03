@@ -469,81 +469,63 @@ export function ProductDetailModal({
                   background: "#0a0a0a",
                   borderRadius: "8px",
                   border: "1px solid #333",
-                  display: "flex",
-                  flexDirection: "column",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(6, 1fr)",
                   gap: "0.5rem",
                 }}
               >
-                {/* First Row: Category and Recommended Size */}
-                {(product.category || product.recommendedSize) && (
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: product.category && product.recommendedSize ? "repeat(2, 1fr)" : "1fr",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    {product.category && (
-                      <div style={{ textAlign: "center" }}>
-                        <div
-                          style={{
-                            fontSize: "0.7rem",
-                            fontWeight: 600,
-                            color: "#888",
-                            marginBottom: "0.25rem",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.5px",
-                          }}
-                        >
-                          Category
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.95rem",
-                            fontWeight: 600,
-                            color: "#fff",
-                          }}
-                        >
-                          {product.category}
-                        </div>
-                      </div>
-                    )}
-                    {product.recommendedSize && (
-                      <div style={{ textAlign: "center" }}>
-                        <div
-                          style={{
-                            fontSize: "0.7rem",
-                            fontWeight: 600,
-                            color: "#888",
-                            marginBottom: "0.25rem",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.5px",
-                          }}
-                        >
-                          Recommended Size
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.95rem",
-                            fontWeight: 600,
-                            color: "#fff",
-                          }}
-                        >
-                          {product.recommendedSize}
-                        </div>
-                      </div>
-                    )}
+                {product.category && (
+                  <div style={{ textAlign: "center" }}>
+                    <div
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: 600,
+                        color: "#888",
+                        marginBottom: "0.25rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      Category
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.95rem",
+                        fontWeight: 600,
+                        color: "#fff",
+                      }}
+                    >
+                      {product.category}
+                    </div>
                   </div>
                 )}
-                {/* Second Row: Technical Specs (Pots, Switches, I/O, LEDs) */}
+                {product.recommendedSize && (
+                  <div style={{ textAlign: "center" }}>
+                    <div
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: 600,
+                        color: "#888",
+                        marginBottom: "0.25rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      Recommended Size
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.95rem",
+                        fontWeight: 600,
+                        color: "#fff",
+                      }}
+                    >
+                      {product.recommendedSize}
+                    </div>
+                  </div>
+                )}
                 {effectiveTechnicalSpecs && (
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(4, 1fr)",
-                      gap: "0.5rem",
-                    }}
-                  >
+                  <>
                     <div style={{ textAlign: "center" }}>
                       <div
                         style={{
@@ -636,7 +618,7 @@ export function ProductDetailModal({
                         {effectiveTechnicalSpecs.led_count}
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
             </div>
