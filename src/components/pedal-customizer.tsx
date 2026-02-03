@@ -786,7 +786,7 @@ export function PedalCustomizer({
             <div data-section="tab-content-effect">
             <EffectSelector
               pedals={effectPedals}
-              categories={Array.from(new Set(effectPedals.map(p => p.category))).sort()}
+              categories={Array.from(new Set(effectPedals.flatMap(p => p.categories))).sort()}
               soundCharacters={Array.from(new Set(effectPedals.flatMap(p => p.sound_characters))).sort()}
               selectedPedalId={selectedEffectId}
               onSelectPedal={setSelectedEffectId}
@@ -805,7 +805,7 @@ export function PedalCustomizer({
                   price: pedal.customer_price_eur,
                   image: pedal.image,
                   description: pedal.description,
-                  category: pedal.category,
+                  category: pedal.categories,
                   pcbSupplier: pedal.technical_specs.pcb_reference,
                   recommendedSize: pedal.recommended_enclosure,
                   details: [

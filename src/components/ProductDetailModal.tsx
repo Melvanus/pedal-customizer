@@ -18,7 +18,7 @@ export type ProductModalData = {
   image?: string;
   images?: string[];
   description?: string;
-  category?: string;
+  category?: string | string[];
   pcbSupplier?: string;
   recommendedSize?: string;
   details?: Array<{ label: string; value: string | string[] }>;
@@ -491,16 +491,21 @@ export function ProductDetailModal({
                         letterSpacing: "0.5px",
                       }}
                     >
-                      Category
+                      {Array.isArray(product.category) && product.category.length > 1 ? "Categories" : "Category"}
                     </div>
                     <div
                       style={{
                         fontSize: "0.95rem",
                         fontWeight: 600,
                         color: "#fff",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.25rem",
                       }}
                     >
-                      {product.category}
+                      {Array.isArray(product.category) 
+                        ? product.category.join(", ")
+                        : product.category}
                     </div>
                   </div>
                 )}

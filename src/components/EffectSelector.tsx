@@ -32,7 +32,7 @@ export type EffectPedal = {
   id: string;
   name: string;
   inspired_by: string;
-  category: string;
+  categories: string[];
   description: string;
   sound_characters: string[];
   controls: Array<{ label: string; type: string; description: string }>;
@@ -107,7 +107,7 @@ export function EffectSelector({
 
     // Category filter
     if (categoryFilter) {
-      filtered = filtered.filter((p) => p.category === categoryFilter);
+      filtered = filtered.filter((p) => p.categories.includes(categoryFilter));
     }
 
     // Sound character filter
@@ -490,18 +490,23 @@ export function EffectSelector({
 
               <div style={{ padding: "1rem" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
-                  <div
-                    style={{
-                      display: "inline-block",
-                      background: "#333",
-                      color: "#fff",
-                      padding: "0.25rem 0.6rem",
-                      borderRadius: "4px",
-                      fontSize: "0.7rem",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {pedal.category}
+                  <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                    {pedal.categories.map((cat) => (
+                      <div
+                        key={cat}
+                        style={{
+                          display: "inline-block",
+                          background: "#333",
+                          color: "#fff",
+                          padding: "0.25rem 0.6rem",
+                          borderRadius: "4px",
+                          fontSize: "0.7rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {cat}
+                      </div>
+                    ))}
                   </div>
                   <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
                     €{pedal.customer_price_eur.toFixed(2)}
@@ -630,19 +635,23 @@ export function EffectSelector({
               Inspired by: {detailPedal.inspired_by}
             </div>
 
-            <div
-              style={{
-                display: "inline-block",
-                background: "#333",
-                color: "#fff",
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                fontSize: "0.9rem",
-                fontWeight: 600,
-                marginBottom: "1rem",
-              }}
-            >
-              {detailPedal.category}
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+              {detailPedal.categories.map((cat) => (
+                <div
+                  key={cat}
+                  style={{
+                    display: "inline-block",
+                    background: "#333",
+                    color: "#fff",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "6px",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                  }}
+                >
+                  {cat}
+                </div>
+              ))}
             </div>
 
             <p style={{ color: "#ccc", lineHeight: 1.6, marginBottom: "1.5rem" }}>

@@ -32,7 +32,7 @@
       "id": "WARMACHINE",
       "name": "War Machine",
       "inspired_by": "Death by Audio Fuzz War™ (V1)",
-      "category": "Fuzz",
+      "categories": ["Fuzz"],
       "description": "The sonic annihilator that crushes everything in its path. Massive, aggressive fuzz with a wide tonal palette. Based on version 1 of the legendary Fuzz War. Completly different circuit than later versions, which are more simmilar to a Big Muff.",
       "sound_characters": ["aggressive", "harsh", "thick", "modern", "compressed"],
       "controls": [
@@ -88,7 +88,7 @@
       "id": "424",
       "name": "Mk.424",
       "inspired_by": "Tascam 424 Portastudio™",
-      "category": "Preamp",
+      "categories": ["Fuzz", "Distortion", "Overdrive", "Boost", "EQ/Filter"],
       "description": "The ultimate preamp for drive, distortion and fuzz. Ask Mk.gee, he knows.",
       "sound_characters": ["warm", "smooth", "vintage", "transparent", "compressed"],
       "controls": [
@@ -148,7 +148,7 @@
       "id": "EQFILTER",
       "name": "Six Seven EQ",
       "inspired_by": "Boss GE-7 Equalizer®",
-      "category": "EQ/Filter",
+      "categories": ["EQ/Filter"],
       "description": "Six sliders of tonal control. Scoop the mids, boost the bass, or go full V-shape metal mode.",
       "sound_characters": ["transparent", "modern", "versatile"],
       "controls": [
@@ -200,7 +200,7 @@
       "id": "RAT",
       "name": "Distortion Rodent",
       "inspired_by": "ProCo RAT®",
-      "category": "Distortion",
+      "categories": ["Distortion"],
       "description": "The legendary rodent that bites hard. Aggressive, versatile distortion that cuts through any mix with surgical precision.",
       "sound_characters": ["aggressive", "bright", "cutting", "modern", "open"],
       "controls": [
@@ -265,7 +265,7 @@
       "id": "BIGMUFF",
       "name": "Red Square Fuzz",
       "inspired_by": "Electro-Harmonix Big Muff Pi®",
-      "category": "Fuzz",
+      "categories": ["Fuzz"],
       "description": "Emits a wall of fuzz that will even get comrade Lenin out of his grave. Thick, creamy sustain with that iconic scooped mid tone.",
       "sound_characters": ["warm", "thick", "compressed", "vintage", "scooped", "creamy"],
       "controls": [
@@ -319,7 +319,7 @@
       "id": "KLON",
       "name": "Golden Mythical Beast",
       "inspired_by": "Klon Centaur™",
-      "category": "Overdrive",
+      "categories": ["Overdrive"],
       "description": "The stuff of legends and empty wallets. Transparent overdrive that makes your amp sound like it costs $10k more.",
       "sound_characters": ["transparent", "warm", "open", "modern", "smooth"],
       "controls": [
@@ -375,7 +375,7 @@
       "id": "FUZZFACE",
       "name": "Fuzzy Face",
       "inspired_by": "Dallas Arbiter Fuzz Face™",
-      "category": "Fuzz",
+      "categories": ["Fuzz"],
       "description": "The round fuzz that Hendrix made famous. Touch-sensitive, dynamic, and germanium goodness (or silicon if you prefer).",
       "sound_characters": ["vintage", "warm", "open", "dynamic", "smooth"],
       "controls": [
@@ -435,7 +435,7 @@
       "id": "BOOSTER",
       "name": "Treble Amplifier",
       "inspired_by": "Rangemaster Treble Booster™",
-      "category": "Boost",
+      "categories": ["Boost"],
       "description": "The old-school British secret weapon. Simple one-transistor circuit that adds sparkle and pushes amps into overdrive heaven.",
       "sound_characters": ["bright", "transparent", "vintage", "cutting"],
       "controls": [
@@ -466,7 +466,7 @@
       "id": "BLUESBREAKER",
       "name": "Blues Driver Deluxe",
       "inspired_by": "Marshall Bluesbreaker®",
-      "category": "Overdrive",
+      "categories": ["Overdrive"],
       "description": "Marshall in a box. Classic British amp-like overdrive with that unmistakable mid-range punch. Size does matter here.",
       "sound_characters": ["mid-focused", "warm", "vintage", "open", "smooth"],
       "controls": [
@@ -499,7 +499,7 @@
       "id": "PHASE90",
       "name": "Phase Shifter 90",
       "inspired_by": "MXR Phase 90®",
-      "category": "Modulation",
+      "categories": ["Modulation"],
       "description": "The swirly orange box that's been on every pedalboard since 1974. From subtle swoosh to full jet-plane mode.",
       "sound_characters": ["vintage", "warm", "swirly"],
       "controls": [
@@ -530,7 +530,7 @@
       "id": "CHORUS",
       "name": "Analog Chorus Deluxe",
       "inspired_by": "Boss CE-2 Chorus®",
-      "category": "Modulation",
+      "categories": ["Modulation"],
       "description": "The sound of the 80s condensed in a box. Lush, shimmering chorus that makes everything sound like it's wearing a tuxedo.",
       "sound_characters": ["warm", "vintage", "lush", "smooth"],
       "controls": [
@@ -562,7 +562,7 @@
       "id": "DELAY",
       "name": "Analog Delay Classic",
       "inspired_by": "MXR Carbon Copy™",
-      "category": "Delay",
+      "categories": ["Delay"],
       "description": "Warm analog delay with the characteristic degradation and saturation. Because digital is for spreadsheets.",
       "sound_characters": ["warm", "dark", "vintage", "lo-fi"],
       "controls": [
