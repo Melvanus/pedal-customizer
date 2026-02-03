@@ -13,9 +13,12 @@ type SelectedModWithOptions = {
     removes_controls?: string[];
     additional_options?: Array<{
       label: string;
+      description: string;
       type: string;
       range?: [number, number];
+      default?: number | string[];
       options?: string[];
+      max_selections?: number;
     }>;
   };
   options?: Record<string, any>;
@@ -64,6 +67,8 @@ export default function SummaryPage() {
   const [tempLedColor, setTempLedColor] = React.useState("");
   const [tempCustomLedColor, setTempCustomLedColor] = React.useState("#ff0000");
   const [tempPaintColor, setTempPaintColor] = React.useState("#808080");
+  const [editingModIndex, setEditingModIndex] = React.useState<number | null>(null);
+  const [tempModOptions, setTempModOptions] = React.useState<Record<string, any>>({});
 
   // Compute effective controls considering mods
   const effectiveControls = React.useMemo(() => {
@@ -226,6 +231,40 @@ export default function SummaryPage() {
     }
   };
 
+  const handleEditModOptions = (modIndex: number) => {
+    if (config?.effectMods && config.effectMods[modIndex]) {
+      setTempModOptions(config.effectMods[modIndex].options || {});
+      setEditingModIndex(modIndex);
+    }
+  };
+
+  const handleSaveModOptions = () => {
+    if (editingModIndex !== null && config?.effectMods) {
+      const updatedMods = [...config.effectMods];
+      updatedMods[editingModIndex] = {
+        ...updatedMods[editingModIndex],
+        options: { ...tempModOptions },
+      };
+      const updatedConfig = { ...config, effectMods: updatedMods };
+      setConfig(updatedConfig);
+      sessionStorage.setItem("pedalConfiguration", JSON.stringify(updatedConfig));
+      setEditingModIndex(null);
+      setTempModOptions({});
+    }
+  };
+
+  const handleCancelModEdit = () => {
+    setEditingModIndex(null);
+    setTempModOptions({});
+  };
+
+  const handleModOptionChange = (optionLabel: string, value: any) => {
+    setTempModOptions(prev => ({
+      ...prev,
+      [optionLabel]: value,
+    }));
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
       {/* Header */}
@@ -300,9 +339,34 @@ export default function SummaryPage() {
                       borderBottom: idx < config.effectMods!.length - 1 ? "1px solid #2d2d2d" : "none",
                     }}
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem", alignItems: "center" }}>
                       <span style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>{modWithOpts.mod.name}</span>
-                      <span style={{ fontSize: "1rem", fontWeight: 700, color: "#4ade80" }}>+€{modWithOpts.mod.customer_price_eur.toFixed(2)}</span>
+                      <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                        <span style={{ fontSize: "1rem", fontWeight: 700, color: "#4ade80" }}>+€{modWithOpts.mod.customer_price_eur.toFixed(2)}</span>
+                        {modWithOpts.mod.additional_options && modWithOpts.mod.additional_options.length > 0 && (
+                          <button
+                            onClick={() => handleEditModOptions(idx)}
+                            style={{
+                              background: "#2d2d2d",
+                              color: "#fff",
+                              border: "1px solid #666",
+                              borderRadius: "5px",
+                              padding: "0.4rem 0.8rem",
+                              cursor: "pointer",
+                              fontSize: "0.8rem",
+                              transition: "all 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = "#3d3d3d";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "#2d2d2d";
+                            }}
+                          >
+                            ✏️ Edit Options
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <p style={{ fontSize: "0.85rem", color: "#aaa", marginBottom: modWithOpts.options && Object.keys(modWithOpts.options).length > 0 ? "0.75rem" : 0 }}>
                       {modWithOpts.mod.description}
@@ -937,6 +1001,170 @@ export default function SummaryPage() {
                 </button>
                 <button
                   onClick={handleSavePaintColor}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#fff",
+                    color: "#000",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mod Options Edit Modal */}
+        {editingModIndex !== null && config?.effectMods && config.effectMods[editingModIndex] && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+              padding: "2rem",
+            }}
+            onClick={handleCancelModEdit}
+          >
+            <div
+              style={{
+                background: "#1a1a1a",
+                borderRadius: "12px",
+                padding: "2rem",
+                maxWidth: "600px",
+                width: "100%",
+                border: "2px solid #333",
+                maxHeight: "80vh",
+                overflow: "auto",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "#fff" }}>
+                Edit Mod Options
+              </h3>
+              <p style={{ fontSize: "1rem", color: "#aaa", marginBottom: "1.5rem" }}>
+                {config.effectMods[editingModIndex].mod.name}
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {config.effectMods[editingModIndex].mod.additional_options?.map((option, optIdx) => (
+                  <div key={optIdx}>
+                    <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "#fff", marginBottom: "0.5rem" }}>
+                      {option.label}
+                    </label>
+                    <p style={{ fontSize: "0.85rem", color: "#aaa", marginBottom: "0.75rem" }}>
+                      {option.description}
+                    </p>
+                    
+                    {option.type === "NumberRange" && option.range && (
+                      <div>
+                        <input
+                          type="number"
+                          min={option.range[0]}
+                          max={option.range[1]}
+                          value={tempModOptions[option.label] ?? option.default ?? option.range[0]}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            if (val >= option.range![0] && val <= option.range![1]) {
+                              handleModOptionChange(option.label, val);
+                            }
+                          }}
+                          style={{
+                            width: "100%",
+                            padding: "0.75rem",
+                            background: "#0a0a0a",
+                            border: "1px solid #666",
+                            borderRadius: "5px",
+                            color: "#e0e0e0",
+                            fontSize: "0.9rem",
+                          }}
+                        />
+                        <div style={{ fontSize: "0.75rem", color: "#777", marginTop: "0.5rem" }}>
+                          Range: {option.range[0]} - {option.range[1]}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {option.type === "MultiSelect" && option.options && (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                        {option.options.map((choice, choiceIdx) => {
+                          const currentSelections = tempModOptions[option.label] ?? option.default ?? [];
+                          const isSelected = currentSelections.includes(choice);
+                          const canSelect = !isSelected || currentSelections.length > 0;
+                          const canAdd = !isSelected && (!option.max_selections || currentSelections.length < option.max_selections);
+                          
+                          return (
+                            <label
+                              key={choiceIdx}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                padding: "0.75rem",
+                                background: isSelected ? "#2d2d2d" : "#0a0a0a",
+                                border: isSelected ? "1px solid #4ade80" : "1px solid #666",
+                                borderRadius: "5px",
+                                cursor: (isSelected || canAdd) ? "pointer" : "not-allowed",
+                                opacity: (isSelected || canAdd) ? 1 : 0.5,
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                disabled={!isSelected && !canAdd}
+                                onChange={(e) => {
+                                  const newSelections = e.target.checked
+                                    ? [...currentSelections, choice]
+                                    : currentSelections.filter((c: string) => c !== choice);
+                                  handleModOptionChange(option.label, newSelections);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              />
+                              <span style={{ color: "#fff", fontSize: "0.9rem" }}>{choice}</span>
+                            </label>
+                          );
+                        })}
+                        {option.max_selections && (
+                          <div style={{ fontSize: "0.75rem", color: "#777", marginTop: "0.25rem" }}>
+                            Select up to {option.max_selections} options
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+                <button
+                  onClick={handleCancelModEdit}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#2d2d2d",
+                    color: "#fff",
+                    border: "1px solid #666",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveModOptions}
                   style={{
                     flex: 1,
                     padding: "0.75rem",
