@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Maximize2, Minimize2 } from "lucide-react";
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
 
 type Position = {
   x: number;
@@ -31,6 +31,8 @@ type LayoutData = {
 
 type EnclosureVisualizerProps = {
   layout: LayoutData;
+  availableLayouts?: LayoutData[];
+  onLayoutChange?: (layout: LayoutData) => void;
   enclosureColor?: string;
   finishType?: string;
   ledColor?: string;
@@ -61,6 +63,8 @@ const getFinishPattern = (finishType: string | undefined, color: string) => {
 
 export function EnclosureVisualizer({
   layout,
+  availableLayouts = [],
+  onLayoutChange,
   enclosureColor = "#808080",
   finishType,
   ledColor = "#ff0000",
@@ -74,6 +78,24 @@ export function EnclosureVisualizer({
   const viewBoxHeight = 160;
   
   const scale = 0.8;
+  
+  // Calculate current layout index and handle navigation
+  const currentIndex = availableLayouts.findIndex(l => l.id === layout.id);
+  const hasMultipleLayouts = availableLayouts.length > 1;
+  
+  const handlePrevLayout = () => {
+    if (hasMultipleLayouts && onLayoutChange) {
+      const newIndex = currentIndex > 0 ? currentIndex - 1 : availableLayouts.length - 1;
+      onLayoutChange(availableLayouts[newIndex]);
+    }
+  };
+  
+  const handleNextLayout = () => {
+    if (hasMultipleLayouts && onLayoutChange) {
+      const newIndex = currentIndex < availableLayouts.length - 1 ? currentIndex + 1 : 0;
+      onLayoutChange(availableLayouts[newIndex]);
+    }
+  };
   
   const visualizerContent = (
     <div
@@ -100,29 +122,92 @@ export function EnclosureVisualizer({
           <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "#e0e0e0" }}>
             Enclosure Preview
           </span>
-          <button
-            onClick={onToggleMaximize}
-            style={{
-              background: "transparent",
-              border: "none",
-              color: "#fff",
-              cursor: "pointer",
-              padding: "0.25rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "4px",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#333")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-          >
-            {isMaximized ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            {hasMultipleLayouts && (
+              <span style={{ fontSize: "0.75rem", color: "#888" }}>
+                Layout {currentIndex + 1}/{availableLayouts.length}
+              </span>
+            )}
+            <button
+              onClick={onToggleMaximize}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#fff",
+                cursor: "pointer",
+                padding: "0.25rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "4px",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#333")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              {isMaximized ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
+          </div>
         </div>
       )}
 
-      {/* SVG Visualization */}
-      <div style={{ padding: isMaximized ? "2rem" : "1rem" }}>
+      {/* SVG Visualization with navigation */}
+      <div style={{ position: "relative", padding: isMaximized ? "2rem" : "1rem" }}>
+        {/* Previous Layout Button */}
+        {hasMultipleLayouts && (
+          <button
+            onClick={handlePrevLayout}
+            style={{
+              position: "absolute",
+              left: "0.5rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "rgba(0, 0, 0, 0.7)",
+              border: "1px solid #666",
+              borderRadius: "50%",
+              width: "36px",
+              height: "36px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "#fff",
+              zIndex: 10,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)")}
+          >
+            <ChevronLeft size={24} />
+          </button>
+        )}
+        
+        {/* Next Layout Button */}
+        {hasMultipleLayouts && (
+          <button
+            onClick={handleNextLayout}
+            style={{
+              position: "absolute",
+              right: "0.5rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "rgba(0, 0, 0, 0.7)",
+              border: "1px solid #666",
+              borderRadius: "50%",
+              width: "36px",
+              height: "36px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "#fff",
+              zIndex: 10,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)")}
+          >
+            <ChevronRight size={24} />
+          </button>
+        )}
+        
         <svg
           viewBox={`${-viewBoxWidth / 2} ${-viewBoxHeight / 2} ${viewBoxWidth} ${viewBoxHeight}`}
           style={{

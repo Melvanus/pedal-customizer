@@ -72,6 +72,7 @@ export default function SummaryPage() {
   const [tempModOptions, setTempModOptions] = React.useState<Record<string, any>>({});
   const [isVisualizerMaximized, setIsVisualizerMaximized] = React.useState(false);
   const [layoutsData, setLayoutsData] = React.useState<any[]>([]);
+  const [selectedLayoutId, setSelectedLayoutId] = React.useState<string | null>(null);
 
   // Compute effective controls considering mods
   const effectiveControls = React.useMemo(() => {
@@ -94,6 +95,81 @@ export default function SummaryPage() {
     
     return controls;
   }, [config?.effect, config?.effectMods]);
+
+  // Select appropriate layout based on control count (must be before early return)
+  const selectedLayout = React.useMemo(() => {
+    if (!config || !config.effect || layoutsData.length === 0) return null;
+    
+    const enclosureType = config.enclosureSize?.name || "125B";
+    
+    // Count effective controls
+    let potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
+    let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
+    let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
+    
+    // Find all matching layouts
+    const matchingLayouts = layoutsData.filter((layout: any) => 
+      layout.enclosure_type === enclosureType &&
+      layout.potentiometer_count === potCount &&
+      layout.switch_count === switchCount &&
+      layout.fader_count === faderCount
+    );
+    
+    // If user selected a specific layout and it's still valid, use it
+    if (selectedLayoutId) {
+      const userSelected = matchingLayouts.find((l: any) => l.id === selectedLayoutId);
+      if (userSelected) return userSelected;
+    }
+    
+    // Otherwise use first matching layout
+    if (matchingLayouts.length > 0) return matchingLayouts[0];
+    
+    // Fallback: find closest match by enclosure type and pot count
+    let bestMatch = layoutsData.find((layout: any) => 
+      layout.enclosure_type === enclosureType &&
+      layout.potentiometer_count >= potCount
+    );
+    
+    // Final fallback: just get first layout for the enclosure type
+    if (!bestMatch) {
+      bestMatch = layoutsData.find((layout: any) => 
+        layout.enclosure_type === enclosureType
+      );
+    }
+    
+    return bestMatch || layoutsData[0];
+  }, [config, effectiveControls, layoutsData, selectedLayoutId]);
+  
+  // Get all available layouts for current configuration
+  const availableLayouts = React.useMemo(() => {
+    if (!config || !config.effect || layoutsData.length === 0) return [];
+    
+    const enclosureType = config.enclosureSize?.name || "125B";
+    let potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
+    let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
+    let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
+    
+    return layoutsData.filter((layout: any) => 
+      layout.enclosure_type === enclosureType &&
+      layout.potentiometer_count === potCount &&
+      layout.switch_count === switchCount &&
+      layout.fader_count === faderCount
+    );
+  }, [config, effectiveControls, layoutsData]);
+  
+  // Get paint color (must be before early return)
+  const paintColor = React.useMemo(() => {
+    if (!config?.paint) return "#808080";
+    if (config.paint.is_custom_color && config.paint.rgb) {
+      return config.paint.rgb;
+    }
+    return config.paint.color_info?.hex || "#808080";
+  }, [config?.paint]);
+  
+  // Get finish type (must be before early return)
+  const finishType = React.useMemo(() => {
+    return config?.paint?.finish_info?.finish_type || "";
+  }, [config?.paint]);
 
   React.useEffect(() => {
     // Load layouts data
@@ -154,57 +230,6 @@ export default function SummaryPage() {
       </div>
     );
   }
-  
-  // Select appropriate layout based on control count
-  const selectedLayout = React.useMemo(() => {
-    if (!config || !config.effect || layoutsData.length === 0) return null;
-    
-    const enclosureType = config.enclosureSize?.name || "125B";
-    
-    // Count effective controls
-    let potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
-    let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
-    let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
-    
-    // Find matching layout
-    let bestMatch = layoutsData.find((layout: any) => 
-      layout.enclosure_type === enclosureType &&
-      layout.potentiometer_count === potCount &&
-      layout.switch_count === switchCount &&
-      layout.fader_count === faderCount
-    );
-    
-    // Fallback: find closest match by enclosure type and pot count
-    if (!bestMatch) {
-      bestMatch = layoutsData.find((layout: any) => 
-        layout.enclosure_type === enclosureType &&
-        layout.potentiometer_count >= potCount
-      );
-    }
-    
-    // Final fallback: just get first layout for the enclosure type
-    if (!bestMatch) {
-      bestMatch = layoutsData.find((layout: any) => 
-        layout.enclosure_type === enclosureType
-      );
-    }
-    
-    return bestMatch || layoutsData[0];
-  }, [config, effectiveControls, layoutsData]);
-  
-  // Get paint color
-  const paintColor = React.useMemo(() => {
-    if (!config?.paint) return "#808080";
-    if (config.paint.is_custom_color && config.paint.rgb) {
-      return config.paint.rgb;
-    }
-    return config.paint.color_info?.hex || "#808080";
-  }, [config?.paint]);
-  
-  // Get finish type
-  const finishType = React.useMemo(() => {
-    return config?.paint?.finish_info?.finish_type || "";
-  }, [config?.paint]);
   
   const warnings: string[] = [];
   
@@ -661,6 +686,8 @@ export default function SummaryPage() {
               <div data-section="enclosure-visualizer" style={{ marginBottom: "2rem" }}>
                 <EnclosureVisualizer
                   layout={selectedLayout}
+                  availableLayouts={availableLayouts}
+                  onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
                   enclosureColor={paintColor}
                   finishType={finishType}
                   ledColor={config.ledColor || "#ff0000"}
