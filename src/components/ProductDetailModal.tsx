@@ -671,40 +671,41 @@ export function ProductDetailModal({
                     key={idx}
                     style={{
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "flex-start",
                       gap: "1rem",
-                      paddingBottom: idx < effectiveControls.length - 1 ? "0.75rem" : "0",
+                      paddingBottom: idx < effectiveControls.length - 1 ? "0.5rem" : "0",
                       borderBottom: idx < effectiveControls.length - 1 ? "1px solid #333" : "none",
                     }}
                   >
                     <div
                       style={{
-                        flex: "0 0 120px",
+                        flex: "0 0 auto",
                         display: "flex",
-                        flexDirection: "column",
-                        gap: "0.25rem",
+                        alignItems: "baseline",
+                        gap: "0.5rem",
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      <div
+                      <span
                         style={{
-                          fontSize: "0.95rem",
+                          fontSize: "0.9rem",
                           fontWeight: 600,
                           color: "#fff",
                         }}
                       >
                         {control.label}
-                      </div>
-                      <div
+                      </span>
+                      <span
                         style={{
-                          fontSize: "0.7rem",
+                          fontSize: "0.75rem",
                           fontWeight: 600,
                           color: "#666",
                           textTransform: "uppercase",
                           letterSpacing: "0.5px",
                         }}
                       >
-                        {control.type}
-                      </div>
+                        ({control.type})
+                      </span>
                     </div>
                     <div
                       style={{

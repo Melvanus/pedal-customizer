@@ -1058,91 +1058,99 @@ export default function SummaryPage() {
                 {config.effectMods[editingModIndex].mod.name}
               </p>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {config.effectMods[editingModIndex].mod.additional_options?.map((option, optIdx) => (
-                  <div key={optIdx}>
-                    <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "#fff", marginBottom: "0.5rem" }}>
-                      {option.label}
-                    </label>
-                    <p style={{ fontSize: "0.85rem", color: "#aaa", marginBottom: "0.75rem" }}>
-                      {option.description}
-                    </p>
+                  <div key={optIdx} style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start" }}>
+                    {/* Left: Label and Description */}
+                    <div style={{ flex: "0 0 220px" }}>
+                      <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "#fff", marginBottom: "0.25rem" }}>
+                        {option.label}
+                      </label>
+                      <p style={{ fontSize: "0.8rem", color: "#aaa", lineHeight: 1.4 }}>
+                        {option.description}
+                      </p>
+                    </div>
                     
-                    {option.type === "NumberRange" && option.range && (
-                      <div>
-                        <input
-                          type="number"
-                          min={option.range[0]}
-                          max={option.range[1]}
-                          value={tempModOptions[option.label] ?? option.default ?? option.range[0]}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value);
-                            if (val >= option.range![0] && val <= option.range![1]) {
-                              handleModOptionChange(option.label, val);
-                            }
-                          }}
-                          style={{
-                            width: "100%",
-                            padding: "0.75rem",
-                            background: "#0a0a0a",
-                            border: "1px solid #666",
-                            borderRadius: "5px",
-                            color: "#e0e0e0",
-                            fontSize: "0.9rem",
-                          }}
-                        />
-                        <div style={{ fontSize: "0.75rem", color: "#777", marginTop: "0.5rem" }}>
-                          Range: {option.range[0]} - {option.range[1]}
-                        </div>
-                      </div>
-                    )}
-                    
-                    {option.type === "MultiSelect" && option.options && (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                        {option.options.map((choice, choiceIdx) => {
-                          const currentSelections = tempModOptions[option.label] ?? option.default ?? [];
-                          const isSelected = currentSelections.includes(choice);
-                          const canSelect = !isSelected || currentSelections.length > 0;
-                          const canAdd = !isSelected && (!option.max_selections || currentSelections.length < option.max_selections);
-                          
-                          return (
-                            <label
-                              key={choiceIdx}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "0.5rem",
-                                padding: "0.75rem",
-                                background: isSelected ? "#2d2d2d" : "#0a0a0a",
-                                border: isSelected ? "1px solid #4ade80" : "1px solid #666",
-                                borderRadius: "5px",
-                                cursor: (isSelected || canAdd) ? "pointer" : "not-allowed",
-                                opacity: (isSelected || canAdd) ? 1 : 0.5,
-                              }}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                disabled={!isSelected && !canAdd}
-                                onChange={(e) => {
-                                  const newSelections = e.target.checked
-                                    ? [...currentSelections, choice]
-                                    : currentSelections.filter((c: string) => c !== choice);
-                                  handleModOptionChange(option.label, newSelections);
-                                }}
-                                style={{ cursor: "pointer" }}
-                              />
-                              <span style={{ color: "#fff", fontSize: "0.9rem" }}>{choice}</span>
-                            </label>
-                          );
-                        })}
-                        {option.max_selections && (
-                          <div style={{ fontSize: "0.75rem", color: "#777", marginTop: "0.25rem" }}>
-                            Select up to {option.max_selections} options
+                    {/* Right: Input and Info */}
+                    <div style={{ flex: 1 }}>
+                      {option.type === "NumberRange" && option.range && (
+                        <div>
+                          <input
+                            type="number"
+                            min={option.range[0]}
+                            max={option.range[1]}
+                            value={tempModOptions[option.label] ?? option.default ?? option.range[0]}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value);
+                              if (val >= option.range![0] && val <= option.range![1]) {
+                                handleModOptionChange(option.label, val);
+                              }
+                            }}
+                            style={{
+                              width: "100%",
+                              padding: "0.6rem",
+                              background: "#0a0a0a",
+                              border: "1px solid #666",
+                              borderRadius: "5px",
+                              color: "#e0e0e0",
+                              fontSize: "0.9rem",
+                            }}
+                          />
+                          <div style={{ fontSize: "0.7rem", color: "#777", marginTop: "0.4rem" }}>
+                            Range: {option.range[0]} - {option.range[1]}
                           </div>
-                        )}
-                      </div>
-                    )}
+                        </div>
+                      )}
+                      
+                      {option.type === "MultiSelect" && option.options && (
+                        <div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                            {option.options.map((choice, choiceIdx) => {
+                              const currentSelections = tempModOptions[option.label] ?? option.default ?? [];
+                              const isSelected = currentSelections.includes(choice);
+                              const canSelect = !isSelected || currentSelections.length > 0;
+                              const canAdd = !isSelected && (!option.max_selections || currentSelections.length < option.max_selections);
+                              
+                              return (
+                                <label
+                                  key={choiceIdx}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem",
+                                    padding: "0.5rem 0.75rem",
+                                    background: isSelected ? "#2d2d2d" : "#0a0a0a",
+                                    border: isSelected ? "1px solid #4ade80" : "1px solid #666",
+                                    borderRadius: "5px",
+                                    cursor: (isSelected || canAdd) ? "pointer" : "not-allowed",
+                                    opacity: (isSelected || canAdd) ? 1 : 0.5,
+                                  }}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    disabled={!isSelected && !canAdd}
+                                    onChange={(e) => {
+                                      const newSelections = e.target.checked
+                                        ? [...currentSelections, choice]
+                                        : currentSelections.filter((c: string) => c !== choice);
+                                      handleModOptionChange(option.label, newSelections);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                  <span style={{ color: "#fff", fontSize: "0.85rem" }}>{choice}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                          {option.max_selections && (
+                            <div style={{ fontSize: "0.7rem", color: "#777", marginTop: "0.4rem" }}>
+                              Select up to {option.max_selections} options
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
