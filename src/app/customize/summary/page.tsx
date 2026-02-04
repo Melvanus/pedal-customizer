@@ -722,6 +722,9 @@ export default function SummaryPage() {
                   onLabelChange={(controlLabel, newValue) => {
                     setControlLabels(prev => ({ ...prev, [controlLabel]: newValue }));
                   }}
+                  onPedalNameChange={(newValue) => {
+                    setPedalName(newValue);
+                  }}
                 />
               </div>
             )}

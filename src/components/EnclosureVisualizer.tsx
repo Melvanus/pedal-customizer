@@ -42,6 +42,7 @@ type EnclosureVisualizerProps = {
   isMaximized?: boolean;
   onToggleMaximize?: () => void;
   onLabelChange?: (controlLabel: string, newValue: string) => void;
+  onPedalNameChange?: (newValue: string) => void;
 };
 
 const getFinishPattern = (finishType: string | undefined, color: string) => {
@@ -75,6 +76,7 @@ export function EnclosureVisualizer({
   isMaximized = false,
   onToggleMaximize,
   onLabelChange,
+  onPedalNameChange,
 }: EnclosureVisualizerProps) {
   const viewBoxWidth = 140;
   const viewBoxHeight = 160;
@@ -84,6 +86,7 @@ export function EnclosureVisualizer({
   // Edit mode state
   const [isEditMode, setIsEditMode] = React.useState(false);
   const [isEditLabelsMode, setIsEditLabelsMode] = React.useState(false);
+  const [editingLabel, setEditingLabel] = React.useState<{ type: string; index: number; value: string } | null>(null);
   const [isDragging, setIsDragging] = React.useState(false);
   const [draggedItem, setDraggedItem] = React.useState<{ type: string; index: number } | null>(null);
   
@@ -536,21 +539,73 @@ export function EnclosureVisualizer({
                 onMouseDown={handleMouseDown('pedalName', 0)}
                 style={{ cursor: isEditMode ? 'move' : 'default' }}
               >
-                <text
-                  x={getPosition('pedalName', 0, layout.pedal_name_position).x}
-                  y={getPosition('pedalName', 0, layout.pedal_name_position).y}
-                  textAnchor="middle"
-                  style={{
-                    fontSize: "6px",
-                    fontWeight: "bold",
-                    fill: "#fff",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                    pointerEvents: isEditMode ? 'auto' : 'none',
-                  }}
-                >
-                  {pedalName}
-                </text>
+                {editingLabel?.type === 'pedalName' ? (
+                  <foreignObject
+                    x={getPosition('pedalName', 0, layout.pedal_name_position).x - 30}
+                    y={getPosition('pedalName', 0, layout.pedal_name_position).y - 5}
+                    width="60"
+                    height="10"
+                  >
+                    <input
+                      autoFocus
+                      type="text"
+                      value={editingLabel.value}
+                      onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
+                      onBlur={() => {
+                        if (editingLabel.value.trim() !== '' && onPedalNameChange) {
+                          onPedalNameChange(editingLabel.value.trim());
+                        }
+                        setEditingLabel(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          if (editingLabel.value.trim() !== '' && onPedalNameChange) {
+                            onPedalNameChange(editingLabel.value.trim());
+                          }
+                          setEditingLabel(null);
+                        } else if (e.key === 'Escape') {
+                          setEditingLabel(null);
+                        }
+                      }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        fontSize: '6px',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        background: '#1a1a1a',
+                        border: '1px solid #4ade80',
+                        color: '#fff',
+                        outline: 'none',
+                        padding: '0',
+                      }}
+                    />
+                  </foreignObject>
+                ) : (
+                  <text
+                    x={getPosition('pedalName', 0, layout.pedal_name_position).x}
+                    y={getPosition('pedalName', 0, layout.pedal_name_position).y}
+                    textAnchor="middle"
+                    style={{
+                      fontSize: "6px",
+                      fontWeight: "bold",
+                      fill: "#fff",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                      pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
+                      cursor: isEditLabelsMode ? 'pointer' : 'default',
+                    }}
+                    onClick={() => {
+                      if (isEditLabelsMode) {
+                        setEditingLabel({ type: 'pedalName', index: 0, value: pedalName });
+                      }
+                    }}
+                  >
+                    {pedalName}
+                  </text>
+                )}
               </g>
             )}
 
@@ -581,29 +636,71 @@ export function EnclosureVisualizer({
                     strokeLinecap="round"
                   />
                   {/* Label */}
-                  <text
-                    x={effectivePos.x + pos.label_offset.x}
-                    y={effectivePos.y + pos.label_offset.y}
-                    textAnchor="middle"
-                    style={{
-                      fontSize: "3.5px",
-                      fontWeight: 600,
-                      fill: "#fff",
-                      textTransform: "uppercase",
-                      pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                      cursor: isEditLabelsMode ? 'pointer' : 'default',
-                    }}
-                    onClick={() => {
-                      if (isEditLabelsMode && onLabelChange && control) {
-                        const newLabel = prompt('Edit label:', label);
-                        if (newLabel !== null && newLabel.trim() !== '') {
-                          onLabelChange(control.label, newLabel.trim());
+                  {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
+                    <foreignObject
+                      x={effectivePos.x + pos.label_offset.x - 15}
+                      y={effectivePos.y + pos.label_offset.y - 4}
+                      width="30"
+                      height="8"
+                    >
+                      <input
+                        autoFocus
+                        type="text"
+                        value={editingLabel.value}
+                        onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
+                        onBlur={() => {
+                          if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                            onLabelChange(control.label, editingLabel.value.trim());
+                          }
+                          setEditingLabel(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                              onLabelChange(control.label, editingLabel.value.trim());
+                            }
+                            setEditingLabel(null);
+                          } else if (e.key === 'Escape') {
+                            setEditingLabel(null);
+                          }
+                        }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          fontSize: '3.5px',
+                          fontWeight: 600,
+                          textAlign: 'center',
+                          textTransform: 'uppercase',
+                          background: '#1a1a1a',
+                          border: '1px solid #4ade80',
+                          color: '#fff',
+                          outline: 'none',
+                          padding: '0',
+                        }}
+                      />
+                    </foreignObject>
+                  ) : (
+                    <text
+                      x={effectivePos.x + pos.label_offset.x}
+                      y={effectivePos.y + pos.label_offset.y}
+                      textAnchor="middle"
+                      style={{
+                        fontSize: "3.5px",
+                        fontWeight: 600,
+                        fill: "#fff",
+                        textTransform: "uppercase",
+                        pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                        cursor: isEditLabelsMode ? 'pointer' : 'default',
+                      }}
+                      onClick={() => {
+                        if (isEditLabelsMode && control) {
+                          setEditingLabel({ type: 'potentiometer', index: idx, value: label });
                         }
-                      }
-                    }}
-                  >
-                    {label}
-                  </text>
+                      }}
+                    >
+                      {label}
+                    </text>
+                  )}
                 </g>
               );
             })}
@@ -643,29 +740,71 @@ export function EnclosureVisualizer({
                     rx="0.5"
                   />
                   {/* Label */}
-                  <text
-                    x={effectivePos.x + pos.label_offset.x}
-                    y={effectivePos.y + pos.label_offset.y}
-                    textAnchor="middle"
-                    style={{
-                      fontSize: "3px",
-                      fontWeight: 600,
-                      fill: "#fff",
-                      textTransform: "uppercase",
-                      pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                      cursor: isEditLabelsMode ? 'pointer' : 'default',
-                    }}
-                    onClick={() => {
-                      if (isEditLabelsMode && onLabelChange && control) {
-                        const newLabel = prompt('Edit label:', label);
-                        if (newLabel !== null && newLabel.trim() !== '') {
-                          onLabelChange(control.label, newLabel.trim());
+                  {editingLabel?.type === 'switch' && editingLabel?.index === idx ? (
+                    <foreignObject
+                      x={effectivePos.x + pos.label_offset.x - 12}
+                      y={effectivePos.y + pos.label_offset.y - 3.5}
+                      width="24"
+                      height="7"
+                    >
+                      <input
+                        autoFocus
+                        type="text"
+                        value={editingLabel.value}
+                        onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
+                        onBlur={() => {
+                          if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                            onLabelChange(control.label, editingLabel.value.trim());
+                          }
+                          setEditingLabel(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                              onLabelChange(control.label, editingLabel.value.trim());
+                            }
+                            setEditingLabel(null);
+                          } else if (e.key === 'Escape') {
+                            setEditingLabel(null);
+                          }
+                        }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          fontSize: '3px',
+                          fontWeight: 600,
+                          textAlign: 'center',
+                          textTransform: 'uppercase',
+                          background: '#1a1a1a',
+                          border: '1px solid #4ade80',
+                          color: '#fff',
+                          outline: 'none',
+                          padding: '0',
+                        }}
+                      />
+                    </foreignObject>
+                  ) : (
+                    <text
+                      x={effectivePos.x + pos.label_offset.x}
+                      y={effectivePos.y + pos.label_offset.y}
+                      textAnchor="middle"
+                      style={{
+                        fontSize: "3px",
+                        fontWeight: 600,
+                        fill: "#fff",
+                        textTransform: "uppercase",
+                        pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                        cursor: isEditLabelsMode ? 'pointer' : 'default',
+                      }}
+                      onClick={() => {
+                        if (isEditLabelsMode && control) {
+                          setEditingLabel({ type: 'switch', index: idx, value: label });
                         }
-                      }
-                    }}
-                  >
-                    {label}
-                  </text>
+                      }}
+                    >
+                      {label}
+                    </text>
+                  )}
                 </g>
               );
             })}
@@ -705,29 +844,71 @@ export function EnclosureVisualizer({
                     rx="0.5"
                   />
                   {/* Label */}
-                  <text
-                    x={effectivePos.x + pos.label_offset.x}
-                    y={effectivePos.y + pos.label_offset.y}
-                    textAnchor="middle"
-                    style={{
-                      fontSize: "3.5px",
-                      fontWeight: 600,
-                      fill: "#fff",
-                      textTransform: "uppercase",
-                      pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                      cursor: isEditLabelsMode ? 'pointer' : 'default',
-                    }}
-                    onClick={() => {
-                      if (isEditLabelsMode && onLabelChange && control) {
-                        const newLabel = prompt('Edit label:', label);
-                        if (newLabel !== null && newLabel.trim() !== '') {
-                          onLabelChange(control.label, newLabel.trim());
+                  {editingLabel?.type === 'fader' && editingLabel?.index === idx ? (
+                    <foreignObject
+                      x={effectivePos.x + pos.label_offset.x - 15}
+                      y={effectivePos.y + pos.label_offset.y - 4}
+                      width="30"
+                      height="8"
+                    >
+                      <input
+                        autoFocus
+                        type="text"
+                        value={editingLabel.value}
+                        onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
+                        onBlur={() => {
+                          if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                            onLabelChange(control.label, editingLabel.value.trim());
+                          }
+                          setEditingLabel(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                              onLabelChange(control.label, editingLabel.value.trim());
+                            }
+                            setEditingLabel(null);
+                          } else if (e.key === 'Escape') {
+                            setEditingLabel(null);
+                          }
+                        }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          fontSize: '3.5px',
+                          fontWeight: 600,
+                          textAlign: 'center',
+                          textTransform: 'uppercase',
+                          background: '#1a1a1a',
+                          border: '1px solid #4ade80',
+                          color: '#fff',
+                          outline: 'none',
+                          padding: '0',
+                        }}
+                      />
+                    </foreignObject>
+                  ) : (
+                    <text
+                      x={effectivePos.x + pos.label_offset.x}
+                      y={effectivePos.y + pos.label_offset.y}
+                      textAnchor="middle"
+                      style={{
+                        fontSize: "3.5px",
+                        fontWeight: 600,
+                        fill: "#fff",
+                        textTransform: "uppercase",
+                        pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                        cursor: isEditLabelsMode ? 'pointer' : 'default',
+                      }}
+                      onClick={() => {
+                        if (isEditLabelsMode && control) {
+                          setEditingLabel({ type: 'fader', index: idx, value: label });
                         }
-                      }
-                    }}
-                  >
-                    {label}
-                  </text>
+                      }}
+                    >
+                      {label}
+                    </text>
+                  )}
                 </g>
               );
             })}
