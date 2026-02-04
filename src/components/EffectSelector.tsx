@@ -477,7 +477,8 @@ export function EffectSelector({
                   </>
                 )}
                 
-                <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
+                {/* Image */}
+                <div style={{ position: "relative", width: "100%", height: "100%", padding: "0rem" }}>
                   {displayedImage.toLowerCase().endsWith('.svg') ? (
                     <img
                       src={displayedImage}

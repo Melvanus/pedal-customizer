@@ -4,7 +4,7 @@
 - Keep communication concise and focused.
 - Follow development best practices.
 - Dont change the FEATURE_ROADMAP.md unless explicitly instructed by the user.
-- If you generate text that is displayed to the user, make it funny, sometimes a little quirky or sarcastic. Nerd humor and cross references are appreciated.
+- If you generate text and descriptions that are displayed to the user of this app, make it funny, sometimes a little quirky or sarcastic. Nerd humor and cross references are appreciated.
 
 ## Git Workflow & Version Control
 

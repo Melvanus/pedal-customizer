@@ -64,11 +64,18 @@ export function ProductDetailModal({
 
   // Initialize local mods from product when it changes
   React.useEffect(() => {
-    if (product?.selectedMods) {
-      setLocalSelectedMods(product.selectedMods);
+    console.log('🔄 [ProductDetailModal] Initializing modal with product:', {
+      productType: product?.type,
+      productTitle: product?.title,
+      selectedMods: product?.selectedMods,
+      modsCount: product?.selectedMods?.length || 0
+    });
+    if (product) {
+      setLocalSelectedMods(product.selectedMods || []);
     } else {
       setLocalSelectedMods([]);
     }
+    // Use JSON.stringify to ensure deep comparison of selected mods
   }, [product]);
 
   // Compute effective controls based on selected mods
@@ -123,11 +130,15 @@ export function ProductDetailModal({
   }, [product?.technicalSpecs, localSelectedMods]);
 
   const handleModToggle = (mod: CompatibleMod) => {
+    console.log('🎯 [ProductDetailModal] Toggling mod:', mod.name);
     setLocalSelectedMods(prev => {
       const isSelected = prev.some(m => m.mod.name === mod.name);
+      let newMods;
       if (isSelected) {
-        return prev.filter(m => m.mod.name !== mod.name);
+        console.log('  ➖ Removing mod:', mod.name);
+        newMods = prev.filter(m => m.mod.name !== mod.name);
       } else {
+        console.log('  ➕ Adding mod:', mod.name);
         // Initialize with default values for additional_options
         const defaultOptions: Record<string, any> = {};
         if (mod.additional_options) {
@@ -139,29 +150,39 @@ export function ProductDetailModal({
             }
           });
         }
-        return [...prev, { mod, options: defaultOptions }];
+        newMods = [...prev, { mod, options: defaultOptions }];
       }
+      console.log('  � New mods state:', newMods.map(m => m.mod.name));
+      // Don't call onModsChange here - let the useEffect handle it
+      return newMods;
     });
   };
 
   const handleModOptionChange = (modName: string, optionLabel: string, value: any) => {
-    setLocalSelectedMods(prev => prev.map(item => {
-      if (item.mod.name === modName) {
-        return {
-          ...item,
-          options: {
-            ...item.options,
-            [optionLabel]: value,
-          },
-        };
-      }
-      return item;
-    }));
+    setLocalSelectedMods(prev => {
+      const newMods = prev.map(item => {
+        if (item.mod.name === modName) {
+          return {
+            ...item,
+            options: {
+              ...item.options,
+              [optionLabel]: value,
+            },
+          };
+        }
+        return item;
+      });
+      // Don't call onModsChange here - let the useEffect handle it
+      return newMods;
+    });
   };
 
   // Notify parent of changes
   React.useEffect(() => {
+    console.log('🔁 [ProductDetailModal] Sync effect running. LocalSelectedMods:', 
+      localSelectedMods.map(m => m.mod.name));
     if (product?.onModsChange) {
+      console.log('  📤 Calling onModsChange from effect with', localSelectedMods.length, 'mods');
       product.onModsChange(localSelectedMods);
     }
   }, [localSelectedMods, product?.onModsChange]);

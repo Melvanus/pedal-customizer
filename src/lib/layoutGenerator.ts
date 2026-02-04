@@ -161,7 +161,7 @@ function generateControlPositions(
 
   const positions: Position[] = [];
   const minSpacing = type === 'fader' ? 14 : 16; // Faders can be closer together
-  const labelOffsetY = type === 'fader' ? -25 : 15; // Labels above faders, below pots/switches
+  const labelOffsetY = type === 'fader' ? 25 : 15; // Labels below pots/switches/faders
   
   // Try to arrange in rows if there are many controls
   const maxPerRow = Math.floor(usableWidth / minSpacing);

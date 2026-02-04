@@ -121,9 +121,7 @@
             "potentiometers": -1,
             "faders": 1
           },
-          "removes_controls": [
-            { "label": "Output" }
-          ],
+          "removes_controls": ["Output"],
           "adds_controls": [
             { "label": "Output", "type": "Fader", "description": "Sets the output volume level with a fader." }
           ]
@@ -187,6 +185,31 @@
             { "label": "4. Band", "description": "Adjust the center frequency for the 800Hz band.", "type": "NumberRange", "range": [600, 1200], "default": 800 },
             { "label": "5. Band", "description": "Adjust the center frequency for the 1.6kHz band.", "type": "NumberRange", "range": [1200, 2400], "default": 1600 },
             { "label": "6. Band", "description": "Adjust the center frequency for the 3.2kHz band.", "type": "NumberRange", "range": [2400, 4800], "default": 3200 }
+          ]
+        },
+        {
+          "name": "Fader Mod", 
+          "description": "Uses Faders instead of Potentiometers for the EQ bands.", 
+          "customer_price_eur": 10,
+          "adds_technical_specs": {
+            "potentiometers": -6,
+            "faders": 6
+          },
+          "removes_controls": [
+            "100Hz",
+            "200Hz",
+            "400Hz",
+            "800Hz",
+            "1.6kHz",
+            "3.2kHz"
+          ],
+          "adds_controls": [
+            { "label": "100Hz", "type": "Fader", "description": "Boosts or cuts low frequencies." },
+            { "label": "200Hz", "type": "Fader", "description": "Adjusts low-mid frequencies." },
+            { "label": "400Hz", "type": "Fader", "description": "Controls mid frequencies." },
+            { "label": "800Hz", "type": "Fader", "description": "Adjusts upper-mid frequencies." },
+            { "label": "1.6kHz", "type": "Fader", "description": "Controls presence frequencies." },
+            { "label": "3.2kHz", "type": "Fader", "description": "Adjusts high-mid frequencies." }
           ]
         }
       ],

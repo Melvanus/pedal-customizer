@@ -218,6 +218,30 @@ export function EnclosureSizeSelector({
   };
 
   React.useEffect(() => {
+/*
+    const lastTimeRef = React.useRef<number>(performance.now());
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      setBanana((prev) => {
+      if (!prev.isDragging) return prev;
+      
+      // Use viewport coordinates directly for fixed positioning
+      const newX = e.clientX - prev.dragOffsetX;
+      const newY = e.clientY - prev.dragOffsetY;
+      
+      // Calculate time delta in seconds
+      const currentTime = performance.now();
+      const deltaTime = (currentTime - lastTimeRef.current) / 1000;
+      lastTimeRef.current = currentTime;
+      
+      // Track velocity while dragging (distance / time)
+      const vx = deltaTime > 0 ? (newX - prev.x) / deltaTime : 0;
+      const vy = deltaTime > 0 ? (newY - prev.y) / deltaTime : 0;
+      
+      return { ...prev, x: newX, y: newY, vx, vy, lastX: prev.x, lastY: prev.y };
+      });
+    };
+*/
     const handleMouseMove = (e: MouseEvent) => {
       setBanana((prev) => {
         if (!prev.isDragging) return prev;
