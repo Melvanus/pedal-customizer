@@ -278,18 +278,6 @@ export function EnclosureVisualizer({
                 strokeWidth="0.5"
                 rx="0.5"
               />
-              <text
-                x={layout.input_jack_position.x + 4}
-                y={layout.input_jack_position.y + 13}
-                textAnchor="middle"
-                style={{
-                  fontSize: "3px",
-                  fontWeight: 600,
-                  fill: "#fff",
-                }}
-              >
-                IN
-              </text>
             </g>
 
             {/* Output Jack (behind enclosure) */}
@@ -304,18 +292,6 @@ export function EnclosureVisualizer({
                 strokeWidth="0.5"
                 rx="0.5"
               />
-              <text
-                x={layout.output_jack_position.x - 4}
-                y={layout.output_jack_position.y + 13}
-                textAnchor="middle"
-                style={{
-                  fontSize: "3px",
-                  fontWeight: 600,
-                  fill: "#fff",
-                }}
-              >
-                OUT
-              </text>
             </g>
 
             {/* Enclosure background with shadow */}
