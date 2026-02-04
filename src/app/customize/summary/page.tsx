@@ -77,55 +77,34 @@ export default function SummaryPage() {
 
   // Compute effective controls considering mods
   const effectiveControls = React.useMemo(() => {
-    console.log('🎛️ [Summary] Computing effective controls');
-    console.log('  Base controls from effect:', config?.effect?.controls);
-    console.log('  Effect mods:', config?.effectMods?.map((m: any) => m.mod.name));
-    
     if (!config?.effect?.controls) {
-      console.log('  ❌ No base controls found');
       return [];
     }
     
     let controls = [...config.effect.controls];
-    console.log('  Starting with', controls.length, 'controls:', controls.map((c: any) => `${c.label} (${c.type})`));
     
     if (config.effectMods && Array.isArray(config.effectMods)) {
       config.effectMods.forEach(({ mod }: any) => {
-        console.log(`  Processing mod: ${mod.name}`);
-        
         // Remove controls specified in removes_controls
         if (mod.removes_controls && Array.isArray(mod.removes_controls)) {
-          console.log('    Removing controls:', mod.removes_controls);
-          const beforeLength = controls.length;
           controls = controls.filter((c: any) => !mod.removes_controls!.includes(c.label));
-          console.log(`    Removed ${beforeLength - controls.length} controls`);
         }
         
         // Add new controls from adds_controls
         if (mod.adds_controls && Array.isArray(mod.adds_controls)) {
-          console.log('    Adding controls:', mod.adds_controls.map((c: any) => `${c.label} (${c.type})`));
           controls = [...controls, ...mod.adds_controls];
         }
       });
     }
-    
-    console.log('  ✅ Final controls:', controls.length, 'items:', controls.map((c: any) => `${c.label} (${c.type})`));
-    
-    // Count by type
-    const potCount = controls.filter((c: any) => c.type === 'Pot').length;
-    const switchCount = controls.filter((c: any) => c.type === 'Switch' && c.label !== 'Bypass').length;
-    const faderCount = controls.filter((c: any) => c.type === 'Fader').length;
-    console.log('  📊 Control counts: Pots:', potCount, 'Switches:', switchCount, 'Faders:', faderCount);
     
     return controls;
   }, [config?.effect, config?.effectMods]);
 
   // Select appropriate layout based on control count (must be before early return)
   const selectedLayout = React.useMemo(() => {
-    console.log('🗺️ [Summary] Selecting layout');
+    console.log('🎲 [Randomize] Layout useMemo triggered, randomLayoutKey:', randomLayoutKey);
     
     if (!config || !config.effect || layoutsData.length === 0) {
-      console.log('  ❌ Missing data');
       return null;
     }
     
@@ -136,15 +115,13 @@ export default function SummaryPage() {
     let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
     let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
     
-    console.log('  Looking for layout:');
-    console.log('    Enclosure type:', enclosureType);
-    console.log('    Need: Pots:', potCount, 'Switches:', switchCount, 'Faders:', faderCount);
-    
-    // Log all available layouts for this enclosure type
-    const enclosureLayouts = layoutsData.filter((l: any) => l.enclosure_type === enclosureType);
-    console.log('    Available layouts for', enclosureType + ':', enclosureLayouts.map((l: any) => 
-      `${l.id} (P:${l.potentiometer_count}, S:${l.switch_count}, F:${l.fader_count})`
-    ));
+    // If randomLayoutKey > 0, force random generation
+    if (randomLayoutKey > 0) {
+      console.log('🎲 [Randomize] Forcing random layout generation!');
+      const randomLayout = generateRandomLayout(enclosureType, potCount, switchCount, faderCount);
+      console.log('🎲 [Randomize] Generated layout:', randomLayout.id);
+      return randomLayout;
+    }
     
     // Find all matching layouts
     const matchingLayouts = layoutsData.filter((layout: any) => 
@@ -154,30 +131,20 @@ export default function SummaryPage() {
       layout.fader_count === faderCount
     );
     
-    console.log('    Exact matches found:', matchingLayouts.length);
-    if (matchingLayouts.length > 0) {
-      console.log('      Matches:', matchingLayouts.map((l: any) => l.id));
-    }
-    
     // If user selected a specific layout and it's still valid, use it
     if (selectedLayoutId) {
       const userSelected = matchingLayouts.find((l: any) => l.id === selectedLayoutId);
       if (userSelected) {
-        console.log('  ✅ Using user-selected layout:', userSelected.id);
         return userSelected;
       }
     }
     
     // Otherwise use first matching layout
     if (matchingLayouts.length > 0) {
-      console.log('  ✅ Using first exact match:', matchingLayouts[0].id);
       return matchingLayouts[0];
     }
     
-    console.log('  ⚠️ No exact match, looking for fallback...');
-    
     // Fallback: find closest match considering all control types
-    // Prioritize matching the total control count and type distribution
     let bestMatch = layoutsData.find((layout: any) => 
       layout.enclosure_type === enclosureType &&
       (layout.potentiometer_count >= potCount || potCount === 0) &&
@@ -185,9 +152,7 @@ export default function SummaryPage() {
     );
     
     if (bestMatch) {
-      console.log('  ⚠️ Using fallback layout:', bestMatch.id, 
-        `(P:${bestMatch.potentiometer_count}, S:${bestMatch.switch_count}, F:${bestMatch.fader_count})`);
-      console.log('    ⚠️ This may not perfectly match your configuration!');
+      return bestMatch;
     }
     
     // Final fallback: just get first layout for the enclosure type
@@ -196,20 +161,20 @@ export default function SummaryPage() {
         layout.enclosure_type === enclosureType
       );
       if (bestMatch) {
-        console.log('  ⚠️ Using final fallback (first layout):', bestMatch.id);
+        return bestMatch;
       }
     }
     
     if (!bestMatch && layoutsData.length > 0) {
-      console.log('  ⚠️ No layout found for enclosure, using first available layout');
       bestMatch = layoutsData[0];
     }
     
     // Ultimate fallback: generate a random layout
     if (!bestMatch) {
-      console.log('  🎲 No suitable layout found - generating random layout!');
-      console.log('    Generating for:', enclosureType, `P:${potCount}, S:${switchCount}, F:${faderCount}`);
-      return generateRandomLayout(enclosureType, potCount, switchCount, faderCount);
+      console.log('🎲 [Randomize] Generating random layout:', { enclosureType, potCount, switchCount, faderCount });
+      const randomLayout = generateRandomLayout(enclosureType, potCount, switchCount, faderCount);
+      console.log('🎲 [Randomize] Generated layout:', randomLayout.id);
+      return randomLayout;
     }
     
     return bestMatch;
@@ -234,10 +199,16 @@ export default function SummaryPage() {
   
   // Handler to generate a new random layout
   const handleRandomizeLayout = React.useCallback(() => {
-    console.log('🎲 [Summary] Randomizing layout...');
+    console.log('🎲 [Randomize] Button clicked!');
+    console.log('🎲 [Randomize] Current randomLayoutKey:', randomLayoutKey);
+    console.log('🎲 [Randomize] Current selectedLayout:', selectedLayout?.id);
     // Increment the key to force layout regeneration
-    setRandomLayoutKey(prev => prev + 1);
-  }, []);
+    setRandomLayoutKey(prev => {
+      const newKey = prev + 1;
+      console.log('🎲 [Randomize] Setting new randomLayoutKey:', newKey);
+      return newKey;
+    });
+  }, [randomLayoutKey, selectedLayout]);
   
   // Helper function to convert rgb(r, g, b) to hex
   const rgbToHex = (rgb: string): string => {

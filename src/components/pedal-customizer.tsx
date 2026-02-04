@@ -119,9 +119,17 @@ export function PedalCustomizer({
     if (selectedEffect?.recommended_enclosure) {
       setSelectedEnclosureSizeId(selectedEffect.recommended_enclosure);
     }
-    // Reset mods when effect changes
-    setSelectedEffectMods([]);
   }, [selectedEffectId, selectedEffect]);
+
+  // Store previous effect ID to detect actual changes
+  const prevEffectIdRef = React.useRef<string | null>(null);
+  React.useEffect(() => {
+    if (prevEffectIdRef.current !== null && prevEffectIdRef.current !== selectedEffectId) {
+      // Effect actually changed - reset mods
+      setSelectedEffectMods([]);
+    }
+    prevEffectIdRef.current = selectedEffectId;
+  }, [selectedEffectId]);
 
   // Measure configuration summary height and update padding
   React.useEffect(() => {
@@ -138,6 +146,11 @@ export function PedalCustomizer({
     
     return () => window.removeEventListener('resize', measureHeight);
   }, []);
+
+  // Close modal when tab changes
+  React.useEffect(() => {
+    setModalProduct(null);
+  }, [activeTab]);
 
   // Calculate mod costs
   const modsTotalPrice = React.useMemo(() => {
@@ -174,17 +187,14 @@ export function PedalCustomizer({
 
   // Modal handler for select & continue
   const handleModalSelectAndContinue = () => {
+    console.log('✨ [PedalCustomizer] Select & Continue clicked. Modal type:', modalProduct?.type);
+    console.log('  Current selectedEffectMods:', selectedEffectMods.map(m => m.mod.name));
     // Handle selection based on modal type
     if (modalProduct) {
       switch (modalProduct.type) {
         case "effect":
-          // Find effect by name and select it
-          const effectPedal = effectPedals.find(
-            p => p.name === modalProduct.title
-          );
-          if (effectPedal) {
-            setSelectedEffectId(effectPedal.id);
-          }
+          // Effect was already selected when modal opened, no need to change it
+          console.log('  ✅ Effect already selected when modal opened');
           break;
         case "size":
           // Select the size by name
@@ -226,8 +236,11 @@ export function PedalCustomizer({
       }
     }
     
+    console.log('  🚪 Closing modal');
     setModalProduct(null);
+    console.log('  ➡️ Advancing to next tab');
     advanceToNextTab();
+    console.log('  📊 Final selectedEffectMods:', selectedEffectMods.map(m => m.mod.name));
   };
 
   const paintStats = React.useMemo(() => {
@@ -808,6 +821,20 @@ export function PedalCustomizer({
               onDrop={handleDrop}
               onDeleteImage={handleDeleteImage}
               onShowDetails={(pedal) => {
+                console.log('🪟 [PedalCustomizer] Opening modal for effect:', pedal.name, {
+                  currentSelectedEffectId: selectedEffectId,
+                  newEffectId: pedal.id,
+                  currentSelectedEffectMods: selectedEffectMods.map(m => m.mod.name),
+                  modsCount: selectedEffectMods.length
+                });
+                
+                // Select this effect FIRST, before opening the modal
+                // This way mods won't be reset when clicking "Select & Continue"
+                if (selectedEffectId !== pedal.id) {
+                  console.log('  ⚡ Selecting effect before opening modal:', pedal.id);
+                  setSelectedEffectId(pedal.id);
+                }
+                
                 setModalProduct({
                   type: "effect",
                   title: pedal.name,

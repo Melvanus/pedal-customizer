@@ -103,6 +103,8 @@ const getContrastingTextColor = (backgroundColor: string): string => {
   return luminance > 0.5 ? '#000' : '#fff';
 };
 
+// Calculate 
+
 export function EnclosureVisualizer({
   layout,
   availableLayouts = [],
@@ -121,16 +123,7 @@ export function EnclosureVisualizer({
   onPedalNameChange,
   labeledLettering = false,
 }: EnclosureVisualizerProps) {
-  console.log('🖼️ [EnclosureVisualizer] Rendering with props:', {
-    layoutId: layout.id,
-    layoutFaderCount: layout.fader_count,
-    layoutFaderPositions: layout.fader_positions?.length || 0,
-    controls: controls.map(c => `${c.label} (${c.type})`),
-    controlsCount: controls.length,
-    potControls: controls.filter(c => c.type === 'Pot').length,
-    switchControls: controls.filter(c => c.type === 'Switch').length,
-    faderControls: controls.filter(c => c.type === 'Fader').length,
-  });
+  console.log('🎲 [Randomize] EnclosureVisualizer rendering, layout ID:', layout.id);
   
   const viewBoxWidth = 140;
   const viewBoxHeight = 160;
@@ -961,9 +954,9 @@ export function EnclosureVisualizer({
                   {/* Fader track */}
                   <rect
                     x={effectivePos.x - 1}
-                    y={effectivePos.y - 10}
+                    y={effectivePos.y - (35 / 2.0)}
                     width="2"
-                    height="20"
+                    height="35"
                     fill="#1a1a1a"
                     stroke="#000"
                     strokeWidth="0.3"
@@ -972,14 +965,17 @@ export function EnclosureVisualizer({
                   {/* Fader handle */}
                   <rect
                     x={effectivePos.x - 2.5}
-                    y={effectivePos.y - 2}
+                    y={effectivePos.y - 3}
                     width="5"
-                    height="4"
+                    height="6"
                     fill="url(#metal-knob)"
                     stroke="#1a1a1a"
                     strokeWidth="0.3"
                     rx="0.5"
                   />
+                  {/* Fader Screws */}
+                  <circle cx={effectivePos.x} cy={effectivePos.y - 20.5} r="0.7" fill="#555" />
+                  <circle cx={effectivePos.x} cy={effectivePos.y + 20.5} r="0.7" fill="#555" />
                   {/* Label */}
                   {editingLabel?.type === 'fader' && editingLabel?.index === idx ? (
                     <foreignObject
