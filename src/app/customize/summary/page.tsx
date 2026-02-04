@@ -171,14 +171,24 @@ export default function SummaryPage() {
   const paintColor = React.useMemo(() => {
     if (!config?.paint) return "#808080";
     
-    // Check if it has an RGB field (from enclosures_data.json)
-    if (config.paint.rgb) {
+    // For custom color products, check if user has selected a custom color
+    if (config.paint.is_custom_color && config.paint.rgb) {
       const rgbValue = config.paint.rgb;
-      // Convert rgb(r,g,b) format to hex if needed
+      // If it starts with 'rgb(', convert to hex
       if (rgbValue.startsWith('rgb(')) {
         return rgbToHex(rgbValue);
       }
-      // If it's already hex or custom color, return as-is
+      // If it's already in hex format (user selected color), return as-is
+      return rgbValue;
+    }
+    
+    // For standard products, use the RGB field from the product data
+    if (config.paint.rgb) {
+      const rgbValue = config.paint.rgb;
+      // Convert rgb(r,g,b) format to hex
+      if (rgbValue.startsWith('rgb(')) {
+        return rgbToHex(rgbValue);
+      }
       return rgbValue;
     }
     
