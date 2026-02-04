@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ChevronLeft, AlertTriangle, Download, Mail } from "lucide-react";
 import { EnclosureVisualizer } from "@/components/EnclosureVisualizer";
-import { Condiment } from "next/font/google";
+import { generateRandomLayout, type GeneratedLayout } from "@/lib/layoutGenerator";
 
 type SelectedModWithOptions = {
   mod: {
@@ -69,38 +69,65 @@ export default function SummaryPage() {
   const [tempLedColor, setTempLedColor] = React.useState("");
   const [tempCustomLedColor, setTempCustomLedColor] = React.useState("#ff0000");
   const [tempPaintColor, setTempPaintColor] = React.useState("#808080");
-  const [editingModIndex, setEditingModIndex] = React.useState<number | null>(null);
-  const [tempModOptions, setTempModOptions] = React.useState<Record<string, any>>({});
   const [isVisualizerMaximized, setIsVisualizerMaximized] = React.useState(false);
   const [layoutsData, setLayoutsData] = React.useState<any[]>([]);
   const [selectedLayoutId, setSelectedLayoutId] = React.useState<string | null>(null);
   const [showPedalNameInVisualizer, setShowPedalNameInVisualizer] = React.useState(true);
+  const [randomLayoutKey, setRandomLayoutKey] = React.useState(0);
 
   // Compute effective controls considering mods
   const effectiveControls = React.useMemo(() => {
-    if (!config?.effect?.controls) return [];
+    console.log('🎛️ [Summary] Computing effective controls');
+    console.log('  Base controls from effect:', config?.effect?.controls);
+    console.log('  Effect mods:', config?.effectMods?.map((m: any) => m.mod.name));
+    
+    if (!config?.effect?.controls) {
+      console.log('  ❌ No base controls found');
+      return [];
+    }
     
     let controls = [...config.effect.controls];
+    console.log('  Starting with', controls.length, 'controls:', controls.map((c: any) => `${c.label} (${c.type})`));
     
-    if (config.effectMods) {
-      config.effectMods.forEach(({ mod }) => {
+    if (config.effectMods && Array.isArray(config.effectMods)) {
+      config.effectMods.forEach(({ mod }: any) => {
+        console.log(`  Processing mod: ${mod.name}`);
+        
         // Remove controls specified in removes_controls
-        if (mod.removes_controls) {
+        if (mod.removes_controls && Array.isArray(mod.removes_controls)) {
+          console.log('    Removing controls:', mod.removes_controls);
+          const beforeLength = controls.length;
           controls = controls.filter((c: any) => !mod.removes_controls!.includes(c.label));
+          console.log(`    Removed ${beforeLength - controls.length} controls`);
         }
+        
         // Add new controls from adds_controls
-        if (mod.adds_controls) {
+        if (mod.adds_controls && Array.isArray(mod.adds_controls)) {
+          console.log('    Adding controls:', mod.adds_controls.map((c: any) => `${c.label} (${c.type})`));
           controls = [...controls, ...mod.adds_controls];
         }
       });
     }
+    
+    console.log('  ✅ Final controls:', controls.length, 'items:', controls.map((c: any) => `${c.label} (${c.type})`));
+    
+    // Count by type
+    const potCount = controls.filter((c: any) => c.type === 'Pot').length;
+    const switchCount = controls.filter((c: any) => c.type === 'Switch' && c.label !== 'Bypass').length;
+    const faderCount = controls.filter((c: any) => c.type === 'Fader').length;
+    console.log('  📊 Control counts: Pots:', potCount, 'Switches:', switchCount, 'Faders:', faderCount);
     
     return controls;
   }, [config?.effect, config?.effectMods]);
 
   // Select appropriate layout based on control count (must be before early return)
   const selectedLayout = React.useMemo(() => {
-    if (!config || !config.effect || layoutsData.length === 0) return null;
+    console.log('🗺️ [Summary] Selecting layout');
+    
+    if (!config || !config.effect || layoutsData.length === 0) {
+      console.log('  ❌ Missing data');
+      return null;
+    }
     
     const enclosureType = config.enclosureSize?.name || "125B";
     
@@ -108,6 +135,16 @@ export default function SummaryPage() {
     let potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
     let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
     let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
+    
+    console.log('  Looking for layout:');
+    console.log('    Enclosure type:', enclosureType);
+    console.log('    Need: Pots:', potCount, 'Switches:', switchCount, 'Faders:', faderCount);
+    
+    // Log all available layouts for this enclosure type
+    const enclosureLayouts = layoutsData.filter((l: any) => l.enclosure_type === enclosureType);
+    console.log('    Available layouts for', enclosureType + ':', enclosureLayouts.map((l: any) => 
+      `${l.id} (P:${l.potentiometer_count}, S:${l.switch_count}, F:${l.fader_count})`
+    ));
     
     // Find all matching layouts
     const matchingLayouts = layoutsData.filter((layout: any) => 
@@ -117,30 +154,66 @@ export default function SummaryPage() {
       layout.fader_count === faderCount
     );
     
+    console.log('    Exact matches found:', matchingLayouts.length);
+    if (matchingLayouts.length > 0) {
+      console.log('      Matches:', matchingLayouts.map((l: any) => l.id));
+    }
+    
     // If user selected a specific layout and it's still valid, use it
     if (selectedLayoutId) {
       const userSelected = matchingLayouts.find((l: any) => l.id === selectedLayoutId);
-      if (userSelected) return userSelected;
+      if (userSelected) {
+        console.log('  ✅ Using user-selected layout:', userSelected.id);
+        return userSelected;
+      }
     }
     
     // Otherwise use first matching layout
-    if (matchingLayouts.length > 0) return matchingLayouts[0];
+    if (matchingLayouts.length > 0) {
+      console.log('  ✅ Using first exact match:', matchingLayouts[0].id);
+      return matchingLayouts[0];
+    }
     
-    // Fallback: find closest match by enclosure type and pot count
+    console.log('  ⚠️ No exact match, looking for fallback...');
+    
+    // Fallback: find closest match considering all control types
+    // Prioritize matching the total control count and type distribution
     let bestMatch = layoutsData.find((layout: any) => 
       layout.enclosure_type === enclosureType &&
-      layout.potentiometer_count >= potCount
+      (layout.potentiometer_count >= potCount || potCount === 0) &&
+      (layout.fader_count >= faderCount || faderCount === 0)
     );
+    
+    if (bestMatch) {
+      console.log('  ⚠️ Using fallback layout:', bestMatch.id, 
+        `(P:${bestMatch.potentiometer_count}, S:${bestMatch.switch_count}, F:${bestMatch.fader_count})`);
+      console.log('    ⚠️ This may not perfectly match your configuration!');
+    }
     
     // Final fallback: just get first layout for the enclosure type
     if (!bestMatch) {
       bestMatch = layoutsData.find((layout: any) => 
         layout.enclosure_type === enclosureType
       );
+      if (bestMatch) {
+        console.log('  ⚠️ Using final fallback (first layout):', bestMatch.id);
+      }
     }
     
-    return bestMatch || layoutsData[0];
-  }, [config, effectiveControls, layoutsData, selectedLayoutId]);
+    if (!bestMatch && layoutsData.length > 0) {
+      console.log('  ⚠️ No layout found for enclosure, using first available layout');
+      bestMatch = layoutsData[0];
+    }
+    
+    // Ultimate fallback: generate a random layout
+    if (!bestMatch) {
+      console.log('  🎲 No suitable layout found - generating random layout!');
+      console.log('    Generating for:', enclosureType, `P:${potCount}, S:${switchCount}, F:${faderCount}`);
+      return generateRandomLayout(enclosureType, potCount, switchCount, faderCount);
+    }
+    
+    return bestMatch;
+  }, [config, effectiveControls, layoutsData, selectedLayoutId, randomLayoutKey]);
   
   // Get all available layouts for current configuration
   const availableLayouts = React.useMemo(() => {
@@ -158,6 +231,13 @@ export default function SummaryPage() {
       layout.fader_count === faderCount
     );
   }, [config, effectiveControls, layoutsData]);
+  
+  // Handler to generate a new random layout
+  const handleRandomizeLayout = React.useCallback(() => {
+    console.log('🎲 [Summary] Randomizing layout...');
+    // Increment the key to force layout regeneration
+    setRandomLayoutKey(prev => prev + 1);
+  }, []);
   
   // Helper function to convert rgb(r, g, b) to hex
   const rgbToHex = (rgb: string): string => {
@@ -347,40 +427,6 @@ export default function SummaryPage() {
     }
   };
 
-  const handleEditModOptions = (modIndex: number) => {
-    if (config?.effectMods && config.effectMods[modIndex]) {
-      setTempModOptions(config.effectMods[modIndex].options || {});
-      setEditingModIndex(modIndex);
-    }
-  };
-
-  const handleSaveModOptions = () => {
-    if (editingModIndex !== null && config?.effectMods) {
-      const updatedMods = [...config.effectMods];
-      updatedMods[editingModIndex] = {
-        ...updatedMods[editingModIndex],
-        options: { ...tempModOptions },
-      };
-      const updatedConfig = { ...config, effectMods: updatedMods };
-      setConfig(updatedConfig);
-      sessionStorage.setItem("pedalConfiguration", JSON.stringify(updatedConfig));
-      setEditingModIndex(null);
-      setTempModOptions({});
-    }
-  };
-
-  const handleCancelModEdit = () => {
-    setEditingModIndex(null);
-    setTempModOptions({});
-  };
-
-  const handleModOptionChange = (optionLabel: string, value: any) => {
-    setTempModOptions(prev => ({
-      ...prev,
-      [optionLabel]: value,
-    }));
-  };
-
   return (
     <div data-section="summary-page" style={{ minHeight: "100vh", background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
       {/* Header */}
@@ -479,29 +525,6 @@ export default function SummaryPage() {
                       <span style={{ fontSize: "1rem", fontWeight: 600, color: "#fff" }}>{modWithOpts.mod.name}</span>
                       <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
                         <span style={{ fontSize: "1rem", fontWeight: 700, color: "#4ade80" }}>+€{modWithOpts.mod.customer_price_eur.toFixed(2)}</span>
-                        {modWithOpts.mod.additional_options && modWithOpts.mod.additional_options.length > 0 && (
-                          <button
-                            onClick={() => handleEditModOptions(idx)}
-                            style={{
-                              background: "#2d2d2d",
-                              color: "#fff",
-                              border: "1px solid #666",
-                              borderRadius: "5px",
-                              padding: "0.4rem 0.8rem",
-                              cursor: "pointer",
-                              fontSize: "0.8rem",
-                              transition: "all 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = "#3d3d3d";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = "#2d2d2d";
-                            }}
-                          >
-                            ✏️ Edit Options
-                          </button>
-                        )}
                       </div>
                     </div>
                     <p style={{ fontSize: "0.85rem", color: "#aaa", marginBottom: modWithOpts.options && Object.keys(modWithOpts.options).length > 0 ? "0.75rem" : 0 }}>
@@ -755,12 +778,22 @@ export default function SummaryPage() {
           {/* Order Form */}
           <div data-section="order-form-sidebar">
             {/* Enclosure Visualizer */}
-            {selectedLayout && (
+            {selectedLayout && (() => {
+              console.log('🎨 [Summary] Rendering EnclosureVisualizer with:', {
+                layout: selectedLayout.id,
+                layoutFaderCount: selectedLayout.fader_count,
+                layoutFaderPositions: selectedLayout.fader_positions?.length || 0,
+                controls: effectiveControls.map((c: any) => `${c.label} (${c.type})`),
+                controlsCount: effectiveControls.length,
+                faderControls: effectiveControls.filter((c: any) => c.type === 'Fader').map((c: any) => c.label)
+              });
+              return (
               <div data-section="enclosure-visualizer" style={{ marginBottom: "2rem" }}>
                 <EnclosureVisualizer
                   layout={selectedLayout}
                   availableLayouts={availableLayouts}
                   onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
+                  onRandomizeLayout={handleRandomizeLayout}
                   enclosureColor={paintColor}
                   finishType={finishType}
                   ledColor={config.ledColor || "#ff0000"}
@@ -779,7 +812,8 @@ export default function SummaryPage() {
                   labeledLettering={config.design?.name === "Labeled Lettering"}
                 />
               </div>
-            )}
+              );
+            })()}
             
             <div data-section="order-form-card" style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", border: "1px solid #333", position: "sticky", top: "2rem" }}>
               <h3 data-section="form-title" style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#fff" }}>Your Information</h3>
@@ -1191,178 +1225,6 @@ export default function SummaryPage() {
                 </button>
                 <button
                   onClick={handleSavePaintColor}
-                  style={{
-                    flex: 1,
-                    padding: "0.75rem",
-                    background: "#fff",
-                    color: "#000",
-                    border: "none",
-                    borderRadius: "8px",
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
-                >
-                  Save Changes
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Mod Options Edit Modal */}
-        {editingModIndex !== null && config?.effectMods && config.effectMods[editingModIndex] && (
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "rgba(0, 0, 0, 0.8)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
-              padding: "2rem",
-            }}
-            onClick={handleCancelModEdit}
-          >
-            <div
-              style={{
-                background: "#1a1a1a",
-                borderRadius: "12px",
-                padding: "2rem",
-                maxWidth: "600px",
-                width: "100%",
-                border: "2px solid #333",
-                maxHeight: "80vh",
-                overflow: "auto",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "#fff" }}>
-                Edit Mod Options
-              </h3>
-              <p style={{ fontSize: "1rem", color: "#aaa", marginBottom: "1.5rem" }}>
-                {config.effectMods[editingModIndex].mod.name}
-              </p>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                {config.effectMods[editingModIndex].mod.additional_options?.map((option, optIdx) => (
-                  <div key={optIdx} style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start" }}>
-                    {/* Left: Label and Description */}
-                    <div style={{ flex: "0 0 220px" }}>
-                      <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "#fff", marginBottom: "0.25rem" }}>
-                        {option.label}
-                      </label>
-                      <p style={{ fontSize: "0.8rem", color: "#aaa", lineHeight: 1.4 }}>
-                        {option.description}
-                      </p>
-                    </div>
-                    
-                    {/* Right: Input and Info */}
-                    <div style={{ flex: 1 }}>
-                      {option.type === "NumberRange" && option.range && (
-                        <div>
-                          <input
-                            type="number"
-                            min={option.range[0]}
-                            max={option.range[1]}
-                            value={tempModOptions[option.label] ?? option.default ?? option.range[0]}
-                            onChange={(e) => {
-                              const val = parseInt(e.target.value);
-                              if (val >= option.range![0] && val <= option.range![1]) {
-                                handleModOptionChange(option.label, val);
-                              }
-                            }}
-                            style={{
-                              width: "100%",
-                              padding: "0.6rem",
-                              background: "#0a0a0a",
-                              border: "1px solid #666",
-                              borderRadius: "5px",
-                              color: "#e0e0e0",
-                              fontSize: "0.9rem",
-                            }}
-                          />
-                          <div style={{ fontSize: "0.7rem", color: "#777", marginTop: "0.4rem" }}>
-                            Range: {option.range[0]} - {option.range[1]}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {option.type === "MultiSelect" && option.options && (
-                        <div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                            {option.options.map((choice, choiceIdx) => {
-                              const currentSelections = tempModOptions[option.label] ?? option.default ?? [];
-                              const isSelected = currentSelections.includes(choice);
-                              const canSelect = !isSelected || currentSelections.length > 0;
-                              const canAdd = !isSelected && (!option.max_selections || currentSelections.length < option.max_selections);
-                              
-                              return (
-                                <label
-                                  key={choiceIdx}
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "0.5rem",
-                                    padding: "0.5rem 0.75rem",
-                                    background: isSelected ? "#2d2d2d" : "#0a0a0a",
-                                    border: isSelected ? "1px solid #4ade80" : "1px solid #666",
-                                    borderRadius: "5px",
-                                    cursor: (isSelected || canAdd) ? "pointer" : "not-allowed",
-                                    opacity: (isSelected || canAdd) ? 1 : 0.5,
-                                  }}
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={isSelected}
-                                    disabled={!isSelected && !canAdd}
-                                    onChange={(e) => {
-                                      const newSelections = e.target.checked
-                                        ? [...currentSelections, choice]
-                                        : currentSelections.filter((c: string) => c !== choice);
-                                      handleModOptionChange(option.label, newSelections);
-                                    }}
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                  <span style={{ color: "#fff", fontSize: "0.85rem" }}>{choice}</span>
-                                </label>
-                              );
-                            })}
-                          </div>
-                          {option.max_selections && (
-                            <div style={{ fontSize: "0.7rem", color: "#777", marginTop: "0.4rem" }}>
-                              Select up to {option.max_selections} options
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
-                <button
-                  onClick={handleCancelModEdit}
-                  style={{
-                    flex: 1,
-                    padding: "0.75rem",
-                    background: "#2d2d2d",
-                    color: "#fff",
-                    border: "1px solid #666",
-                    borderRadius: "8px",
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveModOptions}
                   style={{
                     flex: 1,
                     padding: "0.75rem",

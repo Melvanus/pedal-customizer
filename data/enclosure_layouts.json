@@ -5137,5 +5137,257 @@
         "y": 15
       }
     ]
+  },
+  {
+    "id": "1590BB-6fader",
+    "enclosure_type": "1590BB",
+    "potentiometer_count": 0,
+    "switch_count": 0,
+    "fader_count": 6,
+    "dimensions_mm": {
+      "width": 95,
+      "length": 119
+    },
+    "potentiometer_positions": [],
+    "switch_positions": [],
+    "fader_positions": [
+      {
+        "x": -40,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": -24,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": -8,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": 8,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": 24,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": 40,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      }
+    ],
+    "footswitch_position": {
+      "x": 0,
+      "y": 48
+    },
+    "led_position": {
+      "x": 0,
+      "y": 20
+    },
+    "input_jack_position": {
+      "x": 44,
+      "y": 0
+    },
+    "output_jack_position": {
+      "x": -44,
+      "y": 0
+    },
+    "pedal_name_position": {
+      "x": 0,
+      "y": -58
+    }
+  },
+  {
+    "id": "125B-6fader",
+    "enclosure_type": "125B",
+    "potentiometer_count": 0,
+    "switch_count": 0,
+    "fader_count": 6,
+    "dimensions_mm": {
+      "width": 67,
+      "length": 122
+    },
+    "potentiometer_positions": [],
+    "switch_positions": [],
+    "fader_positions": [
+      {
+        "x": -30,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": -18,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": -6,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": 6,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": 18,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      },
+      {
+        "x": 30,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      }
+    ],
+    "footswitch_position": {
+      "x": 0,
+      "y": 45
+    },
+    "led_position": {
+      "x": 0,
+      "y": 20
+    },
+    "input_jack_position": {
+      "x": 30,
+      "y": 0
+    },
+    "output_jack_position": {
+      "x": -30,
+      "y": 0
+    },
+    "pedal_name_position": {
+      "x": 0,
+      "y": -55
+    }
+  },
+  {
+    "id": "1590BB-1fader",
+    "enclosure_type": "1590BB",
+    "potentiometer_count": 0,
+    "switch_count": 0,
+    "fader_count": 1,
+    "dimensions_mm": {
+      "width": 95,
+      "length": 119
+    },
+    "potentiometer_positions": [],
+    "switch_positions": [],
+    "fader_positions": [
+      {
+        "x": 0,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      }
+    ],
+    "footswitch_position": {
+      "x": 0,
+      "y": 48
+    },
+    "led_position": {
+      "x": 0,
+      "y": 20
+    },
+    "input_jack_position": {
+      "x": 44,
+      "y": 0
+    },
+    "output_jack_position": {
+      "x": -44,
+      "y": 0
+    },
+    "pedal_name_position": {
+      "x": 0,
+      "y": -58
+    }
+  },
+  {
+    "id": "125B-1fader",
+    "enclosure_type": "125B",
+    "potentiometer_count": 0,
+    "switch_count": 0,
+    "fader_count": 1,
+    "dimensions_mm": {
+      "width": 67,
+      "length": 122
+    },
+    "potentiometer_positions": [],
+    "switch_positions": [],
+    "fader_positions": [
+      {
+        "x": 0,
+        "y": -35,
+        "label_offset": {
+          "x": 0,
+          "y": -25
+        }
+      }
+    ],
+    "footswitch_position": {
+      "x": 0,
+      "y": 45
+    },
+    "led_position": {
+      "x": 0,
+      "y": 20
+    },
+    "input_jack_position": {
+      "x": 30,
+      "y": 0
+    },
+    "output_jack_position": {
+      "x": -30,
+      "y": 0
+    },
+    "pedal_name_position": {
+      "x": 0,
+      "y": -55
+    }
   }
 ]

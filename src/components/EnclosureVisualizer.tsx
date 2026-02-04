@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Move } from "lucide-react";
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Move, Shuffle } from "lucide-react";
 
 type Position = {
   x: number;
@@ -35,6 +35,7 @@ type EnclosureVisualizerProps = {
   layout: LayoutData;
   availableLayouts?: LayoutData[];
   onLayoutChange?: (layout: LayoutData) => void;
+  onRandomizeLayout?: () => void;
   enclosureColor?: string;
   finishType?: string;
   ledColor?: string;
@@ -106,6 +107,7 @@ export function EnclosureVisualizer({
   layout,
   availableLayouts = [],
   onLayoutChange,
+  onRandomizeLayout,
   enclosureColor = "#808080",
   finishType,
   ledColor = "#ff0000",
@@ -119,6 +121,17 @@ export function EnclosureVisualizer({
   onPedalNameChange,
   labeledLettering = false,
 }: EnclosureVisualizerProps) {
+  console.log('🖼️ [EnclosureVisualizer] Rendering with props:', {
+    layoutId: layout.id,
+    layoutFaderCount: layout.fader_count,
+    layoutFaderPositions: layout.fader_positions?.length || 0,
+    controls: controls.map(c => `${c.label} (${c.type})`),
+    controlsCount: controls.length,
+    potControls: controls.filter(c => c.type === 'Pot').length,
+    switchControls: controls.filter(c => c.type === 'Switch').length,
+    faderControls: controls.filter(c => c.type === 'Fader').length,
+  });
+  
   const viewBoxWidth = 140;
   const viewBoxHeight = 160;
   
@@ -327,6 +340,34 @@ export function EnclosureVisualizer({
               <span style={{ fontSize: "0.75rem", color: "#888" }}>
                 Layout {currentIndex + 1}/{availableLayouts.length}
               </span>
+            )}
+            {onRandomizeLayout && (
+              <button
+                onClick={onRandomizeLayout}
+                style={{
+                  background: "transparent",
+                  border: "1px solid #333",
+                  color: "#fff",
+                  cursor: "pointer",
+                  padding: "0.25rem 0.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                  borderRadius: "4px",
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#222";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                }}
+                title="Generate a completely new random layout (feeling lucky?)"
+              >
+                <Shuffle size={14} />
+                <span>Randomize</span>
+              </button>
             )}
             <button
               onClick={() => setIsEditMode(!isEditMode)}
@@ -899,12 +940,19 @@ export function EnclosureVisualizer({
             })}
 
             {/* Faders */}
-            {layout.fader_positions.map((pos, idx) => {
-              const control = controls.filter((c) => c.type === "Fader")[idx];
-              const label = control ? controlLabels[control.label] || control.label : `Fader ${idx + 1}`;
-              const effectivePos = getPosition('fader', idx, pos);
+            {(() => {
+              console.log('🎚️ [EnclosureVisualizer] Rendering faders:', {
+                layoutFaderPositions: layout.fader_positions?.length || 0,
+                faderPositionsData: layout.fader_positions,
+                controlsFaders: controls.filter(c => c.type === 'Fader').map(c => c.label)
+              });
               
-              return (
+              return layout.fader_positions?.map((pos, idx) => {
+                const control = controls.filter((c) => c.type === "Fader")[idx];
+                const label = control ? controlLabels[control.label] || control.label : `Fader ${idx + 1}`;
+                const effectivePos = getPosition('fader', idx, pos);
+                
+                return (
                 <g 
                   key={`fader-${idx}`}
                   onMouseDown={handleMouseDown('fader', idx)}
@@ -1012,7 +1060,8 @@ export function EnclosureVisualizer({
                   )}
                 </g>
               );
-            })}
+              }) || [];
+            })()}
 
             {/* LED with glow - support both single and multiple LEDs */}
             {ledType !== "No LED" && ledType !== "Illuminated Footswitch" && (() => {
