@@ -158,12 +158,31 @@ export default function SummaryPage() {
     );
   }, [config, effectiveControls, layoutsData]);
   
+  // Helper function to convert rgb(r, g, b) to hex
+  const rgbToHex = (rgb: string): string => {
+    const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (!match) return rgb; // Return as-is if not in rgb() format
+    const [, r, g, b] = match;
+    const toHex = (n: string) => parseInt(n).toString(16).padStart(2, '0');
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  };
+
   // Get paint color (must be before early return)
   const paintColor = React.useMemo(() => {
     if (!config?.paint) return "#808080";
-    if (config.paint.is_custom_color && config.paint.rgb) {
-      return config.paint.rgb;
+    
+    // Check if it has an RGB field (from enclosures_data.json)
+    if (config.paint.rgb) {
+      const rgbValue = config.paint.rgb;
+      // Convert rgb(r,g,b) format to hex if needed
+      if (rgbValue.startsWith('rgb(')) {
+        return rgbToHex(rgbValue);
+      }
+      // If it's already hex or custom color, return as-is
+      return rgbValue;
     }
+    
+    // Fallback to color_info hex or default gray
     return config.paint.color_info?.hex || "#808080";
   }, [config?.paint]);
   
