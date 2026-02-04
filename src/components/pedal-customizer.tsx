@@ -419,11 +419,17 @@ export function PedalCustomizer({
   };
 
   const handleProceedToSummary = () => {
+    // If custom paint with custom color selected, override the rgb value
+    let paintConfig = selectedPaint ?? null;
+    if (paintConfig && paintConfig.is_custom_color && customColor) {
+      paintConfig = { ...paintConfig, rgb: customColor };
+    }
+    
     const configData = {
       effect: selectedEffect ?? null,
       effectMods: selectedEffectMods,
       enclosureSize: selectedSize ?? null,
-      paint: selectedPaint ?? null,
+      paint: paintConfig,
       design: selectedDesign ?? null,
       labelText,
       led: selectedLed ?? null,
