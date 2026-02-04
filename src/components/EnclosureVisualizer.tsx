@@ -588,27 +588,39 @@ export function EnclosureVisualizer({
                     />
                   </foreignObject>
                 ) : (
-                  <text
-                    x={getPosition('pedalName', 0, layout.pedal_name_position).x}
-                    y={getPosition('pedalName', 0, layout.pedal_name_position).y}
-                    textAnchor="middle"
-                    style={{
-                      fontSize: "6px",
-                      fontWeight: "bold",
-                      fill: "#fff",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                      pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
-                      cursor: isEditLabelsMode ? 'pointer' : 'default',
-                    }}
-                    onClick={() => {
-                      if (isEditLabelsMode) {
-                        setEditingLabel({ type: 'pedalName', index: 0, value: pedalName });
-                      }
-                    }}
-                  >
-                    {pedalName}
-                  </text>
+                  <>
+                    {labeledLettering && pedalName && (
+                      <rect
+                        x={getPosition('pedalName', 0, layout.pedal_name_position).x - (pedalName.length * 3) - 1.2}
+                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 8}
+                        width={(pedalName.length * 6) + 2.4}
+                        height="10.5"
+                        fill="#000"
+                        rx="0.5"
+                      />
+                    )}
+                    <text
+                      x={getPosition('pedalName', 0, layout.pedal_name_position).x}
+                      y={getPosition('pedalName', 0, layout.pedal_name_position).y}
+                      textAnchor="middle"
+                      style={{
+                        fontSize: "6px",
+                        fontWeight: "bold",
+                        fill: "#fff",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                        pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
+                        cursor: isEditLabelsMode ? 'pointer' : 'default',
+                      }}
+                      onClick={() => {
+                        if (isEditLabelsMode) {
+                          setEditingLabel({ type: 'pedalName', index: 0, value: pedalName });
+                        }
+                      }}
+                    >
+                      {pedalName}
+                    </text>
+                  </>
                 )}
               </g>
             )}
@@ -625,21 +637,7 @@ export function EnclosureVisualizer({
                   onMouseDown={handleMouseDown('potentiometer', idx)}
                   style={{ cursor: isEditMode ? 'move' : 'default' }}
                 >
-                  {/* Knob shadow */}
-                  <circle cx={effectivePos.x} cy={effectivePos.y + 0.75} r="8.25" fill="#000" opacity="0.3" />
-                  {/* Knob body */}
-                  <circle cx={effectivePos.x} cy={effectivePos.y} r="7.5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
-                  {/* Knob indicator line */}
-                  <line
-                    x1={effectivePos.x}
-                    y1={effectivePos.y - 6}
-                    x2={effectivePos.x}
-                    y2={effectivePos.y - 1.5}
-                    stroke="#fff"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                  />
-                  {/* Label */}
+                  {/* Label (rendered first, behind knob) */}
                   {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 15}
@@ -717,6 +715,20 @@ export function EnclosureVisualizer({
                       </text>
                     </>
                   )}
+                  {/* Knob shadow */}
+                  <circle cx={effectivePos.x} cy={effectivePos.y + 0.75} r="8.25" fill="#000" opacity="0.3" />
+                  {/* Knob body */}
+                  <circle cx={effectivePos.x} cy={effectivePos.y} r="7.5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
+                  {/* Knob indicator line */}
+                  <line
+                    x1={effectivePos.x}
+                    y1={effectivePos.y - 6}
+                    x2={effectivePos.x}
+                    y2={effectivePos.y - 1.5}
+                    stroke="#fff"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
                 </g>
               );
             })}
@@ -954,7 +966,7 @@ export function EnclosureVisualizer({
             })}
 
             {/* LED with glow */}
-            {ledType !== "No LED" && (
+            {ledType !== "No LED" && ledType !== "Illuminated Footswitch" && (
               <g 
                 onMouseDown={handleMouseDown('led', 0)}
                 style={{ cursor: isEditMode ? 'move' : 'default' }}
