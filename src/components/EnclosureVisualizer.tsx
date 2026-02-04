@@ -224,10 +224,8 @@ export function EnclosureVisualizer({
     }
   }, [isDragging, draggedItem]);
   
-  // Helper to get effective position
+  // Helper to get effective position (always uses override if exists)
   const getPosition = (type: string, index: number, defaultPos: Position): Position => {
-    if (!isEditMode) return defaultPos;
-    
     if (type === 'potentiometer' && positionOverrides.potentiometers[index]) {
       return positionOverrides.potentiometers[index];
     } else if (type === 'switch' && positionOverrides.switches[index]) {
