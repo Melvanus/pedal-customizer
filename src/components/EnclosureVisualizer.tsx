@@ -36,6 +36,7 @@ type EnclosureVisualizerProps = {
   enclosureColor?: string;
   finishType?: string;
   ledColor?: string;
+  ledType?: string;
   pedalName?: string;
   controlLabels?: Record<string, string>;
   controls?: Array<{ label: string; type: string }>;
@@ -71,6 +72,7 @@ export function EnclosureVisualizer({
   enclosureColor = "#808080",
   finishType,
   ledColor = "#ff0000",
+  ledType = "No Bezel",
   pedalName = "Custom Pedal",
   controlLabels = {},
   controls = [],
@@ -952,32 +954,140 @@ export function EnclosureVisualizer({
             })}
 
             {/* LED with glow */}
-            <g 
-              onMouseDown={handleMouseDown('led', 0)}
-              style={{ cursor: isEditMode ? 'move' : 'default' }}
-            >
-              <circle
-                cx={getPosition('led', 0, layout.led_position).x}
-                cy={getPosition('led', 0, layout.led_position).y}
-                r="2.5"
-                fill={ledColor}
-                filter="url(#led-glow)"
-                opacity="0.9"
-              />
-              <circle
-                cx={getPosition('led', 0, layout.led_position).x}
-                cy={getPosition('led', 0, layout.led_position).y}
-                r="1.5"
-                fill="#fff"
-                opacity="0.6"
-              />
-            </g>
+            {ledType !== "No LED" && (
+              <g 
+                onMouseDown={handleMouseDown('led', 0)}
+                style={{ cursor: isEditMode ? 'move' : 'default' }}
+              >
+                {ledType === "Fender Style Jewel" ? (
+                  <>
+                    {/* Jewel base (16mm diameter) */}
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="9.35"
+                      fill={ledColor}
+                      opacity="0.3"
+                      filter="url(#led-glow)"
+                    />
+                    {/* Jewel dome effect - gradient layers */}
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="9.35"
+                      fill={ledColor}
+                      opacity="0.6"
+                    />
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="7"
+                      fill={ledColor}
+                      opacity="0.8"
+                    />
+                    {/* Bright center */}
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="4"
+                      fill="#fff"
+                      opacity="0.9"
+                    />
+                    {/* Chrome ring */}
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="9.35"
+                      fill="none"
+                      stroke="#c0c0c0"
+                      strokeWidth="0.8"
+                    />
+                  </>
+                ) : ledType === "Simple LED Bezel" ? (
+                  <>
+                    {/* LED itself */}
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="2.5"
+                      fill={ledColor}
+                      filter="url(#led-glow)"
+                      opacity="0.9"
+                    />
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="1.5"
+                      fill="#fff"
+                      opacity="0.6"
+                    />
+                    {/* Silver bezel */}
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="4"
+                      fill="none"
+                      stroke="#c0c0c0"
+                      strokeWidth="1"
+                    />
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="3.2"
+                      fill="none"
+                      stroke="#888"
+                      strokeWidth="0.3"
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* Standard LED (No Bezel) */}
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="2.5"
+                      fill={ledColor}
+                      filter="url(#led-glow)"
+                      opacity="0.9"
+                    />
+                    <circle
+                      cx={getPosition('led', 0, layout.led_position).x}
+                      cy={getPosition('led', 0, layout.led_position).y}
+                      r="1.5"
+                      fill="#fff"
+                      opacity="0.6"
+                    />
+                  </>
+                )}
+              </g>
+            )}
 
             {/* Footswitch */}
             <g 
               onMouseDown={handleMouseDown('footswitch', 0)}
               style={{ cursor: isEditMode ? 'move' : 'default' }}
             >
+              {ledType === "Illuminated Footswitch" && (
+                <>
+                  {/* Blurred colored ring behind footswitch */}
+                  <circle
+                    cx={getPosition('footswitch', 0, layout.footswitch_position).x}
+                    cy={getPosition('footswitch', 0, layout.footswitch_position).y}
+                    r="12"
+                    fill={ledColor}
+                    opacity="0.6"
+                    filter="url(#led-glow)"
+                  />
+                  <circle
+                    cx={getPosition('footswitch', 0, layout.footswitch_position).x}
+                    cy={getPosition('footswitch', 0, layout.footswitch_position).y}
+                    r="10"
+                    fill={ledColor}
+                    opacity="0.4"
+                    filter="url(#led-glow)"
+                  />
+                </>
+              )}
               <circle
                 cx={getPosition('footswitch', 0, layout.footswitch_position).x}
                 cy={getPosition('footswitch', 0, layout.footswitch_position).y}

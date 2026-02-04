@@ -714,6 +714,7 @@ export default function SummaryPage() {
                   enclosureColor={paintColor}
                   finishType={finishType}
                   ledColor={config.ledColor || "#ff0000"}
+                  ledType={config.led?.name}
                   pedalName={showPedalNameInVisualizer ? (pedalName || "Custom Pedal") : ""}
                   controlLabels={controlLabels}
                   controls={effectiveControls}
