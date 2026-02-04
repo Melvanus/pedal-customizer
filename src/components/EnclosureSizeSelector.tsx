@@ -240,6 +240,8 @@ export function EnclosureSizeSelector({
 
         // Quadratic throw effect based on last velocity  
         let totalVelocity = Math.sqrt(prev.vx * prev.vx + prev.vy * prev.vy);
+        console.log("Total velocity on release:", totalVelocity);
+
         let multiplier = Math.min(1000, (totalVelocity) ** 1000);
 
         // 
