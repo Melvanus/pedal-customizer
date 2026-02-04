@@ -266,6 +266,58 @@ export function EnclosureVisualizer({
 
           {/* Main Enclosure Body */}
           <g transform={`scale(${scale})`}>
+            {/* Input Jack (behind enclosure) */}
+            <g>
+              <rect
+                x={layout.input_jack_position.x + 4 - 2}
+                y={layout.input_jack_position.y - 7.5}
+                width="4"
+                height="15"
+                fill="#888"
+                stroke="#555"
+                strokeWidth="0.5"
+                rx="0.5"
+              />
+              <text
+                x={layout.input_jack_position.x + 4}
+                y={layout.input_jack_position.y + 13}
+                textAnchor="middle"
+                style={{
+                  fontSize: "3px",
+                  fontWeight: 600,
+                  fill: "#fff",
+                }}
+              >
+                IN
+              </text>
+            </g>
+
+            {/* Output Jack (behind enclosure) */}
+            <g>
+              <rect
+                x={layout.output_jack_position.x - 4 - 2}
+                y={layout.output_jack_position.y - 7.5}
+                width="4"
+                height="15"
+                fill="#888"
+                stroke="#555"
+                strokeWidth="0.5"
+                rx="0.5"
+              />
+              <text
+                x={layout.output_jack_position.x - 4}
+                y={layout.output_jack_position.y + 13}
+                textAnchor="middle"
+                style={{
+                  fontSize: "3px",
+                  fontWeight: 600,
+                  fill: "#fff",
+                }}
+              >
+                OUT
+              </text>
+            </g>
+
             {/* Enclosure background with shadow */}
             <rect
               x={-layout.dimensions_mm.width / 2}
@@ -320,17 +372,17 @@ export function EnclosureVisualizer({
               return (
                 <g key={`pot-${idx}`}>
                   {/* Knob shadow */}
-                  <circle cx={pos.x} cy={pos.y + 0.5} r="5.5" fill="#000" opacity="0.3" />
+                  <circle cx={pos.x} cy={pos.y + 0.75} r="8.25" fill="#000" opacity="0.3" />
                   {/* Knob body */}
-                  <circle cx={pos.x} cy={pos.y} r="5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
+                  <circle cx={pos.x} cy={pos.y} r="7.5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
                   {/* Knob indicator line */}
                   <line
                     x1={pos.x}
-                    y1={pos.y - 4}
+                    y1={pos.y - 6}
                     x2={pos.x}
-                    y2={pos.y - 1}
+                    y2={pos.y - 1.5}
                     stroke="#fff"
-                    strokeWidth="0.8"
+                    strokeWidth="1.2"
                     strokeLinecap="round"
                   />
                   {/* Label */}
@@ -482,58 +534,6 @@ export function EnclosureVisualizer({
                 stroke="#1a1a1a"
                 strokeWidth="0.3"
               />
-            </g>
-
-            {/* Input Jack */}
-            <g>
-              <rect
-                x={layout.input_jack_position.x - 2}
-                y={layout.input_jack_position.y - 5}
-                width="4"
-                height="10"
-                fill="#888"
-                stroke="#555"
-                strokeWidth="0.5"
-                rx="0.5"
-              />
-              <text
-                x={layout.input_jack_position.x}
-                y={layout.input_jack_position.y + 11}
-                textAnchor="middle"
-                style={{
-                  fontSize: "3px",
-                  fontWeight: 600,
-                  fill: "#fff",
-                }}
-              >
-                IN
-              </text>
-            </g>
-
-            {/* Output Jack */}
-            <g>
-              <rect
-                x={layout.output_jack_position.x - 2}
-                y={layout.output_jack_position.y - 5}
-                width="4"
-                height="10"
-                fill="#888"
-                stroke="#555"
-                strokeWidth="0.5"
-                rx="0.5"
-              />
-              <text
-                x={layout.output_jack_position.x}
-                y={layout.output_jack_position.y + 11}
-                textAnchor="middle"
-                style={{
-                  fontSize: "3px",
-                  fontWeight: 600,
-                  fill: "#fff",
-                }}
-              >
-                OUT
-              </text>
             </g>
           </g>
         </svg>
