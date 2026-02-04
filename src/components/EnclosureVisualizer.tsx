@@ -43,6 +43,7 @@ type EnclosureVisualizerProps = {
   onToggleMaximize?: () => void;
   onLabelChange?: (controlLabel: string, newValue: string) => void;
   onPedalNameChange?: (newValue: string) => void;
+  labeledLettering?: boolean;
 };
 
 const getFinishPattern = (finishType: string | undefined, color: string) => {
@@ -77,6 +78,7 @@ export function EnclosureVisualizer({
   onToggleMaximize,
   onLabelChange,
   onPedalNameChange,
+  labeledLettering = false,
 }: EnclosureVisualizerProps) {
   const viewBoxWidth = 140;
   const viewBoxHeight = 160;
@@ -680,26 +682,38 @@ export function EnclosureVisualizer({
                       />
                     </foreignObject>
                   ) : (
-                    <text
-                      x={effectivePos.x + pos.label_offset.x}
-                      y={effectivePos.y + pos.label_offset.y}
-                      textAnchor="middle"
-                      style={{
-                        fontSize: "3.5px",
-                        fontWeight: 600,
-                        fill: "#fff",
-                        textTransform: "uppercase",
-                        pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                        cursor: isEditLabelsMode ? 'pointer' : 'default',
-                      }}
-                      onClick={() => {
-                        if (isEditLabelsMode && control) {
-                          setEditingLabel({ type: 'potentiometer', index: idx, value: label });
-                        }
-                      }}
-                    >
-                      {label}
-                    </text>
+                    <>
+                      {labeledLettering && (
+                        <rect
+                          x={effectivePos.x + pos.label_offset.x - (label.length * 2.5) - 1.2}
+                          y={effectivePos.y + pos.label_offset.y - 8}
+                          width={(label.length * 5) + 2.4}
+                          height="10.5"
+                          fill="#000"
+                          rx="0.5"
+                        />
+                      )}
+                      <text
+                        x={effectivePos.x + pos.label_offset.x}
+                        y={effectivePos.y + pos.label_offset.y}
+                        textAnchor="middle"
+                        style={{
+                          fontSize: labeledLettering ? "8px" : "3.5px",
+                          fontWeight: 600,
+                          fill: "#fff",
+                          textTransform: "uppercase",
+                          pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                          cursor: isEditLabelsMode ? 'pointer' : 'default',
+                        }}
+                        onClick={() => {
+                          if (isEditLabelsMode && control) {
+                            setEditingLabel({ type: 'potentiometer', index: idx, value: label });
+                          }
+                        }}
+                      >
+                        {label}
+                      </text>
+                    </>
                   )}
                 </g>
               );
@@ -784,26 +798,38 @@ export function EnclosureVisualizer({
                       />
                     </foreignObject>
                   ) : (
-                    <text
-                      x={effectivePos.x + pos.label_offset.x}
-                      y={effectivePos.y + pos.label_offset.y}
-                      textAnchor="middle"
-                      style={{
-                        fontSize: "3px",
-                        fontWeight: 600,
-                        fill: "#fff",
-                        textTransform: "uppercase",
-                        pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                        cursor: isEditLabelsMode ? 'pointer' : 'default',
-                      }}
-                      onClick={() => {
-                        if (isEditLabelsMode && control) {
-                          setEditingLabel({ type: 'switch', index: idx, value: label });
-                        }
-                      }}
-                    >
-                      {label}
-                    </text>
+                    <>
+                      {labeledLettering && (
+                        <rect
+                          x={effectivePos.x + pos.label_offset.x - (label.length * 2) - 1.2}
+                          y={effectivePos.y + pos.label_offset.y - 7.5}
+                          width={(label.length * 4) + 2.4}
+                          height="10.5"
+                          fill="#000"
+                          rx="0.5"
+                        />
+                      )}
+                      <text
+                        x={effectivePos.x + pos.label_offset.x}
+                        y={effectivePos.y + pos.label_offset.y}
+                        textAnchor="middle"
+                        style={{
+                          fontSize: labeledLettering ? "8px" : "3px",
+                          fontWeight: 600,
+                          fill: "#fff",
+                          textTransform: "uppercase",
+                          pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                          cursor: isEditLabelsMode ? 'pointer' : 'default',
+                        }}
+                        onClick={() => {
+                          if (isEditLabelsMode && control) {
+                            setEditingLabel({ type: 'switch', index: idx, value: label });
+                          }
+                        }}
+                      >
+                        {label}
+                      </text>
+                    </>
                   )}
                 </g>
               );
@@ -888,26 +914,38 @@ export function EnclosureVisualizer({
                       />
                     </foreignObject>
                   ) : (
-                    <text
-                      x={effectivePos.x + pos.label_offset.x}
-                      y={effectivePos.y + pos.label_offset.y}
-                      textAnchor="middle"
-                      style={{
-                        fontSize: "3.5px",
-                        fontWeight: 600,
-                        fill: "#fff",
-                        textTransform: "uppercase",
-                        pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                        cursor: isEditLabelsMode ? 'pointer' : 'default',
-                      }}
-                      onClick={() => {
-                        if (isEditLabelsMode && control) {
-                          setEditingLabel({ type: 'fader', index: idx, value: label });
-                        }
-                      }}
-                    >
-                      {label}
-                    </text>
+                    <>
+                      {labeledLettering && (
+                        <rect
+                          x={effectivePos.x + pos.label_offset.x - (label.length * 2.5) - 1.2}
+                          y={effectivePos.y + pos.label_offset.y - 8}
+                          width={(label.length * 5) + 2.4}
+                          height="10.5"
+                          fill="#000"
+                          rx="0.5"
+                        />
+                      )}
+                      <text
+                        x={effectivePos.x + pos.label_offset.x}
+                        y={effectivePos.y + pos.label_offset.y}
+                        textAnchor="middle"
+                        style={{
+                          fontSize: labeledLettering ? "8px" : "3.5px",
+                          fontWeight: 600,
+                          fill: "#fff",
+                          textTransform: "uppercase",
+                          pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                          cursor: isEditLabelsMode ? 'pointer' : 'default',
+                        }}
+                        onClick={() => {
+                          if (isEditLabelsMode && control) {
+                            setEditingLabel({ type: 'fader', index: idx, value: label });
+                          }
+                        }}
+                      >
+                        {label}
+                      </text>
+                    </>
                   )}
                 </g>
               );

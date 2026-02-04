@@ -725,6 +725,7 @@ export default function SummaryPage() {
                   onPedalNameChange={(newValue) => {
                     setPedalName(newValue);
                   }}
+                  labeledLettering={config.design?.name === "Labeled Lettering"}
                 />
               </div>
             )}
