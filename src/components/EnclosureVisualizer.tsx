@@ -579,7 +579,7 @@ export function EnclosureVisualizer({
                         textAlign: 'center',
                         textTransform: 'uppercase',
                         letterSpacing: '0.5px',
-                        background: '#1a1a1a',
+                        background: 'transparent',
                         border: '1px solid #4ade80',
                         color: '#fff',
                         outline: 'none',
@@ -601,8 +601,9 @@ export function EnclosureVisualizer({
                     )}
                     <text
                       x={getPosition('pedalName', 0, layout.pedal_name_position).x}
-                      y={getPosition('pedalName', 0, layout.pedal_name_position).y}
+                      y={getPosition('pedalName', 0, layout.pedal_name_position).y - 1.25}
                       textAnchor="middle"
+                      dominantBaseline="middle"
                       style={{
                         fontSize: "6px",
                         fontWeight: "bold",
@@ -673,7 +674,7 @@ export function EnclosureVisualizer({
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
-                          background: '#1a1a1a',
+                          background: 'transparent',
                           border: '1px solid #4ade80',
                           color: '#fff',
                           outline: 'none',
@@ -803,7 +804,7 @@ export function EnclosureVisualizer({
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
-                          background: '#1a1a1a',
+                          background: 'transparent',
                           border: '1px solid #4ade80',
                           color: '#fff',
                           outline: 'none',
@@ -919,7 +920,7 @@ export function EnclosureVisualizer({
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
-                          background: '#1a1a1a',
+                          background: 'transparent',
                           border: '1px solid #4ade80',
                           color: '#fff',
                           outline: 'none',
