@@ -91,15 +91,46 @@ export function EnclosureVisualizer({
     faders: Position[];
     led: Position | null;
     footswitch: Position | null;
+    pedalName: Position | null;
   }>({
     potentiometers: [],
     switches: [],
     faders: [],
     led: null,
     footswitch: null,
+    pedalName: null,
   });
   
   const svgRef = React.useRef<SVGSVGElement>(null);
+  
+  // Load saved positions from sessionStorage on mount
+  React.useEffect(() => {
+    const savedKey = `enclosure_positions_${layout.id}`;
+    const saved = sessionStorage.getItem(savedKey);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setPositionOverrides(parsed);
+      } catch (e) {
+        console.error('Failed to parse saved positions:', e);
+      }
+    }
+  }, [layout.id]);
+  
+  // Save positions to sessionStorage when edit mode is disabled
+  React.useEffect(() => {
+    if (!isEditMode && (
+      positionOverrides.potentiometers.length > 0 ||
+      positionOverrides.switches.length > 0 ||
+      positionOverrides.faders.length > 0 ||
+      positionOverrides.led ||
+      positionOverrides.footswitch ||
+      positionOverrides.pedalName
+    )) {
+      const savedKey = `enclosure_positions_${layout.id}`;
+      sessionStorage.setItem(savedKey, JSON.stringify(positionOverrides));
+    }
+  }, [isEditMode, positionOverrides, layout.id]);
   
   // Calculate current layout index and handle navigation
   const currentIndex = availableLayouts.findIndex(l => l.id === layout.id);
@@ -118,17 +149,6 @@ export function EnclosureVisualizer({
       onLayoutChange(availableLayouts[newIndex]);
     }
   };
-  
-  // Reset position overrides when layout changes
-  React.useEffect(() => {
-    setPositionOverrides({
-      potentiometers: [],
-      switches: [],
-      faders: [],
-      led: null,
-      footswitch: null,
-    });
-  }, [layout.id]);
   
   // Drag handlers
   const getScaledMousePosition = (event: MouseEvent | React.MouseEvent): Position | null => {
@@ -179,6 +199,8 @@ export function EnclosureVisualizer({
         newOverrides.led = pos;
       } else if (draggedItem.type === 'footswitch') {
         newOverrides.footswitch = pos;
+      } else if (draggedItem.type === 'pedalName') {
+        newOverrides.pedalName = pos;
       }
       
       return newOverrides;
@@ -216,6 +238,8 @@ export function EnclosureVisualizer({
       return positionOverrides.led;
     } else if (type === 'footswitch' && positionOverrides.footswitch) {
       return positionOverrides.footswitch;
+    } else if (type === 'pedalName' && positionOverrides.pedalName) {
+      return positionOverrides.pedalName;
     }
     
     return defaultPos;
@@ -276,7 +300,7 @@ export function EnclosureVisualizer({
               title="Toggle edit mode to drag and reposition components"
             >
               <Move size={14} />
-              {isEditMode ? "Edit" : ""}
+              <span>Edit Layout</span>
             </button>
             <button
               onClick={onToggleMaximize}
@@ -477,20 +501,28 @@ export function EnclosureVisualizer({
             </linearGradient>
 
             {/* Pedal Name */}
-            <text
-              x={layout.pedal_name_position.x}
-              y={layout.pedal_name_position.y}
-              textAnchor="middle"
-              style={{
-                fontSize: "6px",
-                fontWeight: "bold",
-                fill: "#fff",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {pedalName}
-            </text>
+            {pedalName && (
+              <g
+                onMouseDown={handleMouseDown('pedalName', 0)}
+                style={{ cursor: isEditMode ? 'move' : 'default' }}
+              >
+                <text
+                  x={getPosition('pedalName', 0, layout.pedal_name_position).x}
+                  y={getPosition('pedalName', 0, layout.pedal_name_position).y}
+                  textAnchor="middle"
+                  style={{
+                    fontSize: "6px",
+                    fontWeight: "bold",
+                    fill: "#fff",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                    pointerEvents: isEditMode ? 'auto' : 'none',
+                  }}
+                >
+                  {pedalName}
+                </text>
+              </g>
+            )}
 
             {/* Potentiometers */}
             {layout.potentiometer_positions.map((pos, idx) => {

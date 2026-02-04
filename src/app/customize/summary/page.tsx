@@ -73,6 +73,7 @@ export default function SummaryPage() {
   const [isVisualizerMaximized, setIsVisualizerMaximized] = React.useState(false);
   const [layoutsData, setLayoutsData] = React.useState<any[]>([]);
   const [selectedLayoutId, setSelectedLayoutId] = React.useState<string | null>(null);
+  const [showPedalNameInVisualizer, setShowPedalNameInVisualizer] = React.useState(true);
 
   // Compute effective controls considering mods
   const effectiveControls = React.useMemo(() => {
@@ -559,21 +560,43 @@ export default function SummaryPage() {
               <div style={{ background: "#1a1a1a", padding: "0.1rem 1.5rem 1.5rem 1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
                 <h3 style={{ fontSize: "1.2rem", marginBottom: "0.75rem", color: "#fff" }}>Custom Labeling</h3>
                 
-                <div style={{ marginBottom: "1.5rem" }}>
-                  <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
-                    Custom Pedal Name
+                {/* Show Pedal Name Toggle */}
+                <div style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <label style={{ display: "flex", alignItems: "center", cursor: "pointer", userSelect: "none" }}>
+                    <input
+                      type="checkbox"
+                      checked={showPedalNameInVisualizer}
+                      onChange={(e) => setShowPedalNameInVisualizer(e.target.checked)}
+                      style={{ 
+                        width: "18px", 
+                        height: "18px", 
+                        cursor: "pointer",
+                        accentColor: "#4ade80"
+                      }}
+                    />
+                    <span style={{ marginLeft: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
+                      Show Pedal Name in Visualization
+                    </span>
                   </label>
-                  <input
-                    type="text"
-                    value={pedalName}
-                    onChange={(e) => setPedalName(e.target.value)}
-                    placeholder="e.g. Aurora Drive"
-                    style={{ width: "100%", padding: "0.75rem", background: "#0f0f0f", border: "2px solid #2d2d2d", borderRadius: "5px", color: "#e0e0e0", fontSize: "1rem", boxSizing: "border-box" }}
-                  />
-                  <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.5rem", marginBottom: 0 }}>
-                    Leave empty if you'd like us to create a unique name for your pedal
-                  </p>
                 </div>
+                
+                {showPedalNameInVisualizer && (
+                  <div style={{ marginBottom: "1.5rem" }}>
+                    <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#ccc" }}>
+                      Custom Pedal Name
+                    </label>
+                    <input
+                      type="text"
+                      value={pedalName}
+                      onChange={(e) => setPedalName(e.target.value)}
+                      placeholder="e.g. Aurora Drive"
+                      style={{ width: "100%", padding: "0.75rem", background: "#0f0f0f", border: "2px solid #2d2d2d", borderRadius: "5px", color: "#e0e0e0", fontSize: "1rem", boxSizing: "border-box" }}
+                    />
+                    <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.5rem", marginBottom: 0 }}>
+                      Leave empty if you'd like us to create a unique name for your pedal
+                    </p>
+                  </div>
+                )}
 
                 {/* Control Labels */}
                 {effectiveControls.length > 0 && (
@@ -691,7 +714,7 @@ export default function SummaryPage() {
                   enclosureColor={paintColor}
                   finishType={finishType}
                   ledColor={config.ledColor || "#ff0000"}
-                  pedalName={pedalName || "Custom Pedal"}
+                  pedalName={showPedalNameInVisualizer ? (pedalName || "Custom Pedal") : ""}
                   controlLabels={controlLabels}
                   controls={effectiveControls}
                   isMaximized={isVisualizerMaximized}
