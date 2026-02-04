@@ -42,7 +42,7 @@ export function LandingPage({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "70vh",
+          minHeight: "30vh",
           padding: "2rem",
           textAlign: "center",
         }}
@@ -52,7 +52,7 @@ export function LandingPage({
           style={{
             fontSize: "4rem",
             fontWeight: "bold",
-            marginBottom: "1.5rem",
+            marginBottom: "1rem",
             background: "linear-gradient(135deg, #fff 0%, #aaa 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
@@ -120,7 +120,7 @@ export function LandingPage({
         data-section="statistics-section"
         style={{
           background: "#1a1a1a",
-          padding: "4rem 2rem",
+          padding: "0rem 2rem",
           borderTop: "2px solid #333",
           borderBottom: "2px solid #333",
         }}
@@ -138,7 +138,7 @@ export function LandingPage({
               fontSize: "2rem",
               fontWeight: 600,
               textAlign: "center",
-              marginBottom: "3rem",
+              marginBottom: "1rem",
               color: "#fff",
             }}
           >
@@ -149,9 +149,9 @@ export function LandingPage({
             data-section="stat-cards-grid"
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "2rem",
-              marginBottom: "3rem",
+              gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
+              gap: "1rem",
+              marginBottom: "2rem",
             }}
           >
             <StatCard label="Effect Pedals" value={effectPedals} />
@@ -319,7 +319,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
       <div
         data-section="stat-value"
         style={{
-          fontSize: "2.5rem",
+          fontSize: "1.5rem",
           fontWeight: "bold",
           color: "#fff",
           marginBottom: "0.5rem",

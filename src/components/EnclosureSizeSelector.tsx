@@ -273,7 +273,9 @@ export function EnclosureSizeSelector({
 
         // Apply throw effect with velocity dampening factor
         // Since velocity is now in pixels/second, apply a dampening factor
-        const throwFactor = 0.3; // Adjust this to control throw strength
+        const throwFactor = 0.002; // Adjust this to control throw strength
+
+        console.log("Throw velocity:", prev.vx, prev.vy);
         
         return {
           ...prev,
