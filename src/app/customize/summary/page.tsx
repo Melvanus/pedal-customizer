@@ -719,6 +719,9 @@ export default function SummaryPage() {
                   controls={effectiveControls}
                   isMaximized={isVisualizerMaximized}
                   onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}
+                  onLabelChange={(controlLabel, newValue) => {
+                    setControlLabels(prev => ({ ...prev, [controlLabel]: newValue }));
+                  }}
                 />
               </div>
             )}

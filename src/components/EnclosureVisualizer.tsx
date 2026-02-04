@@ -41,6 +41,7 @@ type EnclosureVisualizerProps = {
   controls?: Array<{ label: string; type: string }>;
   isMaximized?: boolean;
   onToggleMaximize?: () => void;
+  onLabelChange?: (controlLabel: string, newValue: string) => void;
 };
 
 const getFinishPattern = (finishType: string | undefined, color: string) => {
@@ -73,6 +74,7 @@ export function EnclosureVisualizer({
   controls = [],
   isMaximized = false,
   onToggleMaximize,
+  onLabelChange,
 }: EnclosureVisualizerProps) {
   const viewBoxWidth = 140;
   const viewBoxHeight = 160;
@@ -81,6 +83,7 @@ export function EnclosureVisualizer({
   
   // Edit mode state
   const [isEditMode, setIsEditMode] = React.useState(false);
+  const [isEditLabelsMode, setIsEditLabelsMode] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
   const [draggedItem, setDraggedItem] = React.useState<{ type: string; index: number } | null>(null);
   
@@ -299,6 +302,35 @@ export function EnclosureVisualizer({
             >
               <Move size={14} />
               <span>Edit Layout</span>
+            </button>
+            <button
+              onClick={() => setIsEditLabelsMode(!isEditLabelsMode)}
+              style={{
+                background: isEditLabelsMode ? "#333" : "transparent",
+                border: "1px solid " + (isEditLabelsMode ? "#666" : "#333"),
+                color: isEditLabelsMode ? "#4ade80" : "#fff",
+                cursor: "pointer",
+                padding: "0.25rem 0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.25rem",
+                borderRadius: "4px",
+                fontSize: "0.75rem",
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => {
+                if (!isEditLabelsMode) e.currentTarget.style.background = "#222";
+              }}
+              onMouseLeave={(e) => {
+                if (!isEditLabelsMode) e.currentTarget.style.background = "transparent";
+              }}
+              title="Toggle edit mode to click and edit label text"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              <span>Edit Labels</span>
             </button>
             <button
               onClick={onToggleMaximize}
@@ -558,7 +590,16 @@ export function EnclosureVisualizer({
                       fontWeight: 600,
                       fill: "#fff",
                       textTransform: "uppercase",
-                      pointerEvents: 'none',
+                      pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                      cursor: isEditLabelsMode ? 'pointer' : 'default',
+                    }}
+                    onClick={() => {
+                      if (isEditLabelsMode && onLabelChange && control) {
+                        const newLabel = prompt('Edit label:', label);
+                        if (newLabel !== null && newLabel.trim() !== '') {
+                          onLabelChange(control.label, newLabel.trim());
+                        }
+                      }
                     }}
                   >
                     {label}
@@ -611,7 +652,16 @@ export function EnclosureVisualizer({
                       fontWeight: 600,
                       fill: "#fff",
                       textTransform: "uppercase",
-                      pointerEvents: 'none',
+                      pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                      cursor: isEditLabelsMode ? 'pointer' : 'default',
+                    }}
+                    onClick={() => {
+                      if (isEditLabelsMode && onLabelChange && control) {
+                        const newLabel = prompt('Edit label:', label);
+                        if (newLabel !== null && newLabel.trim() !== '') {
+                          onLabelChange(control.label, newLabel.trim());
+                        }
+                      }
                     }}
                   >
                     {label}
@@ -664,7 +714,16 @@ export function EnclosureVisualizer({
                       fontWeight: 600,
                       fill: "#fff",
                       textTransform: "uppercase",
-                      pointerEvents: 'none',
+                      pointerEvents: isEditLabelsMode ? 'auto' : 'none',
+                      cursor: isEditLabelsMode ? 'pointer' : 'default',
+                    }}
+                    onClick={() => {
+                      if (isEditLabelsMode && onLabelChange && control) {
+                        const newLabel = prompt('Edit label:', label);
+                        if (newLabel !== null && newLabel.trim() !== '') {
+                          onLabelChange(control.label, newLabel.trim());
+                        }
+                      }
                     }}
                   >
                     {label}
