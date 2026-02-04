@@ -13,6 +13,7 @@ type BananaPhysics = {
   dragOffsetY: number;
   lastX: number;
   lastY: number;
+  lastMoveTime: number;
 };
 
 export type EnclosureSize = {
@@ -55,6 +56,7 @@ export function EnclosureSizeSelector({
     dragOffsetY: 0,
     lastX: 600,
     lastY: 150,
+    lastMoveTime: performance.now(),
   });
 
   // Physics simulation with repelling forces and gravitational attraction
@@ -214,6 +216,7 @@ export function EnclosureSizeSelector({
       dragOffsetY: e.clientY - rect.top,
       vx: 0,
       vy: 0,
+      lastMoveTime: performance.now(),
     }));
   };
 
@@ -250,11 +253,17 @@ export function EnclosureSizeSelector({
         const newX = e.clientX - prev.dragOffsetX;
         const newY = e.clientY - prev.dragOffsetY;
         
-        // Track velocity while dragging
-        const vx = newX - prev.x;
-        const vy = newY - prev.y;
+        // Calculate time delta in seconds
+        const currentTime = performance.now();
+        const deltaTime = (currentTime - prev.lastMoveTime) / 1000;
         
-        return { ...prev, x: newX, y: newY, vx, vy, lastX: prev.x, lastY: prev.y };
+        // Track velocity while dragging (distance / time)
+        // Prevent division by zero and use minimum deltaTime
+        const safeDeltaTime = Math.max(deltaTime, 0.001);
+        const vx = (newX - prev.x) / safeDeltaTime;
+        const vy = (newY - prev.y) / safeDeltaTime;
+        
+        return { ...prev, x: newX, y: newY, vx, vy, lastX: prev.x, lastY: prev.y, lastMoveTime: currentTime };
       });
     };
 
@@ -262,20 +271,15 @@ export function EnclosureSizeSelector({
       setBanana((prev) => {
         if (!prev.isDragging) return prev;
 
-        // Quadratic throw effect based on last velocity  
-        let totalVelocity = Math.sqrt(prev.vx * prev.vx + prev.vy * prev.vy);
-        console.log("Total velocity on release:", totalVelocity);
-
-        let multiplier = Math.min(1000, (totalVelocity) ** 1000);
-
-        // 
-
-        // Keep the velocity from dragging for throwing effect (2x multiplier)
+        // Apply throw effect with velocity dampening factor
+        // Since velocity is now in pixels/second, apply a dampening factor
+        const throwFactor = 0.3; // Adjust this to control throw strength
+        
         return {
           ...prev,
           isDragging: false,
-          vx: prev.vx * multiplier,
-          vy: prev.vy * multiplier,
+          vx: prev.vx * throwFactor,
+          vy: prev.vy * throwFactor,
         };
       });
     };
