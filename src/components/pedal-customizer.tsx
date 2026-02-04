@@ -1882,7 +1882,7 @@ export function PedalCustomizer({
             left: "50%",
             transform: "translateX(-50%)",
             width: "85%",
-            maxWidth: "800px",
+            maxWidth: "400px",
             background: "rgba(26, 26, 26, 0.85)",
             padding: "1rem",
             borderRadius: "10px",

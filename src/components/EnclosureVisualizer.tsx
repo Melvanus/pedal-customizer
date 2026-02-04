@@ -22,8 +22,10 @@ type LayoutData = {
   potentiometer_positions: PositionWithLabel[];
   switch_positions: PositionWithLabel[];
   fader_positions: PositionWithLabel[];
-  footswitch_position: Position;
-  led_position: Position;
+  footswitch_position?: Position; // Optional - for single footswitch layouts
+  footswitch_positions?: Position[]; // Optional - for multi footswitch layouts
+  led_position?: Position; // Optional - for single LED layouts
+  led_positions?: Position[]; // Optional - for multi LED layouts
   input_jack_position: Position;
   output_jack_position: Position;
   pedal_name_position: Position;
@@ -137,15 +139,15 @@ export function EnclosureVisualizer({
     potentiometers: Position[];
     switches: Position[];
     faders: Position[];
-    led: Position | null;
-    footswitch: Position | null;
+    leds: Position[];
+    footswitches: Position[];
     pedalName: Position | null;
   }>({
     potentiometers: [],
     switches: [],
     faders: [],
-    led: null,
-    footswitch: null,
+    leds: [],
+    footswitches: [],
     pedalName: null,
   });
   
@@ -171,8 +173,8 @@ export function EnclosureVisualizer({
       positionOverrides.potentiometers.length > 0 ||
       positionOverrides.switches.length > 0 ||
       positionOverrides.faders.length > 0 ||
-      positionOverrides.led ||
-      positionOverrides.footswitch ||
+      positionOverrides.leds.length > 0 ||
+      positionOverrides.footswitches.length > 0 ||
       positionOverrides.pedalName
     )) {
       const savedKey = `enclosure_positions_${layout.id}`;
@@ -244,9 +246,13 @@ export function EnclosureVisualizer({
         newFaders[draggedItem.index] = pos;
         newOverrides.faders = newFaders;
       } else if (draggedItem.type === 'led') {
-        newOverrides.led = pos;
+        const newLEDs = [...prev.leds];
+        newLEDs[draggedItem.index] = pos;
+        newOverrides.leds = newLEDs;
       } else if (draggedItem.type === 'footswitch') {
-        newOverrides.footswitch = pos;
+        const newFootswitches = [...prev.footswitches];
+        newFootswitches[draggedItem.index] = pos;
+        newOverrides.footswitches = newFootswitches;
       } else if (draggedItem.type === 'pedalName') {
         newOverrides.pedalName = pos;
       }
@@ -280,10 +286,10 @@ export function EnclosureVisualizer({
       return positionOverrides.switches[index];
     } else if (type === 'fader' && positionOverrides.faders[index]) {
       return positionOverrides.faders[index];
-    } else if (type === 'led' && positionOverrides.led) {
-      return positionOverrides.led;
-    } else if (type === 'footswitch' && positionOverrides.footswitch) {
-      return positionOverrides.footswitch;
+    } else if (type === 'led' && positionOverrides.leds[index]) {
+      return positionOverrides.leds[index];
+    } else if (type === 'footswitch' && positionOverrides.footswitches[index]) {
+      return positionOverrides.footswitches[index];
     } else if (type === 'pedalName' && positionOverrides.pedalName) {
       return positionOverrides.pedalName;
     }
@@ -1008,167 +1014,177 @@ export function EnclosureVisualizer({
               );
             })}
 
-            {/* LED with glow */}
-            {ledType !== "No LED" && ledType !== "Illuminated Footswitch" && (
-              <g 
-                onMouseDown={handleMouseDown('led', 0)}
-                style={{ cursor: isEditMode ? 'move' : 'default' }}
-              >
-                {/* Invisible hit area for better clickability and to prevent glow cutoff */}
-                <circle
-                  cx={getPosition('led', 0, layout.led_position).x}
-                  cy={getPosition('led', 0, layout.led_position).y}
-                  r="18"
-                  fill="transparent"
-                  stroke="none"
-                />
-                
-                {ledType === "Fender Style Jewel" ? (
-                  <>
-                    {/* Jewel base (16mm diameter) */}
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="9.35"
-                      fill={ledColor}
-                      opacity="0.3"
-                      filter="url(#led-glow)"
-                    />
-                    {/* Jewel dome effect - gradient layers */}
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="9.35"
-                      fill={ledColor}
-                      opacity="0.6"
-                    />
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="7"
-                      fill={ledColor}
-                      opacity="0.8"
-                    />
-                    {/* Bright center */}
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="4"
-                      fill="#fff"
-                      opacity="0.9"
-                    />
-                    {/* Chrome ring */}
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="9.35"
-                      fill="none"
-                      stroke="#c0c0c0"
-                      strokeWidth="0.8"
-                    />
-                  </>
-                ) : ledType === "Simple LED Bezel" ? (
-                  <>
-                    {/* LED itself */}
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="2.5"
-                      fill={ledColor}
-                      filter="url(#led-glow)"
-                      opacity="0.9"
-                    />
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="1.5"
-                      fill="#fff"
-                      opacity="0.6"
-                    />
-                    {/* Silver bezel */}
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="4"
-                      fill="none"
-                      stroke="#c0c0c0"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="3.2"
-                      fill="none"
-                      stroke="#888"
-                      strokeWidth="0.3"
-                    />
-                  </>
-                ) : (
-                  <>
-                    {/* Standard LED (No Bezel) */}
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="2.5"
-                      fill={ledColor}
-                      filter="url(#led-glow)"
-                      opacity="0.9"
-                    />
-                    <circle
-                      cx={getPosition('led', 0, layout.led_position).x}
-                      cy={getPosition('led', 0, layout.led_position).y}
-                      r="1.5"
-                      fill="#fff"
-                      opacity="0.6"
-                    />
-                  </>
-                )}
-              </g>
-            )}
+            {/* LED with glow - support both single and multiple LEDs */}
+            {ledType !== "No LED" && ledType !== "Illuminated Footswitch" && (() => {
+              const ledPositions = layout.led_positions || (layout.led_position ? [layout.led_position] : []);
+              return ledPositions.map((ledPos, index) => (
+                <g 
+                  key={`led-${index}`}
+                  onMouseDown={handleMouseDown('led', index)}
+                  style={{ cursor: isEditMode ? 'move' : 'default' }}
+                >
+                  {/* Invisible hit area for better clickability and to prevent glow cutoff */}
+                  <circle
+                    cx={getPosition('led', index, ledPos).x}
+                    cy={getPosition('led', index, ledPos).y}
+                    r="18"
+                    fill="transparent"
+                    stroke="none"
+                  />
+                  
+                  {ledType === "Fender Style Jewel" ? (
+                    <>
+                      {/* Jewel base (16mm diameter) */}
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="9.35"
+                        fill={ledColor}
+                        opacity="0.3"
+                        filter="url(#led-glow)"
+                      />
+                      {/* Jewel dome effect - gradient layers */}
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="9.35"
+                        fill={ledColor}
+                        opacity="0.6"
+                      />
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="7"
+                        fill={ledColor}
+                        opacity="0.8"
+                      />
+                      {/* Bright center */}
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="4"
+                        fill="#fff"
+                        opacity="0.9"
+                      />
+                      {/* Chrome ring */}
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="9.35"
+                        fill="none"
+                        stroke="#c0c0c0"
+                        strokeWidth="0.8"
+                      />
+                    </>
+                  ) : ledType === "Simple LED Bezel" ? (
+                    <>
+                      {/* LED itself */}
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="2.5"
+                        fill={ledColor}
+                        filter="url(#led-glow)"
+                        opacity="0.9"
+                      />
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="1.5"
+                        fill="#fff"
+                        opacity="0.6"
+                      />
+                      {/* Silver bezel */}
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="4"
+                        fill="none"
+                        stroke="#c0c0c0"
+                        strokeWidth="1"
+                      />
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="3.2"
+                        fill="none"
+                        stroke="#888"
+                        strokeWidth="0.3"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {/* Standard LED (No Bezel) */}
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="2.5"
+                        fill={ledColor}
+                        filter="url(#led-glow)"
+                        opacity="0.9"
+                      />
+                      <circle
+                        cx={getPosition('led', index, ledPos).x}
+                        cy={getPosition('led', index, ledPos).y}
+                        r="1.5"
+                        fill="#fff"
+                        opacity="0.6"
+                      />
+                    </>
+                  )}
+                </g>
+              ));
+            })()}
 
-            {/* Footswitch */}
-            <g 
-              onMouseDown={handleMouseDown('footswitch', 0)}
-              style={{ cursor: isEditMode ? 'move' : 'default' }}
-            >
-              {ledType === "Illuminated Footswitch" && (
-                <>
-                  {/* Blurred colored ring behind footswitch */}
+            {/* Footswitch - support both single and multiple footswitches */}
+            {(() => {
+              const footswitchPositions = layout.footswitch_positions || (layout.footswitch_position ? [layout.footswitch_position] : []);
+              return footswitchPositions.map((fsPos, index) => (
+                <g 
+                  key={`footswitch-${index}`}
+                  onMouseDown={handleMouseDown('footswitch', index)}
+                  style={{ cursor: isEditMode ? 'move' : 'default' }}
+                >
+                  {ledType === "Illuminated Footswitch" && (
+                    <>
+                      {/* Blurred colored ring behind footswitch */}
+                      <circle
+                        cx={getPosition('footswitch', index, fsPos).x}
+                        cy={getPosition('footswitch', index, fsPos).y}
+                        r="12"
+                        fill={ledColor}
+                        opacity="0.6"
+                        filter="url(#led-glow)"
+                      />
+                      <circle
+                        cx={getPosition('footswitch', index, fsPos).x}
+                        cy={getPosition('footswitch', index, fsPos).y}
+                        r="10"
+                        fill={ledColor}
+                        opacity="0.4"
+                        filter="url(#led-glow)"
+                      />
+                    </>
+                  )}
                   <circle
-                    cx={getPosition('footswitch', 0, layout.footswitch_position).x}
-                    cy={getPosition('footswitch', 0, layout.footswitch_position).y}
-                    r="12"
-                    fill={ledColor}
-                    opacity="0.6"
-                    filter="url(#led-glow)"
+                    cx={getPosition('footswitch', index, fsPos).x}
+                    cy={getPosition('footswitch', index, fsPos).y}
+                    r="9"
+                    fill="url(#footswitch-grad)"
+                    stroke="#0a0a0a"
+                    strokeWidth="0.5"
                   />
                   <circle
-                    cx={getPosition('footswitch', 0, layout.footswitch_position).x}
-                    cy={getPosition('footswitch', 0, layout.footswitch_position).y}
-                    r="10"
-                    fill={ledColor}
-                    opacity="0.4"
-                    filter="url(#led-glow)"
+                    cx={getPosition('footswitch', index, fsPos).x}
+                    cy={getPosition('footswitch', index, fsPos).y}
+                    r="6"
+                    fill="#2a2a2a"
+                    stroke="#1a1a1a"
+                    strokeWidth="0.3"
                   />
-                </>
-              )}
-              <circle
-                cx={getPosition('footswitch', 0, layout.footswitch_position).x}
-                cy={getPosition('footswitch', 0, layout.footswitch_position).y}
-                r="9"
-                fill="url(#footswitch-grad)"
-                stroke="#0a0a0a"
-                strokeWidth="0.5"
-              />
-              <circle
-                cx={getPosition('footswitch', 0, layout.footswitch_position).x}
-                cy={getPosition('footswitch', 0, layout.footswitch_position).y}
-                r="6"
-                fill="#2a2a2a"
-                stroke="#1a1a1a"
-                strokeWidth="0.3"
-              />
-            </g>
+                </g>
+              ));
+            })()}
           </g>
         </svg>
       </div>

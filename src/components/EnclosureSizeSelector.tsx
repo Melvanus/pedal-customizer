@@ -238,13 +238,11 @@ export function EnclosureSizeSelector({
       setBanana((prev) => {
         if (!prev.isDragging) return prev;
 
-        // Quadratic throw effect based on last velocity
-        // when the mouse is moved slowly the banana should not fly off too fast
-        // Should be a value between 0 and 2
+        // Quadratic throw effect based on last velocity  
         let totalVelocity = Math.sqrt(prev.vx * prev.vx + prev.vy * prev.vy);
-        
-        // Quadratic scaling
-        let multiplier = Math.min(2, (totalVelocity) ** 2);
+        let multiplier = Math.min(1000, (totalVelocity) ** 1000);
+
+        // 
 
         // Keep the velocity from dragging for throwing effect (2x multiplier)
         return {
