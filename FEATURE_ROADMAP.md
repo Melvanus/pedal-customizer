@@ -1,58 +1,165 @@
 # Pedal Customizer - Feature Roadmap
 
 ## Current Features ✅
-- Dark theme with black & white design elements
-- **Six-tab configuration system: Effect → Size → Paint/Finish → Design/Labeling → LED → Other**
-- **Effect Pedal Selection Tab**
-  - Search by name, circuit, or sound characteristics
-  - Category filters (Overdrive, Distortion, Fuzz, Boost, Modulation, etc.)
-  - Sound character tag filtering (warm, bright, aggressive, vintage, etc.)
-  - Sort by popularity, name, complexity, or size
-  - Detailed modal showing full specs, mods, and technical info
-- **Enclosure Size Selection Tab**
-  - Visual size comparison with relative scaling
-  - Funny, quirky size descriptions and analogies
-  - Capacity information and component counts
-  - Smart recommendations based on selected effect pedal
-  - "Best Fit" badge for recommended sizes
-- **Paint/Finish tab now as Step 3**
-- Search, filter, and sort for paint options
-- Multi-select for "Other" category
-- Real-time price calculation in EUR (includes effect circuit price modifier)
-- Configuration summary display with interactive navigation (shows all 6 steps)
-- Download configuration as JSON (includes effect and enclosure size data)
-- Fixed layout with scrollable selection area
-- Floating tabs & filters panel at top (translucent, responsive)
-- Floating configuration summary panel at bottom-center (translucent, clickable)
-- Finish type icons on paint cards (⭐ Glossy, 🔨 Hammered, 🏖️ Sand, ☢️ Glow, ✨ Metallic, 🎨 Matte)
-- Product descriptions (short & long) on all options
-- Landing page with statistics and total combinations calculation
-  - Shows effect pedals and enclosure sizes in statistics
-  - Updated "How It Works" section with 6-step workflow
-- Final summary page with:
-  - Effect circuit and enclosure size information display
-  - Long descriptions for all selected options
-  - Incompatibility warning detection and display
-  - Customer details form (name, email, notes)
-  - Order submission workflow
-  - Configuration download as JSON backup
-- **LED Color Selection** with standard colors (Red, Blue, Green, Yellow, White, Amber, UV) and custom RGB input
-  - Color picker in customizer LED tab (appears after selecting LED option)
-  - Color picker in LED product detail modal
-  - Visual blooming color indicator in summary page
-  - Editable LED color on summary page with modal editor
-  - Default red LED color
-- **Editable Options on Summary Page**
-  - Edit LED color from summary with full color picker modal
-  - Edit custom paint colors from summary with RGB color picker
-  - Real-time configuration updates
-  - Changes persist in sessionStorage
-- **Improved Tab Spacing** - adequate bottom padding (250px) prevents products from being hidden by floating summary panel
+
+**Overview:** A fully functional dark-themed pedal customizer with a 6-step workflow (Effect → Size → Paint/Finish → Design/Labeling → LED → Other). Users can select from various effect pedals, enclosure sizes, paint finishes, design options, LED configurations, and hardware upgrades. The system includes real-time 2D visualization, dynamic pricing, and a comprehensive summary page with order submission.
+
+### Core Configuration System
+- **Six-tab workflow:** Effect Pedal Selection → Enclosure Size → Paint/Finish → Design/Labeling → LED → Other Options
+- Real-time price calculation in EUR with dynamic modifiers based on selections
+- Configuration persistence using sessionStorage
+- Download configuration as JSON for backup/sharing
+- Fixed layout with scrollable selection areas and floating UI panels
+
+### Effect Pedal Selection
+- Search by name, circuit designation, or sound characteristics
+- Category filters (Overdrive, Distortion, Fuzz, Boost, Modulation, Delay, Reverb, etc.)
+- Sound character tag filtering (warm, bright, aggressive, vintage, modern, etc.)
+- Multiple sort options: popularity, name, complexity, recommended enclosure size
+- Detailed product modal with full specifications, available mods, and technical details
+
+### Enclosure Size Selection
+- Visual size comparison with accurate relative scaling
+- Quirky, humorous size descriptions and real-world analogies
+- Capacity metrics showing maximum component counts
+- Smart size recommendations based on selected effect circuit
+- "Best Fit" badge highlighting ideal enclosure for chosen effect
+
+### Paint, Finish & Design Options
+- Extensive color palette with finish type variations
+- Search, filter, and sort capabilities for paint options
+- Finish type indicators: ⭐ Glossy, 🔨 Hammered, 🏖️ Sand, ☢️ Glow, ✨ Metallic, 🎨 Matte
+- Custom color support with RGB picker for specialty orders
+- Design labeling options with visual preview integration
+
+### LED Configuration
+- Standard LED colors: Red, Blue, Green, Yellow, White, Amber, UV
+- Custom RGB color input with visual color picker
+- Multiple LED styles: No LED, No Bezel, Simple LED Bezel, Fender Style Jewel, Illuminated Footswitch
+- Color picker available in both LED tab and product detail modal
+- Editable LED color from summary page with full modal editor
+- Default red LED when LED option selected
+
+### 2D Enclosure Visualization
+- Real-time interactive enclosure preview on summary page
+- Accurate component positioning (potentiometers, switches, faders, LED, footswitch, jacks)
+- Visual finish patterns (textured/wrinkle, metallic/sparkle, hammertone)
+- LED rendering with appropriate bezel style and color-accurate glow effect
+- **Edit Layout Mode:** Drag and reposition components with persistent positions
+- **Edit Labels Mode:** Click to rename control labels inline
+- Multiple layout navigation when control count varies (e.g., with mods)
+- Maximize/minimize functionality for detailed inspection
+- Labeled lettering option with black background rectangles
+- Responsive to selected modifications (updates layout based on control requirements)
+
+### Summary & Order Management
+- Comprehensive order summary with all selections displayed
+- Effect circuit and enclosure size details at top
+- Long descriptions for all selected options
+- Incompatibility warning detection and display system
+- Customer details form (name, email, special notes)
+- Order submission workflow ready for backend integration
+- Edit options directly from summary (LED color, custom paint colors)
+- Real-time configuration updates reflected immediately
+
+### UI/UX Features
+- Dark theme (#0a0a0a background, #1a1a1a cards, white accents)
+- Floating translucent tabs & filters panel at top
+- Floating translucent configuration summary panel at bottom-center (clickable for navigation)
+- Multi-select support for "Other" category hardware upgrades
+- Adequate bottom padding (250px) prevents content being hidden by summary panel
+- Product descriptions (short & long) on all option cards
+- Detailed product modals with expand/collapse functionality
+
+### Landing Page
+- Statistics dashboard showing total combinations available
+- Effect pedal count and enclosure size variety metrics
+- "How It Works" section explaining the 6-step workflow
+- Engaging introduction to the customization process
+
+
+
+### 6. **Save & Load Configurations**
+**Problem:** Users can't save their work and come back to it
+**Solution:**
+- Save configurations to browser localStorage / download function
+- Load previously saved configurations
+- Option to Name/label saved configurations
+- Share configurations via URL parameters
 
 
 ## High Priority Features 🔴
 
-### 1. **Size Selection Warning System** ⚠️
+### 1. **Responsive Detail Cards & Information Density** 📱⭐
+**Problem:** Detail cards can exceed available screen space, especially on lower resolution devices, making navigation cumbersome and hiding important information
+**Solution Approaches:**
+
+**A) Layout & Positioning Optimizations:**
+- **Overlay Mode:** Position detail card as transparent overlay on top of product image instead of separate area
+  - Saves significant vertical space
+  - Glassmorphism effect (backdrop-blur) for readability
+  - Image dimmed/blurred in background
+  - Close button clearly visible
+- **Sidebar Mode:** Slide-in detail panel from right side (desktop) or bottom sheet (mobile)
+  - Keeps product grid visible for context
+  - Smooth animation transitions
+  - Partial overlay allows background interaction
+- **Inline Expansion:** Accordion-style expansion within product card itself
+  - No modal needed for basic info
+  - Full modal only for extensive details
+
+**B) Content Density & Prioritization:**
+- **Progressive Disclosure:** Show essential info first, expand for details
+  - Initial view: Title, price, 1-line description, primary category
+  - Click "More Details" to reveal: all categories, sound characters, mods, specs
+- **Tag Limiting:** Display top 3-4 most relevant tags with "+X more" button
+  - Prioritize by relevance score or popularity
+  - Expandable inline without modal
+- **Smart Truncation:** 
+  - Descriptions: Show 2-3 lines, "Read more" inline expansion
+  - Categories: Show primary category badge, hover/click for all
+  - Specifications: Collapsible sections (Circuit, Dimensions, Compatibility)
+
+**C) Responsive Breakpoints:**
+- **Desktop (>1024px):** Two-column layout within modal, full information visible
+- **Tablet (768-1024px):** Single column, scrollable, collapsible sections
+- **Mobile (<768px):** Bottom sheet design, swipeable sections, minimal initial view
+- **Small Mobile (<480px):** Ultra-compact mode with icon buttons for section navigation
+
+**D) Information Architecture:**
+- **Tabs within Modal:** Separate tabs for Overview / Specs / Mods / Reviews
+  - Reduces visual clutter per screen
+  - Users navigate to what they need
+- **Icon-First Design:** Replace text labels with icons where possible
+  - Category icons instead of text badges
+  - Visual indicators for specs (size, complexity, compatibility)
+- **Data Visualization:** 
+  - Complexity as visual meter (1-5 dots/bars) instead of text
+  - Compatibility matrix as simple icon grid
+  - Price comparison chart if multiple variants
+
+**E) Dynamic Content Adaptation:**
+- **Screen Size Detection:** Automatically adjust content based on viewport
+  - Hide less critical fields on small screens
+  - Reorder elements (most important first)
+- **Touch Optimization:** Larger tap targets, swipe gestures for mobile
+- **Lazy Load Images:** Load detail images only when modal opens
+- **Virtual Scrolling:** For long lists (mods, specs) only render visible items
+
+**F) Alternative: Compact Card Design:**
+- **Minimal Modal Approach:** Keep detail cards small and scannable
+  - Maximum height: 70vh to prevent full-screen takeover
+  - Grid layout: Image left (30%), Details right (70%)
+  - Sticky header with title and price
+  - Condensed typography with tighter line spacing
+
+**Recommended Implementation Priority:**
+1. **Immediate:** Overlay positioning + content truncation + tag limiting
+2. **Phase 2:** Responsive breakpoints + collapsible sections
+3. **Phase 3:** Tabbed interface + data visualization
+4. **Future:** Bottom sheet design + advanced touch gestures
+
+### 2. **Size Selection Warning System** ⚠️
 **Problem:** Users can select enclosures smaller than recommended without warning
 **Solution:**
 - In the sizes tab, detect when selected size is smaller than recommended size
@@ -65,6 +172,8 @@
   - Size order: 1590A < 1590B = 125B < 1590BB < 1590BS < 1590XX
   - Compare selected size index with recommended size index
   - If selected < recommended, show warning
+  - If its two or more levels smaller show more "dangourous" warning, and more costs
+  - The price should also rise the bigger the enclosure gets due to higher costs of those
 - Still allow selection (don't block), but make consequences clear
 - **Benefits:**
   - Prevents build issues from undersized enclosures
@@ -72,7 +181,7 @@
   - Reduces customer service inquiries
   - Educational for users learning about enclosure requirements
 
-### 2. **Effect-Specific Mods Integration** ⭐⭐⭐
+### 3. **Effect-Specific Mods Integration** ⭐⭐⭐
 **Problem:** Current "Other" mods are generic; should be context-aware based on selected effect
 **Solution:**
 - **Mod Selection Within Effect Details:**
@@ -95,7 +204,7 @@
   - Automatic size adjustment prevents building errors
   - Educational - users learn about circuit modifications
 
-### 3. **Improve "Other" Category UX & Multi-Select Clarity** ⚠️
+### 4. **Improve "Other" Category UX & Multi-Select Clarity** ⚠️
 **Problem:** Multi-select in "Other" tab is confusing; unclear which items can be combined
 **Solution:**
 - **Better Category Organization:**
@@ -120,7 +229,7 @@
   - Move some items to other tabs (battery → during effect selection)
   - Some items may work better as add-ons during size selection
 
-### 4. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
+### 5. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
 **Problem:** Current SKU system only references supplier SKUs directly without proper product identification
 **Solution:**
 - **SKU Structure Refactor:**
@@ -138,55 +247,58 @@
   - Easier to switch suppliers or add alternative sources
   - Professional internal product catalog independent of supplier systems
 
-
-### 6. **Visual Preview / 3D Mockup**
-**Problem:** Users can't see what their configured pedal will look like
-**Solution:** 
-- Generate a real-time visual preview of the pedal with selected options
-- Show enclosure color, labeling position, LED placement
-- Could be 2D illustration or simple 3D render
-
-### 7. **Save & Load Configurations**
-**Problem:** Users can't save their work and come back to it
-**Solution:**
-- Save configurations to browser localStorage
-- Load previously saved configurations
-- Name/label saved configurations
-- Share configurations via URL parameters
-
 ---
 
 ## Medium Priority Features 🟡
 
-### 13. **Price Breakdown Display**
+### 8. **Auto-Adjusting Text Color in 2D Visualizer** 🎨
+**Problem:** Control labels and text in the enclosure visualizer may not be visible against certain enclosure colors
+**Solution:**
+- Automatically adjust text color for potentiometer, switch, and fader labels based on enclosure color
+- Calculate luminance/brightness of enclosure color:
+  - Use dark text (#000 or #333) on light enclosures
+  - Use light text (#fff or #eee) on dark enclosures
+- **Important:** Do NOT apply auto-adjustment to Labeled Lettering option
+  - Labeled Lettering should remain black background with white text (as designed)
+  - Only adjust non-labeled text elements
+- Implementation approach:
+  - Add color contrast calculation utility function
+  - Apply to regular labels in EnclosureVisualizer
+  - Bypass for labeled lettering elements
+- **Benefits:**
+  - Ensures readability across all color choices
+  - Professional appearance regardless of customization
+  - Maintains design intent of special features (labeled lettering)
+
+### 9. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
 **Solution:**
 - Show itemized price breakdown in summary
 - Highlight price changes when selecting options
 - Show supplier cost vs customer price (admin view)
 
-### 14. **Comparison Mode**
+### 10. **Comparison Mode**
 **Problem:** Hard to compare different configurations
 **Solution:**
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
 
-### 15. **Search Across All Categories**
+### 11. **Search Across All Categories**
 **Problem:** Search only works on paint options
 **Solution:**
 - Global search across all tabs
 - Search by feature, price range, color, etc.
 - Filter results by category
 
-### 16. **Favorites / Wishlist**
+### 12. **Favorites / Wishlist**
 **Problem:** Can't mark interesting options for later
 **Solution:**
 - Heart/star icon to favorite items
 - View all favorited items
 - Create multiple wishlists
 
-### 17. **Option Dependencies & Exclusions** ⚠️
+### 13. **Option Dependencies & Exclusions** ⚠️
 **Problem:** Some options are incompatible or mutually exclusive with others
 **Solution Options:**
 
@@ -225,7 +337,7 @@
 Start with **A + D**: Simple rule-based system with visual indicators. Can migrate to matrix system if rules become complex.
 **NOTE:** Warnings system partially implemented
 
-### 18. **Validation & Warnings**
+### 14. **Validation & Warnings**
 **Problem:** No feedback if selections are incompatible
 **Solution:**
 - Warn about incompatible combinations
@@ -237,7 +349,15 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 
 ## Low Priority / Nice-to-Have Features 🟢
 
-### 19. **Preconfigured Pedal Templates**
+### 15. **3D Enclosure Mockup Enhancement**
+**Current State:** 2D visualization fully implemented and functional
+**Future Enhancement:**
+- Optional 3D render mode for more photorealistic preview
+- Animated rotation and perspective views
+- Export high-resolution preview images for marketing/sharing
+- AR preview (view pedal in real environment via phone camera)
+
+### 16. **Preconfigured Pedal Templates**
 **Problem:** Users starting from scratch may feel overwhelmed by choices
 **Solution:**
 - Curated set of pre-configured "starter" pedal configurations
@@ -263,14 +383,14 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Modal/dropdown showing template cards with thumbnail, name, and price
 - One-click load replaces current selections (with confirmation if user has selections)
 
-### 20. **Stock Availability Indicator**
+### 17. **Stock Availability Indicator**
 **Problem:** No visibility into actual stock levels
 **Solution:**
 - Real-time stock display
 - "Low stock" warnings
 - "Notify when available" option
 
-### 21. **Customer Accounts**
+### 18. **Customer Accounts**
 **Problem:** No user history or repeat customer benefits
 **Solution:**
 - User registration/login
@@ -278,21 +398,21 @@ Start with **A + D**: Simple rule-based system with visual indicators. Can migra
 - Saved addresses
 - Loyalty/discount system
 
-### 22. **Mobile Responsiveness Optimization**
+### 19. **Mobile Responsiveness Optimization**
 **Problem:** Layout may not be optimal on small screens
 **Solution:**
 - Optimize grid for mobile (1-2 columns)
 - Touch-friendly controls
 - Swipe gestures for tabs
 
-### 23. **Bulk/Batch Orders**
+### 20. **Bulk/Batch Orders**
 **Problem:** Can't order multiple pedals at once
 **Solution:**
 - "Add to cart" functionality
 - Configure multiple pedals
 - Bulk pricing discounts
 
-### 24. **Tutorials / Help System**
+### 21. **Tutorials / Help System**
 **Problem:** First-time users may be confused
 **Solution:**
 - Interactive tour/walkthrough

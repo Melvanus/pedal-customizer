@@ -65,6 +65,41 @@ const getFinishPattern = (finishType: string | undefined, color: string) => {
   return color;
 };
 
+// Calculate contrasting text color based on background luminance
+const getContrastingTextColor = (backgroundColor: string): string => {
+  // Convert hex to RGB
+  let r = 0, g = 0, b = 0;
+  
+  if (backgroundColor.startsWith('#')) {
+    const hex = backgroundColor.replace('#', '');
+    if (hex.length === 3) {
+      r = parseInt(hex[0] + hex[0], 16);
+      g = parseInt(hex[1] + hex[1], 16);
+      b = parseInt(hex[2] + hex[2], 16);
+    } else {
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+    }
+  } else if (backgroundColor.startsWith('rgb')) {
+    const matches = backgroundColor.match(/\d+/g);
+    if (matches) {
+      r = parseInt(matches[0]);
+      g = parseInt(matches[1]);
+      b = parseInt(matches[2]);
+    }
+  } else {
+    // Default to white text for unknown formats
+    return '#fff';
+  }
+  
+  // Calculate relative luminance (WCAG formula)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  
+  // Return dark text for light backgrounds, light text for dark backgrounds
+  return luminance > 0.5 ? '#000' : '#fff';
+};
+
 export function EnclosureVisualizer({
   layout,
   availableLayouts = [],
@@ -86,6 +121,9 @@ export function EnclosureVisualizer({
   const viewBoxHeight = 160;
   
   const scale = 0.8;
+  
+  // Calculate text color based on enclosure color
+  const textColor = getContrastingTextColor(enclosureColor);
   
   // Edit mode state
   const [isEditMode, setIsEditMode] = React.useState(false);
@@ -426,7 +464,11 @@ export function EnclosureVisualizer({
             width: "100%",
             height: "auto",
             maxHeight: isMaximized ? "80vh" : "300px",
-            cursor: isEditMode ? "move" : "default",
+            cursor: "default",
+            userSelect: "none",
+            WebkitUserSelect: "none",
+            MozUserSelect: "none",
+            msUserSelect: "none",
           }}
         >
           <defs>
@@ -541,7 +583,7 @@ export function EnclosureVisualizer({
             {pedalName && (
               <g
                 onMouseDown={handleMouseDown('pedalName', 0)}
-                style={{ cursor: isEditMode ? 'move' : 'default' }}
+                style={{ cursor: isEditMode ? 'move' : (isEditLabelsMode ? 'pointer' : 'default') }}
               >
                 {editingLabel?.type === 'pedalName' ? (
                   <foreignObject
@@ -607,7 +649,7 @@ export function EnclosureVisualizer({
                       style={{
                         fontSize: "6px",
                         fontWeight: "bold",
-                        fill: "#fff",
+                        fill: labeledLettering ? "#fff" : textColor,
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
@@ -701,7 +743,7 @@ export function EnclosureVisualizer({
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
                           fontWeight: 600,
-                          fill: "#fff",
+                          fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
                           pointerEvents: isEditLabelsMode ? 'auto' : 'none',
                           cursor: isEditLabelsMode ? 'pointer' : 'default',
@@ -831,7 +873,7 @@ export function EnclosureVisualizer({
                         style={{
                           fontSize: labeledLettering ? "8px" : "3px",
                           fontWeight: 600,
-                          fill: "#fff",
+                          fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
                           pointerEvents: isEditLabelsMode ? 'auto' : 'none',
                           cursor: isEditLabelsMode ? 'pointer' : 'default',
@@ -947,7 +989,7 @@ export function EnclosureVisualizer({
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
                           fontWeight: 600,
-                          fill: "#fff",
+                          fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
                           pointerEvents: isEditLabelsMode ? 'auto' : 'none',
                           cursor: isEditLabelsMode ? 'pointer' : 'default',
