@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ChevronLeft, AlertTriangle, Download, Mail } from "lucide-react";
 import { EnclosureVisualizer } from "@/components/EnclosureVisualizer";
+import { Condiment } from "next/font/google";
 
 type SelectedModWithOptions = {
   mod: {
@@ -451,7 +452,6 @@ export default function SummaryPage() {
                       </div>
                     ) as any
                   },
-                  { label: "Inspired By", value: config.effect.inspired_by },
                   { label: "Sound", value: config.effect.sound_characters?.slice(0, 3).join(", ") || "N/A" },
                 ]}
               />
@@ -539,7 +539,7 @@ export default function SummaryPage() {
               <ConfigSection
                 title="Enclosure Size"
                 name={config.enclosureSize.name}
-                price={0}
+                price={config.enclosureSize.customer_price_eur}
                 shortDesc={config.enclosureSize.dimensions}
                 longDesc={config.enclosureSize.description}
                 details={[

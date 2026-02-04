@@ -1014,6 +1014,15 @@ export function EnclosureVisualizer({
                 onMouseDown={handleMouseDown('led', 0)}
                 style={{ cursor: isEditMode ? 'move' : 'default' }}
               >
+                {/* Invisible hit area for better clickability and to prevent glow cutoff */}
+                <circle
+                  cx={getPosition('led', 0, layout.led_position).x}
+                  cy={getPosition('led', 0, layout.led_position).y}
+                  r="18"
+                  fill="transparent"
+                  stroke="none"
+                />
+                
                 {ledType === "Fender Style Jewel" ? (
                   <>
                     {/* Jewel base (16mm diameter) */}
