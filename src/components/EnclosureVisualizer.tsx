@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Move } from "lucide-react";
 
 type Position = {
   x: number;
@@ -79,6 +79,28 @@ export function EnclosureVisualizer({
   
   const scale = 0.8;
   
+  // Edit mode state
+  const [isEditMode, setIsEditMode] = React.useState(false);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [draggedItem, setDraggedItem] = React.useState<{ type: string; index: number } | null>(null);
+  
+  // Position overrides for draggable items
+  const [positionOverrides, setPositionOverrides] = React.useState<{
+    potentiometers: Position[];
+    switches: Position[];
+    faders: Position[];
+    led: Position | null;
+    footswitch: Position | null;
+  }>({
+    potentiometers: [],
+    switches: [],
+    faders: [],
+    led: null,
+    footswitch: null,
+  });
+  
+  const svgRef = React.useRef<SVGSVGElement>(null);
+  
   // Calculate current layout index and handle navigation
   const currentIndex = availableLayouts.findIndex(l => l.id === layout.id);
   const hasMultipleLayouts = availableLayouts.length > 1;
@@ -95,6 +117,108 @@ export function EnclosureVisualizer({
       const newIndex = currentIndex < availableLayouts.length - 1 ? currentIndex + 1 : 0;
       onLayoutChange(availableLayouts[newIndex]);
     }
+  };
+  
+  // Reset position overrides when layout changes
+  React.useEffect(() => {
+    setPositionOverrides({
+      potentiometers: [],
+      switches: [],
+      faders: [],
+      led: null,
+      footswitch: null,
+    });
+  }, [layout.id]);
+  
+  // Drag handlers
+  const getScaledMousePosition = (event: MouseEvent | React.MouseEvent): Position | null => {
+    if (!svgRef.current) return null;
+    
+    const svg = svgRef.current;
+    const point = svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return null;
+    
+    const transformed = point.matrixTransform(ctm.inverse());
+    return { x: transformed.x / scale, y: transformed.y / scale };
+  };
+  
+  const handleMouseDown = (type: string, index: number) => (event: React.MouseEvent) => {
+    if (!isEditMode) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+    setDraggedItem({ type, index });
+  };
+  
+  const handleMouseMove = (event: MouseEvent) => {
+    if (!isDragging || !draggedItem) return;
+    
+    const pos = getScaledMousePosition(event);
+    if (!pos) return;
+    
+    setPositionOverrides(prev => {
+      const newOverrides = { ...prev };
+      
+      if (draggedItem.type === 'potentiometer') {
+        const newPots = [...prev.potentiometers];
+        newPots[draggedItem.index] = pos;
+        newOverrides.potentiometers = newPots;
+      } else if (draggedItem.type === 'switch') {
+        const newSwitches = [...prev.switches];
+        newSwitches[draggedItem.index] = pos;
+        newOverrides.switches = newSwitches;
+      } else if (draggedItem.type === 'fader') {
+        const newFaders = [...prev.faders];
+        newFaders[draggedItem.index] = pos;
+        newOverrides.faders = newFaders;
+      } else if (draggedItem.type === 'led') {
+        newOverrides.led = pos;
+      } else if (draggedItem.type === 'footswitch') {
+        newOverrides.footswitch = pos;
+      }
+      
+      return newOverrides;
+    });
+  };
+  
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setDraggedItem(null);
+  };
+  
+  React.useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, draggedItem]);
+  
+  // Helper to get effective position
+  const getPosition = (type: string, index: number, defaultPos: Position): Position => {
+    if (!isEditMode) return defaultPos;
+    
+    if (type === 'potentiometer' && positionOverrides.potentiometers[index]) {
+      return positionOverrides.potentiometers[index];
+    } else if (type === 'switch' && positionOverrides.switches[index]) {
+      return positionOverrides.switches[index];
+    } else if (type === 'fader' && positionOverrides.faders[index]) {
+      return positionOverrides.faders[index];
+    } else if (type === 'led' && positionOverrides.led) {
+      return positionOverrides.led;
+    } else if (type === 'footswitch' && positionOverrides.footswitch) {
+      return positionOverrides.footswitch;
+    }
+    
+    return defaultPos;
   };
   
   const visualizerContent = (
@@ -128,6 +252,32 @@ export function EnclosureVisualizer({
                 Layout {currentIndex + 1}/{availableLayouts.length}
               </span>
             )}
+            <button
+              onClick={() => setIsEditMode(!isEditMode)}
+              style={{
+                background: isEditMode ? "#333" : "transparent",
+                border: "1px solid " + (isEditMode ? "#666" : "#333"),
+                color: isEditMode ? "#4ade80" : "#fff",
+                cursor: "pointer",
+                padding: "0.25rem 0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.25rem",
+                borderRadius: "4px",
+                fontSize: "0.75rem",
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => {
+                if (!isEditMode) e.currentTarget.style.background = "#222";
+              }}
+              onMouseLeave={(e) => {
+                if (!isEditMode) e.currentTarget.style.background = "transparent";
+              }}
+              title="Toggle edit mode to drag and reposition components"
+            >
+              <Move size={14} />
+              {isEditMode ? "Edit" : ""}
+            </button>
             <button
               onClick={onToggleMaximize}
               style={{
@@ -209,11 +359,13 @@ export function EnclosureVisualizer({
         )}
         
         <svg
+          ref={svgRef}
           viewBox={`${-viewBoxWidth / 2} ${-viewBoxHeight / 2} ${viewBoxWidth} ${viewBoxHeight}`}
           style={{
             width: "100%",
             height: "auto",
             maxHeight: isMaximized ? "80vh" : "300px",
+            cursor: isEditMode ? "move" : "default",
           }}
         >
           <defs>
@@ -344,33 +496,39 @@ export function EnclosureVisualizer({
             {layout.potentiometer_positions.map((pos, idx) => {
               const control = controls.filter((c) => c.type === "Pot")[idx];
               const label = control ? controlLabels[control.label] || control.label : `Pot ${idx + 1}`;
+              const effectivePos = getPosition('potentiometer', idx, pos);
               
               return (
-                <g key={`pot-${idx}`}>
+                <g 
+                  key={`pot-${idx}`}
+                  onMouseDown={handleMouseDown('potentiometer', idx)}
+                  style={{ cursor: isEditMode ? 'move' : 'default' }}
+                >
                   {/* Knob shadow */}
-                  <circle cx={pos.x} cy={pos.y + 0.75} r="8.25" fill="#000" opacity="0.3" />
+                  <circle cx={effectivePos.x} cy={effectivePos.y + 0.75} r="8.25" fill="#000" opacity="0.3" />
                   {/* Knob body */}
-                  <circle cx={pos.x} cy={pos.y} r="7.5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
+                  <circle cx={effectivePos.x} cy={effectivePos.y} r="7.5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
                   {/* Knob indicator line */}
                   <line
-                    x1={pos.x}
-                    y1={pos.y - 6}
-                    x2={pos.x}
-                    y2={pos.y - 1.5}
+                    x1={effectivePos.x}
+                    y1={effectivePos.y - 6}
+                    x2={effectivePos.x}
+                    y2={effectivePos.y - 1.5}
                     stroke="#fff"
                     strokeWidth="1.2"
                     strokeLinecap="round"
                   />
                   {/* Label */}
                   <text
-                    x={pos.x + pos.label_offset.x}
-                    y={pos.y + pos.label_offset.y}
+                    x={effectivePos.x + pos.label_offset.x}
+                    y={effectivePos.y + pos.label_offset.y}
                     textAnchor="middle"
                     style={{
                       fontSize: "3.5px",
                       fontWeight: 600,
                       fill: "#fff",
                       textTransform: "uppercase",
+                      pointerEvents: 'none',
                     }}
                   >
                     {label}
@@ -383,13 +541,18 @@ export function EnclosureVisualizer({
             {layout.switch_positions.map((pos, idx) => {
               const control = controls.filter((c) => c.type === "Switch" && c.label !== "Bypass")[idx];
               const label = control ? controlLabels[control.label] || control.label : `SW ${idx + 1}`;
+              const effectivePos = getPosition('switch', idx, pos);
               
               return (
-                <g key={`switch-${idx}`}>
+                <g 
+                  key={`switch-${idx}`}
+                  onMouseDown={handleMouseDown('switch', idx)}
+                  style={{ cursor: isEditMode ? 'move' : 'default' }}
+                >
                   {/* Switch base */}
                   <rect
-                    x={pos.x - 2.5}
-                    y={pos.y - 4}
+                    x={effectivePos.x - 2.5}
+                    y={effectivePos.y - 4}
                     width="5"
                     height="8"
                     fill="#2a2a2a"
@@ -399,8 +562,8 @@ export function EnclosureVisualizer({
                   />
                   {/* Switch toggle */}
                   <rect
-                    x={pos.x - 1.5}
-                    y={pos.y - 2}
+                    x={effectivePos.x - 1.5}
+                    y={effectivePos.y - 2}
                     width="3"
                     height="4"
                     fill="url(#metal-knob)"
@@ -410,14 +573,15 @@ export function EnclosureVisualizer({
                   />
                   {/* Label */}
                   <text
-                    x={pos.x + pos.label_offset.x}
-                    y={pos.y + pos.label_offset.y}
+                    x={effectivePos.x + pos.label_offset.x}
+                    y={effectivePos.y + pos.label_offset.y}
                     textAnchor="middle"
                     style={{
                       fontSize: "3px",
                       fontWeight: 600,
                       fill: "#fff",
                       textTransform: "uppercase",
+                      pointerEvents: 'none',
                     }}
                   >
                     {label}
@@ -430,13 +594,18 @@ export function EnclosureVisualizer({
             {layout.fader_positions.map((pos, idx) => {
               const control = controls.filter((c) => c.type === "Fader")[idx];
               const label = control ? controlLabels[control.label] || control.label : `Fader ${idx + 1}`;
+              const effectivePos = getPosition('fader', idx, pos);
               
               return (
-                <g key={`fader-${idx}`}>
+                <g 
+                  key={`fader-${idx}`}
+                  onMouseDown={handleMouseDown('fader', idx)}
+                  style={{ cursor: isEditMode ? 'move' : 'default' }}
+                >
                   {/* Fader track */}
                   <rect
-                    x={pos.x - 1}
-                    y={pos.y - 10}
+                    x={effectivePos.x - 1}
+                    y={effectivePos.y - 10}
                     width="2"
                     height="20"
                     fill="#1a1a1a"
@@ -446,8 +615,8 @@ export function EnclosureVisualizer({
                   />
                   {/* Fader handle */}
                   <rect
-                    x={pos.x - 2.5}
-                    y={pos.y - 2}
+                    x={effectivePos.x - 2.5}
+                    y={effectivePos.y - 2}
                     width="5"
                     height="4"
                     fill="url(#metal-knob)"
@@ -457,14 +626,15 @@ export function EnclosureVisualizer({
                   />
                   {/* Label */}
                   <text
-                    x={pos.x + pos.label_offset.x}
-                    y={pos.y + pos.label_offset.y}
+                    x={effectivePos.x + pos.label_offset.x}
+                    y={effectivePos.y + pos.label_offset.y}
                     textAnchor="middle"
                     style={{
                       fontSize: "3.5px",
                       fontWeight: 600,
                       fill: "#fff",
                       textTransform: "uppercase",
+                      pointerEvents: 'none',
                     }}
                   >
                     {label}
@@ -474,18 +644,21 @@ export function EnclosureVisualizer({
             })}
 
             {/* LED with glow */}
-            <g>
+            <g 
+              onMouseDown={handleMouseDown('led', 0)}
+              style={{ cursor: isEditMode ? 'move' : 'default' }}
+            >
               <circle
-                cx={layout.led_position.x}
-                cy={layout.led_position.y}
+                cx={getPosition('led', 0, layout.led_position).x}
+                cy={getPosition('led', 0, layout.led_position).y}
                 r="2.5"
                 fill={ledColor}
                 filter="url(#led-glow)"
                 opacity="0.9"
               />
               <circle
-                cx={layout.led_position.x}
-                cy={layout.led_position.y}
+                cx={getPosition('led', 0, layout.led_position).x}
+                cy={getPosition('led', 0, layout.led_position).y}
                 r="1.5"
                 fill="#fff"
                 opacity="0.6"
@@ -493,18 +666,21 @@ export function EnclosureVisualizer({
             </g>
 
             {/* Footswitch */}
-            <g>
+            <g 
+              onMouseDown={handleMouseDown('footswitch', 0)}
+              style={{ cursor: isEditMode ? 'move' : 'default' }}
+            >
               <circle
-                cx={layout.footswitch_position.x}
-                cy={layout.footswitch_position.y}
+                cx={getPosition('footswitch', 0, layout.footswitch_position).x}
+                cy={getPosition('footswitch', 0, layout.footswitch_position).y}
                 r="9"
                 fill="url(#footswitch-grad)"
                 stroke="#0a0a0a"
                 strokeWidth="0.5"
               />
               <circle
-                cx={layout.footswitch_position.x}
-                cy={layout.footswitch_position.y}
+                cx={getPosition('footswitch', 0, layout.footswitch_position).x}
+                cy={getPosition('footswitch', 0, layout.footswitch_position).y}
                 r="6"
                 fill="#2a2a2a"
                 stroke="#1a1a1a"
