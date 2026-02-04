@@ -591,9 +591,9 @@ export function EnclosureVisualizer({
                   <>
                     {labeledLettering && pedalName && (
                       <rect
-                        x={getPosition('pedalName', 0, layout.pedal_name_position).x - (pedalName.length * 1.75) - 1.17}
+                        x={getPosition('pedalName', 0, layout.pedal_name_position).x - (pedalName.length * 2.25) - 1.35}
                         y={getPosition('pedalName', 0, layout.pedal_name_position).y - 6.5}
-                        width={(pedalName.length * 3.5) + 2.33}
+                        width={(pedalName.length * 4.5) + 2.7}
                         height="10.5"
                         fill="#000"
                         rx="0.5"
