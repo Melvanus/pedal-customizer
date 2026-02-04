@@ -486,23 +486,19 @@ export function EnclosureVisualizer({
 
             {/* Input Jack */}
             <g>
-              <circle
-                cx={layout.input_jack_position.x}
-                cy={layout.input_jack_position.y}
-                r="3.5"
-                fill="#1a1a1a"
-                stroke="#0a0a0a"
+              <rect
+                x={layout.input_jack_position.x - 2}
+                y={layout.input_jack_position.y - 5}
+                width="4"
+                height="10"
+                fill="#888"
+                stroke="#555"
                 strokeWidth="0.5"
-              />
-              <circle
-                cx={layout.input_jack_position.x}
-                cy={layout.input_jack_position.y}
-                r="1.5"
-                fill="#000"
+                rx="0.5"
               />
               <text
                 x={layout.input_jack_position.x}
-                y={layout.input_jack_position.y + 8}
+                y={layout.input_jack_position.y + 11}
                 textAnchor="middle"
                 style={{
                   fontSize: "3px",
@@ -516,23 +512,19 @@ export function EnclosureVisualizer({
 
             {/* Output Jack */}
             <g>
-              <circle
-                cx={layout.output_jack_position.x}
-                cy={layout.output_jack_position.y}
-                r="3.5"
-                fill="#1a1a1a"
-                stroke="#0a0a0a"
+              <rect
+                x={layout.output_jack_position.x - 2}
+                y={layout.output_jack_position.y - 5}
+                width="4"
+                height="10"
+                fill="#888"
+                stroke="#555"
                 strokeWidth="0.5"
-              />
-              <circle
-                cx={layout.output_jack_position.x}
-                cy={layout.output_jack_position.y}
-                r="1.5"
-                fill="#000"
+                rx="0.5"
               />
               <text
                 x={layout.output_jack_position.x}
-                y={layout.output_jack_position.y + 8}
+                y={layout.output_jack_position.y + 11}
                 textAnchor="middle"
                 style={{
                   fontSize: "3px",
