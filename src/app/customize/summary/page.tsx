@@ -425,12 +425,33 @@ export default function SummaryPage() {
                 title="Effect Pedal Circuit"
                 name={config.effect.name}
                 price={config.effect.customer_price_eur}
-                shortDesc={`${config.effect.category} • Inspired by ${config.effect.inspired_by}`}
+                shortDesc={`Inspired by ${config.effect.inspired_by}`}
                 longDesc={config.effect.description}
                 details={[
-                  { label: "Circuit Type", value: config.effect.category },
+                  { 
+                    label: "Categories", 
+                    value: (
+                      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                        {(config.effect.categories || [config.effect.category]).map((cat: string) => (
+                          <div
+                            key={cat}
+                            style={{
+                              display: "inline-block",
+                              background: "#333",
+                              color: "#fff",
+                              padding: "0.25rem 0.6rem",
+                              borderRadius: "4px",
+                              fontSize: "0.7rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {cat}
+                          </div>
+                        ))}
+                      </div>
+                    ) as any
+                  },
                   { label: "Inspired By", value: config.effect.inspired_by },
-                  { label: "Complexity", value: config.effect.technical_specs?.complexity || "N/A" },
                   { label: "Sound", value: config.effect.sound_characters?.slice(0, 3).join(", ") || "N/A" },
                 ]}
               />
