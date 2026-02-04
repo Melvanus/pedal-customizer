@@ -792,7 +792,7 @@ export function PedalCustomizer({
                       color: "#e0e0e0",
                     }}
                   >
-                    <option value="favourites">Fuzzy's Favourites</option>
+                    <option value="favourites">Fuzzy&apos;s Favourites</option>
                     <option value="name">Name</option>
                     <option value="sku">SKU</option>
                     <option value="price">Price</option>

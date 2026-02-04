@@ -637,7 +637,7 @@ export default function SummaryPage() {
                       style={{ width: "100%", padding: "0.75rem", background: "#0f0f0f", border: "2px solid #2d2d2d", borderRadius: "5px", color: "#e0e0e0", fontSize: "1rem", boxSizing: "border-box" }}
                     />
                     <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.5rem", marginBottom: 0 }}>
-                      Leave empty if you'd like us to create a unique name for your pedal
+                      Leave empty if you&apos;d like us to create a unique name for your pedal
                     </p>
                   </div>
                 )}
@@ -674,7 +674,7 @@ export default function SummaryPage() {
                       ))}
                     </div>
                     <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.75rem", marginBottom: 0 }}>
-                      Customize the label for each control. The default value is the control's original name.
+                      Customize the label for each control. The default value is the control&apos;s original name.
                     </p>
                   </div>
                 )}

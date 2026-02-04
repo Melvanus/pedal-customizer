@@ -1432,7 +1432,7 @@ export function ProductDetailModal({
                   <strong>Important Note</strong>
                 </div>
                 <p style={{ margin: 0 }}>
-                  Custom colors may vary slightly from screen display. We'll match your selection as
+                  Custom colors may vary slightly from screen display. We&apos;ll match your selection as
                   closely as possible with automotive-grade paint.
                 </p>
               </div>
