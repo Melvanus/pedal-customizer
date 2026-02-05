@@ -236,31 +236,34 @@ export function EnclosureVisualizer({
     const pos = getScaledMousePosition(event);
     if (!pos) return;
     
+    // Convert from SVG coordinates (+y=down) to data coordinates (+y=up)
+    const dataPos = { x: pos.x, y: -pos.y };
+    
     setPositionOverrides(prev => {
       const newOverrides = { ...prev };
       
       if (draggedItem.type === 'potentiometer') {
         const newPots = [...prev.potentiometers];
-        newPots[draggedItem.index] = pos;
+        newPots[draggedItem.index] = dataPos;
         newOverrides.potentiometers = newPots;
       } else if (draggedItem.type === 'switch') {
         const newSwitches = [...prev.switches];
-        newSwitches[draggedItem.index] = pos;
+        newSwitches[draggedItem.index] = dataPos;
         newOverrides.switches = newSwitches;
       } else if (draggedItem.type === 'fader') {
         const newFaders = [...prev.faders];
-        newFaders[draggedItem.index] = pos;
+        newFaders[draggedItem.index] = dataPos;
         newOverrides.faders = newFaders;
       } else if (draggedItem.type === 'led') {
         const newLEDs = [...prev.leds];
-        newLEDs[draggedItem.index] = pos;
+        newLEDs[draggedItem.index] = dataPos;
         newOverrides.leds = newLEDs;
       } else if (draggedItem.type === 'footswitch') {
         const newFootswitches = [...prev.footswitches];
-        newFootswitches[draggedItem.index] = pos;
+        newFootswitches[draggedItem.index] = dataPos;
         newOverrides.footswitches = newFootswitches;
       } else if (draggedItem.type === 'pedalName') {
-        newOverrides.pedalName = pos;
+        newOverrides.pedalName = dataPos;
       }
       
       return newOverrides;
