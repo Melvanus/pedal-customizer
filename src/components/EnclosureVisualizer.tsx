@@ -285,22 +285,28 @@ export function EnclosureVisualizer({
   }, [isDragging, draggedItem]);
   
   // Helper to get effective position (always uses override if exists)
+  // Note: We flip y-coordinate for SVG rendering since our data uses +y=up but SVG uses +y=down
   const getPosition = (type: string, index: number, defaultPos: Position): Position => {
+    let pos: Position;
+    
     if (type === 'potentiometer' && positionOverrides.potentiometers[index]) {
-      return positionOverrides.potentiometers[index];
+      pos = positionOverrides.potentiometers[index];
     } else if (type === 'switch' && positionOverrides.switches[index]) {
-      return positionOverrides.switches[index];
+      pos = positionOverrides.switches[index];
     } else if (type === 'fader' && positionOverrides.faders[index]) {
-      return positionOverrides.faders[index];
+      pos = positionOverrides.faders[index];
     } else if (type === 'led' && positionOverrides.leds[index]) {
-      return positionOverrides.leds[index];
+      pos = positionOverrides.leds[index];
     } else if (type === 'footswitch' && positionOverrides.footswitches[index]) {
-      return positionOverrides.footswitches[index];
+      pos = positionOverrides.footswitches[index];
     } else if (type === 'pedalName' && positionOverrides.pedalName) {
-      return positionOverrides.pedalName;
+      pos = positionOverrides.pedalName;
+    } else {
+      pos = defaultPos;
     }
     
-    return defaultPos;
+    // Flip y-coordinate for SVG (data uses +y=up, SVG uses +y=down)
+    return { x: pos.x, y: -pos.y };
   };
   
   const visualizerContent = (
@@ -724,7 +730,7 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y + pos.label_offset.y - 4}
+                      y={effectivePos.y - pos.label_offset.y - 4}
                       width="30"
                       height="8"
                     >
@@ -769,7 +775,7 @@ export function EnclosureVisualizer({
                       {labeledLettering && (
                         <rect
                           x={effectivePos.x + pos.label_offset.x - (label.length * 2.5) - 1.2}
-                          y={effectivePos.y + pos.label_offset.y - 8}
+                          y={effectivePos.y - pos.label_offset.y - 8}
                           width={(label.length * 5) + 2.4}
                           height="10.5"
                           fill="#000"
@@ -778,7 +784,7 @@ export function EnclosureVisualizer({
                       )}
                       <text
                         x={effectivePos.x + pos.label_offset.x}
-                        y={effectivePos.y + pos.label_offset.y}
+                        y={effectivePos.y - pos.label_offset.y}
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
@@ -854,7 +860,7 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'switch' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 12}
-                      y={effectivePos.y + pos.label_offset.y - 3.5}
+                      y={effectivePos.y - pos.label_offset.y - 3.5}
                       width="24"
                       height="7"
                     >
@@ -899,7 +905,7 @@ export function EnclosureVisualizer({
                       {labeledLettering && (
                         <rect
                           x={effectivePos.x + pos.label_offset.x - (label.length * 2) - 1.2}
-                          y={effectivePos.y + pos.label_offset.y - 7.5}
+                          y={effectivePos.y - pos.label_offset.y - 7.5}
                           width={(label.length * 4) + 2.4}
                           height="10.5"
                           fill="#000"
@@ -908,7 +914,7 @@ export function EnclosureVisualizer({
                       )}
                       <text
                         x={effectivePos.x + pos.label_offset.x}
-                        y={effectivePos.y + pos.label_offset.y}
+                        y={effectivePos.y - pos.label_offset.y}
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3px",
@@ -980,7 +986,7 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'fader' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y + pos.label_offset.y - 4}
+                      y={effectivePos.y - pos.label_offset.y - 4}
                       width="30"
                       height="8"
                     >
@@ -1025,7 +1031,7 @@ export function EnclosureVisualizer({
                       {labeledLettering && (
                         <rect
                           x={effectivePos.x + pos.label_offset.x - (label.length * 2.5) - 1.2}
-                          y={effectivePos.y + pos.label_offset.y - 8}
+                          y={effectivePos.y - pos.label_offset.y - 8}
                           width={(label.length * 5) + 2.4}
                           height="10.5"
                           fill="#000"
@@ -1034,7 +1040,7 @@ export function EnclosureVisualizer({
                       )}
                       <text
                         x={effectivePos.x + pos.label_offset.x}
-                        y={effectivePos.y + pos.label_offset.y}
+                        y={effectivePos.y - pos.label_offset.y}
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
