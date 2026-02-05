@@ -811,6 +811,7 @@ export default function SummaryPage() {
               return (
               <div data-section="enclosure-visualizer" style={{ marginBottom: "2rem" }}>
                 <EnclosureVisualizer
+                  key={`visualizer-${selectedLayout.id}-${randomLayoutKey}`}
                   layout={selectedLayout}
                   availableLayouts={availableLayouts}
                   onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
