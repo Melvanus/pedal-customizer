@@ -223,7 +223,7 @@ function generateFaderPositions(
     case 'horizontal':
       // Single horizontal row
       for (let i = 0; i < count; i++) {
-        const x = -usableWidth / 2 + marginX + (i + 1) * (usableWidth / (count + 1));
+        const x = -usableWidth / 2 + (i + 1) * (usableWidth / (count + 1));
         positions.push({
           x: Math.round(x),
           y: Math.round(centerY + (Math.random() - 0.5) * 8), // Slight randomness
@@ -326,7 +326,7 @@ function generateSwitchPositions(
     case 'single-row':
       // All in one horizontal row
       for (let i = 0; i < count; i++) {
-        const x = -usableWidth / 2 + marginX + (i + 1) * (usableWidth / (count + 1));
+        const x = -usableWidth / 2 + (i + 1) * (usableWidth / (count + 1));
         const y = centerY + (Math.random() - 0.5) * 8;
         
         if (!isTooClose({ x, y }, existingPositions, minSpacing)) {
@@ -348,7 +348,7 @@ function generateSwitchPositions(
         const rowSpacing = usableWidth / (rowItems + 1);
         
         for (let i = 0; i < rowItems; i++) {
-          const x = -usableWidth / 2 + marginX + (i + 1) * rowSpacing;
+          const x = -usableWidth / 2 + (i + 1) * rowSpacing;
           
           if (!isTooClose({ x, y }, existingPositions, minSpacing)) {
             positions.push({
@@ -416,7 +416,7 @@ function generatePotPositions(
         const spacing = usableWidth / (rowItems + 1);
         
         for (let i = 0; i < rowItems; i++) {
-          const x = -usableWidth / 2 + marginX + (i + 1) * spacing;
+          const x = -usableWidth / 2 + (i + 1) * spacing;
           
           if (!isTooClose({ x, y }, avoidPositions, minSpacing)) {
             positions.push({
@@ -461,7 +461,7 @@ function generatePotPositions(
       let idx = 0;
       for (let row = 0; row < gridRows && idx < count; row++) {
         for (let col = 0; col < cols && idx < count; col++) {
-          const x = -usableWidth / 2 + marginX + (col + 1) * colSpacing;
+          const x = -usableWidth / 2 + (col + 1) * colSpacing;
           const y = topY - (row + 1) * rowSpacing;
           
           if (!isTooClose({ x, y }, avoidPositions, minSpacing)) {
@@ -488,7 +488,7 @@ function generatePotPositions(
         const spacing = usableWidth / (items + 1);
         
         for (let i = 0; i < items; i++) {
-          const x = -usableWidth / 2 + marginX + (i + 1) * spacing;
+          const x = -usableWidth / 2 + (i + 1) * spacing;
           
           if (!isTooClose({ x, y }, avoidPositions, minSpacing)) {
             positions.push({
