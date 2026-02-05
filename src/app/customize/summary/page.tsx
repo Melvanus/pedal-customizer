@@ -100,6 +100,33 @@ export default function SummaryPage() {
     return controls;
   }, [config?.effect, config?.effectMods]);
 
+  // Calculate required footswitch and LED counts
+  const requiredCounts = React.useMemo(() => {
+    if (!config?.effect) {
+      return { footswitches: 1, leds: 1 };
+    }
+
+    // Start with base counts from effect (footswitches default to 1, LEDs from technical_specs)
+    let footswitches = 1; // Most pedals have 1 bypass footswitch
+    let leds = config.effect.technical_specs?.led_count || 1;
+
+    // Add counts from mods
+    if (config.effectMods && Array.isArray(config.effectMods)) {
+      config.effectMods.forEach(({ mod }: any) => {
+        if (mod.adds_technical_specs) {
+          if (mod.adds_technical_specs.footswitches) {
+            footswitches += mod.adds_technical_specs.footswitches;
+          }
+          if (mod.adds_technical_specs.led_count) {
+            leds += mod.adds_technical_specs.led_count;
+          }
+        }
+      });
+    }
+
+    return { footswitches, leds };
+  }, [config?.effect, config?.effectMods]);
+
   // Select appropriate layout based on control count (must be before early return)
   const selectedLayout = React.useMemo(() => {
     console.log('🎲 [Randomize] Layout useMemo triggered, randomLayoutKey:', randomLayoutKey);
@@ -115,6 +142,16 @@ export default function SummaryPage() {
     let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
     let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
     
+    // Get required footswitch and LED counts
+    const { footswitches: requiredFootswitches, leds: requiredLeds } = requiredCounts;
+    
+    // Helper to count footswitches and LEDs in a layout
+    const getLayoutCounts = (layout: any) => {
+      const footswitchCount = layout.footswitch_positions?.length || (layout.footswitch_position ? 1 : 0);
+      const ledCount = layout.led_positions?.length || (layout.led_position ? 1 : 0);
+      return { footswitchCount, ledCount };
+    };
+    
     // If randomLayoutKey > 0, force random generation
     if (randomLayoutKey > 0) {
       console.log('🎲 [Randomize] Forcing random layout generation!');
@@ -123,13 +160,16 @@ export default function SummaryPage() {
       return randomLayout;
     }
     
-    // Find all matching layouts
-    const matchingLayouts = layoutsData.filter((layout: any) => 
-      layout.enclosure_type === enclosureType &&
-      layout.potentiometer_count === potCount &&
-      layout.switch_count === switchCount &&
-      layout.fader_count === faderCount
-    );
+    // Find all matching layouts (including footswitch and LED counts)
+    const matchingLayouts = layoutsData.filter((layout: any) => {
+      const { footswitchCount, ledCount } = getLayoutCounts(layout);
+      return layout.enclosure_type === enclosureType &&
+        layout.potentiometer_count === potCount &&
+        layout.switch_count === switchCount &&
+        layout.fader_count === faderCount &&
+        footswitchCount === requiredFootswitches &&
+        ledCount === requiredLeds;
+    });
     
     // If user selected a specific layout and it's still valid, use it
     if (selectedLayoutId) {
@@ -144,12 +184,15 @@ export default function SummaryPage() {
       return matchingLayouts[0];
     }
     
-    // Fallback: find closest match considering all control types
-    let bestMatch = layoutsData.find((layout: any) => 
-      layout.enclosure_type === enclosureType &&
-      (layout.potentiometer_count >= potCount || potCount === 0) &&
-      (layout.fader_count >= faderCount || faderCount === 0)
-    );
+    // Fallback: find closest match considering all control types (prioritize footswitch/LED match)
+    let bestMatch = layoutsData.find((layout: any) => {
+      const { footswitchCount, ledCount } = getLayoutCounts(layout);
+      return layout.enclosure_type === enclosureType &&
+        footswitchCount === requiredFootswitches &&
+        ledCount === requiredLeds &&
+        (layout.potentiometer_count >= potCount || potCount === 0) &&
+        (layout.fader_count >= faderCount || faderCount === 0);
+    });
     
     if (bestMatch) {
       return bestMatch;
@@ -178,7 +221,7 @@ export default function SummaryPage() {
     }
     
     return bestMatch;
-  }, [config, effectiveControls, layoutsData, selectedLayoutId, randomLayoutKey]);
+  }, [config, effectiveControls, layoutsData, selectedLayoutId, randomLayoutKey, requiredCounts]);
   
   // Get all available layouts for current configuration
   const availableLayouts = React.useMemo(() => {
@@ -189,13 +232,20 @@ export default function SummaryPage() {
     let switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
     let faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
     
-    return layoutsData.filter((layout: any) => 
-      layout.enclosure_type === enclosureType &&
-      layout.potentiometer_count === potCount &&
-      layout.switch_count === switchCount &&
-      layout.fader_count === faderCount
-    );
-  }, [config, effectiveControls, layoutsData]);
+    const { footswitches: requiredFootswitches, leds: requiredLeds } = requiredCounts;
+    
+    return layoutsData.filter((layout: any) => {
+      const footswitchCount = layout.footswitch_positions?.length || (layout.footswitch_position ? 1 : 0);
+      const ledCount = layout.led_positions?.length || (layout.led_position ? 1 : 0);
+      
+      return layout.enclosure_type === enclosureType &&
+        layout.potentiometer_count === potCount &&
+        layout.switch_count === switchCount &&
+        layout.fader_count === faderCount &&
+        footswitchCount === requiredFootswitches &&
+        ledCount === requiredLeds;
+    });
+  }, [config, effectiveControls, layoutsData, requiredCounts]);
   
   // Handler to generate a new random layout
   const handleRandomizeLayout = React.useCallback(() => {
