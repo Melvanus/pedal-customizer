@@ -58,6 +58,8 @@ export default function LayoutEditorPage() {
     if (selectedLayoutId) {
       const layout = layouts.find((l) => l.id === selectedLayoutId);
       if (layout) {
+        setEditedLayout(JSON.parse(JSON.stringify(layout)));
+        setSaveStatus("idle");
         setHasUnsavedChanges(false);
       }
     }
@@ -82,9 +84,7 @@ export default function LayoutEditorPage() {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [editedLayout, hasUnsavedChange
-    }
-  }, [selectedLayoutId, layouts]);
+  }, [editedLayout, hasUnsavedChanges]);
 
   const handleSave = async () => {
     if (!editedLayout) return;
@@ -98,8 +98,7 @@ export default function LayoutEditorPage() {
       delete layoutToSave.footswitch_positions;
     } else if (layoutToSave.footswitch_positions && layoutToSave.footswitch_positions.length === 0) {
       delete layoutToSave.footswitch_positions;
-    }setHasUnsavedChanges(false);
-        
+    }
     
     // Convert led_positions array to singular if only one
     if (layoutToSave.led_positions && layoutToSave.led_positions.length === 1) {
@@ -123,6 +122,7 @@ export default function LayoutEditorPage() {
       const data = await response.json();
       if (data.success) {
         setSaveStatus("success");
+        setHasUnsavedChanges(false);
         // Update local layouts array
         setLayouts((prev) =>
           prev.map((l) => (l.id === layoutToSave.id ? layoutToSave : l))
@@ -132,7 +132,6 @@ export default function LayoutEditorPage() {
         setSaveStatus("error");
         setTimeout(() => setSaveStatus("idle"), 3000);
       }
-    setHasUnsavedChanges(true);
     } catch (error) {
       console.error("Save error:", error);
       setSaveStatus("error");
@@ -156,6 +155,7 @@ export default function LayoutEditorPage() {
     current[path[path.length - 1]] = value;
 
     setEditedLayout(newLayout);
+    setHasUnsavedChanges(true);
   };
 
   const addPosition = (type: "potentiometer" | "switch" | "fader" | "footswitch" | "led") => {
@@ -169,7 +169,6 @@ export default function LayoutEditorPage() {
         newLayout.potentiometer_count++;
         break;
       case "switch":
-    setHasUnsavedChanges(true);
         newLayout.switch_positions.push({ x: 0, y: 0, label_offset: { x: 0, y: 15 } });
         newLayout.switch_count++;
         break;
@@ -194,6 +193,7 @@ export default function LayoutEditorPage() {
     }
 
     setEditedLayout(newLayout);
+    setHasUnsavedChanges(true);
   };
 
   const removePosition = (type: "potentiometer" | "switch" | "fader" | "footswitch" | "led", index: number) => {
@@ -208,7 +208,6 @@ export default function LayoutEditorPage() {
         break;
       case "switch":
         newLayout.switch_positions.splice(index, 1);
-    setHasUnsavedChanges(true);
         newLayout.switch_count = newLayout.switch_positions.length;
         break;
       case "fader":
@@ -234,6 +233,7 @@ export default function LayoutEditorPage() {
     }
 
     setEditedLayout(newLayout);
+    setHasUnsavedChanges(true);
   };
 
   const enclosureTypes = Array.from(new Set(layouts.map((l) => l.enclosure_type))).sort();
@@ -247,7 +247,33 @@ export default function LayoutEditorPage() {
     return (
       <div style={{ background: "#0a0a0a", minHeight: "100vh", color: "#e0e0e0", padding: "2rem" }}>
         <p>Loading...</p>
-      </ddiv style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ background: "#0a0a0a", minHeight: "100vh", color: "#e0e0e0" }}>
+      {/* Header */}
+      <div
+        style={{
+          background: "#1a1a1a",
+          borderBottom: "2px solid #333",
+          padding: "1rem 2rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <Link href="/" style={{ color: "#e0e0e0", textDecoration: "none" }}>
+            <ChevronLeft size={24} />
+          </Link>
+          <h1 style={{ margin: 0, fontSize: "1.5rem" }}>🛠️ Layout Editor</h1>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <div style={{ fontSize: "0.9rem", color: "#aaa" }}>
             {saveStatus === "success" ? (
               <span style={{ color: "#22c55e", display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -286,33 +312,7 @@ export default function LayoutEditorPage() {
           >
             <Save size={20} /> {saveStatus === "saving" ? "Saving..." : "Save Now"}
           </button>
-        </divground: saveStatus === "success" ? "#22c55e" : saveStatus === "error" ? "#ef4444" : "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: saveStatus === "saving" ? "wait" : "pointer",
-            fontSize: "1rem",
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            transition: "all 0.2s",
-          }}
-        >
-          {saveStatus === "success" ? (
-            <>
-              <CheckCircle size={20} /> Saved!
-            </>
-          ) : saveStatus === "error" ? (
-            <>
-              <AlertCircle size={20} /> Error
-            </>
-          ) : (
-            <>
-              <Save size={20} /> {saveStatus === "saving" ? "Saving..." : "Save Changes"}
-            </>
-          )}
-        </button>
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "300px 1fr 400px", gap: "1rem", padding: "1rem" }}>
@@ -452,6 +452,32 @@ export default function LayoutEditorPage() {
           {/* Footswitches */}
           <PositionSection
             title="Footswitches"
+            positions={editedLayout.footswitch_positions || (editedLayout.footswitch_position ? [editedLayout.footswitch_position] : [])}
+            type="footswitch"
+            hasLabelOffset={false}
+            onUpdate={(path, value) => {
+              // Special handling for footswitches - convert to array format if needed
+              if (!editedLayout) return;
+              const newLayout = JSON.parse(JSON.stringify(editedLayout));
+              
+              // Ensure we're working with footswitch_positions array
+              if (!newLayout.footswitch_positions) {
+                if (newLayout.footswitch_position) {
+                  newLayout.footswitch_positions = [newLayout.footswitch_position];
+                  delete newLayout.footswitch_position;
+                } else {
+                  newLayout.footswitch_positions = [{ x: 0, y: 0 }];
+                }
+              }
+              
+              const index = parseInt(path[1]);
+              if (path[2] === "x") {
+                newLayout.footswitch_positions[index].x = value;
+              } else if (path[2] === "y") {
+                newLayout.footswitch_positions[index].y = value;
+              }
+              
+              setEditedLayout(newLayout);
               setHasUnsavedChanges(true);
             }}
             onAdd={() => addPosition("footswitch")}
@@ -487,33 +513,7 @@ export default function LayoutEditorPage() {
               }
               
               setEditedLayout(newLayout);
-              setHasUnsavedChanges(true
-            positions={editedLayout.led_positions || (editedLayout.led_position ? [editedLayout.led_position] : [])}
-            type="led"
-            hasLabelOffset={false}
-            onUpdate={(path, value) => {
-              // Special handling for LEDs - convert to array format if needed
-              if (!editedLayout) return;
-              const newLayout = JSON.parse(JSON.stringify(editedLayout));
-              
-              // Ensure we're working with led_positions array
-              if (!newLayout.led_positions) {
-                if (newLayout.led_position) {
-                  newLayout.led_positions = [newLayout.led_position];
-                  delete newLayout.led_position;
-                } else {
-                  newLayout.led_positions = [{ x: 0, y: 0 }];
-                }
-              }
-              
-              const index = parseInt(path[1]);
-              if (path[2] === "x") {
-                newLayout.led_positions[index].x = value;
-              } else if (path[2] === "y") {
-                newLayout.led_positions[index].y = value;
-              }
-              
-              setEditedLayout(newLayout);
+              setHasUnsavedChanges(true);
             }}
             onAdd={() => addPosition("led")}
             onRemove={(i) => removePosition("led", i)}
