@@ -4,7 +4,7 @@ Highest Prio:
 - Fix the random layout generator at the moment everything is condensed around the footswitch, randomize stuff so that it doesnt look completly random. put faders and switches in the upper half of the pedal. give them some kind of order, like splitting them up in multiple groups, rows, or diagonal lines. currently not all things are moving and once something is moved by the user its not randomized anymore.
 - The layout editor should have a align feature, when things are moved around it should check if theres something next or over/under it so that it aligns when a certain delta is reached.
 - Color change for text in layout editor doesnt work for the editable text
-- Setting mod labels a the position the things they replace in detail modal and summaty category
+- Setting mod labels a the position the things they replace in detail modal and summary category
 
 Dont know if we should do that:
 - In the first window a default pedal is always selected. i want you to change it so that the default selection is a completly custom build with unknown pricing. here the user can put all the information regarding the used schematic or the original pedal etc himself, so that he can get a completly custom pedal.

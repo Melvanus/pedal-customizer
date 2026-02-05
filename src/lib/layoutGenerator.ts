@@ -93,7 +93,7 @@ export function generateRandomLayout(
   const spec = ENCLOSURE_SPECS[enclosureType] || ENCLOSURE_SPECS['125B'];
   
   // Calculate usable area (avoiding fixed elements)
-  const usableWidth = spec.width - 20; // Leave margins
+  const usableWidth = spec.width - 10; // Leave margins
   const topY = -spec.nameY - 15; // Below pedal name
   const bottomY = spec.ledY + 10; // Above LED
   const usableHeight = Math.abs(topY - bottomY);
@@ -161,7 +161,7 @@ function generateControlPositions(
 
   const positions: Position[] = [];
   const minSpacing = type === 'fader' ? 14 : 16; // Faders can be closer together
-  const labelOffsetY = type === 'fader' ? 25 : 15; // Labels below pots/switches/faders
+  const labelOffsetY = type === 'fader' ? 35 : 15; // Labels below pots/switches/faders
   
   // Try to arrange in rows if there are many controls
   const maxPerRow = Math.floor(usableWidth / minSpacing);
