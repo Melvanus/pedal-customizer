@@ -733,9 +733,9 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y - pos.label_offset.y - 4}
+                      y={effectivePos.y - pos.label_offset.y - 3.5}
                       width="30"
-                      height="8"
+                      height="7"
                     >
                       <input
                         autoFocus
@@ -762,14 +762,17 @@ export function EnclosureVisualizer({
                           width: '100%',
                           height: '100%',
                           fontSize: '3.5px',
+                          fontFamily: 'inherit',
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
+                          letterSpacing: '0px',
                           background: 'transparent',
                           border: 'none',
                           color: textColor,
                           outline: 'none',
                           padding: '0',
+                          lineHeight: '7px',
                         }}
                       />
                     </foreignObject>
@@ -863,9 +866,9 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'switch' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 12}
-                      y={effectivePos.y - pos.label_offset.y - 3.5}
+                      y={effectivePos.y - pos.label_offset.y - 3}
                       width="24"
-                      height="7"
+                      height="6"
                     >
                       <input
                         autoFocus
@@ -892,14 +895,17 @@ export function EnclosureVisualizer({
                           width: '100%',
                           height: '100%',
                           fontSize: '3px',
+                          fontFamily: 'inherit',
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
+                          letterSpacing: '0px',
                           background: 'transparent',
                           border: 'none',
                           color: textColor,
                           outline: 'none',
                           padding: '0',
+                          lineHeight: '6px',
                         }}
                       />
                     </foreignObject>
@@ -989,9 +995,9 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'fader' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y - pos.label_offset.y - 4}
+                      y={effectivePos.y - pos.label_offset.y - 3.5}
                       width="30"
-                      height="8"
+                      height="7"
                     >
                       <input
                         autoFocus
@@ -1018,14 +1024,17 @@ export function EnclosureVisualizer({
                           width: '100%',
                           height: '100%',
                           fontSize: '3.5px',
+                          fontFamily: 'inherit',
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
+                          letterSpacing: '0px',
                           background: 'transparent',
                           border: 'none',
                           color: textColor,
                           outline: 'none',
                           padding: '0',
+                          lineHeight: '7px',
                         }}
                       />
                     </foreignObject>
