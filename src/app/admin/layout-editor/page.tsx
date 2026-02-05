@@ -65,14 +65,33 @@ export default function LayoutEditorPage() {
   const handleSave = async () => {
     if (!editedLayout) return;
 
+    // Normalize footswitch and LED positions before saving
+    const layoutToSave = JSON.parse(JSON.stringify(editedLayout));
+    
+    // Convert footswitch_positions array to singular if only one
+    if (layoutToSave.footswitch_positions && layoutToSave.footswitch_positions.length === 1) {
+      layoutToSave.footswitch_position = layoutToSave.footswitch_positions[0];
+      delete layoutToSave.footswitch_positions;
+    } else if (layoutToSave.footswitch_positions && layoutToSave.footswitch_positions.length === 0) {
+      delete layoutToSave.footswitch_positions;
+    }
+    
+    // Convert led_positions array to singular if only one
+    if (layoutToSave.led_positions && layoutToSave.led_positions.length === 1) {
+      layoutToSave.led_position = layoutToSave.led_positions[0];
+      delete layoutToSave.led_positions;
+    } else if (layoutToSave.led_positions && layoutToSave.led_positions.length === 0) {
+      delete layoutToSave.led_positions;
+    }
+
     setSaveStatus("saving");
     try {
       const response = await fetch("/api/admin/layouts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          layoutId: editedLayout.id,
-          updatedLayout: editedLayout,
+          layoutId: layoutToSave.id,
+          updatedLayout: layoutToSave,
         }),
       });
 
@@ -81,7 +100,7 @@ export default function LayoutEditorPage() {
         setSaveStatus("success");
         // Update local layouts array
         setLayouts((prev) =>
-          prev.map((l) => (l.id === editedLayout.id ? editedLayout : l))
+          prev.map((l) => (l.id === layoutToSave.id ? layoutToSave : l))
         );
         setTimeout(() => setSaveStatus("idle"), 2000);
       } else {
@@ -102,6 +121,10 @@ export default function LayoutEditorPage() {
     let current: any = newLayout;
 
     for (let i = 0; i < path.length - 1; i++) {
+      if (current[path[i]] === undefined) {
+        console.error(`Path ${path[i]} is undefined in`, current);
+        return;
+      }
       current = current[path[i]];
     }
     current[path[path.length - 1]] = value;
@@ -396,7 +419,30 @@ export default function LayoutEditorPage() {
             positions={editedLayout.footswitch_positions || (editedLayout.footswitch_position ? [editedLayout.footswitch_position] : [])}
             type="footswitch"
             hasLabelOffset={false}
-            onUpdate={updatePosition}
+            onUpdate={(path, value) => {
+              // Special handling for footswitches - convert to array format if needed
+              if (!editedLayout) return;
+              const newLayout = JSON.parse(JSON.stringify(editedLayout));
+              
+              // Ensure we're working with footswitch_positions array
+              if (!newLayout.footswitch_positions) {
+                if (newLayout.footswitch_position) {
+                  newLayout.footswitch_positions = [newLayout.footswitch_position];
+                  delete newLayout.footswitch_position;
+                } else {
+                  newLayout.footswitch_positions = [{ x: 0, y: 0 }];
+                }
+              }
+              
+              const index = parseInt(path[1]);
+              if (path[2] === "x") {
+                newLayout.footswitch_positions[index].x = value;
+              } else if (path[2] === "y") {
+                newLayout.footswitch_positions[index].y = value;
+              }
+              
+              setEditedLayout(newLayout);
+            }}
             onAdd={() => addPosition("footswitch")}
             onRemove={(i) => removePosition("footswitch", i)}
           />
@@ -407,7 +453,30 @@ export default function LayoutEditorPage() {
             positions={editedLayout.led_positions || (editedLayout.led_position ? [editedLayout.led_position] : [])}
             type="led"
             hasLabelOffset={false}
-            onUpdate={updatePosition}
+            onUpdate={(path, value) => {
+              // Special handling for LEDs - convert to array format if needed
+              if (!editedLayout) return;
+              const newLayout = JSON.parse(JSON.stringify(editedLayout));
+              
+              // Ensure we're working with led_positions array
+              if (!newLayout.led_positions) {
+                if (newLayout.led_position) {
+                  newLayout.led_positions = [newLayout.led_position];
+                  delete newLayout.led_position;
+                } else {
+                  newLayout.led_positions = [{ x: 0, y: 0 }];
+                }
+              }
+              
+              const index = parseInt(path[1]);
+              if (path[2] === "x") {
+                newLayout.led_positions[index].x = value;
+              } else if (path[2] === "y") {
+                newLayout.led_positions[index].y = value;
+              }
+              
+              setEditedLayout(newLayout);
+            }}
             onAdd={() => addPosition("led")}
             onRemove={(i) => removePosition("led", i)}
           />
