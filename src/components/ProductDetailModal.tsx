@@ -51,6 +51,7 @@ type ProductDetailModalProps = {
   onClose: () => void;
   onSelectAndContinue: () => void;
   nextTabName?: string;
+  imageSize?: { width: number; height: number };
 };
 
 export function ProductDetailModal({
@@ -58,6 +59,7 @@ export function ProductDetailModal({
   onClose,
   onSelectAndContinue,
   nextTabName,
+  imageSize = { width: 400, height: 250 },
 }: ProductDetailModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
   const [localSelectedMods, setLocalSelectedMods] = React.useState<SelectedModWithOptions[]>([]);
@@ -294,7 +296,7 @@ export function ProductDetailModal({
               data-section="product-image"
               style={{
                 width: "100%",
-                height: "250px",
+                height: `${imageSize.height}px`,
                 background: product.type === "effect" ? "#ffffff" : "#0a0a0a",
                 borderRadius: "12px",
                 marginBottom: "0.5rem",
@@ -320,8 +322,8 @@ export function ProductDetailModal({
                 <Image
                   src={currentImage}
                   alt={product.title}
-                  width={400}
-                  height={250}
+                  width={imageSize.width}
+                  height={imageSize.height}
                   style={{
                     maxWidth: "100%",
                     maxHeight: "100%",

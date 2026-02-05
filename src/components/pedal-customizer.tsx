@@ -524,7 +524,7 @@ export function PedalCustomizer({
 
       {/* Scrollable Content Area */}
       <div data-section="content-area" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", position: "relative" }}>
-        {/* Configuration Summary - Fixed at top */}
+        {/* Configuration Summary Tabs - Fixed at top */}
         <div
           ref={summaryRef}
           data-section="configuration-summary"
@@ -547,6 +547,7 @@ export function PedalCustomizer({
             gap: "0.5rem",
           }}
         >
+                {/* Effect Selection Tab */}
                 <button
                   data-section="tab-effect"
                   onClick={() => setActiveTab("effect")}
@@ -577,6 +578,7 @@ export function PedalCustomizer({
                     {selectedEffect ? selectedEffect.name : "—"}
                   </span>
                 </button>
+                {/* Enclosure Size Tab */}
                 <button
                   data-section="tab-size"
                   onClick={() => setActiveTab("size")}
@@ -607,6 +609,7 @@ export function PedalCustomizer({
                     {selectedSize ? selectedSize.name : "—"}
                   </span>
                 </button>
+                {/* Paint/Finish Tab */}
                 <button
                   data-section="tab-paint"
                   onClick={() => setActiveTab("paint")}
@@ -637,6 +640,7 @@ export function PedalCustomizer({
                     {selectedPaint ? selectedPaint.displayed_name : "—"}
                   </span>
                 </button>
+                {/* Design Tab */}
                 <button
                   data-section="tab-design"
                   onClick={() => setActiveTab("design")}
@@ -662,7 +666,7 @@ export function PedalCustomizer({
                     }
                   }}
                 >
-                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design</span>
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design/Label</span>
                   <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{selectedDesign?.name || "—"}</span>
                 </button>
                 <button
@@ -1298,8 +1302,6 @@ export function PedalCustomizer({
                           images: images,
                           description: option.long_description || option.short_description || option.description,
                           details: [
-                            { label: "Style", value: "Graphic Design" },
-                            { label: "Format", value: "Printed Label" },
                           ],
                         });
                       } else {
@@ -1328,7 +1330,7 @@ export function PedalCustomizer({
                       e.currentTarget.style.boxShadow = selectedDesignId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
                     }}
                   >
-                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                    <div style={{ width: "100%", height: "320px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                       {adminMode && (
                         <>
                           <div style={{
@@ -2134,6 +2136,7 @@ export function PedalCustomizer({
         onClose={() => setModalProduct(null)}
         onSelectAndContinue={handleModalSelectAndContinue}
         nextTabName={getNextTabName()}
+        imageSize={modalProduct?.type === "design" ? { width: 600, height: 400 } : undefined}
       />
     </div>
   );
