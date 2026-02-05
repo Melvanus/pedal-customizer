@@ -5,9 +5,77 @@
         "image": "LED_Through_Hole.jpg",
         "customer_price_eur": 0,
         "short_description": "Just a plain LED through a hole. Position can be customized to your graphics.",
-        "long_description": "No LED bezel or mounting hardware included. The LED will be mounted directly through the enclosure. Choose this if you want a minimalist look or plan to position the LED based on your custom graphics.",
+        "long_description": "No LED bezel or mounting hardware. The LED will be mounted directly through the enclosure. Choose this if you want a minimalist look.",
         "images": [
             "LED_Through_Hole.jpg"
+        ]
+    },
+    {
+        "name": "Simple LED Bezel",
+        "price": 1,
+        "image": "LED_Simple_Bezel.jpg",
+        "customer_price_eur": 1,
+        "short_description": "You're a basic bitch? Take this basic LED mounting bezel",
+        "long_description": "Simple chrome LED bezel. Provides a clean and compact mounting solution for 3mm or 5mm LEDs.",
+        "images": [
+            "LED_Simple_Bezel.jpg"
+        ],
+        "available_colors": ["chrome", "matched"]
+    },
+    {
+        "name": "Wide Chrome LED Bezel",
+        "price": 1,
+        "image": "LED_Wide_Bezel.jpg",
+        "customer_price_eur": 1,
+        "short_description": "You're a fancy bitch? Take this fancy LED mounting bezel",
+        "long_description": "A big wider chrome LED bezel. Provides a clean, mounting solution for 3mm or 5mm LEDs.",
+        "images": [
+            "LED_Wide_Chrome_Bezel_A-6043.jpg"
+        ],
+        "available_colors": ["chrome", "matched"]
+    },
+    {
+        "name": "Lampshade",
+        "price": 1,
+        "image": "LED_Lampshade.png",
+        "customer_price_eur": 2,
+        "short_description": "A stylish lampshade for your LED.",
+        "long_description": "A plastic lampshade that diffuses the LED light softly, adding a warm glow to your pedal. Perfect for a vintage or cozy aesthetic.",
+        "images": [
+            "LED_Lampshade.png"
+        ],
+        "available_colors": ["red", "blue", "green", "yellow", "clear"]
+    },
+    {
+        "name": "Alarm Lampshade",
+        "price": 1,
+        "image": "LED_Flat_Lampshade.jpg",
+        "customer_price_eur": 2,
+        "short_description": "A flat, alarm-style lampshade for your LED.",
+        "long_description": "A flat lampshade that gives your LED a bold, industrial look. The flat-top design reaches out of the enclosure and diffuses light in a unique way, making it a literal standout feature on your pedal.",
+        "images": [
+            "LED_Flat_Lampshade.jpg"
+        ],
+        "available_colors": ["red",  "clear"]
+    },
+    {
+        "name": "Fender Style Jewel",
+        "price": 4,
+        "image": "LED_Fender_Jewel.png",
+        "customer_price_eur": 4,
+        "short_description": "Man you got style!",
+        "long_description": "Classic Fender amplifier-style jewel indicator light. Features a domed lens that diffuses LED light beautifully. Available in various colors (red, amber, green, blue). Adds authentic vintage aesthetics to your build.",
+        "available_colors": ["red", "amber", "green", "blue", "purple", "clear"]
+    },
+    {
+        "name": "Illuminated Footswitch",
+        "price": 3,
+        "image": "LED_Footswitch.jpg",
+        "customer_price_eur": 4,
+        "short_description": "You're all in for that high tech stuff, huh?",
+        "long_description": "Footswitch with integrated LED illumination. The switch itself lights up when the pedal is active. Modern, clean look that eliminates the need for a separate indicator LED.",
+        "images": [
+            "LED_Footswitch.jpg"
         ]
     },
     {
@@ -19,36 +87,6 @@
         "long_description": "No LED indicator light included with your pedal. The enclosure will be prepared without any LED drilling or mounting provisions.",
         "images": [
             "LED_No_No.jpg"
-        ]
-    },
-    {
-        "name": "Simple LED Bezel",
-        "price": 1,
-        "image": "LED_Simple_Bezel.jpg",
-        "customer_price_eur": 1,
-        "short_description": "You're a basic bitch? Take this basic LED mounting bezel",
-        "long_description": "Simple chrome or black plastic LED bezel. Provides a clean, professional mounting solution for 3mm or 5mm LEDs. Includes mounting hardware and necessary drilling.",
-        "images": [
-            "LED_Simple_Bezel.jpg"
-        ]
-    },
-    {
-        "name": "Fender Style Jewel",
-        "price": 4,
-        "image": "LED_Fender_Jewel.png",
-        "customer_price_eur": 4,
-        "short_description": "Man you got style!",
-        "long_description": "Classic Fender amplifier-style jewel indicator light. Features a domed lens that diffuses LED light beautifully. Available in various colors (red, amber, green, blue). Adds authentic vintage aesthetics to your build."
-    },
-    {
-        "name": "Illuminated Footswitch",
-        "price": 3,
-        "image": "LED_Footswitch.jpg",
-        "customer_price_eur": 3,
-        "short_description": "You're all in for that high tech stuff, huh?",
-        "long_description": "Footswitch with integrated LED illumination. The switch itself lights up when the pedal is active. Modern, clean look that eliminates the need for a separate indicator LED. Note: Requires specific footswitch wiring - please specify in order notes if you need wiring assistance.",
-        "images": [
-            "LED_Footswitch.jpg"
         ]
     }
 ]

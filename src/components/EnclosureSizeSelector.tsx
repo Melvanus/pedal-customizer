@@ -321,11 +321,13 @@ export function EnclosureSizeSelector({
       </div>
 
       <div
-        data-section="size-cards-grid"
+        data-section="product-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           gap: "1.5rem",
+          maxWidth: "1400px",
+          margin: "0 auto",
         }}
       >
         {sizes.map((size) => {

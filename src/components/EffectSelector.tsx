@@ -3,6 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { Search, X } from "lucide-react";
+import { IMAGE_CONFIG } from "@/lib/imageConfig";
 
 export type CompatibleMod = {
   name: string;
@@ -296,12 +297,14 @@ export function EffectSelector({
 
       {/* Pedal Grid */}
       <div
-        data-section="pedal-grid"
+        data-section="product-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
           gap: "1.5rem",
           marginBottom: "2rem",
+          maxWidth: "1400px",
+          margin: "0 auto 2rem auto",
         }}
       >
         {filteredPedals.map((pedal) => {
@@ -392,7 +395,7 @@ export function EffectSelector({
                 </div>
               )}
 
-              <div style={{ width: "100%", height: "160px", background: "rgb(255,255,255)", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+              <div style={{ width: "100%", height: `${IMAGE_CONFIG.cardHeights.effect}px`, background: "rgb(255,255,255)", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                 {adminMode && onDeleteImage && displayedImage && (
                   <button
                     onClick={(e) => {

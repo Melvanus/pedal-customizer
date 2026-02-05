@@ -6,8 +6,12 @@ import { useRouter } from "next/navigation";
 import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation, Cat, Sun, LucideCircleSlash2, Circle } from "lucide-react";
 import { EffectSelector, type EffectPedal } from "./EffectSelector";
 import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelector";
+import { PaintSelector, type PaintOption as PaintSelectorOption } from "./PaintSelector";
+import { DesignSelector, type DesignOption } from "./DesignSelector";
+import { LedSelector, type LedOption } from "./LedSelector";
 import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
+import { IMAGE_CONFIG } from "@/lib/imageConfig";
 
 export type OptionItem = {
   id: string;
@@ -40,9 +44,9 @@ export type PaintOption = OptionItem & {
 type PedalCustomizerProps = {
   effectPedals: EffectPedal[];
   enclosureSizes: EnclosureSize[];
-  paintOptions: PaintOption[];
-  designOptions: OptionItem[];
-  ledOptions: OptionItem[];
+  paintOptions: PaintSelectorOption[];
+  designOptions: DesignOption[];
+  ledOptions: LedOption[];
   favouritePaintIds: string[];
 };
 
@@ -531,9 +535,10 @@ export function PedalCustomizer({
           style={{
             position: "absolute",
             top: "1rem",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "calc(100% - 3rem)",
+            left: "1.5rem",
+            right: "3rem",
+            marginLeft: "auto",
+            marginRight: "auto",
             maxWidth: "800px",
             background: "rgba(26, 26, 26, 0.85)",
             backdropFilter: "blur(10px)",
@@ -545,6 +550,7 @@ export function PedalCustomizer({
             display: "grid",
             gridTemplateColumns: "repeat(5, 1fr)",
             gap: "0.5rem",
+            overflow: "hidden",
           }}
         >
                 {/* Effect Selection Tab */}
@@ -561,6 +567,8 @@ export function PedalCustomizer({
                     border: activeTab === "effect" ? "2px solid #fff" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                   onMouseEnter={(e) => {
                     if (activeTab !== "effect") {
@@ -574,7 +582,7 @@ export function PedalCustomizer({
                   }}
                 >
                   <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "effect" ? "#000" : "#888", marginBottom: "0.25rem" }}>Effect</span>
-                  <span style={{ fontSize: "0.8rem", color: activeTab === "effect" ? "#000" : "#aaa" }}>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "effect" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {selectedEffect ? selectedEffect.name : "—"}
                   </span>
                 </button>
@@ -592,6 +600,8 @@ export function PedalCustomizer({
                     border: activeTab === "size" ? "2px solid #fff" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                   onMouseEnter={(e) => {
                     if (activeTab !== "size") {
@@ -605,7 +615,7 @@ export function PedalCustomizer({
                   }}
                 >
                   <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "size" ? "#000" : "#888", marginBottom: "0.25rem" }}>Size</span>
-                  <span style={{ fontSize: "0.8rem", color: activeTab === "size" ? "#000" : "#aaa" }}>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "size" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {selectedSize ? selectedSize.name : "—"}
                   </span>
                 </button>
@@ -623,6 +633,8 @@ export function PedalCustomizer({
                     border: activeTab === "paint" ? "2px solid #fff" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                   onMouseEnter={(e) => {
                     if (activeTab !== "paint") {
@@ -636,7 +648,7 @@ export function PedalCustomizer({
                   }}
                 >
                   <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "paint" ? "#000" : "#888", marginBottom: "0.25rem" }}>Paint/Finish</span>
-                  <span style={{ fontSize: "0.8rem", color: activeTab === "paint" ? "#000" : "#aaa" }}>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "paint" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {selectedPaint ? selectedPaint.displayed_name : "—"}
                   </span>
                 </button>
@@ -654,6 +666,8 @@ export function PedalCustomizer({
                     border: activeTab === "design" ? "2px solid #fff" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                   onMouseEnter={(e) => {
                     if (activeTab !== "design") {
@@ -667,7 +681,7 @@ export function PedalCustomizer({
                   }}
                 >
                   <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design/Label</span>
-                  <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa" }}>{selectedDesign?.name || "—"}</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selectedDesign?.name || "—"}</span>
                 </button>
                 <button
                   data-section="tab-led"
@@ -682,6 +696,8 @@ export function PedalCustomizer({
                     border: activeTab === "led" ? "2px solid #fff" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                   onMouseEnter={(e) => {
                     if (activeTab !== "led") {
@@ -695,7 +711,7 @@ export function PedalCustomizer({
                   }}
                 >
                   <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "led" ? "#000" : "#888", marginBottom: "0.25rem" }}>LED</span>
-                  <span style={{ fontSize: "0.8rem", color: activeTab === "led" ? "#000" : "#aaa" }}>{selectedLed?.name || "—"}</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "led" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selectedLed?.name || "—"}</span>
                 </button>
         </div>
 
@@ -945,805 +961,140 @@ export function PedalCustomizer({
 
           {/* Paint/Finish Tab */}
           {activeTab === "paint" && (
-            <div
-              data-section="tab-content-paint"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                gap: "1.5rem",
+            <PaintSelector
+              paintOptions={filteredPaintOptions}
+              selectedPaintId={selectedPaintId}
+              onSelectPaint={(id) => {
+                setSelectedPaintId(id);
+                const selectedOption = paintOptions.find(p => p.id === id);
+                if (selectedOption?.is_custom_color) {
+                  setShowColorPicker(true);
+                }
               }}
-            >
-                {filteredPaintOptions.map((option) => {
-                  const currentImageIdx = currentImageIndex[option.supplier_sku] || 0;
-                  const images = option.images || [option.image];
-                  const currentImage = images[currentImageIdx] || option.image;
-                  
-                  return (
-                  <div
-                    key={option.id}
-                    onClick={() => {
-                      if (!adminMode) {
-                        // Open modal for product details
-                        setModalProduct({
-                          type: "paint",
-                          title: option.displayed_name || option.name,
-                          subtitle: `${option.color || ""} ${option.finish || ""}`.trim(),
-                          price: option.customer_price_eur,
-                          image: currentImage,
-                          images: option.images && option.images.length > 0 ? option.images : [currentImage],
-                          description: option.long_description || option.short_description || option.description,
-                          details: [
-                            { label: "Color", value: option.color || "Custom" },
-                            { label: "Finish", value: option.finish || "Custom" },
-                            { label: "Dimensions", value: "120mm × 94mm × 34mm (L×W×H)" },
-                          ],
-                          is_custom_color: option.is_custom_color,
-                          customColor: customColor,
-                          customFinish: customFinish,
-                          onCustomColorChange: (color: string) => {
-                            setCustomColor(color);
-                            setHasInteractedWithCustomPaint(true);
-                            setModalProduct((prev) => prev ? { ...prev, customColor: color } : null);
-                          },
-                          onCustomFinishChange: (finish: "Matte" | "Glossy") => {
-                            setCustomFinish(finish);
-                            setHasInteractedWithCustomPaint(true);
-                            setModalProduct((prev) => prev ? { ...prev, customFinish: finish } : null);
-                          },
-                          additionalSections: option.is_custom_color ? [
-                            {
-                              title: "⚠️ Note",
-                              content: (
-                                <div style={{ fontSize: "0.85rem", color: "#ffaa00", lineHeight: 1.5 }}>
-                                  Custom paint requires manual review and has extended production time (5-7 business days).
-                                </div>
-                              ),
-                            },
-                          ] : undefined,
-                        });
-                      } else {
-                        // Admin mode: direct selection
-                        setSelectedPaintId(option.id);
-                        if (option.is_custom_color) {
-                          setShowColorPicker(true);
-                        }
-                      }
-                    }}
-                    onDragOver={adminMode ? (e) => handleDragOver(e, option.supplier_sku) : undefined}
-                    onDragLeave={adminMode ? handleDragLeave : undefined}
-                    onDrop={adminMode ? (e) => handleDrop(e, option.supplier_sku, "paint") : undefined}
-                    style={{
-                      background: dragOverSku === option.supplier_sku ? "#1a3a1a" : "#0f0f0f",
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      boxShadow: selectedPaintId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease",
-                      cursor: adminMode ? "copy" : "pointer",
-                      border: dragOverSku === option.supplier_sku ? "2px dashed #4ade80" : selectedPaintId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
-                      position: "relative",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-3px)";
-                      e.currentTarget.style.boxShadow = "0 5px 20px rgba(255,255,255,0.15)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = selectedPaintId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
-                    }}
-                  >
-                    <div style={{ width: "100%", height: "160px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                      {adminMode && (
-                        <>
-                          <div style={{
-                            position: "absolute",
-                            top: "0.5rem",
-                            left: "0.5rem",
-                            background: "rgba(0, 0, 0, 0.8)",
-                            color: "#4ade80",
-                            padding: "0.25rem 0.5rem",
-                            borderRadius: "5px",
-                            fontSize: "0.7rem",
-                            zIndex: 10,
-                            border: "1px solid #4ade80",
-                          }}>
-                            🔧 Drop images here
-                          </div>
-                          <button
-                            onClick={(e) => handleDeleteImage(e, option.supplier_sku, "paint", currentImage)}
-                            style={{
-                              position: "absolute",
-                              top: "0.5rem",
-                              right: "0.5rem",
-                              width: "24px",
-                              height: "24px",
-                              borderRadius: "50%",
-                              background: "rgba(220, 38, 38, 0.9)",
-                              border: "1px solid rgba(255, 255, 255, 0.3)",
-                              color: "#fff",
-                              fontSize: "0.85rem",
-                              cursor: "pointer",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              zIndex: 10,
-                              transition: "all 0.2s ease",
-                              fontWeight: "bold",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
-                              e.currentTarget.style.transform = "scale(1.1)";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
-                              e.currentTarget.style.transform = "scale(1)";
-                            }}
-                          >
-                            ×
-                          </button>
-                        </>
-                      )}
-                      {images.length > 1 && (
-                        <>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setCurrentImageIndex(prev => ({
-                                ...prev,
-                                [option.supplier_sku]: Math.max(0, currentImageIdx - 1)
-                              }));
-                            }}
-                            disabled={currentImageIdx === 0}
-                            style={{
-                              position: "absolute",
-                              left: "0.5rem",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              background: "rgba(0, 0, 0, 0.7)",
-                              border: "1px solid rgba(255, 255, 255, 0.3)",
-                              borderRadius: "50%",
-                              width: "36px",
-                              height: "36px",
-                              cursor: "pointer",
-                              color: "#fff",
-                              fontSize: "1rem",
-                              opacity: currentImageIdx === 0 ? 0.3 : 1,
-                              zIndex: 10,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              transition: "all 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => {
-                              if (currentImageIdx > 0) {
-                                e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)";
-                            }}
-                          >
-                            ◀
-                          </button>
-                          <div style={{
-                            position: "absolute",
-                            bottom: "0.5rem",
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                            background: "rgba(0, 0, 0, 0.7)",
-                            padding: "0.25rem 0.75rem",
-                            borderRadius: "12px",
-                            zIndex: 10,
-                            color: "#fff",
-                            fontSize: "0.7rem",
-                            border: "1px solid rgba(255, 255, 255, 0.2)",
-                          }}>
-                            {currentImageIdx + 1} / {images.length}
-                          </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setCurrentImageIndex(prev => ({
-                                ...prev,
-                                [option.supplier_sku]: Math.min(images.length - 1, currentImageIdx + 1)
-                              }));
-                            }}
-                            disabled={currentImageIdx === images.length - 1}
-                            style={{
-                              position: "absolute",
-                              right: "0.5rem",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              background: "rgba(0, 0, 0, 0.7)",
-                              border: "1px solid rgba(255, 255, 255, 0.3)",
-                              borderRadius: "50%",
-                              width: "36px",
-                              height: "36px",
-                              cursor: "pointer",
-                              color: "#fff",
-                              fontSize: "1rem",
-                              opacity: currentImageIdx === images.length - 1 ? 0.3 : 1,
-                              zIndex: 10,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              transition: "all 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => {
-                              if (currentImageIdx < images.length - 1) {
-                                e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)";
-                            }}
-                          >
-                            ▶
-                          </button>
-                        </>
-                      )}
-                      <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
-                        {currentImage.toLowerCase().endsWith('.svg') ? (
-                          <img src={currentImage} alt={option.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                        ) : (
-                          <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
-                        )}
-                      </div>
-                    </div>
-                    <div style={{ padding: "1rem" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", gap: "0.5rem" }}>
-                        <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0", lineHeight: 1.3, flex: "1 1 auto", minWidth: 0 }}>
-                          {option.displayed_name}
+              onShowDetails={(option) => {
+                setModalProduct({
+                  type: "paint",
+                  title: option.displayed_name || option.name,
+                  subtitle: `${option.color || ""} ${option.finish || ""}`.trim(),
+                  price: option.customer_price_eur,
+                  image: (option.images && option.images.length > 0 ? option.images[currentImageIndex[option.supplier_sku] || 0] : option.image),
+                  images: option.images && option.images.length > 0 ? option.images : [option.image],
+                  description: option.long_description || option.short_description || option.description,
+                  details: [
+                    { label: "Color", value: option.color || "Custom" },
+                    { label: "Finish", value: option.finish || "Custom" },
+                    { label: "Dimensions", value: "120mm × 94mm × 34mm (L×W×H)" },
+                  ],
+                  is_custom_color: option.is_custom_color,
+                  customColor: customColor,
+                  customFinish: customFinish,
+                  onCustomColorChange: (color: string) => {
+                    setCustomColor(color);
+                    setHasInteractedWithCustomPaint(true);
+                    setModalProduct((prev) => prev ? { ...prev, customColor: color } : null);
+                  },
+                  onCustomFinishChange: (finish: "Matte" | "Glossy") => {
+                    setCustomFinish(finish);
+                    setHasInteractedWithCustomPaint(true);
+                    setModalProduct((prev) => prev ? { ...prev, customFinish: finish } : null);
+                  },
+                  additionalSections: option.is_custom_color ? [
+                    {
+                      title: "⚠️ Note",
+                      content: (
+                        <div style={{ fontSize: "0.85rem", color: "#ffaa00", lineHeight: 1.5 }}>
+                          Custom paint requires manual review and has extended production time (5-7 business days).
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: "0 0 auto" }}>
-                          {
-                            adminMode == true ? 
-                              <span
-                                style={{
-                                  background: "#fff",
-                                  color: "#000",
-                                  padding: "0.25rem 0.6rem",
-                                  borderRadius: "15px",
-                                  fontSize: "0.75rem",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {option.internal_product_id}
-                              </span>
-                              : null
-                          }
-  
-                          {(() => {
-                            const { Icon, color } = getFinishIcon(option.is_custom_color ? customFinish : option.finish);
-                            return (
-                              <div
-                                style={{
-                                  width: "28px",
-                                  height: "28px",
-                                  borderRadius: "50%",
-                                  background: "rgba(255, 255, 255, 0.1)",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  border: "1px solid rgba(255, 255, 255, 0.2)",
-                                }}
-                                title={option.is_custom_color ? customFinish : (option.finish || "Standard Finish")}
-                              >
-                                <Icon size={16} color={color} />
-                              </div>
-                            );
-                          })()}
-                          {(option.rgb || option.is_custom_color) && (
-                            <div
-                              style={{
-                                width: "28px",
-                                height: "28px",
-                                borderRadius: "50%",
-                                background: option.is_custom_color ? customColor : option.rgb,
-                                border: "2px solid rgba(255, 255, 255, 0.3)",
-                                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
-                              }}
-                              title={option.is_custom_color ? `Custom: ${customColor}` : (option.pantone ? `Color: ${option.color}\nPantone: ${option.pantone}` : `Color: ${option.color}`)}
-                            />
-                          )}
-                          <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff", whiteSpace: "nowrap" }}>
-                            {formatPrice(option.customer_price_eur)}
-                          </span>
-                        </div>
-                      </div>
-                      {option.short_description && (
-                        <div style={{ fontSize: "0.8rem", color: "#999", marginBottom: "0.75rem", lineHeight: 1.4 }}>
-                          {option.short_description}
-                        </div>
-                      )}
-                      <div>
-                        <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderBottom: "1px solid #2d2d2d" }}>
-                          <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Color</span>
-                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.is_custom_color ? "Custom RGB" : (option.color || "—")}</span>
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0" }}>
-                          <span style={{ fontWeight: 600, color: "#888", fontSize: "0.8rem" }}>Finish</span>
-                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>{option.is_custom_color ? customFinish : (option.finish || "—")}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  );
-                })}
-              </div>
+                      ),
+                    },
+                  ] : undefined,
+                });
+              }}
+              customColor={customColor}
+              customFinish={customFinish}
+              adminMode={adminMode}
+              dragOverSku={dragOverSku}
+              currentImageIndex={currentImageIndex}
+              onImageIndexChange={(sku, index) => {
+                setCurrentImageIndex(prev => ({ ...prev, [sku]: index }));
+              }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onDeleteImage={handleDeleteImage}
+              onShowColorPicker={() => setShowColorPicker(true)}
+            />
           )}
 
           {/* Design/Labeling Tab */}
           {activeTab === "design" && (
-            <div data-section="tab-content-design">
-              <div
-                data-section="design-options-grid"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                  gap: "1.5rem",
-                  marginBottom: "2rem",
-                }}
-              >
-                {designOptions.map((option) => {
-                  const currentImageIdx = currentImageIndex[option.id] || 0;
-                  const images = option.images || [option.image];
-                  const currentImage = images[currentImageIdx] || option.image;
-                  
-                  return (
-                  <div
-                    key={option.id}
-                    onClick={() => {
-                      if (!adminMode) {
-                        setModalProduct({
-                          type: "design",
-                          title: option.name,
-                          price: option.customer_price_eur,
-                          image: currentImage,
-                          images: images,
-                          description: option.long_description || option.short_description || option.description,
-                          details: [
-                          ],
-                        });
-                      } else {
-                        setSelectedDesignId(option.id);
-                      }
-                    }}
-                    onDragOver={adminMode ? (e) => handleDragOver(e, option.id) : undefined}
-                    onDragLeave={adminMode ? handleDragLeave : undefined}
-                    onDrop={adminMode ? (e) => handleDrop(e, option.id, "design") : undefined}
-                    style={{
-                      background: dragOverSku === option.id ? "#1a3a1a" : "#0f0f0f",
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      boxShadow: selectedDesignId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease",
-                      cursor: adminMode ? "copy" : "pointer",
-                      border: dragOverSku === option.id ? "2px dashed #4ade80" : selectedDesignId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
-                      position: "relative",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-3px)";
-                      e.currentTarget.style.boxShadow = "0 5px 20px rgba(255,255,255,0.15)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = selectedDesignId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
-                    }}
-                  >
-                    <div style={{ width: "100%", height: "320px", background: "#1a1a1a", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                      {adminMode && (
-                        <>
-                          <div style={{
-                            position: "absolute",
-                            top: "0.5rem",
-                            left: "0.5rem",
-                            background: "rgba(0, 0, 0, 0.8)",
-                            color: "#4ade80",
-                            padding: "0.25rem 0.5rem",
-                          borderRadius: "5px",
-                          fontSize: "0.7rem",
-                          zIndex: 10,
-                          border: "1px solid #4ade80",
-                        }}>
-                          🔧 Drop images here
-                        </div>
-                        <button
-                          onClick={(e) => handleDeleteImage(e, option.id, "design", currentImage)}
-                          style={{
-                            position: "absolute",
-                            top: "0.5rem",
-                            right: "0.5rem",
-                            width: "24px",
-                            height: "24px",
-                            borderRadius: "50%",
-                            background: "rgba(220, 38, 38, 0.9)",
-                            border: "1px solid rgba(255, 255, 255, 0.3)",
-                            color: "#fff",
-                            fontSize: "0.85rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 10,
-                            transition: "all 0.2s ease",
-                            fontWeight: "bold",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
-                            e.currentTarget.style.transform = "scale(1.1)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
-                            e.currentTarget.style.transform = "scale(1)";
-                          }}
-                        >
-                          ×
-                        </button>
-                      </>
-                      )}
-                      {images.length > 1 && (
-                        <>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setCurrentImageIndex(prev => ({...prev, [option.id]: Math.max(0, currentImageIdx - 1)}));
-                            }}
-                            disabled={currentImageIdx === 0}
-                            style={{
-                              position: "absolute",
-                              left: "0.5rem",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              background: "rgba(0, 0, 0, 0.7)",
-                              border: "1px solid rgba(255, 255, 255, 0.3)",
-                              borderRadius: "50%",
-                              width: "36px",
-                              height: "36px",
-                              cursor: "pointer",
-                              color: "#fff",
-                              fontSize: "1rem",
-                              opacity: currentImageIdx === 0 ? 0.3 : 1,
-                              zIndex: 10,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              transition: "all 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => { if (currentImageIdx > 0) e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)"; }}
-                            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)"; }}
-                          >
-                            ◀
-                          </button>
-                          <div style={{position: "absolute", bottom: "0.5rem", left: "50%", transform: "translateX(-50%)", background: "rgba(0, 0, 0, 0.7)", padding: "0.25rem 0.75rem", borderRadius: "12px", zIndex: 10, color: "#fff", fontSize: "0.7rem", border: "1px solid rgba(255, 255, 255, 0.2)"}}>
-                            {currentImageIdx + 1} / {images.length}
-                          </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setCurrentImageIndex(prev => ({...prev, [option.id]: Math.min(images.length - 1, currentImageIdx + 1)}));
-                            }}
-                            disabled={currentImageIdx === images.length - 1}
-                            style={{
-                              position: "absolute",
-                              right: "0.5rem",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              background: "rgba(0, 0, 0, 0.7)",
-                              border: "1px solid rgba(255, 255, 255, 0.3)",
-                              borderRadius: "50%",
-                              width: "36px",
-                              height: "36px",
-                              cursor: "pointer",
-                              color: "#fff",
-                              fontSize: "1rem",
-                              opacity: currentImageIdx === images.length - 1 ? 0.3 : 1,
-                              zIndex: 10,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              transition: "all 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => { if (currentImageIdx < images.length - 1) e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)"; }}
-                            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)"; }}
-                          >
-                            ▶
-                          </button>
-                        </>
-                      )}
-                      <div style={{ position: "relative", width: "100%", height: "100%", padding: "0.75rem" }}>
-                        {currentImage.toLowerCase().endsWith('.svg') ? (
-                          <img src={currentImage} alt={option.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                        ) : (
-                          <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
-                        )}
-                        {/* "EXAMPLE" watermark overlay for design images */}
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "1rem",
-                            right: "0.5rem",
-                            transform: "rotate(15deg)",
-                            fontSize: "1rem",
-                            fontWeight: 700,
-                            color: "rgba(255, 255, 255, 0.3)",
-                            textShadow: "0 0 3px rgba(0, 0, 0, 0.8)",
-                            pointerEvents: "none",
-                            letterSpacing: "0.1em",
-                          }}
-                        >
-                          EXAMPLE
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ padding: "1rem" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                        <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
-                        <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                          {formatPrice(option.customer_price_eur)}
-                        </span>
-                      </div>
-                      {option.short_description && (
-                        <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
-                          {option.short_description}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  );
-                })}
-              </div>
-            </div>
+            <DesignSelector
+              designOptions={designOptions}
+              selectedDesignId={selectedDesignId}
+              onSelectDesign={setSelectedDesignId}
+              onShowDetails={(option) => {
+                setModalProduct({
+                  type: "design",
+                  title: option.name,
+                  price: option.customer_price_eur,
+                  image: (option.images && option.images.length > 0 ? option.images[currentImageIndex[option.id] || 0] : option.image),
+                  images: option.images || [option.image],
+                  description: option.long_description || option.short_description || option.description,
+                  details: [],
+                });
+              }}
+              adminMode={adminMode}
+              dragOverSku={dragOverSku}
+              currentImageIndex={currentImageIndex}
+              onImageIndexChange={(id, index) => {
+                setCurrentImageIndex(prev => ({ ...prev, [id]: index }));
+              }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onDeleteImage={handleDeleteImage}
+            />
           )}
 
           {/* LED Tab */}
           {activeTab === "led" && (
             <>
-            <div
-              data-section="tab-content-led"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                gap: "1.5rem",
+            <LedSelector
+              ledOptions={ledOptions}
+              selectedLedId={selectedLedId}
+              onSelectLed={setSelectedLedId}
+              onShowDetails={(option) => {
+                setModalProduct({
+                  type: "led",
+                  title: option.name,
+                  price: option.customer_price_eur,
+                  image: (option.images && option.images.length > 0 ? option.images[currentImageIndex[option.id] || 0] : option.image),
+                  images: option.images || [option.image],
+                  description: option.long_description || option.short_description || option.description,
+                  details: [],
+                  ledColor: selectedLedColor,
+                  customLedColor: customLedColor,
+                  onLedColorChange: (color: string) => {
+                    setSelectedLedColor(color);
+                    setModalProduct((prev) => prev ? { ...prev, ledColor: color } : null);
+                  },
+                  onCustomLedColorChange: (color: string) => {
+                    setCustomLedColor(color);
+                    setModalProduct((prev) => prev ? { ...prev, customLedColor: color } : null);
+                  },
+                });
               }}
-            >
-              {ledOptions.map((option) => {
-                const currentImageIdx = currentImageIndex[option.id] ?? 0;
-                const images = option.images || [option.image];
-                const currentImage = images[currentImageIdx];
-                
-                return (
-                <div
-                  key={option.id}
-                  onClick={() => {
-                    if (!adminMode) {
-                      setModalProduct({
-                        type: "led",
-                        title: option.name,
-                        price: option.customer_price_eur,
-                        image: currentImage,
-                        images: images,
-                        description: option.long_description || option.short_description || option.description,
-                        details: [
-                          { label: "Type", value: "LED Indicator" },
-                          { label: "Installation", value: "Pre-wired & Tested" },
-                        ],
-                        ledColor: selectedLedColor,
-                        customLedColor: customLedColor,
-                        onLedColorChange: (color: string) => {
-                          setSelectedLedColor(color);
-                          setModalProduct((prev) => prev ? { ...prev, ledColor: color } : null);
-                        },
-                        onCustomLedColorChange: (color: string) => {
-                          setCustomLedColor(color);
-                          setModalProduct((prev) => prev ? { ...prev, customLedColor: color } : null);
-                        },
-                      });
-                    } else {
-                      setSelectedLedId(option.id);
-                    }
-                  }}
-                  style={{
-                    background: "#0f0f0f",
-                    borderRadius: "10px",
-                    overflow: "hidden",
-                    boxShadow: selectedLedId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)",
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    cursor: adminMode ? "copy" : "pointer",
-                    border: dragOverSku === option.id ? "2px dashed #4ade80" : selectedLedId === option.id ? "2px solid #fff" : "2px solid #2d2d2d",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-3px)";
-                    e.currentTarget.style.boxShadow = "0 5px 20px rgba(255,255,255,0.15)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = selectedLedId === option.id ? "0 5px 20px rgba(255, 255, 255, 0.2)" : "0 3px 15px rgba(0,0,0,0.5)";
-                  }}
-                  onDragOver={adminMode ? (e) => handleDragOver(e, option.id) : undefined}
-                  onDragLeave={adminMode ? handleDragLeave : undefined}
-                  onDrop={adminMode ? (e) => handleDrop(e, option.id, "led") : undefined}
-                >
-                  <div style={{ 
-                    width: "100%", 
-                    height: "160px", 
-                    background: "#1a1a1a",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    overflow: "hidden"
-                  }}>
-                    {adminMode && (
-                      <>
-                        <div style={{
-                          position: "absolute",
-                          top: "0.5rem",
-                          left: "0.5rem",
-                          background: "rgba(0, 0, 0, 0.8)",
-                          color: "#4ade80",
-                          padding: "0.25rem 0.5rem",
-                          borderRadius: "5px",
-                          fontSize: "0.7rem",
-                          zIndex: 10,
-                          border: "1px solid #4ade80",
-                        }}>
-                          🔧 Drop images here
-                        </div>
-                        <button
-                          onClick={(e) => handleDeleteImage(e, option.id, "led", currentImage)}
-                          style={{
-                            position: "absolute",
-                            top: "0.5rem",
-                            right: "0.5rem",
-                            width: "24px",
-                            height: "24px",
-                            borderRadius: "50%",
-                            background: "rgba(220, 38, 38, 0.9)",
-                            border: "1px solid rgba(255, 255, 255, 0.3)",
-                            color: "#fff",
-                            fontSize: "0.85rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 10,
-                            transition: "all 0.2s ease",
-                            fontWeight: "bold",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(220, 38, 38, 1)";
-                            e.currentTarget.style.transform = "scale(1.1)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(220, 38, 38, 0.9)";
-                            e.currentTarget.style.transform = "scale(1)";
-                          }}
-                        >
-                          ×
-                        </button>
-                      </>
-                    )}
-                    
-                    {images.length > 1 && (
-                      <>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCurrentImageIndex(prev => ({
-                              ...prev,
-                              [option.id]: currentImageIdx > 0 ? currentImageIdx - 1 : images.length - 1
-                            }));
-                          }}
-                          style={{
-                            position: "absolute",
-                            left: "0.5rem",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
-                            background: "rgba(26, 26, 26, 0.8)",
-                            border: "2px solid rgba(255, 255, 255, 0.3)",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 10,
-                            transition: "all 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
-                            e.currentTarget.style.borderColor = "#fff";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
-                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
-                          }}
-                        >
-                          ←
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCurrentImageIndex(prev => ({
-                              ...prev,
-                              [option.id]: currentImageIdx < images.length - 1 ? currentImageIdx + 1 : 0
-                            }));
-                          }}
-                          style={{
-                            position: "absolute",
-                            right: "0.5rem",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
-                            background: "rgba(26, 26, 26, 0.8)",
-                            border: "2px solid rgba(255, 255, 255, 0.3)",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 10,
-                            transition: "all 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.95)";
-                            e.currentTarget.style.borderColor = "#fff";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(26, 26, 26, 0.8)";
-                            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
-                          }}
-                        >
-                          →
-                        </button>
-                        <div style={{
-                          position: "absolute",
-                          bottom: "0.5rem",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          background: "rgba(26, 26, 26, 0.8)",
-                          padding: "0.25rem 0.5rem",
-                          borderRadius: "4px",
-                          fontSize: "0.75rem",
-                          color: "#999",
-                          zIndex: 10,
-                        }}>
-                          {currentImageIdx + 1} / {images.length}
-                        </div>
-                      </>
-                    )}
-                    
-                    <div style={{ padding: "0.75rem", position: "relative", width: "100%", height: "100%" }}>
-                      {currentImage.toLowerCase().endsWith('.svg') ? (
-                        <img src={currentImage} alt={option.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                      ) : (
-                        <Image src={currentImage} alt={option.name} fill unoptimized style={{ objectFit: "contain" }} />
-                      )}
-                    </div>
-                  </div>
-                  <div style={{ padding: "1rem" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                      <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{option.name}</div>
-                      <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}>
-                        {formatPrice(option.customer_price_eur)}
-                      </span>
-                    </div>
-                    {option.short_description && (
-                      <div style={{ fontSize: "0.8rem", color: "#999", lineHeight: 1.4 }}>
-                        {option.short_description}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-              })}
-            </div>
+              adminMode={adminMode}
+              dragOverSku={dragOverSku}
+              currentImageIndex={currentImageIndex}
+              onImageIndexChange={(id, index) => {
+                setCurrentImageIndex(prev => ({ ...prev, [id]: index }));
+              }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onDeleteImage={handleDeleteImage}
+            />
             
             {/* LED Color Picker - only show if an LED option is selected */}
             {selectedLed && !selectedLed.name.includes("No LED") && (
@@ -2136,7 +1487,7 @@ export function PedalCustomizer({
         onClose={() => setModalProduct(null)}
         onSelectAndContinue={handleModalSelectAndContinue}
         nextTabName={getNextTabName()}
-        imageSize={modalProduct?.type === "design" ? { width: 600, height: 400 } : undefined}
+        imageSize={modalProduct?.type ? IMAGE_CONFIG.modalSizes[modalProduct.type] : undefined}
       />
     </div>
   );
