@@ -208,7 +208,7 @@
     "potentiometer_positions": [
       {
         "x": 0,
-        "y": 48,
+        "y": 40,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -216,10 +216,10 @@
       },
       {
         "x": 0,
-        "y": 30,
+        "y": 10,
         "label_offset": {
           "x": 0,
-          "y": -15
+          "y": -16
         }
       }
     ],
@@ -228,10 +228,6 @@
     "footswitch_position": {
       "x": 0,
       "y": -45
-    },
-    "led_position": {
-      "x": 0,
-      "y": 5
     },
     "input_jack_position": {
       "x": 30,
@@ -243,7 +239,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 53
+    },
+    "led_position": {
+      "x": 0,
+      "y": -27
     }
   },
   {
@@ -428,7 +428,7 @@
     "potentiometer_positions": [
       {
         "x": -18,
-        "y": 48,
+        "y": 44,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -436,7 +436,7 @@
       },
       {
         "x": 0,
-        "y": 35,
+        "y": 20,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -444,7 +444,7 @@
       },
       {
         "x": 18,
-        "y": 48,
+        "y": 44,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -457,10 +457,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": 0
-    },
     "input_jack_position": {
       "x": 30,
       "y": 0
@@ -471,7 +467,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -20
+    },
+    "led_position": {
+      "x": 0,
+      "y": 36
     }
   },
   {
@@ -486,7 +486,7 @@
     },
     "potentiometer_positions": [
       {
-        "x": -16,
+        "x": -22,
         "y": 42,
         "label_offset": {
           "x": 0,
@@ -502,7 +502,7 @@
         }
       },
       {
-        "x": 16,
+        "x": 22,
         "y": 42,
         "label_offset": {
           "x": 0,
@@ -546,7 +546,7 @@
     "potentiometer_positions": [
       {
         "x": 0,
-        "y": 50,
+        "y": 45,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -554,7 +554,7 @@
       },
       {
         "x": -18,
-        "y": 32,
+        "y": 25,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -562,7 +562,7 @@
       },
       {
         "x": 18,
-        "y": 32,
+        "y": 25,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -575,10 +575,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": -5
-    },
     "input_jack_position": {
       "x": 30,
       "y": 0
@@ -589,7 +585,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -20
+    },
+    "led_position": {
+      "x": 0,
+      "y": 20
     }
   },
   {
@@ -634,10 +634,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": -10
-    },
     "input_jack_position": {
       "x": 30,
       "y": -5
@@ -648,7 +644,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 54
+    },
+    "led_position": {
+      "x": 0,
+      "y": -19
     }
   },
   {
@@ -663,32 +663,32 @@
     },
     "potentiometer_positions": [
       {
-        "x": -24,
-        "y": 45,
+        "x": -16,
+        "y": 42,
         "label_offset": {
           "x": 0,
           "y": -15
         }
       },
       {
-        "x": -8,
-        "y": 45,
+        "x": 16,
+        "y": 42,
         "label_offset": {
           "x": 0,
           "y": -15
         }
       },
       {
-        "x": 8,
-        "y": 45,
+        "x": -16,
+        "y": 10,
         "label_offset": {
           "x": 0,
           "y": -15
         }
       },
       {
-        "x": 24,
-        "y": 45,
+        "x": 16,
+        "y": 10,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -701,10 +701,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": -10
-    },
     "input_jack_position": {
       "x": 30,
       "y": -10
@@ -715,7 +711,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -24
+    },
+    "led_position": {
+      "x": 0,
+      "y": 23
     }
   },
   {
@@ -731,7 +731,7 @@
     "potentiometer_positions": [
       {
         "x": -24,
-        "y": 48,
+        "y": 44,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -739,7 +739,7 @@
       },
       {
         "x": -8,
-        "y": 48,
+        "y": 44,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -747,7 +747,7 @@
       },
       {
         "x": 8,
-        "y": 48,
+        "y": 44,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -755,7 +755,7 @@
       },
       {
         "x": 24,
-        "y": 48,
+        "y": 44,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -799,7 +799,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -24
     }
   },
   {
@@ -814,7 +814,7 @@
     },
     "potentiometer_positions": [
       {
-        "x": -32,
+        "x": -36,
         "y": 45,
         "label_offset": {
           "x": 0,
@@ -822,7 +822,7 @@
         }
       },
       {
-        "x": -16,
+        "x": -18,
         "y": 45,
         "label_offset": {
           "x": 0,
@@ -838,7 +838,7 @@
         }
       },
       {
-        "x": 16,
+        "x": 18,
         "y": 45,
         "label_offset": {
           "x": 0,
@@ -846,7 +846,7 @@
         }
       },
       {
-        "x": 32,
+        "x": 36,
         "y": 45,
         "label_offset": {
           "x": 0,
@@ -882,7 +882,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -8
     }
   },
   {
@@ -990,7 +990,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -6
     }
   },
   {
@@ -1009,7 +1009,7 @@
         "y": 25,
         "label_offset": {
           "x": 0,
-          "y": -12
+          "y": -14
         }
       }
     ],
@@ -1018,10 +1018,6 @@
     "footswitch_position": {
       "x": 0,
       "y": -35
-    },
-    "led_position": {
-      "x": 0,
-      "y": -10
     },
     "input_jack_position": {
       "x": 17,
@@ -1033,7 +1029,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 40
+      "y": 37
+    },
+    "led_position": {
+      "x": 0,
+      "y": -8
     }
   },
   {
@@ -1048,7 +1048,7 @@
     },
     "potentiometer_positions": [
       {
-        "x": -32,
+        "x": -36,
         "y": 50,
         "label_offset": {
           "x": 0,
@@ -1056,7 +1056,7 @@
         }
       },
       {
-        "x": -16,
+        "x": -18,
         "y": 50,
         "label_offset": {
           "x": 0,
@@ -1072,7 +1072,15 @@
         }
       },
       {
-        "x": 16,
+        "x": 18,
+        "y": 50,
+        "label_offset": {
+          "x": 2,
+          "y": -15
+        }
+      },
+      {
+        "x": 36,
         "y": 50,
         "label_offset": {
           "x": 0,
@@ -1080,24 +1088,16 @@
         }
       },
       {
-        "x": 32,
-        "y": 50,
+        "x": -9,
+        "y": 27,
         "label_offset": {
           "x": 0,
           "y": -15
         }
       },
       {
-        "x": -12,
-        "y": 28,
-        "label_offset": {
-          "x": 0,
-          "y": -15
-        }
-      },
-      {
-        "x": 12,
-        "y": 28,
+        "x": 9,
+        "y": 27,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -1107,7 +1107,7 @@
     "switch_positions": [
       {
         "x": -28,
-        "y": 10,
+        "y": 5,
         "label_offset": {
           "x": 0,
           "y": -12
@@ -1115,7 +1115,7 @@
       },
       {
         "x": 0,
-        "y": 10,
+        "y": 5,
         "label_offset": {
           "x": 0,
           "y": -12
@@ -1123,7 +1123,7 @@
       },
       {
         "x": 28,
-        "y": 10,
+        "y": 5,
         "label_offset": {
           "x": 0,
           "y": -12
@@ -1135,10 +1135,6 @@
       "x": 0,
       "y": -48
     },
-    "led_position": {
-      "x": 0,
-      "y": -22
-    },
     "input_jack_position": {
       "x": 44,
       "y": -8
@@ -1149,7 +1145,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -17
+    },
+    "led_position": {
+      "x": 0,
+      "y": -29
     }
   },
   {
@@ -1200,7 +1200,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 42
+      "y": 39
     }
   },
   {
@@ -1252,7 +1252,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 42
+      "y": 38
     }
   },
   {
@@ -1398,7 +1398,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 52
+      "y": 49
     }
   },
   {
@@ -1458,7 +1458,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 52
+      "y": 48
     }
   },
   {
@@ -1526,7 +1526,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 54
+      "y": 49
     }
   },
   {
@@ -1541,7 +1541,7 @@
     },
     "potentiometer_positions": [
       {
-        "x": -24,
+        "x": -14,
         "y": 42,
         "label_offset": {
           "x": 0,
@@ -1549,7 +1549,7 @@
         }
       },
       {
-        "x": -8,
+        "x": 14,
         "y": 42,
         "label_offset": {
           "x": 0,
@@ -1557,16 +1557,16 @@
         }
       },
       {
-        "x": 8,
-        "y": 42,
+        "x": -14,
+        "y": 12,
         "label_offset": {
           "x": 0,
           "y": -14
         }
       },
       {
-        "x": 24,
-        "y": 42,
+        "x": 14,
+        "y": 12,
         "label_offset": {
           "x": 0,
           "y": -14
@@ -1588,10 +1588,6 @@
       "x": 0,
       "y": -42
     },
-    "led_position": {
-      "x": 0,
-      "y": -8
-    },
     "input_jack_position": {
       "x": 27,
       "y": -5
@@ -1602,7 +1598,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 54
+      "y": -26
+    },
+    "led_position": {
+      "x": 0,
+      "y": -12
     }
   },
   {
@@ -1637,7 +1637,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 52
     },
     "footswitch_positions": [
       {
@@ -1652,11 +1652,11 @@
     "led_positions": [
       {
         "x": -15,
-        "y": -20
+        "y": -25
       },
       {
         "x": 15,
-        "y": -20
+        "y": -25
       }
     ]
   },
@@ -1715,11 +1715,11 @@
     "led_positions": [
       {
         "x": -15,
-        "y": -20
+        "y": -24
       },
       {
         "x": 15,
-        "y": -20
+        "y": -24
       }
     ]
   },
@@ -1778,11 +1778,11 @@
     "led_positions": [
       {
         "x": -15,
-        "y": -20
+        "y": -25
       },
       {
         "x": 15,
-        "y": -20
+        "y": -25
       }
     ]
   },
@@ -1870,10 +1870,10 @@
       },
       {
         "x": 0,
-        "y": 30,
+        "y": 22,
         "label_offset": {
           "x": 0,
-          "y": -15
+          "y": -14
         }
       }
     ],
@@ -1889,7 +1889,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -27
     },
     "footswitch_positions": [
       {
@@ -2165,7 +2165,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -21
     },
     "footswitch_positions": [
       {
@@ -2200,7 +2200,7 @@
     },
     "potentiometer_positions": [
       {
-        "x": -16,
+        "x": -20,
         "y": 42,
         "label_offset": {
           "x": 0,
@@ -2216,7 +2216,7 @@
         }
       },
       {
-        "x": 16,
+        "x": 20,
         "y": 42,
         "label_offset": {
           "x": 0,
@@ -2307,7 +2307,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -6
     },
     "footswitch_positions": [
       {
@@ -2322,11 +2322,11 @@
     "led_positions": [
       {
         "x": -15,
-        "y": -5
+        "y": -25
       },
       {
         "x": 15,
-        "y": -5
+        "y": -25
       }
     ]
   },
@@ -2378,7 +2378,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -29
     },
     "footswitch_positions": [
       {
@@ -2457,7 +2457,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -2
     },
     "footswitch_positions": [
       {
@@ -2472,11 +2472,11 @@
     "led_positions": [
       {
         "x": -15,
-        "y": -10
+        "y": -20
       },
       {
         "x": 15,
-        "y": -10
+        "y": -20
       }
     ]
   },
@@ -2553,7 +2553,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -24
     },
     "footswitch_positions": [
       {
@@ -2616,7 +2616,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 3
     }
   },
   {
@@ -2651,7 +2651,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 1
     },
     "footswitch_positions": [
       {
@@ -2722,7 +2722,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 48
     }
   },
   {
@@ -2765,7 +2765,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 51
     },
     "footswitch_positions": [
       {
@@ -2779,12 +2779,12 @@
     ],
     "led_positions": [
       {
-        "x": -15,
-        "y": -20
+        "x": -35,
+        "y": -45
       },
       {
-        "x": 15,
-        "y": -20
+        "x": 35,
+        "y": -45
       }
     ]
   },
@@ -2836,7 +2836,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": -6
     }
   },
   {
@@ -2879,25 +2879,25 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": -3
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -45
       }
     ],
     "led_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -20
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -20
       }
     ]
@@ -2950,7 +2950,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 48
     }
   },
   {
@@ -2993,7 +2993,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 46
     },
     "footswitch_positions": [
       {
@@ -3037,7 +3037,7 @@
       },
       {
         "x": 0,
-        "y": 30,
+        "y": 20,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -3050,10 +3050,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": 5
-    },
     "input_jack_position": {
       "x": 42,
       "y": 0
@@ -3064,7 +3060,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -26
+    },
+    "led_position": {
+      "x": 0,
+      "y": -5
     }
   },
   {
@@ -3080,7 +3080,7 @@
     "potentiometer_positions": [
       {
         "x": 0,
-        "y": 48,
+        "y": 36,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -3088,7 +3088,7 @@
       },
       {
         "x": 0,
-        "y": 30,
+        "y": 7,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -3107,26 +3107,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 50
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -45
       }
     ],
     "led_positions": [
       {
         "x": -15,
-        "y": 5
+        "y": -30
       },
       {
         "x": 15,
-        "y": 5
+        "y": -30
       }
     ]
   },
@@ -3164,10 +3164,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": -15
-    },
     "input_jack_position": {
       "x": 42,
       "y": 5
@@ -3178,7 +3174,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 9
+    },
+    "led_position": {
+      "x": 0,
+      "y": -25
     }
   },
   {
@@ -3221,26 +3221,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": -9
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -45
       }
     ],
     "led_positions": [
       {
-        "x": -15,
-        "y": -15
+        "x": -10,
+        "y": -45
       },
       {
-        "x": 15,
-        "y": -15
+        "x": 10,
+        "y": -45
       }
     ]
   },
@@ -3286,10 +3286,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": -20
-    },
     "input_jack_position": {
       "x": 42,
       "y": 0
@@ -3300,7 +3296,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 51
+    },
+    "led_position": {
+      "x": 0,
+      "y": -29
     }
   },
   {
@@ -3351,26 +3351,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 51
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -45
       }
     ],
     "led_positions": [
       {
-        "x": -15,
-        "y": -20
+        "x": -30,
+        "y": -25
       },
       {
-        "x": 15,
-        "y": -20
+        "x": 30,
+        "y": -25
       }
     ]
   },
@@ -3430,7 +3430,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 48
     }
   },
   {
@@ -3481,26 +3481,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 47
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -45
       }
     ],
     "led_positions": [
       {
         "x": -15,
-        "y": -20
+        "y": -45
       },
       {
         "x": 15,
-        "y": -20
+        "y": -45
       }
     ]
   },
@@ -3516,8 +3516,8 @@
     },
     "potentiometer_positions": [
       {
-        "x": -25,
-        "y": 48,
+        "x": -30,
+        "y": 42,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -3525,15 +3525,15 @@
       },
       {
         "x": 0,
-        "y": 35,
+        "y": 24,
         "label_offset": {
           "x": 0,
           "y": -15
         }
       },
       {
-        "x": 25,
-        "y": 48,
+        "x": 30,
+        "y": 42,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -3546,10 +3546,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": 0
-    },
     "input_jack_position": {
       "x": 42,
       "y": 0
@@ -3560,7 +3556,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 50
+    },
+    "led_position": {
+      "x": 0,
+      "y": -26
     }
   },
   {
@@ -3611,26 +3611,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 50
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -25,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 25,
         "y": -45
       }
     ],
     "led_positions": [
       {
         "x": -15,
-        "y": 0
+        "y": -18
       },
       {
         "x": 15,
-        "y": 0
+        "y": -18
       }
     ]
   },
@@ -3690,7 +3690,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 6
     }
   },
   {
@@ -3741,25 +3741,25 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": -42
     },
     "footswitch_positions": [
       {
-        "x": -15,
-        "y": -45
+        "x": -30,
+        "y": -42
       },
       {
-        "x": 15,
-        "y": -45
+        "x": 29,
+        "y": -42
       }
     ],
     "led_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -15
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -15
       }
     ]
@@ -3806,10 +3806,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": -5
-    },
     "input_jack_position": {
       "x": 42,
       "y": 0
@@ -3820,7 +3816,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -26
+    },
+    "led_position": {
+      "x": 0,
+      "y": 21
     }
   },
   {
@@ -3871,15 +3871,15 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 6
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -22,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 22,
         "y": -45
       }
     ],
@@ -3936,10 +3936,6 @@
       "x": 0,
       "y": -45
     },
-    "led_position": {
-      "x": 0,
-      "y": -10
-    },
     "input_jack_position": {
       "x": 42,
       "y": -5
@@ -3950,7 +3946,11 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 47
+    },
+    "led_position": {
+      "x": -24,
+      "y": -45
     }
   },
   {
@@ -4001,26 +4001,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 48
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -25,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 25,
         "y": -45
       }
     ],
     "led_positions": [
       {
-        "x": -15,
-        "y": -10
+        "x": -25,
+        "y": -24
       },
       {
-        "x": 15,
-        "y": -10
+        "x": 25,
+        "y": -24
       }
     ]
   },
@@ -4088,7 +4088,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 12
     }
   },
   {
@@ -4147,26 +4147,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 7
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -30,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 30,
         "y": -45
       }
     ],
     "led_positions": [
       {
         "x": -15,
-        "y": -10
+        "y": -27
       },
       {
         "x": 15,
-        "y": -10
+        "y": -27
       }
     ]
   },
@@ -4251,7 +4251,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 17
     }
   },
   {
@@ -4327,25 +4327,25 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": -25
     },
     "footswitch_positions": [
       {
-        "x": -15,
+        "x": -33,
         "y": -45
       },
       {
-        "x": 15,
+        "x": 33,
         "y": -45
       }
     ],
     "led_positions": [
       {
-        "x": -15,
+        "x": -33,
         "y": -5
       },
       {
-        "x": 15,
+        "x": 33,
         "y": -5
       }
     ]
@@ -4363,7 +4363,7 @@
     "potentiometer_positions": [
       {
         "x": 0,
-        "y": 40,
+        "y": 13,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4382,26 +4382,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 35
     },
     "footswitch_positions": [
       {
-        "x": -15,
-        "y": -45
+        "x": -42,
+        "y": -30
       },
       {
-        "x": 15,
-        "y": -45
+        "x": 42,
+        "y": -30
       }
     ],
     "led_positions": [
       {
-        "x": -15,
-        "y": -20
+        "x": -20,
+        "y": -30
       },
       {
-        "x": 15,
-        "y": -20
+        "x": 20,
+        "y": -30
       }
     ]
   },
@@ -4418,7 +4418,7 @@
     "potentiometer_positions": [
       {
         "x": 0,
-        "y": 40,
+        "y": 9,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4437,34 +4437,34 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 35
     },
     "footswitch_positions": [
       {
-        "x": -22,
-        "y": -45
+        "x": -45,
+        "y": -32
       },
       {
         "x": 0,
-        "y": -45
+        "y": -32
       },
       {
-        "x": 22,
-        "y": -45
+        "x": 45,
+        "y": -32
       }
     ],
     "led_positions": [
       {
-        "x": -22,
-        "y": -20
+        "x": -45,
+        "y": -15
       },
       {
         "x": 0,
-        "y": -20
+        "y": -15
       },
       {
-        "x": 22,
-        "y": -20
+        "x": 45,
+        "y": -15
       }
     ]
   },
@@ -4481,7 +4481,7 @@
     "potentiometer_positions": [
       {
         "x": -31,
-        "y": 40,
+        "y": 24,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4489,7 +4489,7 @@
       },
       {
         "x": 31,
-        "y": 40,
+        "y": 23,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4508,26 +4508,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 32
     },
     "footswitch_positions": [
       {
-        "x": -15,
-        "y": -45
+        "x": -40,
+        "y": -32
       },
       {
-        "x": 15,
-        "y": -45
+        "x": 40,
+        "y": -32
       }
     ],
     "led_positions": [
       {
-        "x": -15,
-        "y": -20
+        "x": -22,
+        "y": -32
       },
       {
-        "x": 15,
-        "y": -20
+        "x": 22,
+        "y": -32
       }
     ]
   },
@@ -4544,7 +4544,7 @@
     "potentiometer_positions": [
       {
         "x": -31,
-        "y": 40,
+        "y": 30,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4552,7 +4552,7 @@
       },
       {
         "x": 31,
-        "y": 40,
+        "y": 30,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4571,25 +4571,25 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 28
     },
     "footswitch_positions": [
       {
-        "x": -22,
-        "y": -45
+        "x": -44,
+        "y": -33
       },
       {
         "x": 0,
-        "y": -45
+        "y": -33
       },
       {
-        "x": 22,
-        "y": -45
+        "x": 44,
+        "y": -33
       }
     ],
     "led_positions": [
       {
-        "x": -22,
+        "x": -30,
         "y": -20
       },
       {
@@ -4597,7 +4597,7 @@
         "y": -20
       },
       {
-        "x": 22,
+        "x": 30,
         "y": -20
       }
     ]
@@ -4615,7 +4615,7 @@
     "potentiometer_positions": [
       {
         "x": -26,
-        "y": 45,
+        "y": 30,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4642,16 +4642,16 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": -3
     },
     "footswitch_positions": [
       {
-        "x": -15,
-        "y": -45
+        "x": -35,
+        "y": -33
       },
       {
-        "x": 15,
-        "y": -45
+        "x": 35,
+        "y": -33
       }
     ],
     "led_positions": [
@@ -4678,7 +4678,7 @@
     "potentiometer_positions": [
       {
         "x": -26,
-        "y": 45,
+        "y": 30,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4705,34 +4705,34 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 37
     },
     "footswitch_positions": [
       {
-        "x": -22,
-        "y": -45
+        "x": -40,
+        "y": -30
       },
       {
         "x": 0,
-        "y": -45
+        "y": -30
       },
       {
-        "x": 22,
-        "y": -45
+        "x": 40,
+        "y": -30
       }
     ],
     "led_positions": [
       {
-        "x": -22,
-        "y": -20
+        "x": -40,
+        "y": -15
       },
       {
         "x": 0,
-        "y": -20
+        "y": -15
       },
       {
-        "x": 22,
-        "y": -20
+        "x": 40,
+        "y": -15
       }
     ]
   },
@@ -4776,16 +4776,16 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 36
     },
     "footswitch_positions": [
       {
-        "x": -15,
-        "y": -45
+        "x": -40,
+        "y": -30
       },
       {
-        "x": 15,
-        "y": -45
+        "x": 40,
+        "y": -30
       }
     ],
     "led_positions": [
@@ -4839,20 +4839,20 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 34
     },
     "footswitch_positions": [
       {
-        "x": -22,
-        "y": -45
+        "x": -40,
+        "y": -32
       },
       {
         "x": 0,
-        "y": -45
+        "y": -32
       },
       {
-        "x": 22,
-        "y": -45
+        "x": 40,
+        "y": -32
       }
     ],
     "led_positions": [
@@ -4883,7 +4883,7 @@
     "potentiometer_positions": [
       {
         "x": 0,
-        "y": 48,
+        "y": 26,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4891,7 +4891,7 @@
       },
       {
         "x": 0,
-        "y": 30,
+        "y": -14,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4910,16 +4910,16 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 38
     },
     "footswitch_positions": [
       {
-        "x": -15,
-        "y": -45
+        "x": -42,
+        "y": -32
       },
       {
-        "x": 15,
-        "y": -45
+        "x": 42,
+        "y": -32
       }
     ],
     "led_positions": [
@@ -4945,16 +4945,16 @@
     },
     "potentiometer_positions": [
       {
-        "x": 0,
-        "y": 48,
+        "x": -22,
+        "y": 29,
         "label_offset": {
           "x": 0,
           "y": -15
         }
       },
       {
-        "x": 0,
-        "y": 30,
+        "x": 22,
+        "y": 29,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -4973,26 +4973,26 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 38
     },
     "footswitch_positions": [
       {
-        "x": -22,
-        "y": -45
+        "x": -45,
+        "y": -32
       },
       {
         "x": 0,
-        "y": -45
+        "y": -32
       },
       {
-        "x": 22,
-        "y": -45
+        "x": 45,
+        "y": -32
       }
     ],
     "led_positions": [
       {
         "x": -22,
-        "y": 5
+        "y": -10
       },
       {
         "x": 0,
@@ -5000,7 +5000,7 @@
       },
       {
         "x": 22,
-        "y": 5
+        "y": -10
       }
     ]
   },
@@ -5017,7 +5017,7 @@
     "potentiometer_positions": [
       {
         "x": -21,
-        "y": 42,
+        "y": 32,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -5025,7 +5025,7 @@
       },
       {
         "x": 21,
-        "y": 42,
+        "y": 32,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -5044,16 +5044,16 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 4
     },
     "footswitch_positions": [
       {
-        "x": -15,
-        "y": -45
+        "x": -40,
+        "y": -28
       },
       {
-        "x": 15,
-        "y": -45
+        "x": 40,
+        "y": -28
       }
     ],
     "led_positions": [
@@ -5080,7 +5080,7 @@
     "potentiometer_positions": [
       {
         "x": -21,
-        "y": 42,
+        "y": 26,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -5088,7 +5088,7 @@
       },
       {
         "x": 21,
-        "y": 42,
+        "y": 25,
         "label_offset": {
           "x": 0,
           "y": -15
@@ -5107,20 +5107,20 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 55
+      "y": 38
     },
     "footswitch_positions": [
       {
-        "x": -22,
-        "y": -45
+        "x": -43,
+        "y": -34
       },
       {
         "x": 0,
-        "y": -45
+        "y": -34
       },
       {
-        "x": 22,
-        "y": -45
+        "x": 43,
+        "y": -34
       }
     ],
     "led_positions": [
@@ -5218,7 +5218,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 53
     }
   },
   {
@@ -5344,7 +5344,7 @@
     },
     "pedal_name_position": {
       "x": 0,
-      "y": 58
+      "y": 50
     }
   },
   {
@@ -5387,7 +5387,412 @@
     },
     "pedal_name_position": {
       "x": 0,
+      "y": 52
+    }
+  },
+  {
+    "id": "125B-3pot-1fader",
+    "enclosure_type": "125B",
+    "potentiometer_count": 3,
+    "switch_count": 0,
+    "fader_count": 1,
+    "dimensions_mm": {
+      "width": 67,
+      "length": 122
+    },
+    "potentiometer_positions": [
+      {
+        "x": -19,
+        "y": 46,
+        "label_offset": {
+          "x": 0,
+          "y": -14
+        }
+      },
+      {
+        "x": -19,
+        "y": 20,
+        "label_offset": {
+          "x": 0,
+          "y": -14
+        }
+      },
+      {
+        "x": -19,
+        "y": -6,
+        "label_offset": {
+          "x": 0,
+          "y": -14
+        }
+      }
+    ],
+    "switch_positions": [],
+    "fader_positions": [
+      {
+        "x": 14,
+        "y": 14,
+        "label_offset": {
+          "x": 0,
+          "y": -30
+        }
+      }
+    ],
+    "footswitch_position": {
+      "x": 0,
+      "y": -45
+    },
+    "input_jack_position": {
+      "x": 30,
+      "y": 0
+    },
+    "output_jack_position": {
+      "x": -30,
+      "y": 0
+    },
+    "pedal_name_position": {
+      "x": 13,
+      "y": 46
+    },
+    "led_position": {
+      "x": 0,
+      "y": -28
+    }
+  },
+  {
+    "id": "1590BB-3pot-1fader",
+    "enclosure_type": "1590BB",
+    "potentiometer_count": 3,
+    "switch_count": 0,
+    "fader_count": 1,
+    "dimensions_mm": {
+      "width": 95,
+      "length": 119
+    },
+    "potentiometer_positions": [
+      {
+        "x": -32,
+        "y": 38,
+        "label_offset": {
+          "x": 0,
+          "y": 13
+        }
+      },
+      {
+        "x": -10,
+        "y": 38,
+        "label_offset": {
+          "x": 0,
+          "y": 13
+        }
+      },
+      {
+        "x": 12,
+        "y": 38,
+        "label_offset": {
+          "x": 0,
+          "y": 13
+        }
+      }
+    ],
+    "switch_positions": [],
+    "fader_positions": [
+      {
+        "x": 28,
+        "y": 12,
+        "label_offset": {
+          "x": 0,
+          "y": -30
+        }
+      }
+    ],
+    "footswitch_position": {
+      "x": 0,
+      "y": -48
+    },
+    "input_jack_position": {
+      "x": 44,
+      "y": 0
+    },
+    "output_jack_position": {
+      "x": -44,
+      "y": 0
+    },
+    "pedal_name_position": {
+      "x": -13,
+      "y": -5
+    },
+    "led_position": {
+      "x": 0,
+      "y": -28
+    }
+  },
+  {
+    "id": "125BB-4pot-v2",
+    "enclosure_type": "125B",
+    "potentiometer_count": 4,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": {
+      "width": 67,
+      "length": 122
+    },
+    "potentiometer_positions": [
+      {
+        "x": -21,
+        "y": 45,
+        "label_offset": {
+          "x": 0,
+          "y": -15
+        }
+      },
+      {
+        "x": -7,
+        "y": 26,
+        "label_offset": {
+          "x": 0,
+          "y": -15
+        }
+      },
+      {
+        "x": 7,
+        "y": 45,
+        "label_offset": {
+          "x": 0,
+          "y": -15
+        }
+      },
+      {
+        "x": 21,
+        "y": 26,
+        "label_offset": {
+          "x": 0,
+          "y": -15
+        }
+      }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": {
+      "x": 0,
+      "y": -45
+    },
+    "input_jack_position": {
+      "x": 30,
+      "y": -10
+    },
+    "output_jack_position": {
+      "x": -30,
+      "y": -10
+    },
+    "pedal_name_position": {
+      "x": 0,
+      "y": -16
+    },
+    "led_position": {
+      "x": -19,
+      "y": -45
+    }
+  },
+  {
+    "id": "125BB-4pot-v3",
+    "enclosure_type": "125B",
+    "potentiometer_count": 4,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": {
+      "width": 67,
+      "length": 122
+    },
+    "potentiometer_positions": [
+      {
+        "x": -20,
+        "y": 45,
+        "label_offset": {
+          "x": 16,
+          "y": -1
+        }
+      },
+      {
+        "x": -20,
+        "y": 25,
+        "label_offset": {
+          "x": 16,
+          "y": -1
+        }
+      },
+      {
+        "x": -20,
+        "y": 5,
+        "label_offset": {
+          "x": 16,
+          "y": -1
+        }
+      },
+      {
+        "x": -20,
+        "y": -15,
+        "label_offset": {
+          "x": 16,
+          "y": -1
+        }
+      }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": {
+      "x": 0,
+      "y": -45
+    },
+    "input_jack_position": {
+      "x": 30,
+      "y": -10
+    },
+    "output_jack_position": {
+      "x": -30,
+      "y": -10
+    },
+    "pedal_name_position": {
+      "x": 0,
       "y": 55
+    },
+    "led_position": {
+      "x": -20,
+      "y": -45
+    }
+  },
+  {
+    "id": "125BB-4pot-v4",
+    "enclosure_type": "125B",
+    "potentiometer_count": 4,
+    "switch_count": 0,
+    "fader_count": 0,
+    "dimensions_mm": {
+      "width": 67,
+      "length": 122
+    },
+    "potentiometer_positions": [
+      {
+        "x": -12,
+        "y": 43,
+        "label_offset": {
+          "x": -15,
+          "y": -1
+        }
+      },
+      {
+        "x": 12,
+        "y": 43,
+        "label_offset": {
+          "x": 15,
+          "y": -1
+        }
+      },
+      {
+        "x": -22,
+        "y": 22,
+        "label_offset": {
+          "x": 15,
+          "y": -1
+        }
+      },
+      {
+        "x": 22,
+        "y": 22,
+        "label_offset": {
+          "x": -15,
+          "y": -1
+        }
+      }
+    ],
+    "switch_positions": [],
+    "fader_positions": [],
+    "footswitch_position": {
+      "x": 0,
+      "y": -45
+    },
+    "input_jack_position": {
+      "x": 30,
+      "y": -10
+    },
+    "output_jack_position": {
+      "x": -30,
+      "y": -10
+    },
+    "pedal_name_position": {
+      "x": 0,
+      "y": 55
+    },
+    "led_position": {
+      "x": 0,
+      "y": 29
+    }
+  },
+  {
+    "id": "125B-3pot-1fader-v2",
+    "enclosure_type": "125B",
+    "potentiometer_count": 3,
+    "switch_count": 0,
+    "fader_count": 1,
+    "dimensions_mm": {
+      "width": 67,
+      "length": 122
+    },
+    "potentiometer_positions": [
+      {
+        "x": 19,
+        "y": 46,
+        "label_offset": {
+          "x": 0,
+          "y": -14
+        }
+      },
+      {
+        "x": 19,
+        "y": 20,
+        "label_offset": {
+          "x": 0,
+          "y": -14
+        }
+      },
+      {
+        "x": 19,
+        "y": -6,
+        "label_offset": {
+          "x": 0,
+          "y": -14
+        }
+      }
+    ],
+    "switch_positions": [],
+    "fader_positions": [
+      {
+        "x": -16,
+        "y": 14,
+        "label_offset": {
+          "x": 0,
+          "y": -30
+        }
+      }
+    ],
+    "footswitch_position": {
+      "x": 0,
+      "y": -45
+    },
+    "input_jack_position": {
+      "x": 30,
+      "y": 0
+    },
+    "output_jack_position": {
+      "x": -30,
+      "y": 0
+    },
+    "pedal_name_position": {
+      "x": -12,
+      "y": 44
+    },
+    "led_position": {
+      "x": 0,
+      "y": -28
     }
   }
 ]

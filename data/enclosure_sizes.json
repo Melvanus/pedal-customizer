@@ -26,7 +26,7 @@
         "name":  "1590B",
         "dimensions":  "111mm × 61mm × 31mm",
         "description":  "The industry standard. If you\u0027ve stepped on a boutique pedal, it was probably this size. Goldilocks would approve—not too big, not too small, just right.",
-        "funny_description":  "The \u0027jeans and t-shirt\u0027 of enclosures. Classic, reliable, never goes out of style. Your pedalboard\u0027s comfort food.",
+        "funny_description":  "The \u0027jeans and t-shirt\u0027 of enclosures. Just a little tighter. So... ...more like a spendex suit? So nothing like jeans and t-shirt after all.",
         "capacity":  "3-4 potentiometers, 1-3 switches, standard PCB",
         "best_for":  [
                          "Overdrive",
@@ -71,7 +71,7 @@
         "name":  "1590BB",
         "dimensions":  "119mm × 94mm × 42mm",
         "description":  "The workhorse of complex circuits. Wide format gives you room to spread out your components without cramping your style or your soldering iron.",
-        "funny_description":  "Business class for your circuit. Your components get legroom, you get easier drilling. Win-win!",
+        "funny_description":  "Double B for that classic big hand-crafted look. Spacious enough for your wildest pedal dreams.",
         "capacity":  "5-6 potentiometers, 3-4 switches, spacious PCB",
         "best_for":  [
                          "Multi-band EQ",
@@ -94,7 +94,7 @@
         "name":  "1590BS",
         "dimensions":  "125mm × 95mm × 23mm",
         "description":  "The pancake special—maximum footprint, minimum height. Perfect for low-profile builds that want to stay under the radar (literally).",
-        "funny_description":  "Slim Jim\u0027s cousin, Flat Fred. All the space, half the altitude. Like a sports car for pedals.",
+        "funny_description":  "Even if it says so, you\u0027re not getting 1590 bullshits here. But a ton of space, thats what you get for sure!",
         "capacity":  "4-5 potentiometers (short shafts), switches, wide PCB",
         "best_for":  [
                          "Low-profile builds",
@@ -116,7 +116,7 @@
         "name":  "1590XX",
         "dimensions":  "145mm × 120mm × 39mm",
         "description":  "The penthouse suite. When you need space for everything—dual effects, elaborate tone stacks, or just want your circuit to live in luxury.",
-        "funny_description":  "So roomy, your resistors are asking for separate bedrooms. The mansion of enclosures.",
+        "funny_description":  "That double X stands for eXXtra space. If thats what you need, thats what its got! A bit like the hummer of effects pedal enclosures.",
         "capacity":  "8+ potentiometers, 5+ switches, multiple PCBs possible",
         "best_for":  [
                          "Multi-effects",

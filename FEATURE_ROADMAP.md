@@ -90,7 +90,8 @@
 
 ## High Priority Features 🔴
 
-### 1. **Responsive Detail Cards & Information Density** 📱⭐
+
+### 2. **Responsive Detail Cards & Information Density** 📱⭐
 **Problem:** Detail cards can exceed available screen space, especially on lower resolution devices, making navigation cumbersome and hiding important information
 **Solution Approaches:**
 
@@ -159,28 +160,6 @@
 3. **Phase 3:** Tabbed interface + data visualization
 4. **Future:** Bottom sheet design + advanced touch gestures
 
-### 2. **Size Selection Warning System** ⚠️
-**Problem:** Users can select enclosures smaller than recommended without warning
-**Solution:**
-- In the sizes tab, detect when selected size is smaller than recommended size
-- Show warning badge/banner on undersized enclosures:
-  - Visual indicator: Orange/yellow warning icon
-  - Text: "⚠️ Smaller than recommended - Manual review required"
-  - Explanation tooltip: "This size may require custom modifications like top-mounted jacks or illuminated footswitch for proper fit"
-- Add price warning: "May incur additional costs for modifications"
-- Recommended approach:
-  - Size order: 1590A < 1590B = 125B < 1590BB < 1590BS < 1590XX
-  - Compare selected size index with recommended size index
-  - If selected < recommended, show warning
-  - If its two or more levels smaller show more "dangourous" warning, and more costs
-  - The price should also rise the bigger the enclosure gets due to higher costs of those
-- Still allow selection (don't block), but make consequences clear
-- **Benefits:**
-  - Prevents build issues from undersized enclosures
-  - Sets proper customer expectations for costs
-  - Reduces customer service inquiries
-  - Educational for users learning about enclosure requirements
-
 ### 3. **Effect-Specific Mods Integration** ⭐⭐⭐
 **Problem:** Current "Other" mods are generic; should be context-aware based on selected effect
 **Solution:**
@@ -204,71 +183,8 @@
   - Automatic size adjustment prevents building errors
   - Educational - users learn about circuit modifications
 
-### 4. **Improve "Other" Category UX & Multi-Select Clarity** ⚠️
-**Problem:** Multi-select in "Other" tab is confusing; unclear which items can be combined
-**Solution:**
-- **Better Category Organization:**
-  - Rename "Other" to "Hardware Upgrades" or "Additional Options"
-  - Group items into subcategories:
-    - **Enclosure Mods:** Top-mounted jacks, battery compartment, etc.
-    - **Hardware Upgrades:** Premium switches, illuminated footswitch
-    - **Extras:** Velcro, rubber feet, premium knobs
-- **Visual Multi-Select Indicators:**
-  - Add checkbox icon to cards that allow multi-select
-  - Single-select items show radio button icon
-  - Clear "X selected" counter at top of category
-  - Selected items show checkmark badge
-- **Compatibility Rules:**
-  - Gray out incompatible combinations
-  - Tooltip explanation: "Cannot combine with [Item]"
-  - Show suggested alternatives
-- **Help Text:**
-  - "Select all that apply" instruction at top
-  - Inline hints: "Popular combo: Top-mounted jacks + Illuminated switch"
-- **Consider Rework:**
-  - Move some items to other tabs (battery → during effect selection)
-  - Some items may work better as add-ons during size selection
-
-### 5. **Multi-Supplier SKU & Product Management System** ⭐⭐⭐
-**Problem:** Current SKU system only references supplier SKUs directly without proper product identification
-**Solution:**
-- **SKU Structure Refactor:**
-  - Rename current `sku` field to `supplier_sku` in enclosures_data.json
-  - Add `supplier_id` field to each product (initially "tayda" for all enclosures)
-  - Create internal product numbering system (e.g., "PED-ENC-001", "PED-LED-042")
-  - Maintain mapping between internal IDs and supplier SKUs
-- **Admin/Dev View:**
-  - Display supplier SKU only in development/admin mode
-  - Show internal product ID in admin interface
-  - Toggle between views for inventory management
-- **Benefits:**
-  - Multi-supplier support for future expansion
-  - Clear separation between internal product management and supplier ordering
-  - Easier to switch suppliers or add alternative sources
-  - Professional internal product catalog independent of supplier systems
-
----
 
 ## Medium Priority Features 🟡
-
-### 8. **Auto-Adjusting Text Color in 2D Visualizer** 🎨
-**Problem:** Control labels and text in the enclosure visualizer may not be visible against certain enclosure colors
-**Solution:**
-- Automatically adjust text color for potentiometer, switch, and fader labels based on enclosure color
-- Calculate luminance/brightness of enclosure color:
-  - Use dark text (#000 or #333) on light enclosures
-  - Use light text (#fff or #eee) on dark enclosures
-- **Important:** Do NOT apply auto-adjustment to Labeled Lettering option
-  - Labeled Lettering should remain black background with white text (as designed)
-  - Only adjust non-labeled text elements
-- Implementation approach:
-  - Add color contrast calculation utility function
-  - Apply to regular labels in EnclosureVisualizer
-  - Bypass for labeled lettering elements
-- **Benefits:**
-  - Ensures readability across all color choices
-  - Professional appearance regardless of customization
-  - Maintains design intent of special features (labeled lettering)
 
 ### 9. **Price Breakdown Display**
 **Problem:** Users only see total, not individual item costs
@@ -283,13 +199,6 @@
 - Side-by-side comparison of 2-3 configurations
 - Highlight differences
 - Compare prices
-
-### 11. **Search Across All Categories**
-**Problem:** Search only works on paint options
-**Solution:**
-- Global search across all tabs
-- Search by feature, price range, color, etc.
-- Filter results by category
 
 ### 12. **Favorites / Wishlist**
 **Problem:** Can't mark interesting options for later

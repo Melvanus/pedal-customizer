@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, AlertTriangle } from "lucide-react";
+import { checkSizeCompatibility, getEffectiveRecommendedSize, type EffectMod } from "@/lib/sizeCompatibility";
 
 type BananaPhysics = {
   x: number;
@@ -31,6 +32,8 @@ type EnclosureSizeSelectorProps = {
   onSelectSize: (size: string) => void;
   recommendedSize?: string;
   onShowDetails?: (size: EnclosureSize) => void;
+  effectId?: string;
+  selectedMods?: EffectMod[];
 };
 
 const BANANA_SIZE = 140; // Approximate banana size
@@ -41,6 +44,8 @@ export function EnclosureSizeSelector({
   onSelectSize,
   recommendedSize,
   onShowDetails,
+  effectId,
+  selectedMods = [],
 }: EnclosureSizeSelectorProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const animationFrameRef = React.useRef<number | null>(null);
@@ -304,7 +309,14 @@ export function EnclosureSizeSelector({
           Choose Your Enclosure Size
         </h2>
         <p data-section="size-description" style={{ color: "#888", fontSize: "0.95rem" }}>
-          Select the perfect size for your pedal. {recommendedSize && `We recommend ${recommendedSize} for your selected effect.`}
+          Select the perfect size for your pedal. {recommendedSize && effectId && selectedMods && (
+            <>
+              We recommend <strong style={{ color: "#4ade80" }}>{getEffectiveRecommendedSize(recommendedSize, selectedMods)}</strong> for your selected effect
+              {getEffectiveRecommendedSize(recommendedSize, selectedMods) !== recommendedSize && (
+                <span style={{ color: "#ffaa00" }}> (adjusted for mods)</span>
+              )}.
+            </>
+          )}
         </p>
       </div>
 
@@ -318,7 +330,15 @@ export function EnclosureSizeSelector({
       >
         {sizes.map((size) => {
           const isSelected = size.name === selectedSize;
-          const isRecommended = size.name === recommendedSize;
+          const effectiveRecommended = effectId && selectedMods && recommendedSize 
+            ? getEffectiveRecommendedSize(recommendedSize, selectedMods)
+            : recommendedSize;
+          const isRecommended = size.name === effectiveRecommended;
+          
+          // Check compatibility
+          const compatResult = effectId && recommendedSize
+            ? checkSizeCompatibility(effectId, recommendedSize, size.name, selectedMods ||[])
+            : { blocked: false, warning: null, surcharge: 0 };
 
           return (
             <div
@@ -327,37 +347,95 @@ export function EnclosureSizeSelector({
               data-section="size-card"
               data-selected={isSelected}
               onClick={() => {
+                if (compatResult.blocked) return; // Don't allow selection of blocked sizes
                 if (onShowDetails) {
                   onShowDetails(size);
                 } else {
                   onSelectSize(size.name);
                 }
               }}
+              title={compatResult.tooltip || undefined}
               style={{
-                background: isSelected ? "#2a2a2a" : "#1a1a1a",
-                border: isSelected ? "3px solid #fff" : "2px solid #333",
+                background: compatResult.blocked 
+                  ? "#1a1a1a" 
+                  : isSelected ? "#2a2a2a" : "#1a1a1a",
+                border: compatResult.blocked
+                  ? "2px solid #444"
+                  : isSelected ? "3px solid #fff" : "2px solid #333",
                 borderRadius: "12px",
                 padding: "1rem",
-                cursor: "pointer",
+                cursor: compatResult.blocked ? "not-allowed" : "pointer",
                 transition: "all 0.3s ease",
                 position: "relative",
                 display: "flex",
                 flexDirection: "column",
+                opacity: compatResult.blocked ? 0.4 : 1,
               }}
               onMouseEnter={(e) => {
-                if (!isSelected) {
+                if (!isSelected && !compatResult.blocked) {
                   e.currentTarget.style.borderColor = "#666";
                   e.currentTarget.style.transform = "translateY(-4px)";
                 }
               }}
               onMouseLeave={(e) => {
-                if (!isSelected) {
+                if (!isSelected && !compatResult.blocked) {
                   e.currentTarget.style.borderColor = "#333";
                   e.currentTarget.style.transform = "translateY(0)";
                 }
               }}
             >
-              {isRecommended && (
+              {/* Blocked badge */}
+              {compatResult.blocked && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "-12px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "#dc2626",
+                    color: "#fff",
+                    padding: "0.4rem 1rem",
+                    borderRadius: "20px",
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.25rem",
+                    boxShadow: "0 4px 12px rgba(220, 38, 38, 0.3)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {compatResult.warning}
+                </div>
+              )}
+              
+              {/* Warning badge */}
+              {!compatResult.blocked && compatResult.warning && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "-12px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "#f59e0b",
+                    color: "#000",
+                    padding: "0.4rem 1rem",
+                    borderRadius: "20px",
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.25rem",
+                    boxShadow: "0 4px 12px rgba(245, 158, 11, 0.3)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {compatResult.warning}
+                </div>
+              )}
+              
+              {/* Best fit badge */}
+              {isRecommended && !compatResult.blocked && !compatResult.warning && (
                 <div
                   style={{
                     position: "absolute",
@@ -420,7 +498,7 @@ export function EnclosureSizeSelector({
                 style={{
                   fontSize: "1.25rem",
                   fontWeight: 700,
-                  color: "#fff",
+                  color: compatResult.blocked ? "#666" : "#fff",
                   marginBottom: "0.7rem",
                   marginTop: "0rem",
                   textAlign: "center",
@@ -429,17 +507,36 @@ export function EnclosureSizeSelector({
                 {size.name}
               </h3>
 
-              {!isRecommended && (
+              {/* Show price surcharge */}
+              {compatResult.surcharge > 0 && (
                 <div
                   style={{
                     fontSize: "1rem",
                     fontWeight: 700,
-                    color: "#ffaa00",
+                    color: compatResult.warning ? "#f59e0b" : "#ffaa00",
                     textAlign: "center",
                     marginBottom: "0.5rem",
                   }}
                 >
-                  +€5.00
+                  +€{compatResult.surcharge.toFixed(2)}
+                  {compatResult.warning && (
+                    <div style={{ fontSize: "0.7rem", fontWeight: 400, marginTop: "0.25rem" }}>
+                      (includes modification fee)
+                    </div>
+                  )}
+                </div>
+              )}
+              {compatResult.surcharge === 0 && !isRecommended && !compatResult.blocked && (
+                <div
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: 700,
+                    color: "#4ade80",
+                    textAlign: "center",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  No extra cost
                 </div>
               )}
 
@@ -461,15 +558,31 @@ export function EnclosureSizeSelector({
               <p
                 style={{
                   fontSize: "0.9rem",
-                  color: "#ccc",
+                  color: compatResult.blocked ? "#666" : "#ccc",
                   lineHeight: 1.5,
                   marginBottom: "0.25rem",
                   flex: 1,
                   textAlign: "center",
                 }}
               >
-                {size.funny_description}
+                {compatResult.blocked ? "This size is too small for the selected circuit" : size.funny_description}
               </p>
+              
+              {/* Show compatibility tooltip text */}
+              {compatResult.tooltip && !compatResult.blocked && (
+                <p
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "#888",
+                    lineHeight: 1.4,
+                    marginBottom: "0.75rem",
+                    textAlign: "center",
+                    fontStyle: "italic",
+                  }}
+                >
+                  {compatResult.tooltip}
+                </p>
+              )}
 
               <div
                 style={{

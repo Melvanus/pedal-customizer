@@ -236,6 +236,104 @@ export default function LayoutEditorPage() {
     setHasUnsavedChanges(true);
   };
 
+  const duplicateLayout = async () => {
+    if (!editedLayout) return;
+
+    const baseName = editedLayout.id.replace(/-copy-\d+$/, '');
+    const existingCopies = layouts.filter(l => l.id.startsWith(baseName + '-copy-'));
+    const copyNumber = existingCopies.length + 1;
+    const newId = `${baseName}-copy-${copyNumber}`;
+
+    const duplicatedLayout = {
+      ...JSON.parse(JSON.stringify(editedLayout)),
+      id: newId,
+    };
+
+    setSaveStatus("saving");
+    try {
+      const response = await fetch("/api/admin/layouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          layoutId: newId,
+          updatedLayout: duplicatedLayout,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setLayouts((prev) => [...prev, duplicatedLayout]);
+        setSelectedLayoutId(newId);
+        setSaveStatus("success");
+        setTimeout(() => setSaveStatus("idle"), 2000);
+      } else {
+        setSaveStatus("error");
+        setTimeout(() => setSaveStatus("idle"), 3000);
+      }
+    } catch (error) {
+      console.error("Duplicate error:", error);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    }
+  };
+
+  const renameLayout = async (newId: string) => {
+    if (!editedLayout || !newId.trim() || newId === editedLayout.id) return;
+
+    // Check if ID already exists
+    if (layouts.some(l => l.id === newId && l.id !== editedLayout.id)) {
+      alert("A layout with this ID already exists!");
+      return;
+    }
+
+    const oldId = editedLayout.id;
+    const renamedLayout = {
+      ...JSON.parse(JSON.stringify(editedLayout)),
+      id: newId,
+    };
+
+    setSaveStatus("saving");
+    try {
+      // Save with new ID
+      const saveResponse = await fetch("/api/admin/layouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          layoutId: newId,
+          updatedLayout: renamedLayout,
+        }),
+      });
+
+      const saveData = await saveResponse.json();
+      if (saveData.success) {
+        // Delete old layout
+        const deleteResponse = await fetch("/api/admin/layouts", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ layoutId: oldId }),
+        });
+
+        const deleteData = await deleteResponse.json();
+        if (deleteData.success) {
+          setLayouts((prev) => prev.filter(l => l.id !== oldId).concat(renamedLayout));
+          setSelectedLayoutId(newId);
+          setSaveStatus("success");
+          setTimeout(() => setSaveStatus("idle"), 2000);
+        } else {
+          setSaveStatus("error");
+          setTimeout(() => setSaveStatus("idle"), 3000);
+        }
+      } else {
+        setSaveStatus("error");
+        setTimeout(() => setSaveStatus("idle"), 3000);
+      }
+    } catch (error) {
+      console.error("Rename error:", error);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    }
+  };
+
   const enclosureTypes = Array.from(new Set(layouts.map((l) => l.enclosure_type))).sort();
   const filteredLayouts = layouts.filter((l) => {
     if (filterEnclosureType && l.enclosure_type !== filterEnclosureType) return false;
@@ -372,20 +470,44 @@ export default function LayoutEditorPage() {
           {filteredLayouts.map((layout) => (
             <div
               key={layout.id}
-              onClick={() => setSelectedLayoutId(layout.id)}
               style={{
                 padding: "0.75rem",
                 background: selectedLayoutId === layout.id ? "#3b82f6" : "#0a0a0a",
                 borderRadius: "6px",
                 marginBottom: "0.5rem",
-                cursor: "pointer",
                 border: `1px solid ${selectedLayoutId === layout.id ? "#3b82f6" : "#333"}`,
               }}
             >
-              <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{layout.id}</div>
-              <div style={{ fontSize: "0.8rem", color: "#aaa" }}>
-                {layout.enclosure_type} | {layout.potentiometer_count}P {layout.switch_count}S {layout.fader_count}F
+              <div 
+                onClick={() => setSelectedLayoutId(layout.id)}
+                style={{ cursor: "pointer" }}
+              >
+                <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{layout.id}</div>
+                <div style={{ fontSize: "0.8rem", color: "#aaa" }}>
+                  {layout.enclosure_type} | {layout.potentiometer_count}P {layout.switch_count}S {layout.fader_count}F
+                </div>
               </div>
+              {selectedLayoutId === layout.id && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    duplicateLayout();
+                  }}
+                  style={{
+                    marginTop: "0.5rem",
+                    padding: "0.4rem 0.75rem",
+                    background: "#22c55e",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "0.75rem",
+                    width: "100%",
+                  }}
+                >
+                  📋 Duplicate Layout
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -409,7 +531,43 @@ export default function LayoutEditorPage() {
 
           {/* Basic Info */}
           <div style={{ marginBottom: "1.5rem", padding: "1rem", background: "#0a0a0a", borderRadius: "6px" }}>
-            <div style={{ fontWeight: 600, marginBottom: "0.5rem" }}>{editedLayout.id}</div>
+            <div style={{ marginBottom: "0.75rem" }}>
+              <label style={{ display: "block", fontSize: "0.75rem", marginBottom: "0.25rem", color: "#666" }}>
+                Layout ID
+              </label>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                <input
+                  key={editedLayout.id}
+                  type="text"
+                  defaultValue={editedLayout.id}
+                  onBlur={(e) => {
+                    const newId = e.target.value.trim();
+                    if (newId && newId !== editedLayout.id) {
+                      renameLayout(newId);
+                    } else {
+                      e.target.value = editedLayout.id;
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.currentTarget.blur();
+                    } else if (e.key === 'Escape') {
+                      e.currentTarget.value = editedLayout.id;
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: "0.5rem",
+                    background: "#1a1a1a",
+                    border: "1px solid #333",
+                    borderRadius: "4px",
+                    color: "#e0e0e0",
+                    fontWeight: 600,
+                  }}
+                />
+              </div>
+            </div>
             <div style={{ fontSize: "0.85rem", color: "#aaa" }}>
               Type: {editedLayout.enclosure_type} | Dimensions: {editedLayout.dimensions_mm.width}×
               {editedLayout.dimensions_mm.length}mm

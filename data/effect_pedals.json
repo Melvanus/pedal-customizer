@@ -170,7 +170,7 @@
         "led_count": 1,
         "complexity": "complex"
       },
-      "recommended_enclosure": "1590BB",
+      "recommended_enclosure": "125B",
       "compatible_mods": 
       [
         {
@@ -210,7 +210,8 @@
             { "label": "800Hz", "type": "Fader", "description": "Adjusts upper-mid frequencies." },
             { "label": "1.6kHz", "type": "Fader", "description": "Controls presence frequencies." },
             { "label": "3.2kHz", "type": "Fader", "description": "Adjusts high-mid frequencies." }
-          ]
+          ],
+          "changes_reccommended_enclosure": "1590BB"
         }
       ],
       "pcb_supplier_id": "pedalpcb",
@@ -493,7 +494,7 @@
         "led_count": 1,
         "complexity": "beginner"
       },
-      "recommended_enclosure": "125B",
+      "recommended_enclosure": "1590A",
       "compatible_mods": [
         { 
           "name": "External Bias Control",
@@ -520,7 +521,14 @@
         {
           "name": "Input Impedance Mod",
           "description": "Modifies the input impedance by adding a transformer for better interaction with different guitars and pedals in front of it.",
-          "customer_price_eur": 15
+          "customer_price_eur": 15,
+          "adds_technical_specs": {
+            "switches": 1
+          },
+          "adds_controls": [
+            { "label": "Impedance Mode", "type": "Switch", "description": "Toggles between Standard and High Impedance modes." }
+          ],
+          "changes_reccommended_enclosure": "125B"
         }
       ],
       "pcb_supplier_id": "pedalpcb",

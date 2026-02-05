@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Download, ChevronRight, Star, Hammer, Mountain, Sparkles, Palette, Radiation, Cat, Sun, LucideCircleSlash2, Circle } from "lucide-react";
 import { EffectSelector, type EffectPedal } from "./EffectSelector";
 import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelector";
+import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 
 export type OptionItem = {
@@ -157,9 +158,22 @@ export function PedalCustomizer({
     return selectedEffectMods.reduce((sum, { mod }) => sum + mod.customer_price_eur, 0);
   }, [selectedEffectMods]);
 
+  // Calculate size compatibility surcharge
+  const sizeSurcharge = React.useMemo(() => {
+    if (!selectedEffect || !selectedSize) return 0;
+    const result = checkSizeCompatibility(
+      selectedEffect.id,
+      selectedEffect.recommended_enclosure,
+      selectedSize.name,
+      selectedEffectMods
+    );
+    return result.surcharge;
+  }, [selectedEffect, selectedSize, selectedEffectMods]);
+
   const totalPrice =
     (selectedEffect?.customer_price_eur ?? 0) +
     modsTotalPrice +
+    sizeSurcharge +
     (selectedPaint?.customer_price_eur ?? 0) +
     (selectedDesign?.customer_price_eur ?? 0) +
     (selectedLed?.customer_price_eur ?? 0);
@@ -459,34 +473,36 @@ export function PedalCustomizer({
 
   return (
     <div data-section="pedal-customizer-main" style={{ display: "flex", flexDirection: "column", height: "100vh", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: "#e0e0e0", background: "#0a0a0a" }}>
-      {/* Floating Admin Button - Top Right */}
-      <button
-        data-section="admin-toggle-button"
-        onClick={() => setAdminMode(!adminMode)}
-        style={{
-          position: "fixed",
-          top: "1rem",
-          right: "1rem",
-          padding: "0.6rem 1.2rem",
-          border: "2px solid #4ade80",
-          background: adminMode ? "#4ade80" : "rgba(0, 0, 0, 0.7)",
-          color: adminMode ? "#000" : "#4ade80",
-          fontWeight: 600,
-          fontSize: "0.85rem",
-          cursor: "pointer",
-          borderRadius: "6px",
-          transition: "all 0.3s ease",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          zIndex: 9999,
-          backdropFilter: "blur(10px)",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-        }}
-        title="Toggle admin mode for drag & drop image management"
-      >
-        {adminMode ? "🔓" : "🔒"} Admin
-      </button>
+      {/* Floating Admin Button - Top Right (Development Only) */}
+      {process.env.NODE_ENV === 'development' && (
+        <button
+          data-section="admin-toggle-button"
+          onClick={() => setAdminMode(!adminMode)}
+          style={{
+            position: "fixed",
+            top: "1rem",
+            right: "1rem",
+            padding: "0.6rem 1.2rem",
+            border: "2px solid #4ade80",
+            background: adminMode ? "#4ade80" : "rgba(0, 0, 0, 0.7)",
+            color: adminMode ? "#000" : "#4ade80",
+            fontWeight: 600,
+            fontSize: "0.85rem",
+            cursor: "pointer",
+            borderRadius: "6px",
+            transition: "all 0.3s ease",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            zIndex: 9999,
+            backdropFilter: "blur(10px)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+          }}
+          title="Toggle admin mode for drag & drop image management"
+        >
+          {adminMode ? "🔓" : "🔒"} Admin
+        </button>
+      )}
       
       {/* Ultra-Compact Header */}
       <div
@@ -680,7 +696,8 @@ export function PedalCustomizer({
         </div>
 
         {/* Scrollable Content */}
-        <div data-section="tab-content-scrollable" style={{ flex: 1, overflowY: "auto", padding: "1.5rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px" }}>
+        <div data-section="tab-content-scrollable" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
+          <div style={{ padding: "1.5rem", paddingRight: "2rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px", maxWidth: "1400px", marginLeft: "auto", marginRight: "auto" }}>
           {/* Filters for Paint Tab - Separate Panel */}
           {activeTab === "paint" && (
             <div
@@ -873,6 +890,8 @@ export function PedalCustomizer({
               selectedSize={selectedEnclosureSizeId}
               onSelectSize={setSelectedEnclosureSizeId}
               recommendedSize={selectedEffect?.recommended_enclosure}
+              effectId={selectedEffect?.id}
+              selectedMods={selectedEffectMods}
               onShowDetails={(size) => {
                 const isRecommended = size.name === selectedEffect?.recommended_enclosure;
                 const additionalCost = isRecommended ? 0 : 5;
@@ -892,7 +911,7 @@ export function PedalCustomizer({
                       title: "⚠️ Note",
                       content: (
                         <div style={{ fontSize: "0.85rem", color: "#ffaa00", lineHeight: 1.5 }}>
-                          Non-standard size for this effect. Additional €5.00 charge applies.
+                          Non-standard size for this effect. Additional charge applies.
                         </div>
                       ),
                     }] : []),
@@ -1898,6 +1917,7 @@ export function PedalCustomizer({
             </>
           )}
 
+          </div>
         </div>
 
         {/* Bottom Action Bar - Total Price & Review Button */}
