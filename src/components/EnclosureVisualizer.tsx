@@ -672,7 +672,7 @@ export function EnclosureVisualizer({
                         letterSpacing: '0.5px',
                         background: 'transparent',
                         border: 'none',
-                        color: '#fff',
+                        color: textColor,
                         outline: 'none',
                         padding: '0',
                       }}
@@ -767,7 +767,7 @@ export function EnclosureVisualizer({
                           textTransform: 'uppercase',
                           background: 'transparent',
                           border: 'none',
-                          color: '#fff',
+                          color: textColor,
                           outline: 'none',
                           padding: '0',
                         }}
@@ -897,7 +897,7 @@ export function EnclosureVisualizer({
                           textTransform: 'uppercase',
                           background: 'transparent',
                           border: 'none',
-                          color: '#fff',
+                          color: textColor,
                           outline: 'none',
                           padding: '0',
                         }}
@@ -1023,7 +1023,7 @@ export function EnclosureVisualizer({
                           textTransform: 'uppercase',
                           background: 'transparent',
                           border: 'none',
-                          color: '#fff',
+                          color: textColor,
                           outline: 'none',
                           padding: '0',
                         }}
