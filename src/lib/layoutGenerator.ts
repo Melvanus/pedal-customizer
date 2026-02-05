@@ -101,17 +101,17 @@ export function generateRandomLayout(
   const spec = ENCLOSURE_SPECS[enclosureType] || ENCLOSURE_SPECS['125B'];
   
   // Calculate usable areas
-  const marginX = 8;
-  const marginY = 8;
+  const marginX = 5;
+  const marginY = 5;
   const usableWidth = spec.width - (marginX * 2);
   
   // Upper half: for faders and switches (above center, below name)
-  const upperTop = spec.nameY - marginY - 12; // Just below name
+  const upperTop = spec.nameY - 15; // Just below name
   const upperBottom = 5; // Just above center line
   
-  // Full area: for potentiometers (can be anywhere from upperTop to LED area)
-  const fullTop = upperTop;
-  const fullBottom = spec.ledY + 15; // Above LED
+  // Full area: for potentiometers (much larger range!)
+  const fullTop = spec.nameY - 10; // Just below name, almost to top
+  const fullBottom = spec.ledY + 12; // Just above LED area
   
   // Generate LED position first (randomized)
   const ledPosition = generateRandomLEDPosition(spec, usableWidth);
@@ -383,7 +383,7 @@ function generatePotPositions(
   if (count === 0) return [];
   
   const positions: Position[] = [];
-  const minSpacing = 16;
+  const minSpacing = 14; // Reduced from 16 to allow tighter packing
   
   // Add LED to existing positions to avoid
   const avoidPositions = [...existingPositions, ledPosition];
@@ -410,8 +410,8 @@ function generatePotPositions(
       
       for (let row = 0; row < rows; row++) {
         const y = rows === 1 
-          ? (topY + bottomY) / 2 
-          : topY - (row + 0.5) * (usableHeight / rows);
+          ? (topY + bottomY) / 2 + (Math.random() - 0.5) * 15
+          : topY - (row + 1) * (usableHeight / (rows + 1));
         const rowItems = Math.min(itemsPerRow, count - positions.length);
         const spacing = usableWidth / (rowItems + 1);
         
@@ -420,8 +420,8 @@ function generatePotPositions(
           
           if (!isTooClose({ x, y }, avoidPositions, minSpacing)) {
             positions.push({
-              x: Math.round(x + (Math.random() - 0.5) * 3),
-              y: Math.round(y + (Math.random() - 0.5) * 3),
+              x: Math.round(x + (Math.random() - 0.5) * 8),
+              y: Math.round(y + (Math.random() - 0.5) * 8),
               label_offset: { x: 0, y: -15 },
             });
           }
@@ -466,8 +466,8 @@ function generatePotPositions(
           
           if (!isTooClose({ x, y }, avoidPositions, minSpacing)) {
             positions.push({
-              x: Math.round(x + (Math.random() - 0.5) * 4),
-              y: Math.round(y + (Math.random() - 0.5) * 4),
+              x: Math.round(x + (Math.random() - 0.5) * 10),
+              y: Math.round(y + (Math.random() - 0.5) * 10),
               label_offset: { x: 0, y: -15 },
             });
             idx++;
@@ -492,8 +492,8 @@ function generatePotPositions(
           
           if (!isTooClose({ x, y }, avoidPositions, minSpacing)) {
             positions.push({
-              x: Math.round(x + (Math.random() - 0.5) * 3),
-              y: Math.round(y + (Math.random() - 0.5) * 3),
+              x: Math.round(x + (Math.random() - 0.5) * 8),
+              y: Math.round(y + (Math.random() - 0.5) * 8),
               label_offset: { x: 0, y: -15 },
             });
             idx++;
@@ -504,17 +504,19 @@ function generatePotPositions(
   }
   
   // If we couldn't place all pots due to collisions, add them with fallback positions
-  while (positions.length < count) {
-    const x = (Math.random() - 0.5) * usableWidth * 0.8;
-    const y = topY - Math.random() * usableHeight * 0.8;
+  let attempts = 0;
+  while (positions.length < count && attempts < count * 50) {
+    const x = (Math.random() - 0.5) * usableWidth * 0.9;
+    const y = bottomY + Math.random() * usableHeight;
     
-    if (!isTooClose({ x, y }, [...avoidPositions, ...positions], minSpacing * 0.8)) {
+    if (!isTooClose({ x, y }, [...avoidPositions, ...positions], minSpacing * 0.7)) {
       positions.push({
         x: Math.round(x),
         y: Math.round(y),
         label_offset: { x: 0, y: -15 },
       });
     }
+    attempts++;
   }
   
   return positions;
