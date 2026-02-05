@@ -637,7 +637,7 @@ export function EnclosureVisualizer({
                 {editingLabel?.type === 'pedalName' ? (
                   <foreignObject
                     x={getPosition('pedalName', 0, layout.pedal_name_position).x - 30}
-                    y={getPosition('pedalName', 0, layout.pedal_name_position).y - 5}
+                    y={getPosition('pedalName', 0, layout.pedal_name_position).y - 6.25}
                     width="60"
                     height="10"
                   >
@@ -666,6 +666,7 @@ export function EnclosureVisualizer({
                         width: '100%',
                         height: '100%',
                         fontSize: '6px',
+                        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                         fontWeight: 'bold',
                         textAlign: 'center',
                         textTransform: 'uppercase',
@@ -675,6 +676,9 @@ export function EnclosureVisualizer({
                         color: textColor,
                         outline: 'none',
                         padding: '0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     />
                   </foreignObject>
@@ -697,6 +701,7 @@ export function EnclosureVisualizer({
                       dominantBaseline="middle"
                       style={{
                         fontSize: "6px",
+                        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                         fontWeight: "bold",
                         fill: labeledLettering ? "#fff" : textColor,
                         textTransform: "uppercase",
@@ -733,7 +738,7 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y - pos.label_offset.y - 3.5}
+                      y={effectivePos.y - pos.label_offset.y - 4.5}
                       width="30"
                       height="7"
                     >
@@ -762,7 +767,7 @@ export function EnclosureVisualizer({
                           width: '100%',
                           height: '100%',
                           fontSize: '3.5px',
-                          fontFamily: 'inherit',
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
@@ -773,6 +778,9 @@ export function EnclosureVisualizer({
                           outline: 'none',
                           padding: '0',
                           lineHeight: '7px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       />
                     </foreignObject>
@@ -794,6 +802,7 @@ export function EnclosureVisualizer({
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
                           fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
@@ -866,7 +875,7 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'switch' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 12}
-                      y={effectivePos.y - pos.label_offset.y - 3}
+                      y={effectivePos.y - pos.label_offset.y - 4}
                       width="24"
                       height="6"
                     >
@@ -895,7 +904,7 @@ export function EnclosureVisualizer({
                           width: '100%',
                           height: '100%',
                           fontSize: '3px',
-                          fontFamily: 'inherit',
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
@@ -906,6 +915,9 @@ export function EnclosureVisualizer({
                           outline: 'none',
                           padding: '0',
                           lineHeight: '6px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       />
                     </foreignObject>
@@ -927,6 +939,7 @@ export function EnclosureVisualizer({
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3px",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
                           fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
@@ -995,7 +1008,7 @@ export function EnclosureVisualizer({
                   {editingLabel?.type === 'fader' && editingLabel?.index === idx ? (
                     <foreignObject
                       x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y - pos.label_offset.y - 3.5}
+                      y={effectivePos.y - pos.label_offset.y - 4.5}
                       width="30"
                       height="7"
                     >
@@ -1024,7 +1037,7 @@ export function EnclosureVisualizer({
                           width: '100%',
                           height: '100%',
                           fontSize: '3.5px',
-                          fontFamily: 'inherit',
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
                           textAlign: 'center',
                           textTransform: 'uppercase',
@@ -1035,6 +1048,9 @@ export function EnclosureVisualizer({
                           outline: 'none',
                           padding: '0',
                           lineHeight: '7px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       />
                     </foreignObject>
@@ -1056,6 +1072,7 @@ export function EnclosureVisualizer({
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
                           fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
