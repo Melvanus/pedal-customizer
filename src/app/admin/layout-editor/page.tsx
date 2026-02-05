@@ -34,6 +34,8 @@ export default function LayoutEditorPage() {
   const [saveStatus, setSaveStatus] = React.useState<"idle" | "saving" | "success" | "error">("idle");
   const [filterEnclosureType, setFilterEnclosureType] = React.useState<string>("");
   const [filterPotCount, setFilterPotCount] = React.useState<string>("");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
+  const saveTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Load layouts on mount
   React.useEffect(() => {
@@ -56,9 +58,31 @@ export default function LayoutEditorPage() {
     if (selectedLayoutId) {
       const layout = layouts.find((l) => l.id === selectedLayoutId);
       if (layout) {
-        setEditedLayout(JSON.parse(JSON.stringify(layout)));
-        setSaveStatus("idle");
+        setHasUnsavedChanges(false);
       }
+    }
+  }, [selectedLayoutId, layouts]);
+
+  // Auto-save when editedLayout changes (with debounce)
+  React.useEffect(() => {
+    if (!editedLayout || !hasUnsavedChanges) return;
+
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Set new timeout for auto-save (500ms debounce)
+    saveTimeoutRef.current = setTimeout(() => {
+      handleSave();
+    }, 500);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [editedLayout, hasUnsavedChange
     }
   }, [selectedLayoutId, layouts]);
 
@@ -74,7 +98,8 @@ export default function LayoutEditorPage() {
       delete layoutToSave.footswitch_positions;
     } else if (layoutToSave.footswitch_positions && layoutToSave.footswitch_positions.length === 0) {
       delete layoutToSave.footswitch_positions;
-    }
+    }setHasUnsavedChanges(false);
+        
     
     // Convert led_positions array to singular if only one
     if (layoutToSave.led_positions && layoutToSave.led_positions.length === 1) {
@@ -107,6 +132,7 @@ export default function LayoutEditorPage() {
         setSaveStatus("error");
         setTimeout(() => setSaveStatus("idle"), 3000);
       }
+    setHasUnsavedChanges(true);
     } catch (error) {
       console.error("Save error:", error);
       setSaveStatus("error");
@@ -143,6 +169,7 @@ export default function LayoutEditorPage() {
         newLayout.potentiometer_count++;
         break;
       case "switch":
+    setHasUnsavedChanges(true);
         newLayout.switch_positions.push({ x: 0, y: 0, label_offset: { x: 0, y: 15 } });
         newLayout.switch_count++;
         break;
@@ -181,6 +208,7 @@ export default function LayoutEditorPage() {
         break;
       case "switch":
         newLayout.switch_positions.splice(index, 1);
+    setHasUnsavedChanges(true);
         newLayout.switch_count = newLayout.switch_positions.length;
         break;
       case "fader":
@@ -219,38 +247,46 @@ export default function LayoutEditorPage() {
     return (
       <div style={{ background: "#0a0a0a", minHeight: "100vh", color: "#e0e0e0", padding: "2rem" }}>
         <p>Loading...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ background: "#0a0a0a", minHeight: "100vh", color: "#e0e0e0" }}>
-      {/* Header */}
-      <div
-        style={{
-          background: "#1a1a1a",
-          borderBottom: "2px solid #333",
-          padding: "1rem 2rem",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <Link href="/" style={{ color: "#e0e0e0", textDecoration: "none" }}>
-            <ChevronLeft size={24} />
-          </Link>
-          <h1 style={{ margin: 0, fontSize: "1.5rem" }}>🛠️ Layout Editor</h1>
-        </div>
-        <button
-          onClick={handleSave}
-          disabled={saveStatus === "saving"}
-          style={{
-            padding: "0.75rem 1.5rem",
-            background: saveStatus === "success" ? "#22c55e" : saveStatus === "error" ? "#ef4444" : "#3b82f6",
+      </ddiv style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div style={{ fontSize: "0.9rem", color: "#aaa" }}>
+            {saveStatus === "success" ? (
+              <span style={{ color: "#22c55e", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <CheckCircle size={16} /> Auto-saved
+              </span>
+            ) : saveStatus === "saving" ? (
+              <span style={{ color: "#3b82f6" }}>Saving...</span>
+            ) : saveStatus === "error" ? (
+              <span style={{ color: "#ef4444", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <AlertCircle size={16} /> Save failed
+              </span>
+            ) : hasUnsavedChanges ? (
+              <span style={{ color: "#fbbf24" }}>Unsaved changes</span>
+            ) : (
+              <span style={{ color: "#666" }}>All changes saved</span>
+            )}
+          </div>
+          <button
+            onClick={handleSave}
+            disabled={saveStatus === "saving"}
+            style={{
+              padding: "0.75rem 1.5rem",
+              background: saveStatus === "success" ? "#22c55e" : saveStatus === "error" ? "#ef4444" : "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              cursor: saveStatus === "saving" ? "wait" : "pointer",
+              fontSize: "1rem",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              transition: "all 0.2s",
+              opacity: saveStatus === "saving" ? 0.7 : 1,
+            }}
+          >
+            <Save size={20} /> {saveStatus === "saving" ? "Saving..." : "Save Now"}
+          </button>
+        </divground: saveStatus === "success" ? "#22c55e" : saveStatus === "error" ? "#ef4444" : "#3b82f6",
             color: "white",
             border: "none",
             borderRadius: "6px",
@@ -416,32 +452,7 @@ export default function LayoutEditorPage() {
           {/* Footswitches */}
           <PositionSection
             title="Footswitches"
-            positions={editedLayout.footswitch_positions || (editedLayout.footswitch_position ? [editedLayout.footswitch_position] : [])}
-            type="footswitch"
-            hasLabelOffset={false}
-            onUpdate={(path, value) => {
-              // Special handling for footswitches - convert to array format if needed
-              if (!editedLayout) return;
-              const newLayout = JSON.parse(JSON.stringify(editedLayout));
-              
-              // Ensure we're working with footswitch_positions array
-              if (!newLayout.footswitch_positions) {
-                if (newLayout.footswitch_position) {
-                  newLayout.footswitch_positions = [newLayout.footswitch_position];
-                  delete newLayout.footswitch_position;
-                } else {
-                  newLayout.footswitch_positions = [{ x: 0, y: 0 }];
-                }
-              }
-              
-              const index = parseInt(path[1]);
-              if (path[2] === "x") {
-                newLayout.footswitch_positions[index].x = value;
-              } else if (path[2] === "y") {
-                newLayout.footswitch_positions[index].y = value;
-              }
-              
-              setEditedLayout(newLayout);
+              setHasUnsavedChanges(true);
             }}
             onAdd={() => addPosition("footswitch")}
             onRemove={(i) => removePosition("footswitch", i)}
@@ -450,6 +461,33 @@ export default function LayoutEditorPage() {
           {/* LEDs */}
           <PositionSection
             title="LEDs"
+            positions={editedLayout.led_positions || (editedLayout.led_position ? [editedLayout.led_position] : [])}
+            type="led"
+            hasLabelOffset={false}
+            onUpdate={(path, value) => {
+              // Special handling for LEDs - convert to array format if needed
+              if (!editedLayout) return;
+              const newLayout = JSON.parse(JSON.stringify(editedLayout));
+              
+              // Ensure we're working with led_positions array
+              if (!newLayout.led_positions) {
+                if (newLayout.led_position) {
+                  newLayout.led_positions = [newLayout.led_position];
+                  delete newLayout.led_position;
+                } else {
+                  newLayout.led_positions = [{ x: 0, y: 0 }];
+                }
+              }
+              
+              const index = parseInt(path[1]);
+              if (path[2] === "x") {
+                newLayout.led_positions[index].x = value;
+              } else if (path[2] === "y") {
+                newLayout.led_positions[index].y = value;
+              }
+              
+              setEditedLayout(newLayout);
+              setHasUnsavedChanges(true
             positions={editedLayout.led_positions || (editedLayout.led_position ? [editedLayout.led_position] : [])}
             type="led"
             hasLabelOffset={false}
