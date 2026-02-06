@@ -20,6 +20,7 @@ export const IMAGE_CONFIG = {
     paint: { width: 400, height: 250 },
     design: { width: 400, height: 400 },
     led: { width: 400, height: 400 },
+    other: { width: 400, height: 250 },
   },
 } as const;
 

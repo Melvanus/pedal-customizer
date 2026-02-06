@@ -403,16 +403,57 @@ export default function SummaryPage() {
       return;
     }
 
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail)) {
+      alert("Please provide a valid email address");
+      return;
+    }
+
     setIsSubmitting(true);
     
-    // Simulate order submission (in real implementation, this would send to backend/email)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    alert("Order submitted successfully! You will receive a confirmation email shortly.");
-    setIsSubmitting(false);
-    
-    // Download JSON as backup
-    handleDownloadJSON();
+    try {
+      // Prepare order data with customer information
+      const orderData = {
+        ...config,
+        customerName,
+        customerEmail,
+        customerNotes,
+        pedalName,
+        controlLabels,
+        submittedAt: new Date().toISOString(),
+      };
+
+      // Submit order to API
+      const response = await fetch("/api/submit-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to submit order");
+      }
+
+      // Success!
+      alert("🎉 Order submitted successfully!\n\nYou will receive a confirmation email shortly with your order details.\n\nThank you for your order!");
+      
+      // Download JSON as backup
+      handleDownloadJSON();
+      
+      // Clear the configuration after successful submission
+      sessionStorage.removeItem("pedalConfiguration");
+      
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      alert("❌ Failed to submit order. Please try again or download the configuration and contact us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleEditLedColor = () => {
