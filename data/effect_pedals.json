@@ -238,7 +238,7 @@
         { "label": "Hi-Mid", "type": "Switch", "description": "Engages a 2.8kHz midrange boost." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "effectspedalplaceholder.svg",
+      "image": "miraprimus.svg",
       "technical_specs": {
         "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/mira-primus.pdf",
@@ -254,7 +254,7 @@
       "pcb_supplier_sku": "Empyrean Dual Distortion",
       "pcb_supplier_price_eur": 11.50,
       "electrical_components_price_eur": 24.00,
-      "customer_price_eur": 80.00,
+      "customer_price_eur": 79.90,
       "popular": true,
       "mockup": false
     },
@@ -277,7 +277,7 @@
         { "label": "Hi-Mid", "type": "Switch", "description": "Engages a 2.8kHz midrange boost." },
         { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
       ],
-      "image": "effectspedalplaceholder.svg",
+      "image": "miraultima.svg",
       "technical_specs": {
         "pcb_supplier": "Aion FX",
         "schematic_link": "internal://schematics/mira-ultima.pdf",
@@ -293,7 +293,41 @@
       "pcb_supplier_sku": "Empyrean Deluxe Distortion",
       "pcb_supplier_price_eur": 16.50,
       "electrical_components_price_eur": 28.00,
-      "customer_price_eur": 90.00,
+      "customer_price_eur": 89.90,
+      "popular": true,
+      "mockup": false
+    },
+    {
+      "id": "BLACKGARLIC",
+      "name": "Black Garlic",
+      "inspired_by": "Way Huge Swollen Pickle™",
+      "categories": ["Overdrive", "Fuzz"],
+      "description": "The overdrive that gets better with age. Just like black garlic, this pedal delivers a rich, complex flavor that evolves the more you use it. Perfect for when you want your tone to have that deep, umami character.",
+      "sound_characters": ["warm", "thick", "complex", "vintage", "smooth"],
+      "controls": [
+        { "label": "Loudness", "type": "Pot", "description": "Controls the amount of outout volume." },
+        { "label": "Filter", "type": "Pot", "description": "Adjusts the range of the filtered tone." },
+        { "label": "Sustain", "type": "Pot", "description": "Controlls the amount of fuz." },
+        { "label": "Scoop", "type": "Pot", "description": "Controls the amount of mid scoop." },
+        { "label": "Crunch", "type": "Switch", "description": "Adjusts the intensity of compressison." }
+      ],
+      "image": "blackgarlic.svg",
+      "technical_specs": {
+        "pcb_supplier": "PedalPCB",
+        "schematic_link": "internal://schematics/blackgarlic.pdf",
+        "potentiometers": 5,
+        "switches": 0,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "intermediate"
+      },
+      "recommended_enclosure": "125B",
+      "compatible_mods": [],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "PCB150",
+      "pcb_supplier_price_eur": 12.00,
+      "electrical_components_price_eur": 20.00,
+      "customer_price_eur": 74.90,
       "popular": true,
       "mockup": false
     },
@@ -534,8 +568,45 @@
       "pcb_supplier_id": "pedalpcb",
       "pcb_supplier_sku": "PCB582",
       "pcb_supplier_price_eur": 8.00,
-      "electrical_components_price_eur": 6.50,
+      "electrical_components_price_eur": 10.00,
       "customer_price_eur": 44.90,
+      "popular": false,
+      "mockup": false
+    },
+        {
+      "id": "TWOFACE",
+      "name": "Two-Face",
+      "inspired_by": "Dallas Arbiter Fuzz Face™",
+      "categories": ["Fuzz"],
+      "description": "Two fuzz faces in one! This modded version of the classic Fuzz Face allows you to switch between two different fuzz circuits for maximum tonal versatility.",
+      "sound_characters": ["vintage", "warm", "open", "dynamic", "smooth"],
+      "controls": [
+        { "label": "Prevolume", "type": "Pot", "description": "Controls the fuzz intensity for the first circuit, like a guitar pot." },
+        { "label": "Bias 1", "type": "Pot", "description": "Adjusts the transistor bias for the first fuzz circuit." },
+        { "label": "Volume 1", "type": "Pot", "description": "Sets the output level for the first fuzz circuit." },
+        { "label": "Prevolume 2", "type": "Pot", "description": "Controls the fuzz intensity for the second circuit, like a guitar pot." },
+        { "label": "Bias 2", "type": "Pot", "description": "Adjusts the transistor bias for the second fuzz circuit." },
+        { "label": "Volume 2", "type": "Pot", "description": "Sets the output level for the second fuzz circuit." },
+        { "label": "Twoface", "type": "Switch", "description": "Selects." },
+        { "label": "Bypass", "type": "Switch", "description": "Engages or bypasses the effect." }
+      ],
+      "image": "twoface.svg",
+      "technical_specs": {
+        "pcb_supplier": "PedalPCB",
+        "schematic_link": "internal://schematics/fuzzface.pdf",
+        "potentiometers": 6,
+        "switches": 2,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "beginner"
+      },
+      "recommended_enclosure": "1590BB",
+      "compatible_mods": [],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "PCB582",
+      "pcb_supplier_price_eur": 19.00,
+      "electrical_components_price_eur": 10.00,
+      "customer_price_eur": 59.00,
       "popular": false,
       "mockup": false
     },

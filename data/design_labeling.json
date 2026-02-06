@@ -12,7 +12,7 @@
     },
     {
         "name": "Labeled Lettering",
-        "price": 0.5,
+        "price": 0,
         "image": "Labeled_Lettering.jpg",
         "customer_price_eur": 1,
         "short_description": "Simple text labels for controls",
@@ -57,12 +57,34 @@
         ]
     },
     {
-        "name": "Relic",
+        "name": "Make it Glitter",
         "price": 10,
+        "image": "Example_Glitter.jpg",
+        "customer_price_eur": 3,
+        "short_description": "Add some sparkle with glitter accents",
+        "long_description": "This adds a sparkling glitter finish on top of your selected paint to your pedal enclosure. Perfect for a flashy, eye-catching finish.",
+        "images": [
+            "Example_Glitter.jpg"
+        ]
+    },
+    {
+        "name": "Aquarelle Front Panel",
+        "price": 10,
+        "image": "Example_Aquarelle.jpg",
+        "customer_price_eur": 3,
+        "short_description": "Watercolor style paper front panel",
+        "long_description": "Beautiful aquarelle painting style front panel. Adds a unique, artistic touch to your pedal enclosure. Each panel is hand-painted and one-of-a-kind. Please specify desired color scheme or theme in order notes.",
+        "images": [
+            "Example_Aquarelle.jpg"
+        ]
+    },
+    {
+        "name": "Relic",
+        "price": 15,
         "image": "Example_Relic_1.jpg",
         "customer_price_eur": 10,
         "short_description": "Vintage worn/aged appearance",
-        "long_description": "Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique. Note: This finish cannot be combined with pristine powder coating or certain metallic finishes. Manual review may be required.",
+        "long_description": "Professional aging treatment to give your pedal a vintage, road-worn look. Includes intentional scratches, wear patterns, and patina effects. Each relic job is unique.",
         "images": [
             "Example_Relic_1.jpg"
         ]
