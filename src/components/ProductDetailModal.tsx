@@ -105,7 +105,7 @@ export function ProductDetailModal({
 
   // Compute total mod price
   const modsTotalPrice = React.useMemo(() => {
-    return localSelectedMods.reduce((sum, { mod }) => sum + mod.customer_price_eur, 0);
+    return localSelectedMods.reduce((sum, { mod }) => sum + (mod.customer_price_eur ?? 0), 0);
   }, [localSelectedMods]);
 
   // Compute effective technical specs based on selected mods
@@ -731,7 +731,7 @@ export function ProductDetailModal({
                               {mod.name}
                             </div>
                             <div style={{ fontSize: "1rem", fontWeight: 700, color: "#4ade80" }}>
-                              +€{mod.customer_price_eur.toFixed(2)}
+                              +€{(mod.customer_price_eur ?? 0).toFixed(2)}
                             </div>
                           </div>
                           <div style={{ fontSize: "0.85rem", color: "#aaa", lineHeight: 1.5, marginBottom: (isSelected && mod.hint) || (mod.additional_options && isSelected) ? "0.75rem" : 0 }}>

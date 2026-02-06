@@ -1,6 +1,8 @@
 # Add following things to the roadmap, you can expand them a little and get inspired by user friendlyness
 
 Highest Prio:
+
+
 - I want the search of the paint/finish tab to look the same as the one of the effect selector. it should also behave the same in the way that its also in the scroll region and moves 
 
 - The layout editor should have a align feature, when things are moved around it should check if theres something next or over/under it so that it aligns when a certain delta is reached.
@@ -34,3 +36,10 @@ write a documents for an agent to create the following:
 
 
 
+Heho! Ich hab da mal ne Webseite zum individualisieren von Pedalen gebastelt. Würd mich mega freuen wenn du das mal ausprobieren magst.
+Momentan funktionierts am besten auf nem Browser am Computer, Handy-Version ist noch nicht optimiert.
+Gerne am Ende auch auf der letzten Seite nur zum Test auf "Submit Order" klicken, damit dass das dann auch bei mir ankommt und ich checken kann ob das richtig funktioniert.
+Falls irgendwas unklar ist oder nicht wie erwartet funktioniert, würd ich mich über eine Rückmeldung freuen.
+Gerne nehme ich auch Feedack an für Features die du dir sonst noch für sowas wünschen würdest.
+
+Kannst da auch sehr gerne das Pedal was du dir gewünscht hast so konfigurieren wie du willst, dann weiß ich in welche Richtung das ganze gehen soll. Solltest du in dem Fall am Ende Name, eMail und eventuelle  

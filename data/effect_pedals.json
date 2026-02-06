@@ -427,19 +427,16 @@
           "description": "Switches the circuit from the original Triangle version to the later Ram's Head version for different tonal characteristics.", 
           "customer_price_eur": 10 
         },
-        { 
+        {
           "name": "Tone Wicker Switch", 
           "description": "Adds a switch to toggle between the standard tone control and a 'wicker' tone circuit for more tonal options.", 
-          "customer_price_eur": 10 ,
+          "customer_price_eur": 10,
           "adds_technical_specs": {
             "switches": 1
           },
           "adds_controls": [
             { "label": "Tone Mode", "type": "Switch", "description": "Toggles between Standard and Wicker tone circuits." }
           ]
-        },
-        {
-
         }
       ],
       "pcb_supplier_id": "aionfx",

@@ -113,6 +113,7 @@ export function PedalCustomizer({
   const [modalProduct, setModalProduct] = React.useState<ProductModalData | null>(null);
   const [summaryHeight, setSummaryHeight] = React.useState(0);
   const summaryRef = React.useRef<HTMLDivElement>(null);
+  const isRestoringRef = React.useRef<boolean>(false);
 
   const selectedEffect = effectPedals.find((item) => item.id === selectedEffectId);
   const selectedSize = enclosureSizes.find((item) => item.name === selectedEnclosureSizeId);
@@ -120,9 +121,96 @@ export function PedalCustomizer({
   const selectedDesign = designOptions.find((item) => item.id === selectedDesignId);
   const selectedLed = ledOptions.find((item) => item.id === selectedLedId);
 
-  // Auto-select recommended enclosure size when effect changes
+  // Restore configuration from sessionStorage on mount
   React.useEffect(() => {
-    if (selectedEffect?.recommended_enclosure) {
+    const storedConfig = sessionStorage.getItem("pedalConfiguration");
+    if (storedConfig) {
+      try {
+        isRestoringRef.current = true;
+        const config = JSON.parse(storedConfig);
+        
+        // Restore effect selection
+        if (config.effect?.id && effectPedals.find(e => e.id === config.effect.id)) {
+          setSelectedEffectId(config.effect.id);
+        }
+        
+        // Restore effect mods
+        if (config.effectMods && Array.isArray(config.effectMods)) {
+          setSelectedEffectMods(config.effectMods);
+        }
+        
+        // Restore enclosure size
+        if (config.enclosureSize?.name && enclosureSizes.find(s => s.name === config.enclosureSize.name)) {
+          setSelectedEnclosureSizeId(config.enclosureSize.name);
+        }
+        
+        // Restore paint selection
+        if (config.paint?.id) {
+          const paintExists = paintOptions.find(p => p.id === config.paint.id);
+          if (paintExists) {
+            setSelectedPaintId(config.paint.id);
+            // Restore custom color if it was a custom paint
+            if (config.paint.is_custom_color && config.paint.rgb) {
+              setCustomColor(config.paint.rgb);
+              setHasInteractedWithCustomPaint(true);
+            }
+          }
+        }
+        
+        // Restore design selection
+        if (config.design?.id && designOptions.find(d => d.id === config.design.id)) {
+          setSelectedDesignId(config.design.id);
+        }
+        
+        // Restore LED selection
+        if (config.led?.id && ledOptions.find(l => l.id === config.led.id)) {
+          setSelectedLedId(config.led.id);
+        }
+        
+        // Restore LED color
+        if (config.ledColor) {
+          if (config.ledColor.startsWith('#')) {
+            setSelectedLedColor("Custom");
+            setCustomLedColor(config.ledColor);
+          } else {
+            setSelectedLedColor(config.ledColor);
+          }
+        }
+        
+        // Restore LED bezel color
+        if (config.ledBezelColor !== undefined) {
+          setSelectedLedBezelColor(config.ledBezelColor);
+        }
+        
+        // Restore label text
+        if (config.labelText) {
+          setLabelText(config.labelText);
+        }
+        
+        // Mark restoration as complete after a short delay
+        setTimeout(() => {
+          isRestoringRef.current = false;
+          
+          // After restoration, ensure LED bezel color is valid
+          const restoredLed = ledOptions.find(l => l.id === config.led?.id);
+          if (restoredLed?.available_colors && restoredLed.available_colors.length > 0) {
+            const restoredBezelColor = config.ledBezelColor;
+            // If no bezel color was saved, or it's invalid for this LED, set to first available
+            if (!restoredBezelColor || !restoredLed.available_colors.includes(restoredBezelColor)) {
+              setSelectedLedBezelColor(restoredLed.available_colors[0]);
+            }
+          }
+        }, 100);
+      } catch (error) {
+        console.error("Failed to restore configuration from sessionStorage:", error);
+        isRestoringRef.current = false;
+      }
+    }
+  }, []); // Run only once on mount
+
+  // Auto-select recommended enclosure size when effect changes (but not during restoration)
+  React.useEffect(() => {
+    if (!isRestoringRef.current && selectedEffect?.recommended_enclosure) {
       setSelectedEnclosureSizeId(selectedEffect.recommended_enclosure);
     }
   }, [selectedEffectId, selectedEffect]);
@@ -130,12 +218,37 @@ export function PedalCustomizer({
   // Store previous effect ID to detect actual changes
   const prevEffectIdRef = React.useRef<string | null>(null);
   React.useEffect(() => {
-    if (prevEffectIdRef.current !== null && prevEffectIdRef.current !== selectedEffectId) {
+    if (!isRestoringRef.current && prevEffectIdRef.current !== null && prevEffectIdRef.current !== selectedEffectId) {
       // Effect actually changed - reset mods
       setSelectedEffectMods([]);
     }
     prevEffectIdRef.current = selectedEffectId;
   }, [selectedEffectId]);
+
+  // Auto-default bezel color to first available color when LED changes
+  const prevLedIdRef = React.useRef<string | null>(null);
+  React.useEffect(() => {
+    const ledChanged = prevLedIdRef.current !== selectedLedId;
+    
+    if (selectedLed && (ledChanged || prevLedIdRef.current === null)) {
+      // Only auto-set if not currently restoring from sessionStorage
+      if (!isRestoringRef.current) {
+        if (selectedLed.available_colors && selectedLed.available_colors.length > 0) {
+          // LED has color options
+          // Check if current selection is valid for this LED
+          if (!selectedLedBezelColor || !selectedLed.available_colors.includes(selectedLedBezelColor)) {
+            // Current selection is invalid or null - default to first color
+            setSelectedLedBezelColor(selectedLed.available_colors[0]);
+          }
+          // else: current selection is valid, keep it
+        } else {
+          // LED doesn't have color options - clear bezel color
+          setSelectedLedBezelColor(null);
+        }
+      }
+      prevLedIdRef.current = selectedLedId;
+    }
+  }, [selectedLedId, selectedLed, selectedLedBezelColor]);
 
   // Measure configuration summary height and update padding
   React.useEffect(() => {
@@ -189,6 +302,9 @@ export function PedalCustomizer({
     const currentIndex = tabOrder.indexOf(activeTab);
     if (currentIndex < tabOrder.length - 1) {
       setActiveTab(tabOrder[currentIndex + 1]);
+    } else if (activeTab === "led") {
+      // LED is the last tab, go to summary
+      handleProceedToSummary();
     }
   };
 
@@ -198,7 +314,7 @@ export function PedalCustomizer({
       size: "Paint",
       paint: "Design",
       design: "LED",
-      led: "Other",
+      led: "Summary",
       other: undefined,
     };
     return tabNames[activeTab];
@@ -208,6 +324,10 @@ export function PedalCustomizer({
   const handleModalSelectAndContinue = () => {
     console.log('✨ [PedalCustomizer] Select & Continue clicked. Modal type:', modalProduct?.type);
     console.log('  Current selectedEffectMods:', selectedEffectMods.map(m => m.mod.name));
+    
+    let shouldAdvanceTab = true;
+    let ledOptionForSummary: LedOption | undefined;
+    
     // Handle selection based on modal type
     if (modalProduct) {
       switch (modalProduct.type) {
@@ -250,6 +370,9 @@ export function PedalCustomizer({
           );
           if (ledOption) {
             setSelectedLedId(ledOption.id);
+            // Store LED option to pass directly to summary (avoids state timing issue)
+            ledOptionForSummary = ledOption;
+            shouldAdvanceTab = false; // We'll handle navigation manually
           }
           break;
       }
@@ -257,8 +380,39 @@ export function PedalCustomizer({
     
     console.log('  🚪 Closing modal');
     setModalProduct(null);
-    console.log('  ➡️ Advancing to next tab');
-    advanceToNextTab();
+    
+    // For LED tab, go directly to summary with the selected LED option
+    if (ledOptionForSummary) {
+      console.log('  ➡️ Going directly to summary with LED:', ledOptionForSummary.name);
+      // If custom paint with custom color selected, override the rgb value
+      let paintConfig = selectedPaint ?? null;
+      if (paintConfig && paintConfig.is_custom_color && customColor) {
+        paintConfig = { ...paintConfig, rgb: customColor };
+      }
+      
+      const configData = {
+        effect: selectedEffect ?? null,
+        effectMods: selectedEffectMods,
+        enclosureSize: selectedSize ?? null,
+        paint: paintConfig,
+        design: selectedDesign ?? null,
+        labelText,
+        led: ledOptionForSummary, // Use the directly captured LED option
+        ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
+        ledBezelColor: selectedLedBezelColor,
+        totalPrice,
+      };
+      
+      // Store configuration in sessionStorage
+      sessionStorage.setItem("pedalConfiguration", JSON.stringify(configData));
+      
+      // Navigate to summary page
+      router.push("/customize/summary");
+    } else if (shouldAdvanceTab) {
+      console.log('  ➡️ Advancing to next tab');
+      advanceToNextTab();
+    }
+    
     console.log('  📊 Final selectedEffectMods:', selectedEffectMods.map(m => m.mod.name));
   };
 

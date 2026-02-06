@@ -148,6 +148,9 @@ export function EnclosureVisualizer({
     leds: Position[];
     footswitches: Position[];
     pedalName: Position | null;
+    potentiometerLabelOffsets: Position[];
+    switchLabelOffsets: Position[];
+    faderLabelOffsets: Position[];
   }>({
     potentiometers: [],
     switches: [],
@@ -155,6 +158,9 @@ export function EnclosureVisualizer({
     leds: [],
     footswitches: [],
     pedalName: null,
+    potentiometerLabelOffsets: [],
+    switchLabelOffsets: [],
+    faderLabelOffsets: [],
   });
   
   const svgRef = React.useRef<SVGSVGElement>(null);
@@ -181,7 +187,10 @@ export function EnclosureVisualizer({
       positionOverrides.faders.length > 0 ||
       positionOverrides.leds.length > 0 ||
       positionOverrides.footswitches.length > 0 ||
-      positionOverrides.pedalName
+      positionOverrides.pedalName ||
+      positionOverrides.potentiometerLabelOffsets.length > 0 ||
+      positionOverrides.switchLabelOffsets.length > 0 ||
+      positionOverrides.faderLabelOffsets.length > 0
     )) {
       const savedKey = `enclosure_positions_${layout.id}`;
       sessionStorage.setItem(savedKey, JSON.stringify(positionOverrides));
@@ -264,6 +273,25 @@ export function EnclosureVisualizer({
         newOverrides.footswitches = newFootswitches;
       } else if (draggedItem.type === 'pedalName') {
         newOverrides.pedalName = dataPos;
+      } else if (draggedItem.type === 'potentiometer-label') {
+        // Calculate offset relative to parent potentiometer position
+        const parentPos = prev.potentiometers[draggedItem.index] || layout.potentiometer_positions[draggedItem.index];
+        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
+        const newOffsets = [...prev.potentiometerLabelOffsets];
+        newOffsets[draggedItem.index] = offset;
+        newOverrides.potentiometerLabelOffsets = newOffsets;
+      } else if (draggedItem.type === 'switch-label') {
+        const parentPos = prev.switches[draggedItem.index] || layout.switch_positions[draggedItem.index];
+        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
+        const newOffsets = [...prev.switchLabelOffsets];
+        newOffsets[draggedItem.index] = offset;
+        newOverrides.switchLabelOffsets = newOffsets;
+      } else if (draggedItem.type === 'fader-label') {
+        const parentPos = prev.faders[draggedItem.index] || layout.fader_positions[draggedItem.index];
+        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
+        const newOffsets = [...prev.faderLabelOffsets];
+        newOffsets[draggedItem.index] = offset;
+        newOverrides.faderLabelOffsets = newOffsets;
       }
       
       return newOverrides;
@@ -312,6 +340,23 @@ export function EnclosureVisualizer({
     return { x: pos.x, y: -pos.y };
   };
   
+  // Helper to get effective label offset (with overrides applied)
+  const getLabelOffset = (type: string, index: number, defaultOffset: Position): Position => {
+    let offset: Position;
+    
+    if (type === 'potentiometer' && positionOverrides.potentiometerLabelOffsets[index]) {
+      offset = positionOverrides.potentiometerLabelOffsets[index];
+    } else if (type === 'switch' && positionOverrides.switchLabelOffsets[index]) {
+      offset = positionOverrides.switchLabelOffsets[index];
+    } else if (type === 'fader' && positionOverrides.faderLabelOffsets[index]) {
+      offset = positionOverrides.faderLabelOffsets[index];
+    } else {
+      offset = defaultOffset;
+    }
+    
+    return offset;
+  };
+  
   const visualizerContent = (
     <div
       style={{
@@ -325,6 +370,7 @@ export function EnclosureVisualizer({
       {/* Header with title and maximize button */}
       {onToggleMaximize && (
         <div
+          data-section="visualization-header"
           style={{
             display: "flex",
             justifyContent: "space-between",
@@ -343,89 +389,6 @@ export function EnclosureVisualizer({
                 Layout {currentIndex + 1}/{availableLayouts.length}
               </span>
             )}
-            {onRandomizeLayout && (
-              <button
-                onClick={onRandomizeLayout}
-                style={{
-                  background: "transparent",
-                  border: "1px solid #333",
-                  color: "#fff",
-                  cursor: "pointer",
-                  padding: "0.25rem 0.5rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.25rem",
-                  borderRadius: "4px",
-                  fontSize: "0.75rem",
-                  fontWeight: 500,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#222";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                }}
-                title="Generate a completely new random layout (feeling lucky?)"
-              >
-                <Shuffle size={14} />
-                <span>Randomize</span>
-              </button>
-            )}
-            <button
-              onClick={() => setIsEditMode(!isEditMode)}
-              style={{
-                background: isEditMode ? "#333" : "transparent",
-                border: "1px solid " + (isEditMode ? "#666" : "#333"),
-                color: isEditMode ? "#4ade80" : "#fff",
-                cursor: "pointer",
-                padding: "0.25rem 0.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.25rem",
-                borderRadius: "4px",
-                fontSize: "0.75rem",
-                fontWeight: 500,
-              }}
-              onMouseEnter={(e) => {
-                if (!isEditMode) e.currentTarget.style.background = "#222";
-              }}
-              onMouseLeave={(e) => {
-                if (!isEditMode) e.currentTarget.style.background = "transparent";
-              }}
-              title="Toggle edit mode to drag and reposition components"
-            >
-              <Move size={14} />
-              <span>Edit Layout</span>
-            </button>
-            <button
-              onClick={() => setIsEditLabelsMode(!isEditLabelsMode)}
-              style={{
-                background: isEditLabelsMode ? "#333" : "transparent",
-                border: "1px solid " + (isEditLabelsMode ? "#666" : "#333"),
-                color: isEditLabelsMode ? "#4ade80" : "#fff",
-                cursor: "pointer",
-                padding: "0.25rem 0.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.25rem",
-                borderRadius: "4px",
-                fontSize: "0.75rem",
-                fontWeight: 500,
-              }}
-              onMouseEnter={(e) => {
-                if (!isEditLabelsMode) e.currentTarget.style.background = "#222";
-              }}
-              onMouseLeave={(e) => {
-                if (!isEditLabelsMode) e.currentTarget.style.background = "transparent";
-              }}
-              title="Toggle edit mode to click and edit label text"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-              <span>Edit Labels</span>
-            </button>
             <button
               onClick={onToggleMaximize}
               style={{
@@ -449,7 +412,107 @@ export function EnclosureVisualizer({
       )}
 
       {/* SVG Visualization with navigation */}
-      <div style={{ position: "relative", padding: isMaximized ? "2rem" : "1rem" }}>
+      <div data-section="visualization-window" style={{ position: "relative", padding: isMaximized ? "2rem" : "1rem" }}>
+        {/* Floating action buttons */}
+        <div 
+          data-section="visualization-toolbar"
+          style={{ 
+            position: "absolute", 
+            top: "0.2rem", 
+            width: "95%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex", 
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: "0.25rem", 
+            zIndex: 10 
+          }}>
+          {onRandomizeLayout && (
+            <button
+              onClick={onRandomizeLayout}
+              style={{
+          background: "rgba(0, 0, 0, 0.7)",
+          border: "1px solid #666",
+          color: "#fff",
+          cursor: "pointer",
+          padding: "0.25rem 0.5rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          borderRadius: "6px",
+          fontSize: "0.8rem",
+          fontWeight: 500,
+              }}
+              onMouseEnter={(e) => {
+          e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
+              }}
+              onMouseLeave={(e) => {
+          e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)";
+              }}
+              title="Generate a completely new random layout (feeling lucky?)"
+            >
+              <Shuffle size={16} />
+              <span>Randomize</span>
+            </button>
+          )}
+          <button
+            onClick={() => setIsEditMode(!isEditMode)}
+            style={{
+              background: isEditMode ? "rgba(74, 222, 128, 0.2)" : "rgba(0, 0, 0, 0.7)",
+              border: "1px solid " + (isEditMode ? "#4ade80" : "#666"),
+              color: isEditMode ? "#4ade80" : "#fff",
+              cursor: "pointer",
+              padding: "0.25rem 0.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              borderRadius: "6px",
+              fontSize: "0.8rem",
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => {
+              if (!isEditMode) e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
+            }}
+            onMouseLeave={(e) => {
+              if (!isEditMode) e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)";
+            }}
+            title="Toggle edit mode to drag and reposition components"
+          >
+            <Move size={16} />
+            <span>Edit Layout</span>
+          </button>
+          <button
+            onClick={() => setIsEditLabelsMode(!isEditLabelsMode)}
+            style={{
+              background: isEditLabelsMode ? "rgba(74, 222, 128, 0.2)" : "rgba(0, 0, 0, 0.7)",
+              border: "1px solid " + (isEditLabelsMode ? "#4ade80" : "#666"),
+              color: isEditLabelsMode ? "#4ade80" : "#fff",
+              cursor: "pointer",
+              padding: "0.25rem 0.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              borderRadius: "6px",
+              fontSize: "0.8rem",
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => {
+              if (!isEditLabelsMode) e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
+            }}
+            onMouseLeave={(e) => {
+              if (!isEditLabelsMode) e.currentTarget.style.background = "rgba(0, 0, 0, 0.7)";
+            }}
+            title="Toggle edit mode to click and edit label text"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            <span>Edit Labels</span>
+          </button>
+        </div>
+        
         {/* Previous Layout Button */}
         {hasMultipleLayouts && (
           <button
@@ -512,7 +575,7 @@ export function EnclosureVisualizer({
           style={{
             width: "100%",
             height: "auto",
-            maxHeight: isMaximized ? "80vh" : "300px",
+            maxHeight: isMaximized ? "80vh" : "450px",
             cursor: "default",
             userSelect: "none",
             WebkitUserSelect: "none",
@@ -727,6 +790,7 @@ export function EnclosureVisualizer({
               const control = controls.filter((c) => c.type === "Pot")[idx];
               const label = control ? controlLabels[control.label] || control.label : `Pot ${idx + 1}`;
               const effectivePos = getPosition('potentiometer', idx, pos);
+              const labelOffset = getLabelOffset('potentiometer', idx, pos.label_offset);
               
               return (
                 <g 
@@ -737,8 +801,8 @@ export function EnclosureVisualizer({
                   {/* Label (rendered first, behind knob) */}
                   {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
                     <foreignObject
-                      x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y - pos.label_offset.y - 4.5}
+                      x={effectivePos.x + labelOffset.x - 15}
+                      y={effectivePos.y - labelOffset.y - 4.5}
                       width="30"
                       height="7"
                     >
@@ -788,8 +852,8 @@ export function EnclosureVisualizer({
                     <>
                       {labeledLettering && (
                         <rect
-                          x={effectivePos.x + pos.label_offset.x - (label.length * 2.5) - 1.2}
-                          y={effectivePos.y - pos.label_offset.y - 8}
+                          x={effectivePos.x + labelOffset.x - (label.length * 2.5) - 1.2}
+                          y={effectivePos.y - labelOffset.y - 8}
                           width={(label.length * 5) + 2.4}
                           height="10.5"
                           fill="#000"
@@ -797,8 +861,8 @@ export function EnclosureVisualizer({
                         />
                       )}
                       <text
-                        x={effectivePos.x + pos.label_offset.x}
-                        y={effectivePos.y - pos.label_offset.y}
+                        x={effectivePos.x + labelOffset.x}
+                        y={effectivePos.y - labelOffset.y}
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
@@ -806,8 +870,14 @@ export function EnclosureVisualizer({
                           fontWeight: 600,
                           fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
-                          pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                          cursor: isEditLabelsMode ? 'pointer' : 'default',
+                          pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
+                          cursor: isEditLabelsMode ? 'pointer' : (isEditMode ? 'move' : 'default'),
+                        }}
+                        onMouseDown={(e) => {
+                          if (isEditMode && !isEditLabelsMode) {
+                            e.stopPropagation();
+                            handleMouseDown('potentiometer-label', idx)(e);
+                          }
                         }}
                         onClick={() => {
                           if (isEditLabelsMode && control) {
@@ -842,6 +912,7 @@ export function EnclosureVisualizer({
               const control = controls.filter((c) => c.type === "Switch" && c.label !== "Bypass")[idx];
               const label = control ? controlLabels[control.label] || control.label : `SW ${idx + 1}`;
               const effectivePos = getPosition('switch', idx, pos);
+              const labelOffset = getLabelOffset('switch', idx, pos.label_offset);
               
               return (
                 <g 
@@ -874,8 +945,8 @@ export function EnclosureVisualizer({
                   {/* Label */}
                   {editingLabel?.type === 'switch' && editingLabel?.index === idx ? (
                     <foreignObject
-                      x={effectivePos.x + pos.label_offset.x - 12}
-                      y={effectivePos.y - pos.label_offset.y - 4}
+                      x={effectivePos.x + labelOffset.x - 12}
+                      y={effectivePos.y - labelOffset.y - 4}
                       width="24"
                       height="6"
                     >
@@ -925,8 +996,8 @@ export function EnclosureVisualizer({
                     <>
                       {labeledLettering && (
                         <rect
-                          x={effectivePos.x + pos.label_offset.x - (label.length * 2) - 1.2}
-                          y={effectivePos.y - pos.label_offset.y - 7.5}
+                          x={effectivePos.x + labelOffset.x - (label.length * 2) - 1.2}
+                          y={effectivePos.y - labelOffset.y - 7.5}
                           width={(label.length * 4) + 2.4}
                           height="10.5"
                           fill="#000"
@@ -934,8 +1005,8 @@ export function EnclosureVisualizer({
                         />
                       )}
                       <text
-                        x={effectivePos.x + pos.label_offset.x}
-                        y={effectivePos.y - pos.label_offset.y}
+                        x={effectivePos.x + labelOffset.x}
+                        y={effectivePos.y - labelOffset.y}
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3px",
@@ -943,8 +1014,14 @@ export function EnclosureVisualizer({
                           fontWeight: 600,
                           fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
-                          pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                          cursor: isEditLabelsMode ? 'pointer' : 'default',
+                          pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
+                          cursor: isEditLabelsMode ? 'pointer' : (isEditMode ? 'move' : 'default'),
+                        }}
+                        onMouseDown={(e) => {
+                          if (isEditMode && !isEditLabelsMode) {
+                            e.stopPropagation();
+                            handleMouseDown('switch-label', idx)(e);
+                          }
                         }}
                         onClick={() => {
                           if (isEditLabelsMode && control) {
@@ -972,6 +1049,7 @@ export function EnclosureVisualizer({
                 const control = controls.filter((c) => c.type === "Fader")[idx];
                 const label = control ? controlLabels[control.label] || control.label : `Fader ${idx + 1}`;
                 const effectivePos = getPosition('fader', idx, pos);
+                const labelOffset = getLabelOffset('fader', idx, pos.label_offset);
                 
                 return (
                 <g 
@@ -1007,8 +1085,8 @@ export function EnclosureVisualizer({
                   {/* Label */}
                   {editingLabel?.type === 'fader' && editingLabel?.index === idx ? (
                     <foreignObject
-                      x={effectivePos.x + pos.label_offset.x - 15}
-                      y={effectivePos.y - pos.label_offset.y - 4.5}
+                      x={effectivePos.x + labelOffset.x - 15}
+                      y={effectivePos.y - labelOffset.y - 4.5}
                       width="30"
                       height="7"
                     >
@@ -1058,8 +1136,8 @@ export function EnclosureVisualizer({
                     <>
                       {labeledLettering && (
                         <rect
-                          x={effectivePos.x + pos.label_offset.x - (label.length * 2.5) - 1.2}
-                          y={effectivePos.y - pos.label_offset.y - 8}
+                          x={effectivePos.x + labelOffset.x - (label.length * 2.5) - 1.2}
+                          y={effectivePos.y - labelOffset.y - 8}
                           width={(label.length * 5) + 2.4}
                           height="10.5"
                           fill="#000"
@@ -1067,8 +1145,8 @@ export function EnclosureVisualizer({
                         />
                       )}
                       <text
-                        x={effectivePos.x + pos.label_offset.x}
-                        y={effectivePos.y - pos.label_offset.y}
+                        x={effectivePos.x + labelOffset.x}
+                        y={effectivePos.y - labelOffset.y}
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3.5px",
@@ -1076,8 +1154,14 @@ export function EnclosureVisualizer({
                           fontWeight: 600,
                           fill: labeledLettering ? "#fff" : textColor,
                           textTransform: "uppercase",
-                          pointerEvents: isEditLabelsMode ? 'auto' : 'none',
-                          cursor: isEditLabelsMode ? 'pointer' : 'default',
+                          pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
+                          cursor: isEditLabelsMode ? 'pointer' : (isEditMode ? 'move' : 'default'),
+                        }}
+                        onMouseDown={(e) => {
+                          if (isEditMode && !isEditLabelsMode) {
+                            e.stopPropagation();
+                            handleMouseDown('fader-label', idx)(e);
+                          }
                         }}
                         onClick={() => {
                           if (isEditLabelsMode && control) {

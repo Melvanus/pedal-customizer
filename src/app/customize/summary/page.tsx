@@ -360,8 +360,8 @@ export default function SummaryPage() {
         setControlLabels(initialLabels);
       }
       
-      // Parse the old labelText format if it exists
-      const labelText = parsed.labelText || "";
+      // Parse the old labelText format if it exists, or use effect pedal name as default
+      const labelText = parsed.labelText || parsed.effect?.name || "";
       setPedalName(labelText);
     }
   }, []);
@@ -390,16 +390,13 @@ export default function SummaryPage() {
 
   const handleDownloadJSON = () => {
     const payload = {
-      createdAt: new Date().toISOString(),
       ...config,
+      customerName,
+      customerEmail,
+      customerNotes,
       pedalName,
       controlLabels,
-      labelText: pedalName, // Keep backward compatibility
-      customer: {
-        name: customerName,
-        email: customerEmail,
-        notes: customerNotes,
-      },
+      submittedAt: new Date().toISOString(),
     };
 
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -414,17 +411,18 @@ export default function SummaryPage() {
   };
 
   const handleSubmitOrder = async () => {
-    if (!customerName || !customerEmail) {
-      alert("Please provide your name and email address");
-      return;
-    }
+    // Validation disabled for testing
+    // if (!customerName || !customerEmail) {
+    //   alert("Please provide your name and email address");
+    //   return;
+    // }
 
     // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail)) {
-      alert("Please provide a valid email address");
-      return;
-    }
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(customerEmail)) {
+    //   alert("Please provide a valid email address");
+    //   return;
+    // }
 
     setIsSubmitting(true);
     
@@ -806,62 +804,52 @@ export default function SummaryPage() {
             {/* LED */}
             {config.led && (
               <div style={{ position: "relative" }}>
-                {config.ledColor && !config.led.name.includes("No LED") && (
-                  <button
-                    onClick={handleEditLedColor}
-                    style={{
-                      position: "absolute",
-                      top: "1rem",
-                      right: "1rem",
-                      background: "#2d2d2d",
-                      color: "#fff",
-                      border: "1px solid #666",
-                      borderRadius: "5px",
-                      padding: "0.5rem 1rem",
-                      cursor: "pointer",
-                      fontSize: "0.85rem",
-                      transition: "all 0.2s ease",
-                      zIndex: 10,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#3d3d3d";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "#2d2d2d";
-                    }}
-                  >
-                    ✏️ Edit Color
-                  </button>
-                )}
-                <div style={{ position: "relative" }}>
-                  <ConfigSection
-                    title="LED Style"
-                    name={config.led.name}
-                    price={config.led.customer_price_eur}
-                    shortDesc={config.led.short_description}
-                    longDesc={config.led.long_description}
-                    details={(() => {
-                      const details: any[] = [];
-                      
-                      // LED Color
-                      if (config.ledColor && !config.led.name.includes("No LED")) {
-                        details.push({
-                          label: "LED Color",
-                          value: (
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                              <div style={{
-                                width: "24px",
-                                height: "24px",
-                                borderRadius: "50%",
-                                background: getLedColorHex(config.ledColor),
-                                boxShadow: `0 0 10px ${getLedColorHex(config.ledColor)}`,
-                                border: config.ledColor === "White" ? "1px solid #666" : "none"
-                              }} />
-                              <span>{config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor}</span>
-                            </div>
-                          ) as any
-                        });
-                      }
+                <ConfigSection
+                  title="LED Style"
+                  name={config.led.name}
+                  price={config.led.customer_price_eur}
+                  shortDesc={config.led.short_description}
+                  longDesc={config.led.long_description}
+                  details={(() => {
+                    const details: any[] = [];
+                    
+                    // LED Color
+                    if (config.ledColor && !config.led.name.includes("No LED")) {
+                      details.push({
+                        label: "LED Color",
+                        value: (
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <div style={{
+                              width: "24px",
+                              height: "24px",
+                              borderRadius: "50%",
+                              background: getLedColorHex(config.ledColor),
+                              boxShadow: `0 0 10px ${getLedColorHex(config.ledColor)}`,
+                              border: config.ledColor === "White" ? "1px solid #666" : "none"
+                            }} />
+                            <span>{config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor}</span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditLedColor();
+                              }}
+                              style={{
+                                background: "transparent",
+                                color: "#999",
+                                border: "1px solid #666",
+                                borderRadius: "3px",
+                                padding: "0.25rem 0.5rem",
+                                cursor: "pointer",
+                                fontSize: "0.75rem",
+                                marginLeft: "0.5rem"
+                              }}
+                            >
+                              ✏️
+                            </button>
+                          </div>
+                        ) as any
+                      });
+                    }
                       
                       // Bezel/Lens Color
                       if (config.led?.available_colors && config.led.available_colors.length > 0) {
@@ -920,7 +908,6 @@ export default function SummaryPage() {
                       return details.length > 0 ? details : undefined;
                     })()}
                   />
-                </div>
               </div>
             )}
           </div>
