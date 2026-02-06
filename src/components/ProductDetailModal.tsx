@@ -44,6 +44,9 @@ export type ProductModalData = {
   customLedColor?: string;
   onLedColorChange?: (color: string) => void;
   onCustomLedColorChange?: (color: string) => void;
+  availableBezelColors?: string[];
+  selectedBezelColor?: string | null;
+  onBezelColorChange?: (color: string) => void;
 };
 
 type ProductDetailModalProps = {
@@ -1135,6 +1138,97 @@ export function ProductDetailModal({
               <div>{section.content}</div>
             </div>
           ))}
+
+          {/* LED Bezel/Lens Color Picker */}
+          {product.type === "led" && product.availableBezelColors && product.availableBezelColors.length > 0 && product.onBezelColorChange && (
+            <div data-section="led-bezel-color-picker" style={{ marginBottom: "1.5rem" }}>
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  marginBottom: "1rem",
+                }}
+              >
+                🎨 Choose Bezel/Lens Color
+              </h3>
+              
+              <div style={{ 
+                display: "grid", 
+                gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", 
+                gap: "0.75rem",
+                marginBottom: "1rem"
+              }}>
+                {product.availableBezelColors.map((color) => {
+                  const colorMap: Record<string, string> = {
+                    "red": "#ff0000",
+                    "blue": "#0066ff",
+                    "green": "#00ff00",
+                    "yellow": "#ffff00",
+                    "amber": "#ffbf00",
+                    "purple": "#bf00ff",
+                    "clear": "#ffffff",
+                  };
+                  
+                  const displayName = color.charAt(0).toUpperCase() + color.slice(1);
+                  const hexColor = colorMap[color.toLowerCase()] || "#888888";
+                  
+                  return (
+                    <div
+                      key={color}
+                      onClick={() => product.onBezelColorChange!(color)}
+                      style={{
+                        background: "#0a0a0a",
+                        borderRadius: "8px",
+                        padding: "0.75rem",
+                        cursor: "pointer",
+                        border: product.selectedBezelColor === color ? "2px solid #fff" : "2px solid #333",
+                        boxShadow: product.selectedBezelColor === color ? "0 3px 10px rgba(255, 255, 255, 0.2)" : "none",
+                        transition: "all 0.2s ease",
+                        textAlign: "center"
+                      }}
+                      onMouseEnter={(e) => {
+                        if (product.selectedBezelColor !== color) {
+                          e.currentTarget.style.borderColor = "#666";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (product.selectedBezelColor !== color) {
+                          e.currentTarget.style.borderColor = "#333";
+                        }
+                      }}
+                    >
+                      <div style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        background: hexColor,
+                        margin: "0 auto 0.5rem",
+                        boxShadow: color.toLowerCase() !== "clear" ? `0 0 15px ${hexColor}` : "none",
+                        border: color.toLowerCase() === "clear" ? "2px solid #666" : "none",
+                        opacity: color.toLowerCase() === "clear" ? 0.3 : 1,
+                      }} />
+                      <div style={{ fontSize: "0.8rem", color: "#e0e0e0", fontWeight: product.selectedBezelColor === color ? 600 : 400 }}>
+                        {displayName}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              <div style={{
+                background: "rgba(255, 165, 0, 0.1)",
+                border: "1px solid rgba(255, 165, 0, 0.3)",
+                borderRadius: "8px",
+                padding: "0.75rem",
+                fontSize: "0.85rem",
+                color: "#ffaa00",
+                lineHeight: 1.5,
+              }}>
+                <strong>ℹ️ Note:</strong> The bezel/lens color affects the appearance of the LED indicator on your pedal enclosure.
+              </div>
+            </div>
+          )}
 
           {/* LED Color Picker */}
           {product.type === "led" && product.onLedColorChange && product.onCustomLedColorChange && (

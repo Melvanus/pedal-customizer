@@ -35,6 +35,7 @@ type ConfigData = {
   labelText: string;
   led: any;
   ledColor?: string;
+  ledBezelColor?: string | null;
   totalPrice: number;
 };
 
@@ -56,6 +57,19 @@ const getLedColorHex = (color: string): string => {
   return color.startsWith("#") ? color : (colorMap[color] || "#ff0000");
 };
 
+const getBezelColorHex = (color: string): string => {
+  const colorMap: Record<string, string> = {
+    "red": "#ff0000",
+    "blue": "#0066ff",
+    "green": "#00ff00",
+    "yellow": "#ffff00",
+    "amber": "#ffbf00",
+    "purple": "#bf00ff",
+    "clear": "#ffffff"
+  };
+  return colorMap[color.toLowerCase()] || "#ffffff";
+};
+
 export default function SummaryPage() {
   const [config, setConfig] = React.useState<ConfigData | null>(null);
   const [customerName, setCustomerName] = React.useState("");
@@ -65,8 +79,10 @@ export default function SummaryPage() {
   const [controlLabels, setControlLabels] = React.useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [editingLedColor, setEditingLedColor] = React.useState(false);
+  const [editingLedBezelColor, setEditingLedBezelColor] = React.useState(false);
   const [editingPaintColor, setEditingPaintColor] = React.useState(false);
   const [tempLedColor, setTempLedColor] = React.useState("");
+  const [tempLedBezelColor, setTempLedBezelColor] = React.useState<string | null>(null);
   const [tempCustomLedColor, setTempCustomLedColor] = React.useState("#ff0000");
   const [tempPaintColor, setTempPaintColor] = React.useState("#808080");
   const [isVisualizerMaximized, setIsVisualizerMaximized] = React.useState(false);
@@ -473,6 +489,21 @@ export default function SummaryPage() {
     }
   };
 
+  const handleEditLedBezelColor = () => {
+    if (config && config.led?.available_colors) {
+      setTempLedBezelColor(config.ledBezelColor || null);
+      setEditingLedBezelColor(true);
+    }
+  };
+
+  const handleSaveLedBezelColor = () => {
+    if (config) {
+      setConfig({ ...config, ledBezelColor: tempLedBezelColor });
+      sessionStorage.setItem("pedalConfiguration", JSON.stringify({ ...config, ledBezelColor: tempLedBezelColor }));
+      setEditingLedBezelColor(false);
+    }
+  };
+
   const handleEditPaintColor = () => {
     if (config && config.paint.is_custom_color) {
       setTempPaintColor(config.paint.rgb || "#808080");
@@ -809,28 +840,85 @@ export default function SummaryPage() {
                     price={config.led.customer_price_eur}
                     shortDesc={config.led.short_description}
                     longDesc={config.led.long_description}
-                    details={
-                      config.ledColor && !config.led.name.includes("No LED") 
-                        ? [
-                            { 
-                              label: "LED Color", 
-                              value: (
-                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                                  <div style={{
-                                    width: "24px",
-                                    height: "24px",
-                                    borderRadius: "50%",
-                                    background: getLedColorHex(config.ledColor),
-                                    boxShadow: `0 0 10px ${getLedColorHex(config.ledColor)}`,
-                                    border: config.ledColor === "White" ? "1px solid #666" : "none"
-                                  }} />
-                                  <span>{config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor}</span>
-                                </div>
-                              ) as any
-                            }
-                          ]
-                        : undefined
-                    }
+                    details={(() => {
+                      const details: any[] = [];
+                      
+                      // LED Color
+                      if (config.ledColor && !config.led.name.includes("No LED")) {
+                        details.push({
+                          label: "LED Color",
+                          value: (
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                              <div style={{
+                                width: "24px",
+                                height: "24px",
+                                borderRadius: "50%",
+                                background: getLedColorHex(config.ledColor),
+                                boxShadow: `0 0 10px ${getLedColorHex(config.ledColor)}`,
+                                border: config.ledColor === "White" ? "1px solid #666" : "none"
+                              }} />
+                              <span>{config.ledColor.startsWith("#") ? `Custom (${config.ledColor})` : config.ledColor}</span>
+                            </div>
+                          ) as any
+                        });
+                      }
+                      
+                      // Bezel/Lens Color
+                      if (config.led?.available_colors && config.led.available_colors.length > 0) {
+                        details.push({
+                          label: "Bezel/Lens Color",
+                          value: config.ledBezelColor ? (
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                              <div style={{
+                                width: "24px",
+                                height: "24px",
+                                borderRadius: "50%",
+                                background: getBezelColorHex(config.ledBezelColor),
+                                boxShadow: config.ledBezelColor !== "clear" ? `0 0 8px ${getBezelColorHex(config.ledBezelColor)}` : "none",
+                                border: "1px solid #666",
+                                opacity: config.ledBezelColor === "clear" ? 0.3 : 1
+                              }} />
+                              <span style={{ textTransform: "capitalize" }}>{config.ledBezelColor}</span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditLedBezelColor();
+                                }}
+                                style={{
+                                  background: "transparent",
+                                  color: "#999",
+                                  border: "1px solid #666",
+                                  borderRadius: "3px",
+                                  padding: "0.25rem 0.5rem",
+                                  cursor: "pointer",
+                                  fontSize: "0.75rem",
+                                  marginLeft: "0.5rem"
+                                }}
+                              >
+                                ✏️
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={handleEditLedBezelColor}
+                              style={{
+                                background: "#2d2d2d",
+                                color: "#fff",
+                                border: "1px solid #666",
+                                borderRadius: "5px",
+                                padding: "0.5rem 1rem",
+                                cursor: "pointer",
+                                fontSize: "0.85rem"
+                              }}
+                            >
+                              Select Color
+                            </button>
+                          ) as any
+                        });
+                      }
+                      
+                      return details.length > 0 ? details : undefined;
+                    })()}
                   />
                 </div>
               </div>
@@ -1158,6 +1246,125 @@ export default function SummaryPage() {
                 </button>
                 <button
                   onClick={handleSaveLedColor}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#fff",
+                    color: "#000",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Bezel/Lens Color Edit Modal */}
+        {editingLedBezelColor && config?.led?.available_colors && (
+          <div
+            onClick={() => setEditingLedBezelColor(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "#1a1a1a",
+                borderRadius: "15px",
+                padding: "2rem",
+                maxWidth: "500px",
+                width: "90%",
+                border: "2px solid #fff",
+                boxShadow: "0 10px 50px rgba(0,0,0,0.5)",
+              }}
+            >
+              <h2 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "#fff" }}>
+                Select Bezel/Lens Color
+              </h2>
+              <p style={{ fontSize: "0.9rem", color: "#999", marginBottom: "1.5rem" }}>
+                The bezel/lens color affects the appearance of the LED indicator on your pedal enclosure.
+              </p>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))",
+                  gap: "0.75rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                {config.led.available_colors.map((color: string) => {
+                  const colorHex = getBezelColorHex(color);
+                  const isSelected = tempLedBezelColor === color;
+
+                  return (
+                    <div
+                      key={color}
+                      onClick={() => setTempLedBezelColor(color)}
+                      style={{
+                        background: "#0f0f0f",
+                        borderRadius: "8px",
+                        padding: "0.75rem",
+                        cursor: "pointer",
+                        border: isSelected ? "2px solid #fff" : "2px solid #333",
+                        transition: "all 0.2s ease",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "50%",
+                          background: colorHex,
+                          margin: "0 auto 0.5rem",
+                          boxShadow: color !== "clear" ? `0 0 12px ${colorHex}` : "none",
+                          border: "1px solid #666",
+                          opacity: color === "clear" ? 0.3 : 1,
+                        }}
+                      />
+                      <div style={{ fontSize: "0.8rem", color: "#e0e0e0", textTransform: "capitalize" }}>
+                        {color}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <button
+                  onClick={() => setEditingLedBezelColor(false)}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#2d2d2d",
+                    color: "#fff",
+                    border: "1px solid #666",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveLedBezelColor}
                   style={{
                     flex: 1,
                     padding: "0.75rem",

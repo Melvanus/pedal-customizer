@@ -19,8 +19,7 @@
         "long_description": "Simple chrome LED bezel. Provides a clean and compact mounting solution for 3mm or 5mm LEDs.",
         "images": [
             "LED_Simple_Bezel.jpg"
-        ],
-        "available_colors": ["chrome", "matched"]
+        ]
     },
     {
         "name": "Wide Chrome LED Bezel",
@@ -31,9 +30,8 @@
         "long_description": "A big wider chrome LED bezel. Provides a clean, mounting solution for 3mm or 5mm LEDs.",
         "images": [
             "LED_Wide_Chrome_Bezel_A-6043.jpg"
-        ],
-        "available_colors": ["chrome", "matched"]
-    },
+        ]
+        },
     {
         "name": "Lampshade",
         "price": 1,

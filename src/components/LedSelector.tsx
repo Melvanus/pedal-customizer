@@ -14,6 +14,7 @@ export type LedOption = {
   customer_price_eur: number;
   short_description?: string;
   long_description?: string;
+  available_colors?: string[];
 };
 
 type LedSelectorProps = {

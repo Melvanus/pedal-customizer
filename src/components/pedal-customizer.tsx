@@ -95,6 +95,7 @@ export function PedalCustomizer({
   const [selectedLedId, setSelectedLedId] = React.useState(ledOptions[0]?.id ?? "");
   const [selectedLedColor, setSelectedLedColor] = React.useState<string>("Red");
   const [customLedColor, setCustomLedColor] = React.useState<string>("#ff0000");
+  const [selectedLedBezelColor, setSelectedLedBezelColor] = React.useState<string | null>(null);
   const [selectedEffectMods, setSelectedEffectMods] = React.useState<SelectedModWithOptions[]>([]);
   const [labelText, setLabelText] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -465,6 +466,7 @@ export function PedalCustomizer({
       labelText,
       led: selectedLed ?? null,
       ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
+      ledBezelColor: selectedLedBezelColor,
       totalPrice,
     };
     
@@ -1074,6 +1076,8 @@ export function PedalCustomizer({
                   details: [],
                   ledColor: selectedLedColor,
                   customLedColor: customLedColor,
+                  availableBezelColors: option.available_colors,
+                  selectedBezelColor: selectedLedBezelColor,
                   onLedColorChange: (color: string) => {
                     setSelectedLedColor(color);
                     setModalProduct((prev) => prev ? { ...prev, ledColor: color } : null);
@@ -1081,6 +1085,10 @@ export function PedalCustomizer({
                   onCustomLedColorChange: (color: string) => {
                     setCustomLedColor(color);
                     setModalProduct((prev) => prev ? { ...prev, customLedColor: color } : null);
+                  },
+                  onBezelColorChange: (color: string) => {
+                    setSelectedLedBezelColor(color);
+                    setModalProduct((prev) => prev ? { ...prev, selectedBezelColor: color } : null);
                   },
                 });
               }}

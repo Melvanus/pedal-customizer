@@ -69,6 +69,7 @@ function createOrderDataStructure(orderData: any) {
       id: orderData.led?.id,
       name: orderData.led?.name,
       color: orderData.ledColor || null,
+      bezelColor: orderData.ledBezelColor || null,
       isCustomColor: orderData.ledColor?.startsWith('#') || false,
       price: orderData.led?.customer_price_eur,
     },
@@ -180,7 +181,7 @@ export async function POST(request: Request) {
       },
       {
         name: "💡 LED",
-        value: `${cleanOrderData.led.name}${cleanOrderData.led.color ? ` (${cleanOrderData.led.color})` : ''}`,
+        value: `${cleanOrderData.led.name}${cleanOrderData.led.color ? ` (${cleanOrderData.led.color})` : ''}${cleanOrderData.led.bezelColor ? `\nBezel: ${cleanOrderData.led.bezelColor}` : ''}`,
         inline: true
       },
       {
