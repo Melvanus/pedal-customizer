@@ -909,7 +909,7 @@ export function ProductDetailModal({
                       display: "flex",
                       alignItems: "flex-start",
                       gap: "1rem",
-                      paddingBottom: idx < effectiveControls.length - 1 ? "0.5rem" : "0",
+                      paddingBottom: idx < effectiveControls.length - 1 ? "0.25rem" : "0",
                       borderBottom: idx < effectiveControls.length - 1 ? "1px solid #333" : "none",
                     }}
                   >

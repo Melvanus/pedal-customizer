@@ -151,7 +151,11 @@ export function EffectSelector({
           marginBottom: "1rem",
         }}
       >
-        <div>
+        <div
+          style={{
+            marginRight: "1.25rem",
+          }}
+        >
           <label
             data-section="search-label"
             style={{

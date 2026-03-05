@@ -1092,7 +1092,7 @@ export function PedalCustomizer({
                       ),
                     }] : []),
                     {
-                      title: "Funny Description",
+                      title: "Description",
                       content: (
                         <div
                           style={{

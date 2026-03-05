@@ -78,18 +78,413 @@
 - Engaging introduction to the customization process
 
 
+## High Priority Features 🔴
 
-### 6. **Save & Load Configurations**
+### 0. **Support for Knobs** 🎛️⭐
+**Problem:** Potentiometers currently have no visual representation beyond position markers. Users cannot select specific knob types, styles, or colors, which are important aesthetic and functional choices for guitar pedals.
+
+**Solution Overview:**
+Implement a comprehensive knob selection system allowing users to choose from various knob types (e.g., Davies 1900h clone, Chicken Head, Speed Knob, Boss-style, MXR-style) with multiple finish options (Glossy Black, Matte Black, Chrome, Gold, Brushed Aluminum, Cream, etc.). Each knob variant should be visualized in real-time on the enclosure preview.
+
+---
+
+#### **A) Data Structure & Management**
+
+**Knobs Data JSON Structure** (`data/knobs.json`):
+```json
+{
+  "knob_types": [
+    {
+      "id": "davies-1900h-clone",
+      "name": "Davies 1900h Clone",
+      "shortDescription": "Classic vintage-style knob with set screw",
+      "longDescription": "Authentic reproduction of the iconic Davies 1900h knob...",
+      "category": "vintage",
+      "diameter_mm": 19,
+      "height_mm": 15,
+      "shaft_type": "6.35mm (1/4 inch) knurled",
+      "set_screw": true,
+      "popularity": 95,
+      "vector_graphic": "davies-1900h.svg",
+      "color_variants": [
+        {
+          "id": "davies-1900h-black",
+          "color_name": "Glossy Black",
+          "finish": "glossy",
+          "hex_color": "#1a1a1a",
+          "sku": "KNOB-DAV-BLK-01",
+          "supplier": "Tayda",
+          "supplierPriceEUR": 0.45,
+          "customerPriceEUR": 1.20,
+          "stock_status": "in_stock"
+        },
+        {
+          "id": "davies-1900h-cream",
+          "color_name": "Vintage Cream",
+          "finish": "glossy",
+          "hex_color": "#f5f5dc",
+          "sku": "KNOB-DAV-CRM-01",
+          "supplier": "Tayda",
+          "supplierPriceEUR": 0.50,
+          "customerPriceEUR": 1.30,
+          "stock_status": "in_stock"
+        }
+      ]
+    },
+    {
+      "id": "chicken-head",
+      "name": "Chicken Head Pointer Knob",
+      "shortDescription": "Classic pointer knob with clear indicator",
+      "category": "vintage",
+      "diameter_mm": 25,
+      "height_mm": 18,
+      "shaft_type": "6.35mm (1/4 inch) split shaft",
+      "set_screw": false,
+      "popularity": 88,
+      "vector_graphic": "chicken-head.svg",
+      "color_variants": [...]
+    },
+    {
+      "id": "boss-style",
+      "name": "Boss-Style Knob",
+      "shortDescription": "Modern low-profile knob with rubber grip",
+      "category": "modern",
+      "diameter_mm": 16,
+      "height_mm": 12,
+      "shaft_type": "D-shaft 6mm",
+      "set_screw": false,
+      "popularity": 92,
+      "vector_graphic": "boss-style.svg",
+      "color_variants": [...]
+    }
+  ]
+}
+```
+
+**Key Data Fields:**
+- **Physical dimensions** (`diameter_mm`, `height_mm`) - Critical for collision detection
+- **Shaft compatibility** - Ensures knob fits the potentiometer shaft type
+- **Vector graphic reference** - Points to SVG file with color mask support
+- **Color variants array** - Each color can have different SKU, pricing, availability
+- **Category tags** - For filtering (vintage, modern, metal, plastic, extravagant, retro, etc.)
+
+---
+
+#### **B) UI/UX Integration**
+
+**Workflow Position:**
+Maybe add new tab **"Knobs"** between "Design/Labeling" and "LED" tabs
+- Revised workflow: Effect → Size → Paint/Finish → **Design/Labeling → Knobs** → LED → Other
+- Include knob selection in enclosure visualizer
+
+**Selection Interface:**
+
+**Option 1: Dedicated Knobs Tab** (Recommended)
+- Grid view of all knob types with preview images
+- Filter by category (Vintage, Modern, Metal Cap, Skirted, Pointer, etc.)
+- Search functionality
+- Sort by: Popularity, Price, Size, Name
+- Click knob type → Opens color/finish selector modal
+- Show all available colors as swatches with prices
+- Display diameter and shaft compatibility info
+- Maybe use some type of selection tree: “Knob Family → Size → Variant -> Color”
+
+**Option 2: Inline Selection in Visualizer** (Complementary)
+- Click any potentiometer in enclosure visualizer
+- Dropdown appears to select knob type and color
+- Quick selection without leaving summary page
+- Links to full knob catalog for browsing
+
+**Color/Finish Selection:**
+- Color swatches displayed as circles with actual finish (glossy, matte, metallic sheen)
+- Hover shows: Color name, finish type, price, SKU, availability
+- Click to select
+- Badge indicators: ⭐ Glossy, 🎨 Matte, ✨ Metallic, 🥇 Gold, 🥈 Chrome, 🪨 Textured
+
+**Multi-Potentiometer Handling:**
+- **Default behavior:** Select one knob type/color → Apply to ALL potentiometers
+- **Advanced option:** Toggle "Customize individual knobs" checkbox
+  - Enable per-potentiometer selection
+  - Visual indicator on enclosure showing which knobs differ
+  - Summary displays: "Main Knobs: 3x Davies Black, Bass Knob: 1x Davies Cream"
+
+---
+
+#### **C) Visualization in Enclosure Visualizer**
+
+**SVG Vector Graphics with Color Masking:**
+
+**Approach 1: SVG with CSS Color Variables** (Recommended)
+- Each knob type has one SVG file with layered structure:
+  ```svg
+  <svg>
+    <!-- Base shape (unchanging) -->
+    <g id="knob-base">
+      <circle cx="10" cy="10" r="9" fill="var(--knob-color)"/>
+    </g>
+    <!-- Highlight/shadow for glossy effect -->
+    <g id="knob-highlight" opacity="var(--knob-gloss)">
+      <ellipse fill="white" opacity="0.4"/>
+    </g>
+    <!-- Detail elements (indicator line, set screw) -->
+    <g id="knob-details">
+      <line stroke="#333" stroke-width="1.5"/>
+    </g>
+  </svg>
+  ```
+- Apply color dynamically via CSS custom properties:
+  ```css
+  .knob { 
+    --knob-color: #1a1a1a; 
+    --knob-gloss: 0.8; /* 0-1 for matte to glossy */
+  }
+  ```
+
+**Approach 2: SVG Filters for Metallic Finishes**
+- Use SVG `<filter>` elements for chrome/gold/brushed metal effects:
+  ```svg
+  <defs>
+    <linearGradient id="chrome-gradient">
+      <stop offset="0%" stop-color="#e8e8e8"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#c0c0c0"/>
+    </linearGradient>
+    <filter id="brushed-metal">
+      <feTurbulence baseFrequency="0.9" numOctaves="1"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+  ```
+
+**Rendering in EnclosureVisualizer Component:**
+- Load knob SVG as inline element or component
+- Position at each `potentiometer_position` coordinate
+- Scale based on `diameter_mm` relative to enclosure dimensions
+- Apply selected color via CSS variables or inline style
+- Render in correct z-order (behind labels, above enclosure surface)
+
+**Example Integration:**
+```tsx
+{layout.potentiometer_positions.map((pos, index) => {
+  const knob = selectedKnobs[index] || defaultKnob;
+  return (
+    <g key={index} transform={`translate(${pos.x}, ${pos.y})`}>
+      <KnobSVG 
+        type={knob.type}
+        color={knob.color}
+        diameter={knob.diameter_mm}
+        finish={knob.finish}
+      />
+    </g>
+  );
+})}
+```
+
+---
+
+#### **D) Collision Detection & Warnings**
+
+**Proximity Warning System:**
+- Calculate distance between all potentiometer centers
+- If `distance < (knob1_diameter/2 + knob2_diameter/2 + min_clearance)`, flag as potential collision
+- `min_clearance` = 2-3mm recommended for comfortable operation
+
+**Visual Indicators:**
+- **Warning level 1 (Tight fit):** Yellow outline on knobs that are close (0-2mm clearance)
+  - Message: "⚠️ Knobs are close together - consider smaller knobs or repositioning"
+- **Warning level 2 (Collision):** Red outline + pulsing animation
+  - Message: "❌ Knobs overlap! Select smaller knobs or adjust layout"
+- Show clearance measurement on hover between close knobs
+
+**Smart Suggestions:**
+- If collision detected, show "Suggested Alternatives" button
+- Display compatible smaller knob types that would fit
+- Example: "Try Boss-Style (16mm) or Mini Davies (13mm) instead"
+
+**Implementation in EnclosureVisualizer:**
+```tsx
+const detectKnobCollisions = (knobs, positions) => {
+  const warnings = [];
+  for (let i = 0; i < positions.length - 1; i++) {
+    for (let j = i + 1; j < positions.length; j++) {
+      const distance = calculateDistance(positions[i], positions[j]);
+      const required = (knobs[i].diameter + knobs[j].diameter) / 2 + 2; // 2mm clearance
+      if (distance < required) {
+        warnings.push({
+          knobs: [i, j],
+          severity: distance < (knobs[i].diameter + knobs[j].diameter) / 2 ? 'collision' : 'tight',
+          clearance: distance - (knobs[i].diameter + knobs[j].diameter) / 2
+        });
+      }
+    }
+  }
+  return warnings;
+};
+```
+
+---
+
+#### **E) Technical Implementation Details**
+
+**State Management:**
+```tsx
+type KnobSelection = {
+  knob_type_id: string;
+  color_variant_id: string;
+  diameter_mm: number;
+  price: number;
+};
+
+const [selectedKnobs, setSelectedKnobs] = useState<{[potIndex: number]: KnobSelection}>({
+  // Default: Same knob for all pots
+  default: {
+    knob_type_id: "davies-1900h-clone",
+    color_variant_id: "davies-1900h-black",
+    diameter_mm: 19,
+    price: 1.20
+  }
+});
+```
+
+**Price Calculation:**
+- Prices for all buttons should be always included to a ceratin degree
+- If the price of a button exceeds a certain limit, the difference should be applied
+- So if i choose a 5€ button, but only 2€ per button is included, an additional fee of 3€ should be applied
+
+```tsx
+const calculateKnobsCost = () => {
+  const potCount = layout.potentiometer_count;
+  const individualKnobs = Object.keys(selectedKnobs).filter(k => k !== 'default');
+  
+  if (individualKnobs.length === 0) {
+    // All knobs same type
+    return selectedKnobs.default.price * potCount;
+  } else {
+    // Mixed knob types
+    return individualKnobs.reduce((sum, key) => sum + selectedKnobs[key].price, 0);
+  }
+};
+```
+
+**SVG Asset Organization:**
+```
+public/
+  knobs/
+    davies-1900h.svg
+    chicken-head.svg
+    boss-style.svg
+    mxr-style.svg
+    speed-knob.svg
+    mini-davies.svg
+    ...
+```
+
+**Component Structure:**
+- `KnobSelector.tsx` - Main selection grid interface
+- `KnobColorPicker.tsx` - Color variant selector modal
+- `KnobVisualizer.tsx` - SVG rendering component with color application
+- `KnobCollisionDetector.tsx` - Warning system component
+
+---
+
+#### **F) Summary Page Integration**
+
+**Display in Configuration Summary:**
+```
+Selected Knobs:
+  [Icon] 4x Davies 1900h Clone - Glossy Black
+  Price: €4.80 (4 × €1.20)
+
+  [Edit Button] → Opens knob selector
+  [Customize Individual Knobs] → Enable per-pot selection
+```
+
+**If Individual Knobs Selected:**
+```
+Selected Knobs:
+  [Icon] Volume/Gain/Tone: 3x Davies 1900h - Black (€3.60)
+  [Icon] Master: 1x Chicken Head - Chrome (€1.80)
+  Total: €5.40
+
+  ⚠️ Warning: Volume and Gain knobs are very close (0.5mm clearance)
+```
+
+---
+
+#### **G) Implementation Phases**
+
+**Phase 1: Core Functionality** (Essential)
+- Create knobs JSON data structure
+- Build KnobSelector component (grid view, search, filter)
+- Implement basic color variant selection
+- Add knob visualization to EnclosureVisualizer (simple circles with colors)
+- Integrate pricing into summary
+
+**Phase 2: Visual Polish** (Important)
+- Create SVG vector graphics for each knob type with color masking
+- Implement proper rendering with finish effects (glossy, matte, metallic)
+- Add collision detection and warning system
+- Visual indicators in visualizer for tight fits
+
+**Phase 3: Advanced Features** (Nice to have)
+- Per-potentiometer individual knob selection
+- Smart knob recommendations based on enclosure size
+- 3D-style rendering with shadows and highlights
+- Knob rotation animation on hover
+- Export knob selections to order summary with per-item SKUs
+
+---
+
+#### **H) Data Examples & Knob Catalog**
+
+**Suggested Knob Types to Include:**
+- **Vintage:** Davies 1900h, Davies 1510, Chicken Head, Witch Hat
+- **Modern:** Boss-style, MXR-style, Mini knobs, Speed knobs
+- **Specialty:** Skirted knobs, Metal cap knobs, Soft-touch rubber, LED-illuminated knobs
+- **Sizes:** Mini (10-13mm), Standard (16-19mm), Large (22-28mm)
+
+**Color/Finish Combinations:**
+- **Plastics:** Black (glossy/matte), White, Cream, Red, Blue, Green, Transparent
+- **Metals:** Chrome, Gold, Brushed Aluminum, Copper, Black Oxide
+- **Special:** Glow-in-the-dark, Custom colors (higher price tier)
+
+---
+
+#### **I) Compatibility & Validation**
+
+**Shaft Type Validation:**
+- Warn if selected knob shaft type doesn't match potentiometer specification
+- Show compatible shaft adapters if mismatch detected
+- Example: "⚠️ This knob requires D-shaft, but standard pots use round shaft. Add shaft adapter? (+€0.30)"
+
+**Enclosure Size Constraints:**
+- For ultra-compact enclosures, automatically filter out knobs >20mm diameter
+- Show "Recommended for this enclosure" badge on appropriately-sized knobs
+
+**Multi-Gang Potentiometer Support:**
+- For concentric dual pots, ensure outer/inner knob compatibility
+- Suggest appropriate knob sizes (e.g., large outer + mini inner)
+
+---
+
+#### **Benefits**
+✅ Complete visual customization matching real-world builds  
+✅ Accurate pricing with per-variant SKU tracking  
+✅ Prevents physical incompatibilities (collision detection)  
+✅ Enhances enclosure preview realism  
+✅ Supports complex configurations (mixed knob types)  
+✅ Scalable data structure for adding new knob types  
+✅ Efficient SVG approach minimizes asset file count  
+
+---
+
+### 1. **Save & Load Configurations**
 **Problem:** Users can't save their work and come back to it
 **Solution:**
 - Save configurations to browser localStorage / download function
 - Load previously saved configurations
 - Option to Name/label saved configurations
 - Share configurations via URL parameters
-
-
-## High Priority Features 🔴
-
 
 ### 2. **Responsive Detail Cards & Information Density** 📱⭐
 **Problem:** Detail cards can exceed available screen space, especially on lower resolution devices, making navigation cumbersome and hiding important information
@@ -159,29 +554,6 @@
 2. **Phase 2:** Responsive breakpoints + collapsible sections
 3. **Phase 3:** Tabbed interface + data visualization
 4. **Future:** Bottom sheet design + advanced touch gestures
-
-### 3. **Effect-Specific Mods Integration** ⭐⭐⭐
-**Problem:** Current "Other" mods are generic; should be context-aware based on selected effect
-**Solution:**
-- **Mod Selection Within Effect Details:**
-  - Move compatible mods from "Other" tab into Effect detail modal
-  - Show only mods that work with selected effect circuit
-  - Mods listed with checkboxes in effect details view
-  - Each mod shows: name, description, price modifier, complexity impact
-- **Dynamic Size Recommendation:**
-  - Recalculate recommended enclosure size based on selected mods
-  - Example: "Tone Stack Mod" adds 2 potentiometers → recommend larger size
-  - Update "Best Fit" badge dynamically when mods are added/removed
-  - Show warning if mods make current size too small
-- **Mod Categories:**
-  - Circuit mods (clipping options, tone stacks, gain stages)
-  - Bypass mods (buffered, true bypass, soft switching)
-  - Control mods (expression pedal input, remote switching)
-- **Benefits:**
-  - Only show relevant mods for selected circuit
-  - Helps users understand what's possible with their chosen effect
-  - Automatic size adjustment prevents building errors
-  - Educational - users learn about circuit modifications
 
 
 ## Medium Priority Features 🟡

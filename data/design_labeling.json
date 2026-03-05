@@ -20,6 +20,20 @@
         "images": [
             "Labeled_Lettering.jpg",
             "Labeled_Lettering_2.jpg"
+        ],
+        "available_colors": 
+        [
+            {"black": [5, 5, 5]},
+            {"white": [255, 255, 255]},
+            {"green": [13, 135, 72]},
+            {"red": [221, 14, 14]},
+            {"blue": [1, 52, 158]},
+            {"yellow": [255, 176, 6]},
+            {"neon green": [72, 251, 63]},
+            {"orange": [255, 121, 6]},
+            {"hot pink": [253, 145, 204]},
+            {"watermelon pink": [251, 115, 138]},
+            {"bitter lemon": [234, 218, 36]}
         ]
     },
     {

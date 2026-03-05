@@ -3,10 +3,27 @@
 Highest Prio:
 
 
+
+- The current configuration should be always visualized in a smaller visualizer window (with less functions in the minimalized view compared to final overview in the summary view, expanding the toolset only when maximizing the window)
+- Active selection in layout editor
+- Info about the selected element
+- box select for layout editor
+- shift for adding elements to selection
+- when a group is selected the move functions should move the whole group
+- The layout editor should have a align feature, when things are moved around it should check if theres something next or over/under it so that it aligns when a certain delta is reached. when a group is selected a align tool for horizontal / vertical alignment should be shown.
+
+- Multiple types of preconfigurations before design:
+    - Raw: "Start from scratch"
+    - Simple (Polished / Painted / Labeled):
+    - Custom (Decal, Graphics, Relic, Fluffy):
+
+- Two types of knob layouts: standard / custom (when custom, knobs can be adjusted in their position)
+
+- For Labeled Lettering i want more color options for the label/tape. theres an array of objects in the Labeled Lettering object in the design_labeling.json file which has named color / rgb pairs that should be selectable in the  in the  maybe we need a better name also (embroided tape/label?) 
+
 - I want the search of the paint/finish tab to look the same as the one of the effect selector. it should also behave the same in the way that its also in the scroll region and moves 
 
-- The layout editor should have a align feature, when things are moved around it should check if theres something next or over/under it so that it aligns when a certain delta is reached.
-- Setting mod labels at the position the things they replace in detail modal and summary category
+- Setting mod labels at the position of the things they replace in detail modal and summary category
 
 Dont know if we should do that:
 - In the first window a default pedal is always selected. i want you to change it so that the default selection is a completly custom build with unknown pricing. here the user can put all the information regarding the used schematic or the original pedal etc himself, so that he can get a completly custom pedal.
@@ -15,7 +32,9 @@ High Prio:
 
 
 Mid Prio:
-
+- auto save/load system
+- new pedal button
+- naming system
 
 Low Prio:
 
@@ -41,5 +60,4 @@ Momentan funktionierts am besten auf nem Browser am Computer, Handy-Version ist 
 Gerne am Ende auch auf der letzten Seite nur zum Test auf "Submit Order" klicken, damit dass das dann auch bei mir ankommt und ich checken kann ob das richtig funktioniert.
 Falls irgendwas unklar ist oder nicht wie erwartet funktioniert, würd ich mich über eine Rückmeldung freuen.
 Gerne nehme ich auch Feedack an für Features die du dir sonst noch für sowas wünschen würdest.
-
-Kannst da auch sehr gerne das Pedal was du dir gewünscht hast so konfigurieren wie du willst, dann weiß ich in welche Richtung das ganze gehen soll. Solltest du in dem Fall am Ende Name, eMail und eventuelle  
+Kannst da auch sehr gerne das Pedal was du dir gewünscht hast so konfigurieren wie du willst, dann weiß ich in welche Richtung das ganze gehen soll. Solltest du in dem Fall am Ende Name, eMail und eventuelle zusätzliche Anmerkungen eingeben, damit ich weiß dass das ein echter Wunsch ist, und nicht nur ein Test. 
