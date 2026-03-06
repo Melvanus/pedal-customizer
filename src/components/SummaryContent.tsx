@@ -79,6 +79,7 @@ export function SummaryContent() {
   const [customerNotes, setCustomerNotes] = React.useState("");
   const [pedalName, setPedalName] = React.useState("");
   const [controlLabels, setControlLabels] = React.useState<Record<string, string>>({});
+  const [disabledLabels, setDisabledLabels] = React.useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [editingLedColor, setEditingLedColor] = React.useState(false);
   const [editingLedBezelColor, setEditingLedBezelColor] = React.useState(false);
@@ -363,12 +364,17 @@ export function SummaryContent() {
           });
         }
         
-        // Set default labels
+        // Set default labels and disable switches by default
+        const initialDisabled: Record<string, boolean> = {};
         controls.forEach((control: any) => {
           initialLabels[control.label] = control.label;
+          if (control.type === 'Switch') {
+            initialDisabled[control.label] = true;
+          }
         });
         
         setControlLabels(initialLabels);
+        setDisabledLabels(initialDisabled);
       }
       
       // Parse the old labelText format if it exists, or use effect pedal name as default
@@ -407,6 +413,7 @@ export function SummaryContent() {
       customerNotes,
       pedalName,
       controlLabels,
+      disabledLabels,
       submittedAt: new Date().toISOString(),
     };
 
@@ -446,6 +453,7 @@ export function SummaryContent() {
         customerNotes,
         pedalName,
         controlLabels,
+        disabledLabels,
         submittedAt: new Date().toISOString(),
       };
 
@@ -839,32 +847,49 @@ export function SummaryContent() {
                       Control Labels
                     </label>
                     <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                      {effectiveControls.map((control: any, idx: number) => (
-                        <div key={idx}>
-                          <label style={{ display: "block", marginBottom: "0.25rem", fontSize: "0.8rem", color: "#aaa" }}>
-                            {control.type} {idx + 1} - {control.label}
-                          </label>
-                          <input
-                            type="text"
-                            value={controlLabels[control.label] ?? control.label}
-                            onChange={(e) => setControlLabels(prev => ({ ...prev, [control.label]: e.target.value }))}
-                            placeholder={control.label}
-                            style={{ 
-                              width: "100%", 
-                              padding: "0.5rem", 
-                              background: "#0f0f0f", 
-                              border: "1px solid #2d2d2d", 
-                              borderRadius: "4px", 
-                              color: "#e0e0e0", 
-                              fontSize: "0.9rem", 
-                              boxSizing: "border-box" 
-                            }}
-                          />
-                        </div>
-                      ))}
+                      {effectiveControls.map((control: any, idx: number) => {
+                        const isDisabled = !!disabledLabels[control.label];
+                        return (
+                          <div key={idx} style={{ opacity: isDisabled ? 0.5 : 1, transition: 'opacity 0.2s' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.25rem" }}>
+                              <label style={{ fontSize: "0.8rem", color: "#aaa" }}>
+                                {control.type} - {control.label}
+                              </label>
+                              <label style={{ display: "flex", alignItems: "center", cursor: "pointer", userSelect: "none", gap: "0.35rem" }}>
+                                <span style={{ fontSize: "0.75rem", color: isDisabled ? "#666" : "#4ade80" }}>
+                                  {isDisabled ? "Hidden" : "Visible"}
+                                </span>
+                                <input
+                                  type="checkbox"
+                                  checked={!isDisabled}
+                                  onChange={(e) => setDisabledLabels(prev => ({ ...prev, [control.label]: !e.target.checked }))}
+                                  style={{ width: "16px", height: "16px", cursor: "pointer", accentColor: "#4ade80" }}
+                                />
+                              </label>
+                            </div>
+                            <input
+                              type="text"
+                              value={controlLabels[control.label] ?? control.label}
+                              onChange={(e) => setControlLabels(prev => ({ ...prev, [control.label]: e.target.value }))}
+                              placeholder={control.label}
+                              disabled={isDisabled}
+                              style={{ 
+                                width: "100%", 
+                                padding: "0.5rem", 
+                                background: isDisabled ? "#080808" : "#0f0f0f", 
+                                border: `1px solid ${isDisabled ? "#1a1a1a" : "#2d2d2d"}`, 
+                                borderRadius: "4px", 
+                                color: isDisabled ? "#555" : "#e0e0e0", 
+                                fontSize: "0.9rem", 
+                                boxSizing: "border-box" 
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                     <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.75rem", marginBottom: 0 }}>
-                      Customize the label for each control. The default value is the control&apos;s original name.
+                      Toggle visibility and customize the label for each control. Switches are hidden by default.
                     </p>
                   </div>
                 )}
@@ -1008,6 +1033,7 @@ export function SummaryContent() {
                   ledType={config.led?.name}
                   pedalName={showPedalNameInVisualizer ? pedalName : ""}
                   controlLabels={controlLabels}
+                  disabledLabels={disabledLabels}
                   controls={effectiveControls}
                   isMaximized={isVisualizerMaximized}
                   onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}

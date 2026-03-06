@@ -92,6 +92,7 @@ function createOrderDataStructure(orderData: any) {
     customization: {
       pedalName: orderData.pedalName || null,
       controlLabels: orderData.controlLabels || {},
+      disabledLabels: orderData.disabledLabels || {},
       showPedalNameOnEnclosure: orderData.showPedalNameInVisualizer !== false,
     },
     

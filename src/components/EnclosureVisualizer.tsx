@@ -42,6 +42,7 @@ type EnclosureVisualizerProps = {
   ledType?: string;
   pedalName?: string;
   controlLabels?: Record<string, string>;
+  disabledLabels?: Record<string, boolean>;
   controls?: Array<{ label: string; type: string }>;
   isMaximized?: boolean;
   onToggleMaximize?: () => void;
@@ -117,6 +118,7 @@ export function EnclosureVisualizer({
   ledType = "No Bezel",
   pedalName = "Custom Pedal",
   controlLabels = {},
+  disabledLabels = {},
   controls = [],
   isMaximized = false,
   onToggleMaximize,
@@ -817,7 +819,7 @@ export function EnclosureVisualizer({
             {/* Potentiometers */}
             {layout.potentiometer_positions.map((pos, idx) => {
               const control = controls.filter((c) => c.type === "Pot")[idx];
-              const label = control ? controlLabels[control.label] ?? control.label : `Pot ${idx + 1}`;
+              const label = control && !disabledLabels[control.label] ? (controlLabels[control.label] ?? control.label) : (control && disabledLabels[control.label] ? '' : `Pot ${idx + 1}`);
               const effectivePos = getPosition('potentiometer', idx, pos);
               const labelOffset = getLabelOffset('potentiometer', idx, pos.label_offset);
               
@@ -967,7 +969,7 @@ export function EnclosureVisualizer({
             {/* Switches */}
             {layout.switch_positions.map((pos, idx) => {
               const control = controls.filter((c) => c.type === "Switch" && c.label !== "Bypass")[idx];
-              const label = control ? controlLabels[control.label] ?? control.label : `SW ${idx + 1}`;
+              const label = control && !disabledLabels[control.label] ? (controlLabels[control.label] ?? control.label) : (control && disabledLabels[control.label] ? '' : `SW ${idx + 1}`);
               const effectivePos = getPosition('switch', idx, pos);
               const labelOffset = getLabelOffset('switch', idx, pos.label_offset);
               
@@ -1132,7 +1134,7 @@ export function EnclosureVisualizer({
               
               return layout.fader_positions?.map((pos, idx) => {
                 const control = controls.filter((c) => c.type === "Fader")[idx];
-                const label = control ? controlLabels[control.label] ?? control.label : `Fader ${idx + 1}`;
+                const label = control && !disabledLabels[control.label] ? (controlLabels[control.label] ?? control.label) : (control && disabledLabels[control.label] ? '' : `Fader ${idx + 1}`);
                 const effectivePos = getPosition('fader', idx, pos);
                 const labelOffset = getLabelOffset('fader', idx, pos.label_offset);
                 
@@ -1416,7 +1418,12 @@ export function EnclosureVisualizer({
             {/* Footswitch - support both single and multiple footswitches */}
             {(() => {
               const footswitchPositions = layout.footswitch_positions || (layout.footswitch_position ? [layout.footswitch_position] : []);
-              return footswitchPositions.map((fsPos, index) => (
+              const bypassControls = controls.filter((c) => c.type === "Switch" && c.label === "Bypass");
+              return footswitchPositions.map((fsPos, index) => {
+                const control = bypassControls[index];
+                const label = control && !disabledLabels[control.label] ? (controlLabels[control.label] ?? control.label) : '';
+                const fsPosition = getPosition('footswitch', index, fsPos);
+                return (
                 <g 
                   key={`footswitch-${index}`}
                   onMouseDown={handleMouseDown('footswitch', index)}
@@ -1426,16 +1433,16 @@ export function EnclosureVisualizer({
                     <>
                       {/* Blurred colored ring behind footswitch */}
                       <circle
-                        cx={getPosition('footswitch', index, fsPos).x}
-                        cy={getPosition('footswitch', index, fsPos).y}
+                        cx={fsPosition.x}
+                        cy={fsPosition.y}
                         r="12"
                         fill={ledColor}
                         opacity="0.6"
                         filter="url(#led-glow)"
                       />
                       <circle
-                        cx={getPosition('footswitch', index, fsPos).x}
-                        cy={getPosition('footswitch', index, fsPos).y}
+                        cx={fsPosition.x}
+                        cy={fsPosition.y}
                         r="10"
                         fill={ledColor}
                         opacity="0.4"
@@ -1444,23 +1451,53 @@ export function EnclosureVisualizer({
                     </>
                   )}
                   <circle
-                    cx={getPosition('footswitch', index, fsPos).x}
-                    cy={getPosition('footswitch', index, fsPos).y}
+                    cx={fsPosition.x}
+                    cy={fsPosition.y}
                     r="9"
                     fill="url(#footswitch-grad)"
                     stroke="#0a0a0a"
                     strokeWidth="0.5"
                   />
                   <circle
-                    cx={getPosition('footswitch', index, fsPos).x}
-                    cy={getPosition('footswitch', index, fsPos).y}
+                    cx={fsPosition.x}
+                    cy={fsPosition.y}
                     r="6"
                     fill="#2a2a2a"
                     stroke="#1a1a1a"
                     strokeWidth="0.3"
                   />
+                  {/* Footswitch label */}
+                  {label && (
+                    <>
+                      {labeledLettering && (
+                        <rect
+                          x={fsPosition.x - (label.length * 2) - 1.2}
+                          y={fsPosition.y + 11}
+                          width={(label.length * 4) + 2.4}
+                          height="9"
+                          fill={effectiveLabelBg}
+                          rx="0.5"
+                        />
+                      )}
+                      <text
+                        x={fsPosition.x}
+                        y={fsPosition.y + 17}
+                        textAnchor="middle"
+                        style={{
+                          fontSize: labeledLettering ? "8px" : "3px",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+                          fontWeight: 600,
+                          fill: labeledLettering ? labelTextColor : textColor,
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {label}
+                      </text>
+                    </>
+                  )}
                 </g>
-              ));
+                );
+              });
             })()}
           </g>
         </svg>
