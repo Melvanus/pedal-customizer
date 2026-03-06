@@ -716,14 +716,14 @@ export function EnclosureVisualizer({
                       value={editingLabel.value}
                       onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
                       onBlur={() => {
-                        if (editingLabel.value.trim() !== '' && onPedalNameChange) {
+                        if (onPedalNameChange) {
                           onPedalNameChange(editingLabel.value.trim());
                         }
                         setEditingLabel(null);
                       }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          if (editingLabel.value.trim() !== '' && onPedalNameChange) {
+                          if (onPedalNameChange) {
                             onPedalNameChange(editingLabel.value.trim());
                           }
                           setEditingLabel(null);
@@ -753,7 +753,7 @@ export function EnclosureVisualizer({
                   </foreignObject>
                 ) : (
                   <>
-                    {labeledLettering && pedalName && (
+                    {labeledLettering && !!pedalName && (
                       <rect
                         x={getPosition('pedalName', 0, layout.pedal_name_position).x - (pedalName.length * 2.25) - 1.35}
                         y={getPosition('pedalName', 0, layout.pedal_name_position).y - 5.75}
@@ -763,29 +763,52 @@ export function EnclosureVisualizer({
                         rx="0.5"
                       />
                     )}
-                    <text
-                      x={getPosition('pedalName', 0, layout.pedal_name_position).x}
-                      y={getPosition('pedalName', 0, layout.pedal_name_position).y - 1.25}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      style={{
-                        fontSize: "6px",
-                        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-                        fontWeight: "bold",
-                        fill: labeledLettering ? labelTextColor : textColor,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                        pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
-                        cursor: isEditLabelsMode ? 'pointer' : 'default',
-                      }}
-                      onClick={() => {
-                        if (isEditLabelsMode) {
-                          setEditingLabel({ type: 'pedalName', index: 0, value: pedalName });
-                        }
-                      }}
-                    >
-                      {pedalName}
-                    </text>
+                    {pedalName ? (
+                      <text
+                        x={getPosition('pedalName', 0, layout.pedal_name_position).x}
+                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 1.25}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        style={{
+                          fontSize: "6px",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+                          fontWeight: "bold",
+                          fill: labeledLettering ? labelTextColor : textColor,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
+                          cursor: isEditLabelsMode ? 'pointer' : 'default',
+                        }}
+                        onClick={() => {
+                          if (isEditLabelsMode) {
+                            setEditingLabel({ type: 'pedalName', index: 0, value: pedalName });
+                          }
+                        }}
+                      >
+                        {pedalName}
+                      </text>
+                    ) : isEditLabelsMode ? (
+                      <text
+                        x={getPosition('pedalName', 0, layout.pedal_name_position).x}
+                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 1.25}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        style={{
+                          fontSize: "6px",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+                          fontWeight: "bold",
+                          fill: "#555",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          pointerEvents: 'auto',
+                          cursor: 'pointer',
+                          fontStyle: 'italic',
+                        }}
+                        onClick={() => setEditingLabel({ type: 'pedalName', index: 0, value: '' })}
+                      >
+                        Click to add name
+                      </text>
+                    ) : null}
                   </>
                 )}
               </g>
@@ -794,7 +817,7 @@ export function EnclosureVisualizer({
             {/* Potentiometers */}
             {layout.potentiometer_positions.map((pos, idx) => {
               const control = controls.filter((c) => c.type === "Pot")[idx];
-              const label = control ? controlLabels[control.label] || control.label : `Pot ${idx + 1}`;
+              const label = control ? controlLabels[control.label] ?? control.label : `Pot ${idx + 1}`;
               const effectivePos = getPosition('potentiometer', idx, pos);
               const labelOffset = getLabelOffset('potentiometer', idx, pos.label_offset);
               
@@ -829,14 +852,14 @@ export function EnclosureVisualizer({
                           value={editingLabel.value}
                           onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
                           onBlur={() => {
-                            if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                            if (onLabelChange && control) {
                               onLabelChange(control.label, editingLabel.value.trim());
                             }
                             setEditingLabel(null);
                           }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                              if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                              if (onLabelChange && control) {
                                 onLabelChange(control.label, editingLabel.value.trim());
                               }
                               setEditingLabel(null);
@@ -866,7 +889,7 @@ export function EnclosureVisualizer({
                         />
                       </foreignObject>
                     </>
-                  ) : (
+                  ) : label ? (
                     <>
                       {labeledLettering && (
                         <rect
@@ -906,7 +929,23 @@ export function EnclosureVisualizer({
                         {label}
                       </text>
                     </>
-                  )}
+                  ) : isEditLabelsMode && control ? (
+                    <text
+                      x={effectivePos.x + labelOffset.x}
+                      y={effectivePos.y - labelOffset.y}
+                      textAnchor="middle"
+                      style={{
+                        fontSize: "3.5px",
+                        fill: "#555",
+                        fontStyle: 'italic',
+                        pointerEvents: 'auto',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => setEditingLabel({ type: 'potentiometer', index: idx, value: '' })}
+                    >
+                      +
+                    </text>
+                  ) : null}
                   {/* Knob shadow */}
                   <circle cx={effectivePos.x} cy={effectivePos.y + 0.75} r="8.25" fill="#000" opacity="0.3" />
                   {/* Knob body */}
@@ -928,7 +967,7 @@ export function EnclosureVisualizer({
             {/* Switches */}
             {layout.switch_positions.map((pos, idx) => {
               const control = controls.filter((c) => c.type === "Switch" && c.label !== "Bypass")[idx];
-              const label = control ? controlLabels[control.label] || control.label : `SW ${idx + 1}`;
+              const label = control ? controlLabels[control.label] ?? control.label : `SW ${idx + 1}`;
               const effectivePos = getPosition('switch', idx, pos);
               const labelOffset = getLabelOffset('switch', idx, pos.label_offset);
               
@@ -985,14 +1024,14 @@ export function EnclosureVisualizer({
                           value={editingLabel.value}
                           onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
                           onBlur={() => {
-                            if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                            if (onLabelChange && control) {
                               onLabelChange(control.label, editingLabel.value.trim());
                             }
                             setEditingLabel(null);
                           }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                              if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                              if (onLabelChange && control) {
                                 onLabelChange(control.label, editingLabel.value.trim());
                               }
                               setEditingLabel(null);
@@ -1022,7 +1061,7 @@ export function EnclosureVisualizer({
                         />
                       </foreignObject>
                     </>
-                  ) : (
+                  ) : label ? (
                     <>
                       {labeledLettering && (
                         <rect
@@ -1062,7 +1101,23 @@ export function EnclosureVisualizer({
                         {label}
                       </text>
                     </>
-                  )}
+                  ) : isEditLabelsMode && control ? (
+                    <text
+                      x={effectivePos.x + labelOffset.x}
+                      y={effectivePos.y - labelOffset.y}
+                      textAnchor="middle"
+                      style={{
+                        fontSize: "3px",
+                        fill: "#555",
+                        fontStyle: 'italic',
+                        pointerEvents: 'auto',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => setEditingLabel({ type: 'switch', index: idx, value: '' })}
+                    >
+                      +
+                    </text>
+                  ) : null}
                 </g>
               );
             })}
@@ -1077,7 +1132,7 @@ export function EnclosureVisualizer({
               
               return layout.fader_positions?.map((pos, idx) => {
                 const control = controls.filter((c) => c.type === "Fader")[idx];
-                const label = control ? controlLabels[control.label] || control.label : `Fader ${idx + 1}`;
+                const label = control ? controlLabels[control.label] ?? control.label : `Fader ${idx + 1}`;
                 const effectivePos = getPosition('fader', idx, pos);
                 const labelOffset = getLabelOffset('fader', idx, pos.label_offset);
                 
@@ -1137,14 +1192,14 @@ export function EnclosureVisualizer({
                           value={editingLabel.value}
                           onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
                           onBlur={() => {
-                            if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                            if (onLabelChange && control) {
                               onLabelChange(control.label, editingLabel.value.trim());
                             }
                             setEditingLabel(null);
                           }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                              if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                              if (onLabelChange && control) {
                                 onLabelChange(control.label, editingLabel.value.trim());
                               }
                               setEditingLabel(null);
@@ -1174,7 +1229,7 @@ export function EnclosureVisualizer({
                         />
                       </foreignObject>
                     </>
-                  ) : (
+                  ) : label ? (
                     <>
                       {labeledLettering && (
                         <rect
@@ -1214,7 +1269,23 @@ export function EnclosureVisualizer({
                         {label}
                       </text>
                     </>
-                  )}
+                  ) : isEditLabelsMode && control ? (
+                    <text
+                      x={effectivePos.x + labelOffset.x}
+                      y={effectivePos.y - labelOffset.y}
+                      textAnchor="middle"
+                      style={{
+                        fontSize: "3.5px",
+                        fill: "#555",
+                        fontStyle: 'italic',
+                        pointerEvents: 'auto',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => setEditingLabel({ type: 'fader', index: idx, value: '' })}
+                    >
+                      +
+                    </text>
+                  ) : null}
                 </g>
               );
               }) || [];

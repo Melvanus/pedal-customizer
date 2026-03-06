@@ -846,7 +846,7 @@ export function SummaryContent() {
                           </label>
                           <input
                             type="text"
-                            value={controlLabels[control.label] || control.label}
+                            value={controlLabels[control.label] ?? control.label}
                             onChange={(e) => setControlLabels(prev => ({ ...prev, [control.label]: e.target.value }))}
                             placeholder={control.label}
                             style={{ 
@@ -1006,7 +1006,7 @@ export function SummaryContent() {
                   finishType={finishType}
                   ledColor={config.ledColor || "#ff0000"}
                   ledType={config.led?.name}
-                  pedalName={showPedalNameInVisualizer ? (pedalName || "Custom Pedal") : ""}
+                  pedalName={showPedalNameInVisualizer ? pedalName : ""}
                   controlLabels={controlLabels}
                   controls={effectiveControls}
                   isMaximized={isVisualizerMaximized}
