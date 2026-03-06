@@ -23,17 +23,17 @@
         ],
         "available_colors": 
         [
-            {"black": [5, 5, 5]},
-            {"white": [255, 255, 255]},
-            {"green": [13, 135, 72]},
-            {"red": [221, 14, 14]},
-            {"blue": [1, 52, 158]},
-            {"yellow": [255, 176, 6]},
-            {"neon green": [72, 251, 63]},
-            {"orange": [255, 121, 6]},
-            {"hot pink": [253, 145, 204]},
-            {"watermelon pink": [251, 115, 138]},
-            {"bitter lemon": [234, 218, 36]}
+            {"black": "#050505"},
+            {"white": "#ffffff"},
+            {"green": "#0d8748"},
+            {"red": "#dd0e0e"},
+            {"blue": "#01349e"},
+            {"yellow": "#ffb006"},
+            {"neon green": "#48fb3f"},
+            {"orange": "#ff7906"},
+            {"hot pink": "#fd91cc"},
+            {"watermelon pink": "#fb738a"},
+            {"bitter lemon": "#eada24"}
         ]
     },
     {

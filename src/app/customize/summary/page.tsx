@@ -736,34 +736,7 @@ export default function SummaryPage() {
 
             {/* Design/Labeling */}
             {config.design && (
-              <div style={{ position: "relative" }}>
-                {config.design.available_colors && config.design.available_colors.length > 0 && (
-                  <button
-                    onClick={handleEditLabelColor}
-                    style={{
-                      position: "absolute",
-                      top: "1rem",
-                      right: "1rem",
-                      background: "#2d2d2d",
-                      color: "#fff",
-                      border: "1px solid #666",
-                      borderRadius: "5px",
-                      padding: "0.5rem 1rem",
-                      cursor: "pointer",
-                      fontSize: "0.85rem",
-                      transition: "all 0.2s ease",
-                      zIndex: 10,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#3d3d3d";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "#2d2d2d";
-                    }}
-                  >
-                    🏷️ Edit Tape Color
-                  </button>
-                )}
+              <div>
                 <ConfigSection
                   title="Design & Labeling"
                   name={config.design.name}
@@ -787,6 +760,24 @@ export default function SummaryPage() {
                                 border: "1px solid #666",
                               }} />
                               <span>{found.displayName}</span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditLabelColor();
+                                }}
+                                style={{
+                                  background: "transparent",
+                                  color: "#999",
+                                  border: "1px solid #666",
+                                  borderRadius: "3px",
+                                  padding: "0.25rem 0.5rem",
+                                  cursor: "pointer",
+                                  fontSize: "0.75rem",
+                                  marginLeft: "0.5rem"
+                                }}
+                              >
+                                ✏️
+                              </button>
                             </div>
                           ) as any
                         });
