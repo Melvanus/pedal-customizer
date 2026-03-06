@@ -48,6 +48,7 @@ type EnclosureVisualizerProps = {
   onLabelChange?: (controlLabel: string, newValue: string) => void;
   onPedalNameChange?: (newValue: string) => void;
   labeledLettering?: boolean;
+  labelColor?: string;
 };
 
 const getFinishPattern = (finishType: string | undefined, color: string) => {
@@ -122,6 +123,7 @@ export function EnclosureVisualizer({
   onLabelChange,
   onPedalNameChange,
   labeledLettering = false,
+  labelColor,
 }: EnclosureVisualizerProps) {
   console.log('🎲 [Randomize] EnclosureVisualizer rendering, layout ID:', layout.id);
   
@@ -132,6 +134,10 @@ export function EnclosureVisualizer({
   
   // Calculate text color based on enclosure color
   const textColor = getContrastingTextColor(enclosureColor);
+  
+  // Calculate label tape colors
+  const effectiveLabelBg = labelColor || "#000";
+  const labelTextColor = getContrastingTextColor(effectiveLabelBg);
   
   // Edit mode state
   const [isEditMode, setIsEditMode] = React.useState(false);
@@ -753,7 +759,7 @@ export function EnclosureVisualizer({
                         y={getPosition('pedalName', 0, layout.pedal_name_position).y - 6.5}
                         width={(pedalName.length * 4.5) + 2.7}
                         height="10.5"
-                        fill="#000"
+                        fill={effectiveLabelBg}
                         rx="0.5"
                       />
                     )}
@@ -766,7 +772,7 @@ export function EnclosureVisualizer({
                         fontSize: "6px",
                         fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                         fontWeight: "bold",
-                        fill: labeledLettering ? "#fff" : textColor,
+                        fill: labeledLettering ? labelTextColor : textColor,
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
@@ -856,7 +862,7 @@ export function EnclosureVisualizer({
                           y={effectivePos.y - labelOffset.y - 8}
                           width={(label.length * 5) + 2.4}
                           height="10.5"
-                          fill="#000"
+                          fill={effectiveLabelBg}
                           rx="0.5"
                         />
                       )}
@@ -868,7 +874,7 @@ export function EnclosureVisualizer({
                           fontSize: labeledLettering ? "8px" : "3.5px",
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
-                          fill: labeledLettering ? "#fff" : textColor,
+                          fill: labeledLettering ? labelTextColor : textColor,
                           textTransform: "uppercase",
                           pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
                           cursor: isEditLabelsMode ? 'pointer' : (isEditMode ? 'move' : 'default'),
@@ -1000,7 +1006,7 @@ export function EnclosureVisualizer({
                           y={effectivePos.y - labelOffset.y - 7.5}
                           width={(label.length * 4) + 2.4}
                           height="10.5"
-                          fill="#000"
+                          fill={effectiveLabelBg}
                           rx="0.5"
                         />
                       )}
@@ -1012,7 +1018,7 @@ export function EnclosureVisualizer({
                           fontSize: labeledLettering ? "8px" : "3px",
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
-                          fill: labeledLettering ? "#fff" : textColor,
+                          fill: labeledLettering ? labelTextColor : textColor,
                           textTransform: "uppercase",
                           pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
                           cursor: isEditLabelsMode ? 'pointer' : (isEditMode ? 'move' : 'default'),
@@ -1140,7 +1146,7 @@ export function EnclosureVisualizer({
                           y={effectivePos.y - labelOffset.y - 8}
                           width={(label.length * 5) + 2.4}
                           height="10.5"
-                          fill="#000"
+                          fill={effectiveLabelBg}
                           rx="0.5"
                         />
                       )}
@@ -1152,7 +1158,7 @@ export function EnclosureVisualizer({
                           fontSize: labeledLettering ? "8px" : "3.5px",
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
                           fontWeight: 600,
-                          fill: labeledLettering ? "#fff" : textColor,
+                          fill: labeledLettering ? labelTextColor : textColor,
                           textTransform: "uppercase",
                           pointerEvents: isEditLabelsMode ? 'auto' : (isEditMode ? 'auto' : 'none'),
                           cursor: isEditLabelsMode ? 'pointer' : (isEditMode ? 'move' : 'default'),

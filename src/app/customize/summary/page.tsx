@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, AlertTriangle, Download, Mail } from "lucide-react";
 import { EnclosureVisualizer } from "@/components/EnclosureVisualizer";
 import { generateRandomLayout, type GeneratedLayout } from "@/lib/layoutGenerator";
+import { resolveColors, findColorByKey, getContrastingColor, type ColorEntry } from "@/lib/colorUtils";
 
 type SelectedModWithOptions = {
   mod: {
@@ -36,6 +37,7 @@ type ConfigData = {
   led: any;
   ledColor?: string;
   ledBezelColor?: string | null;
+  labelColor?: string | null;
   totalPrice: number;
 };
 
@@ -81,6 +83,8 @@ export default function SummaryPage() {
   const [editingLedColor, setEditingLedColor] = React.useState(false);
   const [editingLedBezelColor, setEditingLedBezelColor] = React.useState(false);
   const [editingPaintColor, setEditingPaintColor] = React.useState(false);
+  const [editingLabelColor, setEditingLabelColor] = React.useState(false);
+  const [tempLabelColor, setTempLabelColor] = React.useState<string | null>(null);
   const [tempLedColor, setTempLedColor] = React.useState("");
   const [tempLedBezelColor, setTempLedBezelColor] = React.useState<string | null>(null);
   const [tempCustomLedColor, setTempCustomLedColor] = React.useState("#ff0000");
@@ -319,6 +323,13 @@ export default function SummaryPage() {
     return config?.paint?.finish_info?.finish_type || "";
   }, [config?.paint]);
 
+  // Get label color hex (must be before early return)
+  const labelColorHex = React.useMemo(() => {
+    if (!config?.labelColor || !config?.design?.available_colors) return undefined;
+    const found = findColorByKey(config.design.available_colors, config.labelColor);
+    return found?.hex;
+  }, [config?.labelColor, config?.design]);
+
   React.useEffect(() => {
     // Load layouts data
     fetch("/api/data/layouts")
@@ -518,6 +529,21 @@ export default function SummaryPage() {
     }
   };
 
+  const handleEditLabelColor = () => {
+    if (config && config.design?.available_colors) {
+      setTempLabelColor(config.labelColor || null);
+      setEditingLabelColor(true);
+    }
+  };
+
+  const handleSaveLabelColor = () => {
+    if (config) {
+      setConfig({ ...config, labelColor: tempLabelColor });
+      sessionStorage.setItem("pedalConfiguration", JSON.stringify({ ...config, labelColor: tempLabelColor }));
+      setEditingLabelColor(false);
+    }
+  };
+
   return (
     <div data-section="summary-page" style={{ minHeight: "100vh", background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
       {/* Header */}
@@ -710,13 +736,66 @@ export default function SummaryPage() {
 
             {/* Design/Labeling */}
             {config.design && (
-              <ConfigSection
-                title="Design & Labeling"
-                name={config.design.name}
-                price={config.design.customer_price_eur}
-                shortDesc={config.design.short_description}
-                longDesc={config.design.long_description}
-              />
+              <div style={{ position: "relative" }}>
+                {config.design.available_colors && config.design.available_colors.length > 0 && (
+                  <button
+                    onClick={handleEditLabelColor}
+                    style={{
+                      position: "absolute",
+                      top: "1rem",
+                      right: "1rem",
+                      background: "#2d2d2d",
+                      color: "#fff",
+                      border: "1px solid #666",
+                      borderRadius: "5px",
+                      padding: "0.5rem 1rem",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      transition: "all 0.2s ease",
+                      zIndex: 10,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#3d3d3d";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "#2d2d2d";
+                    }}
+                  >
+                    🏷️ Edit Tape Color
+                  </button>
+                )}
+                <ConfigSection
+                  title="Design & Labeling"
+                  name={config.design.name}
+                  price={config.design.customer_price_eur}
+                  shortDesc={config.design.short_description}
+                  longDesc={config.design.long_description}
+                  details={(() => {
+                    const details: any[] = [];
+                    if (config.labelColor && config.design.available_colors) {
+                      const found = findColorByKey(config.design.available_colors, config.labelColor);
+                      if (found) {
+                        details.push({
+                          label: "Label Tape Color",
+                          value: (
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                              <div style={{
+                                width: "36px",
+                                height: "16px",
+                                borderRadius: "3px",
+                                background: found.hex,
+                                border: "1px solid #666",
+                              }} />
+                              <span>{found.displayName}</span>
+                            </div>
+                          ) as any
+                        });
+                      }
+                    }
+                    return details.length > 0 ? details : undefined;
+                  })()}
+                />
+              </div>
             )}
 
             {/* Custom Label Text - Only show if design is selected and not "No Labeling / No Design" */}
@@ -948,6 +1027,7 @@ export default function SummaryPage() {
                     setPedalName(newValue);
                   }}
                   labeledLettering={config.design?.name === "Labeled Lettering"}
+                  labelColor={labelColorHex}
                 />
               </div>
               );
@@ -1296,14 +1376,14 @@ export default function SummaryPage() {
                   marginBottom: "1.5rem",
                 }}
               >
-                {config.led.available_colors.map((color: string) => {
-                  const colorHex = getBezelColorHex(color);
-                  const isSelected = tempLedBezelColor === color;
+                {resolveColors(config.led.available_colors).map((resolved) => {
+                  const isSelected = tempLedBezelColor === resolved.key;
+                  const isClear = resolved.key === "clear";
 
                   return (
                     <div
-                      key={color}
-                      onClick={() => setTempLedBezelColor(color)}
+                      key={resolved.key}
+                      onClick={() => setTempLedBezelColor(resolved.key)}
                       style={{
                         background: "#0f0f0f",
                         borderRadius: "8px",
@@ -1319,15 +1399,15 @@ export default function SummaryPage() {
                           width: "40px",
                           height: "40px",
                           borderRadius: "50%",
-                          background: colorHex,
+                          background: resolved.hex,
                           margin: "0 auto 0.5rem",
-                          boxShadow: color !== "clear" ? `0 0 12px ${colorHex}` : "none",
+                          boxShadow: !isClear ? `0 0 12px ${resolved.hex}` : "none",
                           border: "1px solid #666",
-                          opacity: color === "clear" ? 0.3 : 1,
+                          opacity: isClear ? 0.3 : 1,
                         }}
                       />
                       <div style={{ fontSize: "0.8rem", color: "#e0e0e0", textTransform: "capitalize" }}>
-                        {color}
+                        {resolved.displayName}
                       </div>
                     </div>
                   );
@@ -1482,6 +1562,134 @@ export default function SummaryPage() {
                 </button>
                 <button
                   onClick={handleSavePaintColor}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#fff",
+                    color: "#000",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Label Tape Color Edit Modal */}
+        {editingLabelColor && config?.design?.available_colors && (
+          <div
+            onClick={() => setEditingLabelColor(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "#1a1a1a",
+                borderRadius: "15px",
+                padding: "2rem",
+                maxWidth: "600px",
+                width: "90%",
+                border: "2px solid #fff",
+                boxShadow: "0 10px 50px rgba(0,0,0,0.5)",
+              }}
+            >
+              <h2 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "#fff" }}>
+                🏷️ Select Label Tape Color
+              </h2>
+              <p style={{ fontSize: "0.9rem", color: "#999", marginBottom: "1.5rem" }}>
+                Choose the color of your embossed label tape — the little strips that identify your controls.
+              </p>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
+                  gap: "0.75rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                {resolveColors(config.design.available_colors).map((resolved) => {
+                  const isSelected = tempLabelColor === resolved.key;
+                  const textOnSwatch = getContrastingColor(resolved.hex);
+
+                  return (
+                    <div
+                      key={resolved.key}
+                      onClick={() => setTempLabelColor(resolved.key)}
+                      style={{
+                        background: "#0f0f0f",
+                        borderRadius: "8px",
+                        padding: "0.75rem",
+                        cursor: "pointer",
+                        border: isSelected ? "2px solid #fff" : "2px solid #333",
+                        transition: "all 0.2s ease",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "48px",
+                          height: "20px",
+                          borderRadius: "3px",
+                          background: resolved.hex,
+                          margin: "0 auto 0.5rem",
+                          border: "1px solid #555",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "5px",
+                          fontWeight: 700,
+                          color: textOnSwatch,
+                          letterSpacing: "0.5px",
+                          textTransform: "uppercase",
+                          fontFamily: "monospace",
+                        }}
+                      >
+                        LABEL
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#e0e0e0" }}>
+                        {resolved.displayName}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <button
+                  onClick={() => setEditingLabelColor(false)}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    background: "#2d2d2d",
+                    color: "#fff",
+                    border: "1px solid #666",
+                    borderRadius: "8px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveLabelColor}
                   style={{
                     flex: 1,
                     padding: "0.75rem",

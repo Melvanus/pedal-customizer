@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import { PedalCustomizer, type OptionItem, type PaintOption } from "@/components/pedal-customizer";
 import type { EffectPedal } from "@/components/EffectSelector";
 import type { EnclosureSize } from "@/components/EnclosureSizeSelector";
+import type { ColorEntry } from "@/lib/colorUtils";
 
 const toNumber = (price: string | number | undefined) => {
   if (typeof price === "number") return price;
@@ -23,6 +24,7 @@ type RawOption = {
   customer_price_eur: number;
   short_description?: string;
   long_description?: string;
+  available_colors?: ColorEntry[];
 };
 
 export default async function CustomizePage() {

@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { X, ArrowRight } from "lucide-react";
 import type { CompatibleMod } from "./EffectSelector";
+import { resolveColors, getContrastingColor, type ColorEntry, type ResolvedColor } from "@/lib/colorUtils";
 
 export type SelectedModWithOptions = {
   mod: CompatibleMod;
@@ -44,9 +45,13 @@ export type ProductModalData = {
   customLedColor?: string;
   onLedColorChange?: (color: string) => void;
   onCustomLedColorChange?: (color: string) => void;
-  availableBezelColors?: string[];
+  availableBezelColors?: ColorEntry[];
   selectedBezelColor?: string | null;
   onBezelColorChange?: (color: string) => void;
+  // Label tape color picker (for design options like Labeled Lettering)
+  availableLabelColors?: ColorEntry[];
+  selectedLabelColor?: string | null;
+  onLabelColorChange?: (colorKey: string) => void;
 };
 
 type ProductDetailModalProps = {
@@ -1159,41 +1164,30 @@ export function ProductDetailModal({
                 gap: "0.75rem",
                 marginBottom: "1rem"
               }}>
-                {product.availableBezelColors.map((color) => {
-                  const colorMap: Record<string, string> = {
-                    "red": "#ff0000",
-                    "blue": "#0066ff",
-                    "green": "#00ff00",
-                    "yellow": "#ffff00",
-                    "amber": "#ffbf00",
-                    "purple": "#bf00ff",
-                    "clear": "#ffffff",
-                  };
-                  
-                  const displayName = color.charAt(0).toUpperCase() + color.slice(1);
-                  const hexColor = colorMap[color.toLowerCase()] || "#888888";
+                {resolveColors(product.availableBezelColors).map((resolved) => {
+                  const isClear = resolved.key === "clear";
                   
                   return (
                     <div
-                      key={color}
-                      onClick={() => product.onBezelColorChange!(color)}
+                      key={resolved.key}
+                      onClick={() => product.onBezelColorChange!(resolved.key)}
                       style={{
                         background: "#0a0a0a",
                         borderRadius: "8px",
                         padding: "0.75rem",
                         cursor: "pointer",
-                        border: product.selectedBezelColor === color ? "2px solid #fff" : "2px solid #333",
-                        boxShadow: product.selectedBezelColor === color ? "0 3px 10px rgba(255, 255, 255, 0.2)" : "none",
+                        border: product.selectedBezelColor === resolved.key ? "2px solid #fff" : "2px solid #333",
+                        boxShadow: product.selectedBezelColor === resolved.key ? "0 3px 10px rgba(255, 255, 255, 0.2)" : "none",
                         transition: "all 0.2s ease",
                         textAlign: "center"
                       }}
                       onMouseEnter={(e) => {
-                        if (product.selectedBezelColor !== color) {
+                        if (product.selectedBezelColor !== resolved.key) {
                           e.currentTarget.style.borderColor = "#666";
                         }
                       }}
                       onMouseLeave={(e) => {
-                        if (product.selectedBezelColor !== color) {
+                        if (product.selectedBezelColor !== resolved.key) {
                           e.currentTarget.style.borderColor = "#333";
                         }
                       }}
@@ -1202,14 +1196,14 @@ export function ProductDetailModal({
                         width: "40px",
                         height: "40px",
                         borderRadius: "50%",
-                        background: hexColor,
+                        background: resolved.hex,
                         margin: "0 auto 0.5rem",
-                        boxShadow: color.toLowerCase() !== "clear" ? `0 0 15px ${hexColor}` : "none",
-                        border: color.toLowerCase() === "clear" ? "2px solid #666" : "none",
-                        opacity: color.toLowerCase() === "clear" ? 0.3 : 1,
+                        boxShadow: !isClear ? `0 0 15px ${resolved.hex}` : "none",
+                        border: isClear ? "2px solid #666" : "none",
+                        opacity: isClear ? 0.3 : 1,
                       }} />
-                      <div style={{ fontSize: "0.8rem", color: "#e0e0e0", fontWeight: product.selectedBezelColor === color ? 600 : 400 }}>
-                        {displayName}
+                      <div style={{ fontSize: "0.8rem", color: "#e0e0e0", fontWeight: product.selectedBezelColor === resolved.key ? 600 : 400 }}>
+                        {resolved.displayName}
                       </div>
                     </div>
                   );
@@ -1395,6 +1389,87 @@ export function ProductDetailModal({
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Label Tape Color Picker (for design options like Labeled Lettering) */}
+          {product.type === "design" && product.availableLabelColors && product.availableLabelColors.length > 0 && product.onLabelColorChange && (
+            <div data-section="label-tape-color-picker" style={{ marginBottom: "1.5rem" }}>
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                🏷️ Choose Label Tape Color
+              </h3>
+              <p style={{ fontSize: "0.85rem", color: "#999", marginBottom: "1rem" }}>
+                Pick the color of your embossed label tape strips — they&apos;ll wrap around your knob labels like a vintage label maker gone rogue.
+              </p>
+              
+              <div style={{ 
+                display: "grid", 
+                gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", 
+                gap: "0.75rem",
+                marginBottom: "1rem"
+              }}>
+                {resolveColors(product.availableLabelColors).map((resolved) => {
+                  const isSelected = product.selectedLabelColor === resolved.key;
+                  const textOnSwatch = getContrastingColor(resolved.hex);
+                  
+                  return (
+                    <div
+                      key={resolved.key}
+                      onClick={() => product.onLabelColorChange!(resolved.key)}
+                      style={{
+                        background: "#0a0a0a",
+                        borderRadius: "8px",
+                        padding: "0.75rem",
+                        cursor: "pointer",
+                        border: isSelected ? "2px solid #fff" : "2px solid #333",
+                        boxShadow: isSelected ? "0 3px 10px rgba(255, 255, 255, 0.2)" : "none",
+                        transition: "all 0.2s ease",
+                        textAlign: "center"
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.borderColor = "#666";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.borderColor = "#333";
+                        }
+                      }}
+                    >
+                      <div style={{
+                        width: "48px",
+                        height: "20px",
+                        borderRadius: "3px",
+                        background: resolved.hex,
+                        margin: "0 auto 0.5rem",
+                        border: "1px solid #555",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "5px",
+                        fontWeight: 700,
+                        color: textOnSwatch,
+                        letterSpacing: "0.5px",
+                        textTransform: "uppercase",
+                        fontFamily: "monospace",
+                      }}>
+                        LABEL
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#e0e0e0", fontWeight: isSelected ? 600 : 400 }}>
+                        {resolved.displayName}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 

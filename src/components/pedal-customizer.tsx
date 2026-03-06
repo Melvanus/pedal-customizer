@@ -12,6 +12,7 @@ import { LedSelector, type LedOption } from "./LedSelector";
 import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 import { IMAGE_CONFIG } from "@/lib/imageConfig";
+import { resolveColors, findColorByKey, type ColorEntry } from "@/lib/colorUtils";
 
 export type OptionItem = {
   id: string;
@@ -96,6 +97,7 @@ export function PedalCustomizer({
   const [selectedLedColor, setSelectedLedColor] = React.useState<string>("Red");
   const [customLedColor, setCustomLedColor] = React.useState<string>("#ff0000");
   const [selectedLedBezelColor, setSelectedLedBezelColor] = React.useState<string | null>(null);
+  const [selectedLabelColor, setSelectedLabelColor] = React.useState<string | null>(null);
   const [selectedEffectMods, setSelectedEffectMods] = React.useState<SelectedModWithOptions[]>([]);
   const [labelText, setLabelText] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -182,6 +184,11 @@ export function PedalCustomizer({
           setSelectedLedBezelColor(config.ledBezelColor);
         }
         
+        // Restore label color
+        if (config.labelColor !== undefined) {
+          setSelectedLabelColor(config.labelColor);
+        }
+        
         // Restore label text
         if (config.labelText) {
           setLabelText(config.labelText);
@@ -195,9 +202,9 @@ export function PedalCustomizer({
           const restoredLed = ledOptions.find(l => l.id === config.led?.id);
           if (restoredLed?.available_colors && restoredLed.available_colors.length > 0) {
             const restoredBezelColor = config.ledBezelColor;
-            // If no bezel color was saved, or it's invalid for this LED, set to first available
-            if (!restoredBezelColor || !restoredLed.available_colors.includes(restoredBezelColor)) {
-              setSelectedLedBezelColor(restoredLed.available_colors[0]);
+            const resolved = resolveColors(restoredLed.available_colors);
+            if (!restoredBezelColor || !resolved.some(c => c.key === restoredBezelColor)) {
+              setSelectedLedBezelColor(resolved[0].key);
             }
           }
         }, 100);
@@ -234,21 +241,40 @@ export function PedalCustomizer({
       // Only auto-set if not currently restoring from sessionStorage
       if (!isRestoringRef.current) {
         if (selectedLed.available_colors && selectedLed.available_colors.length > 0) {
-          // LED has color options
-          // Check if current selection is valid for this LED
-          if (!selectedLedBezelColor || !selectedLed.available_colors.includes(selectedLedBezelColor)) {
-            // Current selection is invalid or null - default to first color
-            setSelectedLedBezelColor(selectedLed.available_colors[0]);
+          const resolved = resolveColors(selectedLed.available_colors);
+          const isCurrentValid = selectedLedBezelColor && resolved.some(c => c.key === selectedLedBezelColor);
+          if (!isCurrentValid) {
+            setSelectedLedBezelColor(resolved[0].key);
           }
-          // else: current selection is valid, keep it
         } else {
-          // LED doesn't have color options - clear bezel color
           setSelectedLedBezelColor(null);
         }
       }
       prevLedIdRef.current = selectedLedId;
     }
   }, [selectedLedId, selectedLed, selectedLedBezelColor]);
+
+  // Auto-default label tape color when design changes
+  const prevDesignIdRef = React.useRef<string | null>(null);
+  React.useEffect(() => {
+    const designChanged = prevDesignIdRef.current !== selectedDesignId;
+    
+    if (selectedDesign && (designChanged || prevDesignIdRef.current === null)) {
+      if (!isRestoringRef.current) {
+        const designData = selectedDesign as DesignOption & { available_colors?: ColorEntry[] };
+        if (designData.available_colors && designData.available_colors.length > 0) {
+          const resolved = resolveColors(designData.available_colors);
+          const isCurrentValid = selectedLabelColor && resolved.some(c => c.key === selectedLabelColor);
+          if (!isCurrentValid) {
+            setSelectedLabelColor(resolved[0].key);
+          }
+        } else {
+          setSelectedLabelColor(null);
+        }
+      }
+      prevDesignIdRef.current = selectedDesignId;
+    }
+  }, [selectedDesignId, selectedDesign, selectedLabelColor]);
 
   // Measure configuration summary height and update padding
   React.useEffect(() => {
@@ -400,6 +426,7 @@ export function PedalCustomizer({
         led: ledOptionForSummary, // Use the directly captured LED option
         ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
         ledBezelColor: selectedLedBezelColor,
+        labelColor: selectedLabelColor,
         totalPrice,
       };
       
@@ -621,6 +648,7 @@ export function PedalCustomizer({
       led: selectedLed ?? null,
       ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
       ledBezelColor: selectedLedBezelColor,
+      labelColor: selectedLabelColor,
       totalPrice,
     };
     
@@ -1189,6 +1217,7 @@ export function PedalCustomizer({
               selectedDesignId={selectedDesignId}
               onSelectDesign={setSelectedDesignId}
               onShowDetails={(option) => {
+                const designData = option as DesignOption & { available_colors?: ColorEntry[] };
                 setModalProduct({
                   type: "design",
                   title: option.name,
@@ -1197,6 +1226,12 @@ export function PedalCustomizer({
                   images: option.images || [option.image],
                   description: option.long_description || option.short_description || option.description,
                   details: [],
+                  availableLabelColors: designData.available_colors,
+                  selectedLabelColor: selectedLabelColor,
+                  onLabelColorChange: (colorKey: string) => {
+                    setSelectedLabelColor(colorKey);
+                    setModalProduct((prev) => prev ? { ...prev, selectedLabelColor: colorKey } : null);
+                  },
                 });
               }}
               adminMode={adminMode}

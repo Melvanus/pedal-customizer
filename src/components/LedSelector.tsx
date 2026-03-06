@@ -3,6 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { IMAGE_CONFIG } from "@/lib/imageConfig";
+import type { ColorEntry } from "@/lib/colorUtils";
 
 export type LedOption = {
   id: string;
@@ -14,7 +15,7 @@ export type LedOption = {
   customer_price_eur: number;
   short_description?: string;
   long_description?: string;
-  available_colors?: string[];
+  available_colors?: ColorEntry[];
 };
 
 type LedSelectorProps = {
