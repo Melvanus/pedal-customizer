@@ -1129,7 +1129,7 @@ export function SummaryContent() {
                 }}
               >
                 <Mail size={18} />
-                {isSubmitting ? "Submitting..." : "Submit Order"}
+                {isSubmitting ? "Submitting..." : "Submit Build Request"}
               </button>
 
               <button
