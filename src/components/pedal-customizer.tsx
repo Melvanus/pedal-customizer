@@ -13,6 +13,8 @@ import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 import { IMAGE_CONFIG } from "@/lib/imageConfig";
 import { resolveColors, findColorByKey, type ColorEntry } from "@/lib/colorUtils";
+import { EnclosureVisualizer } from "./EnclosureVisualizer";
+import { generateRandomLayout } from "@/lib/layoutGenerator";
 
 export type OptionItem = {
   id: string;
@@ -116,6 +118,12 @@ export function PedalCustomizer({
   const [summaryHeight, setSummaryHeight] = React.useState(0);
   const summaryRef = React.useRef<HTMLDivElement>(null);
   const isRestoringRef = React.useRef<boolean>(false);
+
+  // Mini visualizer state
+  const [layoutsData, setLayoutsData] = React.useState<any[]>([]);
+  const [isVisualizerMaximized, setIsVisualizerMaximized] = React.useState(false);
+  const [selectedLayoutId, setSelectedLayoutId] = React.useState<string | null>(null);
+  const [randomLayoutKey, setRandomLayoutKey] = React.useState(0);
 
   const selectedEffect = effectPedals.find((item) => item.id === selectedEffectId);
   const selectedSize = enclosureSizes.find((item) => item.name === selectedEnclosureSizeId);
@@ -296,6 +304,151 @@ export function PedalCustomizer({
   React.useEffect(() => {
     setModalProduct(null);
   }, [activeTab]);
+
+  // Fetch layouts data for mini visualizer
+  React.useEffect(() => {
+    fetch("/api/data/layouts")
+      .then(res => res.json())
+      .then(data => setLayoutsData(data))
+      .catch(err => console.error("Failed to load layouts:", err));
+  }, []);
+
+  // Compute effective controls considering mods
+  const effectiveControls = React.useMemo(() => {
+    if (!selectedEffect?.controls) return [];
+    let controls = [...selectedEffect.controls];
+    if (selectedEffectMods && Array.isArray(selectedEffectMods)) {
+      selectedEffectMods.forEach(({ mod }: any) => {
+        if (mod.removes_controls && Array.isArray(mod.removes_controls)) {
+          controls = controls.filter((c: any) => !mod.removes_controls!.includes(c.label));
+        }
+        if (mod.adds_controls && Array.isArray(mod.adds_controls)) {
+          controls = [...controls, ...mod.adds_controls];
+        }
+      });
+    }
+    return controls;
+  }, [selectedEffect, selectedEffectMods]);
+
+  // Compute required footswitch/LED counts
+  const requiredCounts = React.useMemo(() => {
+    if (!selectedEffect) return { footswitches: 1, leds: 1 };
+    let footswitches = 1;
+    let leds = selectedEffect.technical_specs?.led_count || 1;
+    if (selectedEffectMods && Array.isArray(selectedEffectMods)) {
+      selectedEffectMods.forEach(({ mod }: any) => {
+        if (mod.adds_technical_specs) {
+          if (mod.adds_technical_specs.footswitches) footswitches += mod.adds_technical_specs.footswitches;
+          if (mod.adds_technical_specs.led_count) leds += mod.adds_technical_specs.led_count;
+        }
+      });
+    }
+    return { footswitches, leds };
+  }, [selectedEffect, selectedEffectMods]);
+
+  // Select appropriate layout based on current config
+  const previewLayout = React.useMemo(() => {
+    if (!selectedEffect || !selectedSize || layoutsData.length === 0) return null;
+    const enclosureType = selectedSize.name;
+    const potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
+    const switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
+    const faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
+    const { footswitches: requiredFootswitches, leds: requiredLeds } = requiredCounts;
+
+    const getLayoutCounts = (layout: any) => ({
+      footswitchCount: layout.footswitch_positions?.length || (layout.footswitch_position ? 1 : 0),
+      ledCount: layout.led_positions?.length || (layout.led_position ? 1 : 0),
+    });
+
+    if (randomLayoutKey > 0) {
+      return generateRandomLayout(enclosureType, potCount, switchCount, faderCount);
+    }
+
+    const matchingLayouts = layoutsData.filter((layout: any) => {
+      const { footswitchCount, ledCount } = getLayoutCounts(layout);
+      return layout.enclosure_type === enclosureType &&
+        layout.potentiometer_count === potCount &&
+        layout.switch_count === switchCount &&
+        layout.fader_count === faderCount &&
+        footswitchCount === requiredFootswitches &&
+        ledCount === requiredLeds;
+    });
+
+    if (selectedLayoutId) {
+      const userSelected = matchingLayouts.find((l: any) => l.id === selectedLayoutId);
+      if (userSelected) return userSelected;
+    }
+    if (matchingLayouts.length > 0) return matchingLayouts[0];
+
+    // Fallback: closest match
+    const fallback = layoutsData.find((layout: any) => {
+      const { footswitchCount, ledCount } = getLayoutCounts(layout);
+      return layout.enclosure_type === enclosureType &&
+        footswitchCount === requiredFootswitches &&
+        ledCount === requiredLeds;
+    }) || layoutsData.find((l: any) => l.enclosure_type === enclosureType);
+
+    if (fallback) return fallback;
+    return generateRandomLayout(enclosureType, potCount, switchCount, faderCount);
+  }, [selectedEffect, selectedSize, effectiveControls, layoutsData, selectedLayoutId, randomLayoutKey, requiredCounts]);
+
+  // Get all available layouts for current configuration
+  const previewAvailableLayouts = React.useMemo(() => {
+    if (!selectedEffect || !selectedSize || layoutsData.length === 0) return [];
+    const enclosureType = selectedSize.name;
+    const potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
+    const switchCount = effectiveControls.filter((c: any) => c.type === "Switch" && c.label !== "Bypass").length;
+    const faderCount = effectiveControls.filter((c: any) => c.type === "Fader").length;
+    const { footswitches: requiredFootswitches, leds: requiredLeds } = requiredCounts;
+    const getLayoutCounts = (layout: any) => ({
+      footswitchCount: layout.footswitch_positions?.length || (layout.footswitch_position ? 1 : 0),
+      ledCount: layout.led_positions?.length || (layout.led_position ? 1 : 0),
+    });
+    return layoutsData.filter((layout: any) => {
+      const { footswitchCount, ledCount } = getLayoutCounts(layout);
+      return layout.enclosure_type === enclosureType &&
+        layout.potentiometer_count === potCount &&
+        layout.switch_count === switchCount &&
+        layout.fader_count === faderCount &&
+        footswitchCount === requiredFootswitches &&
+        ledCount === requiredLeds;
+    });
+  }, [selectedEffect, selectedSize, effectiveControls, layoutsData, requiredCounts]);
+
+  // Compute paint color for preview
+  const previewPaintColor = React.useMemo(() => {
+    if (!selectedPaint) return "#808080";
+    if (selectedPaint.is_custom_color && customColor) return customColor;
+    if (selectedPaint.rgb) {
+      const rgb = selectedPaint.rgb;
+      if (rgb.startsWith('rgb(')) {
+        const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        if (match) {
+          const [, r, g, b] = match;
+          const toHex = (n: string) => parseInt(n).toString(16).padStart(2, '0');
+          return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+        }
+      }
+      return rgb;
+    }
+    return "#808080";
+  }, [selectedPaint, customColor]);
+
+  // Compute LED color for preview
+  const previewLedColor = React.useMemo(() => {
+    if (selectedLedColor === "Custom") return customLedColor;
+    const colorMap: Record<string, string> = { Red: "#ff0000", Blue: "#0066ff", Green: "#00ff00", Yellow: "#ffff00", White: "#ffffff", Amber: "#ffbf00", UV: "#8b00ff" };
+    return colorMap[selectedLedColor] || "#ff0000";
+  }, [selectedLedColor, customLedColor]);
+
+  // Compute label color hex for preview
+  const previewLabelColorHex = React.useMemo(() => {
+    if (!selectedLabelColor || !selectedDesign) return undefined;
+    const designData = selectedDesign as DesignOption & { available_colors?: ColorEntry[] };
+    if (!designData.available_colors) return undefined;
+    const found = findColorByKey(designData.available_colors, selectedLabelColor);
+    return found?.hex;
+  }, [selectedLabelColor, selectedDesign]);
 
   // Calculate mod costs
   const modsTotalPrice = React.useMemo(() => {
@@ -1465,6 +1618,33 @@ export function PedalCustomizer({
               </div>
             )}
             </>
+          )}
+
+          {/* Mini Enclosure Visualizer — visible after effect+size selected, on non-effect tabs */}
+          {activeTab !== "effect" && previewLayout && selectedEffect && selectedSize && (
+            <div style={{ marginTop: "1.5rem", borderTop: "1px solid #333", paddingTop: "1rem" }}>
+              <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                Layout Preview
+              </div>
+              <EnclosureVisualizer
+                key={`preview-${previewLayout.id}-${randomLayoutKey}`}
+                layout={previewLayout}
+                availableLayouts={previewAvailableLayouts}
+                onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
+                onRandomizeLayout={() => setRandomLayoutKey(prev => prev + 1)}
+                enclosureColor={previewPaintColor}
+                finishType={selectedPaint?.finish || ""}
+                ledColor={previewLedColor}
+                ledType={selectedLed?.name}
+                pedalName=""
+                controls={effectiveControls}
+                isMaximized={isVisualizerMaximized}
+                onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}
+                labeledLettering={selectedDesign?.name === "Labeled Lettering"}
+                labelColor={previewLabelColorHex}
+                compact={true}
+              />
+            </div>
           )}
 
           </div>

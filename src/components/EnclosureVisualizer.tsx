@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import * as React from "react";
-import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Move, Shuffle } from "lucide-react";
+import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Move, Shuffle, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, Magnet } from "lucide-react";
 
 type Position = {
   x: number;
@@ -50,6 +50,7 @@ type EnclosureVisualizerProps = {
   onPedalNameChange?: (newValue: string) => void;
   labeledLettering?: boolean;
   labelColor?: string;
+  compact?: boolean;
 };
 
 const getFinishPattern = (finishType: string | undefined, color: string) => {
@@ -126,6 +127,7 @@ export function EnclosureVisualizer({
   onPedalNameChange,
   labeledLettering = false,
   labelColor,
+  compact = false,
 }: EnclosureVisualizerProps) {
   console.log('ðŸŽ² [Randomize] EnclosureVisualizer rendering, layout ID:', layout.id);
   
@@ -149,6 +151,19 @@ export function EnclosureVisualizer({
   const [editingLabel, setEditingLabel] = React.useState<{ type: string; index: number; value: string } | null>(null);
   const [isDragging, setIsDragging] = React.useState(false);
   const [draggedItem, setDraggedItem] = React.useState<{ type: string; index: number } | null>(null);
+  
+  // Multi-select state
+  const [selectedItems, setSelectedItems] = React.useState<Set<string>>(new Set());
+  const [boxSelectStart, setBoxSelectStart] = React.useState<Position | null>(null);
+  const [boxSelectEnd, setBoxSelectEnd] = React.useState<Position | null>(null);
+  const [isBoxSelecting, setIsBoxSelecting] = React.useState(false);
+  const [snapEnabled, setSnapEnabled] = React.useState(true);
+  const [snapLines, setSnapLines] = React.useState<{ x?: number; y?: number }[]>([]);
+  const [dragStartPositions, setDragStartPositions] = React.useState<Map<string, Position>>(new Map());
+  const [dragAnchor, setDragAnchor] = React.useState<Position | null>(null);
+
+  // Helper to create an item key
+  const itemKey = (type: string, index: number) => `${type}-${index}`;
   
   // Position overrides for draggable items
   const [positionOverrides, setPositionOverrides] = React.useState<{
@@ -240,81 +255,312 @@ export function EnclosureVisualizer({
     const transformed = point.matrixTransform(ctm.inverse());
     return { x: transformed.x / scale, y: transformed.y / scale };
   };
-  
+
+  // Get data-space position for an item (not flipped for SVG)
+  const getDataPosition = (type: string, index: number): Position => {
+    const overrides = positionOverrides;
+    if (type === 'potentiometer' && overrides.potentiometers[index]) return overrides.potentiometers[index];
+    if (type === 'switch' && overrides.switches[index]) return overrides.switches[index];
+    if (type === 'fader' && overrides.faders[index]) return overrides.faders[index];
+    if (type === 'led' && overrides.leds[index]) return overrides.leds[index];
+    if (type === 'footswitch' && overrides.footswitches[index]) return overrides.footswitches[index];
+    if (type === 'pedalName' && overrides.pedalName) return overrides.pedalName;
+    // Default positions from layout (already in data space)
+    if (type === 'potentiometer') return layout.potentiometer_positions[index];
+    if (type === 'switch') return layout.switch_positions[index];
+    if (type === 'fader' && layout.fader_positions) return layout.fader_positions[index];
+    if (type === 'led') {
+      const leds = layout.led_positions || (layout.led_position ? [layout.led_position] : []);
+      return leds[index] || { x: 0, y: 0 };
+    }
+    if (type === 'footswitch') {
+      const fs = layout.footswitch_positions || (layout.footswitch_position ? [layout.footswitch_position] : []);
+      return fs[index] || { x: 0, y: 0 };
+    }
+    if (type === 'pedalName') return layout.pedal_name_position;
+    return { x: 0, y: 0 };
+  };
+
+  // Collect all item positions for snap alignment
+  const getAllItemPositions = (): { key: string; pos: Position }[] => {
+    const items: { key: string; pos: Position }[] = [];
+    layout.potentiometer_positions.forEach((_, idx) => items.push({ key: itemKey('potentiometer', idx), pos: getDataPosition('potentiometer', idx) }));
+    layout.switch_positions.forEach((_, idx) => items.push({ key: itemKey('switch', idx), pos: getDataPosition('switch', idx) }));
+    (layout.fader_positions || []).forEach((_, idx) => items.push({ key: itemKey('fader', idx), pos: getDataPosition('fader', idx) }));
+    const ledPositions = layout.led_positions || (layout.led_position ? [layout.led_position] : []);
+    ledPositions.forEach((_, idx) => items.push({ key: itemKey('led', idx), pos: getDataPosition('led', idx) }));
+    const fsPositions = layout.footswitch_positions || (layout.footswitch_position ? [layout.footswitch_position] : []);
+    fsPositions.forEach((_, idx) => items.push({ key: itemKey('footswitch', idx), pos: getDataPosition('footswitch', idx) }));
+    items.push({ key: itemKey('pedalName', 0), pos: getDataPosition('pedalName', 0) });
+    return items;
+  };
+
+  // Apply snap: check if position is near other items and snap if within threshold
+  const SNAP_THRESHOLD = 3; // mm
+  const applySnap = (pos: Position, movingKeys: Set<string>): { snapped: Position; lines: { x?: number; y?: number }[] } => {
+    if (!snapEnabled) return { snapped: pos, lines: [] };
+    const allItems = getAllItemPositions().filter(item => !movingKeys.has(item.key));
+    let snapX: number | undefined;
+    let snapY: number | undefined;
+    const lines: { x?: number; y?: number }[] = [];
+    for (const item of allItems) {
+      if (snapX === undefined && Math.abs(pos.x - item.pos.x) < SNAP_THRESHOLD) {
+        snapX = item.pos.x;
+        lines.push({ x: snapX });
+      }
+      if (snapY === undefined && Math.abs(pos.y - item.pos.y) < SNAP_THRESHOLD) {
+        snapY = item.pos.y;
+        lines.push({ y: snapY });
+      }
+      if (snapX !== undefined && snapY !== undefined) break;
+    }
+    return {
+      snapped: { x: snapX ?? pos.x, y: snapY ?? pos.y },
+      lines,
+    };
+  };
+
+  // Set a single item's position in overrides
+  const setItemPosition = (overrides: typeof positionOverrides, type: string, index: number, pos: Position): typeof positionOverrides => {
+    const newOverrides = { ...overrides };
+    if (type === 'potentiometer') { const arr = [...overrides.potentiometers]; arr[index] = pos; newOverrides.potentiometers = arr; }
+    else if (type === 'switch') { const arr = [...overrides.switches]; arr[index] = pos; newOverrides.switches = arr; }
+    else if (type === 'fader') { const arr = [...overrides.faders]; arr[index] = pos; newOverrides.faders = arr; }
+    else if (type === 'led') { const arr = [...overrides.leds]; arr[index] = pos; newOverrides.leds = arr; }
+    else if (type === 'footswitch') { const arr = [...overrides.footswitches]; arr[index] = pos; newOverrides.footswitches = arr; }
+    else if (type === 'pedalName') { newOverrides.pedalName = pos; }
+    return newOverrides;
+  };
+
   const handleMouseDown = (type: string, index: number) => (event: React.MouseEvent) => {
     if (!isEditMode) return;
     event.preventDefault();
     event.stopPropagation();
+    
+    const key = itemKey(type, index);
+    const shiftHeld = event.shiftKey;
+    
+    if (shiftHeld) {
+      // Toggle selection
+      setSelectedItems(prev => {
+        const next = new Set(prev);
+        if (next.has(key)) next.delete(key); else next.add(key);
+        return next;
+      });
+      return;
+    }
+    
+    // If clicking an unselected item without shift, select only it
+    if (!selectedItems.has(key)) {
+      setSelectedItems(new Set([key]));
+    }
+    
+    // Start drag — capture starting positions of all selected items (or just this one)
+    const itemsToMove = selectedItems.has(key) ? selectedItems : new Set([key]);
+    const startPositions = new Map<string, Position>();
+    itemsToMove.forEach(k => {
+      const [t, i] = k.split('-');
+      const idx = t === 'pedalName' ? 0 : parseInt(i);
+      startPositions.set(k, getDataPosition(t, idx));
+    });
+    
+    // Store SVG-space mouse position as anchor
+    const svgPos = getScaledMousePosition(event);
+    if (svgPos) {
+      setDragAnchor({ x: svgPos.x, y: -svgPos.y }); // Convert to data space
+    }
+    setDragStartPositions(startPositions);
     setIsDragging(true);
     setDraggedItem({ type, index });
   };
   
   const handleMouseMove = (event: MouseEvent) => {
+    if (isBoxSelecting) {
+      const pos = getScaledMousePosition(event);
+      if (pos) setBoxSelectEnd(pos);
+      return;
+    }
+    
     if (!isDragging || !draggedItem) return;
     
     const pos = getScaledMousePosition(event);
-    if (!pos) return;
+    if (!pos || !dragAnchor) return;
     
-    // Convert from SVG coordinates (+y=down) to data coordinates (+y=up)
+    // Convert to data space
     const dataPos = { x: pos.x, y: -pos.y };
+    const dx = dataPos.x - dragAnchor.x;
+    const dy = dataPos.y - dragAnchor.y;
+    
+    const itemsToMove = selectedItems.has(itemKey(draggedItem.type, draggedItem.index))
+      ? selectedItems
+      : new Set([itemKey(draggedItem.type, draggedItem.index)]);
+    
+    // For label-type drags, fall back to single-item logic
+    if (draggedItem.type.endsWith('-label')) {
+      setPositionOverrides(prev => {
+        const newOverrides = { ...prev };
+        const parentType = draggedItem.type.replace('-label', '');
+        let parentPos: Position;
+        if (parentType === 'potentiometer') parentPos = prev.potentiometers[draggedItem.index] || layout.potentiometer_positions[draggedItem.index];
+        else if (parentType === 'switch') parentPos = prev.switches[draggedItem.index] || layout.switch_positions[draggedItem.index];
+        else parentPos = prev.faders[draggedItem.index] || (layout.fader_positions || [])[draggedItem.index];
+        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
+        if (parentType === 'potentiometer') { const arr = [...prev.potentiometerLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.potentiometerLabelOffsets = arr; }
+        else if (parentType === 'switch') { const arr = [...prev.switchLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.switchLabelOffsets = arr; }
+        else { const arr = [...prev.faderLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.faderLabelOffsets = arr; }
+        return newOverrides;
+      });
+      return;
+    }
+    
+    // Apply snap based on the dragged item's new position
+    const draggedKey = itemKey(draggedItem.type, draggedItem.index);
+    const draggedStart = dragStartPositions.get(draggedKey) || getDataPosition(draggedItem.type, draggedItem.index);
+    const proposedPos = { x: draggedStart.x + dx, y: draggedStart.y + dy };
+    const { snapped, lines } = applySnap(proposedPos, itemsToMove);
+    setSnapLines(lines);
+    
+    // Calculate actual delta (with snap applied)
+    const snapDx = snapped.x - draggedStart.x;
+    const snapDy = snapped.y - draggedStart.y;
     
     setPositionOverrides(prev => {
-      const newOverrides = { ...prev };
-      
-      if (draggedItem.type === 'potentiometer') {
-        const newPots = [...prev.potentiometers];
-        newPots[draggedItem.index] = dataPos;
-        newOverrides.potentiometers = newPots;
-      } else if (draggedItem.type === 'switch') {
-        const newSwitches = [...prev.switches];
-        newSwitches[draggedItem.index] = dataPos;
-        newOverrides.switches = newSwitches;
-      } else if (draggedItem.type === 'fader') {
-        const newFaders = [...prev.faders];
-        newFaders[draggedItem.index] = dataPos;
-        newOverrides.faders = newFaders;
-      } else if (draggedItem.type === 'led') {
-        const newLEDs = [...prev.leds];
-        newLEDs[draggedItem.index] = dataPos;
-        newOverrides.leds = newLEDs;
-      } else if (draggedItem.type === 'footswitch') {
-        const newFootswitches = [...prev.footswitches];
-        newFootswitches[draggedItem.index] = dataPos;
-        newOverrides.footswitches = newFootswitches;
-      } else if (draggedItem.type === 'pedalName') {
-        newOverrides.pedalName = dataPos;
-      } else if (draggedItem.type === 'potentiometer-label') {
-        // Calculate offset relative to parent potentiometer position
-        const parentPos = prev.potentiometers[draggedItem.index] || layout.potentiometer_positions[draggedItem.index];
-        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
-        const newOffsets = [...prev.potentiometerLabelOffsets];
-        newOffsets[draggedItem.index] = offset;
-        newOverrides.potentiometerLabelOffsets = newOffsets;
-      } else if (draggedItem.type === 'switch-label') {
-        const parentPos = prev.switches[draggedItem.index] || layout.switch_positions[draggedItem.index];
-        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
-        const newOffsets = [...prev.switchLabelOffsets];
-        newOffsets[draggedItem.index] = offset;
-        newOverrides.switchLabelOffsets = newOffsets;
-      } else if (draggedItem.type === 'fader-label') {
-        const parentPos = prev.faders[draggedItem.index] || layout.fader_positions[draggedItem.index];
-        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
-        const newOffsets = [...prev.faderLabelOffsets];
-        newOffsets[draggedItem.index] = offset;
-        newOverrides.faderLabelOffsets = newOffsets;
-      }
-      
+      let newOverrides = { ...prev };
+      itemsToMove.forEach(key => {
+        const [type, indexStr] = key.split('-');
+        const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
+        const startPos = dragStartPositions.get(key) || getDataPosition(type, idx);
+        const newPos = { x: startPos.x + snapDx, y: startPos.y + snapDy };
+        newOverrides = setItemPosition(newOverrides, type, idx, newPos);
+      });
       return newOverrides;
     });
   };
   
   const handleMouseUp = () => {
+    if (isBoxSelecting) {
+      // Resolve box selection
+      if (boxSelectStart && boxSelectEnd) {
+        const x1 = Math.min(boxSelectStart.x, boxSelectEnd.x);
+        const x2 = Math.max(boxSelectStart.x, boxSelectEnd.x);
+        const y1 = Math.min(boxSelectStart.y, boxSelectEnd.y);
+        const y2 = Math.max(boxSelectStart.y, boxSelectEnd.y);
+        
+        const allItems = getAllItemPositions();
+        const newSelection = new Set<string>();
+        allItems.forEach(item => {
+          // Convert to SVG coords for comparison (flip y)
+          const svgY = -item.pos.y;
+          if (item.pos.x >= x1 && item.pos.x <= x2 && svgY >= y1 && svgY <= y2) {
+            newSelection.add(item.key);
+          }
+        });
+        setSelectedItems(newSelection);
+      }
+      setIsBoxSelecting(false);
+      setBoxSelectStart(null);
+      setBoxSelectEnd(null);
+      return;
+    }
     setIsDragging(false);
     setDraggedItem(null);
+    setDragAnchor(null);
+    setDragStartPositions(new Map());
+    setSnapLines([]);
   };
+
+  // SVG background click: start box select or clear selection
+  const handleSvgMouseDown = (event: React.MouseEvent) => {
+    if (!isEditMode) return;
+    // Only handle clicks on the SVG background (not on items)
+    if (event.target !== svgRef.current && (event.target as Element)?.tagName !== 'rect') return;
+    
+    const pos = getScaledMousePosition(event);
+    if (!pos) return;
+    
+    if (!event.shiftKey) {
+      setSelectedItems(new Set());
+    }
+    setIsBoxSelecting(true);
+    setBoxSelectStart(pos);
+    setBoxSelectEnd(pos);
+  };
+
+  // Alignment handlers
+  const handleAlignHorizontal = () => {
+    if (selectedItems.size < 2) return;
+    let sumX = 0;
+    let count = 0;
+    selectedItems.forEach(key => {
+      const [type, indexStr] = key.split('-');
+      const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
+      const pos = getDataPosition(type, idx);
+      sumX += pos.x;
+      count++;
+    });
+    const avgX = sumX / count;
+    setPositionOverrides(prev => {
+      let newOverrides = { ...prev };
+      selectedItems.forEach(key => {
+        const [type, indexStr] = key.split('-');
+        const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
+        const pos = getDataPosition(type, idx);
+        newOverrides = setItemPosition(newOverrides, type, idx, { x: avgX, y: pos.y });
+      });
+      return newOverrides;
+    });
+  };
+
+  const handleAlignVertical = () => {
+    if (selectedItems.size < 2) return;
+    let sumY = 0;
+    let count = 0;
+    selectedItems.forEach(key => {
+      const [type, indexStr] = key.split('-');
+      const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
+      const pos = getDataPosition(type, idx);
+      sumY += pos.y;
+      count++;
+    });
+    const avgY = sumY / count;
+    setPositionOverrides(prev => {
+      let newOverrides = { ...prev };
+      selectedItems.forEach(key => {
+        const [type, indexStr] = key.split('-');
+        const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
+        const pos = getDataPosition(type, idx);
+        newOverrides = setItemPosition(newOverrides, type, idx, { x: pos.x, y: avgY });
+      });
+      return newOverrides;
+    });
+  };
+
+  // Get info about the selected element(s)
+  const selectedItemInfo = React.useMemo(() => {
+    if (selectedItems.size === 0) return null;
+    if (selectedItems.size > 1) return { type: 'group', count: selectedItems.size };
+    const key = Array.from(selectedItems)[0];
+    const [type, indexStr] = key.split('-');
+    const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
+    const pos = getDataPosition(type, idx);
+    let name = type;
+    if (type === 'potentiometer') {
+      const control = controls.filter(c => c.type === 'Pot')[idx];
+      name = control ? control.label : `Pot ${idx + 1}`;
+    } else if (type === 'switch') {
+      const control = controls.filter(c => c.type === 'Switch' && c.label !== 'Bypass')[idx];
+      name = control ? control.label : `Switch ${idx + 1}`;
+    } else if (type === 'fader') {
+      const control = controls.filter(c => c.type === 'Fader')[idx];
+      name = control ? control.label : `Fader ${idx + 1}`;
+    } else if (type === 'led') name = `LED ${idx + 1}`;
+    else if (type === 'footswitch') name = `Footswitch ${idx + 1}`;
+    else if (type === 'pedalName') name = 'Pedal Name';
+    return { type, name, pos: { x: Math.round(pos.x * 10) / 10, y: Math.round(pos.y * 10) / 10 } };
+  }, [selectedItems, positionOverrides, controls]);
   
   React.useEffect(() => {
-    if (isDragging) {
+    if (isDragging || isBoxSelecting) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
       
@@ -323,7 +569,7 @@ export function EnclosureVisualizer({
         window.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, draggedItem]);
+  }, [isDragging, isBoxSelecting, draggedItem, dragAnchor, dragStartPositions, selectedItems, snapEnabled]);
   
   // Helper to get effective position (always uses override if exists)
   // Note: We flip y-coordinate for SVG rendering since our data uses +y=up but SVG uses +y=down
@@ -422,8 +668,9 @@ export function EnclosureVisualizer({
       )}
 
       {/* SVG Visualization with navigation */}
-      <div data-section="visualization-window" style={{ position: "relative", padding: isMaximized ? "2rem" : "1rem" }}>
-        {/* Floating action buttons */}
+      <div data-section="visualization-window" style={{ position: "relative", padding: isMaximized ? "2rem" : (compact ? "0.5rem" : "1rem") }}>
+        {/* Floating action buttons — compact mode only shows layout nav + maximize */}
+        {(!compact || isMaximized) && (
         <div 
           data-section="visualization-toolbar"
           style={{ 
@@ -436,7 +683,8 @@ export function EnclosureVisualizer({
             flexDirection: "row",
             justifyContent: "center",
             gap: "0.25rem", 
-            zIndex: 10 
+            zIndex: 10,
+            flexWrap: "wrap",
           }}>
           {onRandomizeLayout && (
             <button
@@ -467,7 +715,7 @@ export function EnclosureVisualizer({
             </button>
           )}
           <button
-            onClick={() => setIsEditMode(!isEditMode)}
+            onClick={() => { setIsEditMode(!isEditMode); if (isEditMode) { setSelectedItems(new Set()); setSnapLines([]); } }}
             style={{
               background: isEditMode ? "rgba(74, 222, 128, 0.2)" : "rgba(0, 0, 0, 0.7)",
               border: "1px solid " + (isEditMode ? "#4ade80" : "#666"),
@@ -521,7 +769,76 @@ export function EnclosureVisualizer({
             </svg>
             <span>Edit Labels</span>
           </button>
+          {/* Snap toggle — only visible in maximized edit mode */}
+          {isMaximized && isEditMode && (
+            <button
+              onClick={() => setSnapEnabled(!snapEnabled)}
+              style={{
+                background: snapEnabled ? "rgba(96, 165, 250, 0.2)" : "rgba(0, 0, 0, 0.7)",
+                border: "1px solid " + (snapEnabled ? "#60a5fa" : "#666"),
+                color: snapEnabled ? "#60a5fa" : "#fff",
+                cursor: "pointer",
+                padding: "0.25rem 0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                borderRadius: "6px",
+                fontSize: "0.8rem",
+                fontWeight: 500,
+              }}
+              title={snapEnabled ? "Snap alignment ON — click to disable" : "Snap alignment OFF — click to enable"}
+            >
+              <Magnet size={16} />
+              <span>Snap</span>
+            </button>
+          )}
+          {/* Alignment tools — only in maximized edit mode with multiple selected */}
+          {isMaximized && isEditMode && selectedItems.size >= 2 && (
+            <>
+              <button
+                onClick={handleAlignHorizontal}
+                style={{
+                  background: "rgba(0, 0, 0, 0.7)",
+                  border: "1px solid #f59e0b",
+                  color: "#f59e0b",
+                  cursor: "pointer",
+                  padding: "0.25rem 0.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  borderRadius: "6px",
+                  fontSize: "0.8rem",
+                  fontWeight: 500,
+                }}
+                title="Align selected elements vertically (same X position)"
+              >
+                <AlignHorizontalDistributeCenter size={16} />
+                <span>Align X</span>
+              </button>
+              <button
+                onClick={handleAlignVertical}
+                style={{
+                  background: "rgba(0, 0, 0, 0.7)",
+                  border: "1px solid #f59e0b",
+                  color: "#f59e0b",
+                  cursor: "pointer",
+                  padding: "0.25rem 0.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  borderRadius: "6px",
+                  fontSize: "0.8rem",
+                  fontWeight: 500,
+                }}
+                title="Align selected elements horizontally (same Y position)"
+              >
+                <AlignVerticalDistributeCenter size={16} />
+                <span>Align Y</span>
+              </button>
+            </>
+          )}
         </div>
+        )}
         
         {/* Previous Layout Button */}
         {hasMultipleLayouts && (
@@ -582,11 +899,12 @@ export function EnclosureVisualizer({
         <svg
           ref={svgRef}
           viewBox={`${-viewBoxWidth / 2} ${-viewBoxHeight / 2} ${viewBoxWidth} ${viewBoxHeight}`}
+          onMouseDown={handleSvgMouseDown}
           style={{
             width: "100%",
             height: "auto",
-            maxHeight: isMaximized ? "80vh" : "450px",
-            cursor: "default",
+            maxHeight: isMaximized ? "80vh" : (compact ? "250px" : "450px"),
+            cursor: isEditMode ? (isBoxSelecting ? "crosshair" : "default") : "default",
             userSelect: "none",
             WebkitUserSelect: "none",
             MozUserSelect: "none",
@@ -1510,27 +1828,120 @@ export function EnclosureVisualizer({
                 );
               });
             })()}
+
+            {/* Selection highlights */}
+            {isEditMode && selectedItems.size > 0 && (() => {
+              const highlights: React.ReactNode[] = [];
+              selectedItems.forEach(key => {
+                const [type, indexStr] = key.split('-');
+                const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
+                const dataPos = getDataPosition(type, idx);
+                const svgPos = { x: dataPos.x, y: -dataPos.y };
+                if (type === 'potentiometer') {
+                  highlights.push(<circle key={`sel-${key}`} cx={svgPos.x} cy={svgPos.y} r="9" fill="none" stroke="#22d3ee" strokeWidth="0.8" strokeDasharray="2 1" opacity="0.9" />);
+                } else if (type === 'switch') {
+                  highlights.push(<rect key={`sel-${key}`} x={svgPos.x - 10} y={svgPos.y - 10} width="20" height="20" fill="none" stroke="#22d3ee" strokeWidth="0.8" strokeDasharray="2 1" rx="2" opacity="0.9" />);
+                } else if (type === 'fader') {
+                  highlights.push(<rect key={`sel-${key}`} x={svgPos.x - 5} y={svgPos.y - 20} width="10" height="40" fill="none" stroke="#22d3ee" strokeWidth="0.8" strokeDasharray="2 1" rx="2" opacity="0.9" />);
+                } else if (type === 'led') {
+                  highlights.push(<circle key={`sel-${key}`} cx={svgPos.x} cy={svgPos.y} r="5" fill="none" stroke="#22d3ee" strokeWidth="0.8" strokeDasharray="2 1" opacity="0.9" />);
+                } else if (type === 'footswitch') {
+                  highlights.push(<circle key={`sel-${key}`} cx={svgPos.x} cy={svgPos.y} r="9" fill="none" stroke="#22d3ee" strokeWidth="0.8" strokeDasharray="2 1" opacity="0.9" />);
+                } else if (type === 'pedalName') {
+                  highlights.push(<rect key={`sel-${key}`} x={svgPos.x - 20} y={svgPos.y - 6} width="40" height="10" fill="none" stroke="#22d3ee" strokeWidth="0.8" strokeDasharray="2 1" rx="2" opacity="0.9" />);
+                }
+              });
+              return highlights;
+            })()}
+
+            {/* Snap alignment lines */}
+            {snapLines.map((line, i) => (
+              <React.Fragment key={`snap-${i}`}>
+                {line.x !== undefined && (
+                  <line
+                    x1={line.x} y1={-viewBoxHeight / 2}
+                    x2={line.x} y2={viewBoxHeight / 2}
+                    stroke="#22d3ee" strokeWidth="0.4" strokeDasharray="3 2" opacity="0.6"
+                  />
+                )}
+                {line.y !== undefined && (
+                  <line
+                    x1={-viewBoxWidth / 2} y1={-line.y}
+                    x2={viewBoxWidth / 2} y2={-line.y}
+                    stroke="#22d3ee" strokeWidth="0.4" strokeDasharray="3 2" opacity="0.6"
+                  />
+                )}
+              </React.Fragment>
+            ))}
+
+            {/* Box select rectangle */}
+            {isBoxSelecting && boxSelectStart && boxSelectEnd && (
+              <rect
+                x={Math.min(boxSelectStart.x, boxSelectEnd.x)}
+                y={Math.min(boxSelectStart.y, boxSelectEnd.y)}
+                width={Math.abs(boxSelectEnd.x - boxSelectStart.x)}
+                height={Math.abs(boxSelectEnd.y - boxSelectStart.y)}
+                fill="rgba(34, 211, 238, 0.1)"
+                stroke="#22d3ee"
+                strokeWidth="0.5"
+                strokeDasharray="3 2"
+              />
+            )}
           </g>
         </svg>
+
+        {/* Infobox overlay for selected element */}
+        {isMaximized && isEditMode && selectedItemInfo && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "0.5rem",
+              right: "0.5rem",
+              background: "rgba(15, 15, 15, 0.92)",
+              border: "1px solid #22d3ee44",
+              borderRadius: "6px",
+              padding: "0.4rem 0.7rem",
+              fontSize: "0.7rem",
+              color: "#ccc",
+              pointerEvents: "none",
+              minWidth: "100px",
+            }}
+          >
+            {selectedItemInfo.type === 'group' ? (
+              <span style={{ color: "#22d3ee" }}>{selectedItemInfo.count} elements selected</span>
+            ) : (
+              <>
+                <div style={{ color: "#22d3ee", fontWeight: 600, marginBottom: "2px" }}>
+                  {selectedItemInfo.name}
+                </div>
+                <div style={{ color: "#888" }}>
+                  x: {selectedItemInfo.pos?.x} &nbsp; y: {selectedItemInfo.pos?.y}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Enclosure info footer */}
-      <div
-        style={{
-          padding: "0.5rem 1rem",
-          background: "#0a0a0a",
-          borderTop: "1px solid #333",
-          fontSize: "0.75rem",
-          color: "#999",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <span>{layout.enclosure_type}</span>
-        <span>
-          {layout.dimensions_mm.length}Ã—{layout.dimensions_mm.width}mm
-        </span>
-      </div>
+      {(!compact || isMaximized) && (
+        <div
+          style={{
+            padding: "0.5rem 1rem",
+            background: "#0a0a0a",
+            borderTop: "1px solid #333",
+            fontSize: "0.75rem",
+            color: "#999",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>{layout.enclosure_type}</span>
+          <span>
+            {layout.dimensions_mm.length}×{layout.dimensions_mm.width}mm
+          </span>
+        </div>
+      )}
     </div>
   );
   
