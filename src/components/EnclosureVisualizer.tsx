@@ -543,6 +543,7 @@ export function EnclosureVisualizer({
     const [type, indexStr] = key.split('-');
     const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
     const pos = getDataPosition(type, idx);
+    if (!pos) return null;
     let name = type;
     if (type === 'potentiometer') {
       const control = controls.filter(c => c.type === 'Pot')[idx];
@@ -1836,6 +1837,7 @@ export function EnclosureVisualizer({
                 const [type, indexStr] = key.split('-');
                 const idx = type === 'pedalName' ? 0 : parseInt(indexStr);
                 const dataPos = getDataPosition(type, idx);
+                if (!dataPos) return;
                 const svgPos = { x: dataPos.x, y: -dataPos.y };
                 if (type === 'potentiometer') {
                   highlights.push(<circle key={`sel-${key}`} cx={svgPos.x} cy={svgPos.y} r="9" fill="none" stroke="#22d3ee" strokeWidth="0.8" strokeDasharray="2 1" opacity="0.9" />);
