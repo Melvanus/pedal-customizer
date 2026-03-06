@@ -156,6 +156,8 @@ export function EnclosureVisualizer({
   const [selectedItems, setSelectedItems] = React.useState<Set<string>>(new Set());
   const [boxSelectStart, setBoxSelectStart] = React.useState<Position | null>(null);
   const [boxSelectEnd, setBoxSelectEnd] = React.useState<Position | null>(null);
+  const boxSelectStartRef = React.useRef<Position | null>(null);
+  const boxSelectEndRef = React.useRef<Position | null>(null);
   const [isBoxSelecting, setIsBoxSelecting] = React.useState(false);
   const [snapEnabled, setSnapEnabled] = React.useState(true);
   const [snapLines, setSnapLines] = React.useState<{ x?: number; y?: number }[]>([]);
@@ -377,7 +379,10 @@ export function EnclosureVisualizer({
   const handleMouseMove = (event: MouseEvent) => {
     if (isBoxSelecting) {
       const pos = getScaledMousePosition(event);
-      if (pos) setBoxSelectEnd(pos);
+      if (pos) {
+        setBoxSelectEnd(pos);
+        boxSelectEndRef.current = pos;
+      }
       return;
     }
     
@@ -397,14 +402,17 @@ export function EnclosureVisualizer({
     
     // For label-type drags, fall back to single-item logic
     if (draggedItem.type.endsWith('-label')) {
+      const parentType = draggedItem.type.replace('-label', '');
+      // Apply snap to the label's absolute position
+      const { snapped: snappedLabel, lines: labelLines } = applySnap(dataPos, new Set([itemKey(parentType, draggedItem.index)]));
+      setSnapLines(labelLines);
       setPositionOverrides(prev => {
         const newOverrides = { ...prev };
-        const parentType = draggedItem.type.replace('-label', '');
         let parentPos: Position;
         if (parentType === 'potentiometer') parentPos = prev.potentiometers[draggedItem.index] || layout.potentiometer_positions[draggedItem.index];
         else if (parentType === 'switch') parentPos = prev.switches[draggedItem.index] || layout.switch_positions[draggedItem.index];
         else parentPos = prev.faders[draggedItem.index] || (layout.fader_positions || [])[draggedItem.index];
-        const offset = { x: dataPos.x - parentPos.x, y: dataPos.y - parentPos.y };
+        const offset = { x: snappedLabel.x - parentPos.x, y: snappedLabel.y - parentPos.y };
         if (parentType === 'potentiometer') { const arr = [...prev.potentiometerLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.potentiometerLabelOffsets = arr; }
         else if (parentType === 'switch') { const arr = [...prev.switchLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.switchLabelOffsets = arr; }
         else { const arr = [...prev.faderLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.faderLabelOffsets = arr; }
@@ -439,12 +447,14 @@ export function EnclosureVisualizer({
   
   const handleMouseUp = () => {
     if (isBoxSelecting) {
-      // Resolve box selection
-      if (boxSelectStart && boxSelectEnd) {
-        const x1 = Math.min(boxSelectStart.x, boxSelectEnd.x);
-        const x2 = Math.max(boxSelectStart.x, boxSelectEnd.x);
-        const y1 = Math.min(boxSelectStart.y, boxSelectEnd.y);
-        const y2 = Math.max(boxSelectStart.y, boxSelectEnd.y);
+      // Resolve box selection — use refs for latest values
+      const bStart = boxSelectStartRef.current;
+      const bEnd = boxSelectEndRef.current;
+      if (bStart && bEnd) {
+        const x1 = Math.min(bStart.x, bEnd.x);
+        const x2 = Math.max(bStart.x, bEnd.x);
+        const y1 = Math.min(bStart.y, bEnd.y);
+        const y2 = Math.max(bStart.y, bEnd.y);
         
         const allItems = getAllItemPositions();
         const newSelection = new Set<string>();
@@ -460,6 +470,8 @@ export function EnclosureVisualizer({
       setIsBoxSelecting(false);
       setBoxSelectStart(null);
       setBoxSelectEnd(null);
+      boxSelectStartRef.current = null;
+      boxSelectEndRef.current = null;
       return;
     }
     setIsDragging(false);
@@ -484,6 +496,8 @@ export function EnclosureVisualizer({
     setIsBoxSelecting(true);
     setBoxSelectStart(pos);
     setBoxSelectEnd(pos);
+    boxSelectStartRef.current = pos;
+    boxSelectEndRef.current = pos;
   };
 
   // Alignment handlers
