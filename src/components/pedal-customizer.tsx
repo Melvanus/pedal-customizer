@@ -1054,7 +1054,7 @@ export function PedalCustomizer({
 
         {/* Scrollable Content */}
         <div data-section="tab-content-scrollable" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
-          <div style={{ padding: "1.5rem", paddingRight: activeTab !== "effect" && previewLayout ? "310px" : "2rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px", maxWidth: "1400px", marginLeft: "auto", marginRight: "auto" }}>
+          <div style={{ padding: "1.5rem", paddingRight: "2rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px", maxWidth: "800px", marginLeft: "auto", marginRight: "auto" }}>
           {/* Filters for Paint Tab - Separate Panel */}
           {activeTab === "paint" && (
             <div
@@ -1630,7 +1630,7 @@ export function PedalCustomizer({
             style={{
               position: "fixed",
               top: "50%",
-              right: "1rem",
+              left: "calc(50% + 420px)",
               transform: "translateY(-50%)",
               width: "280px",
               zIndex: 200,
