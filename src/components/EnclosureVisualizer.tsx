@@ -129,10 +129,12 @@ export function EnclosureVisualizer({
 }: EnclosureVisualizerProps) {
   console.log('ðŸŽ² [Randomize] EnclosureVisualizer rendering, layout ID:', layout.id);
   
-  const viewBoxWidth = 140;
-  const viewBoxHeight = 160;
+  // Dynamic viewBox based on enclosure dimensions — 1 SVG unit = 1mm
+  const viewBoxPadding = 30;
+  const viewBoxWidth = layout.dimensions_mm.width + viewBoxPadding * 2;
+  const viewBoxHeight = layout.dimensions_mm.length + viewBoxPadding * 2;
   
-  const scale = 0.8;
+  const scale = 1;
   
   // Calculate text color based on enclosure color
   const textColor = getContrastingTextColor(enclosureColor);
@@ -640,7 +642,7 @@ export function EnclosureVisualizer({
           </defs>
 
           {/* Main Enclosure Body */}
-          <g transform={`scale(${scale})`}>
+          <g>
             {/* Input Jack (behind enclosure) */}
             <g>
               <rect
@@ -979,6 +981,15 @@ export function EnclosureVisualizer({
                   onMouseDown={handleMouseDown('switch', idx)}
                   style={{ cursor: isEditMode ? 'move' : 'default' }}
                 >
+                  {/* Invisible hit area for better clickability */}
+                  <rect
+                    x={effectivePos.x - 12}
+                    y={effectivePos.y - 12}
+                    width="24"
+                    height="24"
+                    fill="transparent"
+                    stroke="none"
+                  />
                   {/* Switch base */}
                   <rect
                     x={effectivePos.x - 2.5}
@@ -1007,7 +1018,7 @@ export function EnclosureVisualizer({
                       {labeledLettering && (
                         <rect
                           x={effectivePos.x + labelOffset.x - 25}
-                          y={effectivePos.y - labelOffset.y - 6.75}
+                          y={effectivePos.y - labelOffset.y - 7.25}
                           width="50"
                           height="9"
                           fill={effectiveLabelBg}
@@ -1016,7 +1027,7 @@ export function EnclosureVisualizer({
                       )}
                       <foreignObject
                         x={effectivePos.x + labelOffset.x - (labeledLettering ? 25 : 12)}
-                        y={effectivePos.y - labelOffset.y - (labeledLettering ? 6.75 : 4)}
+                        y={effectivePos.y - labelOffset.y - (labeledLettering ? 7.25 : 4)}
                         width={labeledLettering ? "50" : "24"}
                         height={labeledLettering ? "9" : "6"}
                       >
@@ -1067,9 +1078,9 @@ export function EnclosureVisualizer({
                     <>
                       {labeledLettering && (
                         <rect
-                          x={effectivePos.x + labelOffset.x - (label.length * 2) - 1.2}
-                          y={effectivePos.y - labelOffset.y - 6.75}
-                          width={(label.length * 4) + 2.4}
+                          x={effectivePos.x + labelOffset.x - (label.length * 2.5) - 1.2}
+                          y={effectivePos.y - labelOffset.y - 7.25}
+                          width={(label.length * 5) + 2.4}
                           height="9"
                           fill={effectiveLabelBg}
                           rx="0.5"
@@ -1471,9 +1482,9 @@ export function EnclosureVisualizer({
                     <>
                       {labeledLettering && (
                         <rect
-                          x={fsPosition.x - (label.length * 2) - 1.2}
+                          x={fsPosition.x - (label.length * 2.5) - 1.2}
                           y={fsPosition.y + 11}
-                          width={(label.length * 4) + 2.4}
+                          width={(label.length * 5) + 2.4}
                           height="9"
                           fill={effectiveLabelBg}
                           rx="0.5"
@@ -1481,7 +1492,7 @@ export function EnclosureVisualizer({
                       )}
                       <text
                         x={fsPosition.x}
-                        y={fsPosition.y + 17}
+                        y={fsPosition.y + 18.25}
                         textAnchor="middle"
                         style={{
                           fontSize: labeledLettering ? "8px" : "3px",
