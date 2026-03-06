@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Move, Shuffle } from "lucide-react";
@@ -125,7 +125,7 @@ export function EnclosureVisualizer({
   labeledLettering = false,
   labelColor,
 }: EnclosureVisualizerProps) {
-  console.log('🎲 [Randomize] EnclosureVisualizer rendering, layout ID:', layout.id);
+  console.log('ðŸŽ² [Randomize] EnclosureVisualizer rendering, layout ID:', layout.id);
   
   const viewBoxWidth = 140;
   const viewBoxHeight = 160;
@@ -756,9 +756,9 @@ export function EnclosureVisualizer({
                     {labeledLettering && pedalName && (
                       <rect
                         x={getPosition('pedalName', 0, layout.pedal_name_position).x - (pedalName.length * 2.25) - 1.35}
-                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 6.5}
+                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 5.75}
                         width={(pedalName.length * 4.5) + 2.7}
-                        height="10.5"
+                        height="9"
                         fill={effectiveLabelBg}
                         rx="0.5"
                       />
@@ -806,62 +806,74 @@ export function EnclosureVisualizer({
                 >
                   {/* Label (rendered first, behind knob) */}
                   {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
-                    <foreignObject
-                      x={effectivePos.x + labelOffset.x - 15}
-                      y={effectivePos.y - labelOffset.y - 4.5}
-                      width="30"
-                      height="7"
-                    >
-                      <input
-                        autoFocus
-                        type="text"
-                        value={editingLabel.value}
-                        onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
-                        onBlur={() => {
-                          if (editingLabel.value.trim() !== '' && onLabelChange && control) {
-                            onLabelChange(control.label, editingLabel.value.trim());
-                          }
-                          setEditingLabel(null);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
+                    <>
+                      {labeledLettering && (
+                        <rect
+                          x={effectivePos.x + labelOffset.x - 25}
+                          y={effectivePos.y - labelOffset.y - 7.25}
+                          width="50"
+                          height="9"
+                          fill={effectiveLabelBg}
+                          rx="0.5"
+                        />
+                      )}
+                      <foreignObject
+                        x={effectivePos.x + labelOffset.x - (labeledLettering ? 25 : 15)}
+                        y={effectivePos.y - labelOffset.y - (labeledLettering ? 7.25 : 4.5)}
+                        width={labeledLettering ? "50" : "30"}
+                        height={labeledLettering ? "9" : "7"}
+                      >
+                        <input
+                          autoFocus
+                          type="text"
+                          value={editingLabel.value}
+                          onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
+                          onBlur={() => {
                             if (editingLabel.value.trim() !== '' && onLabelChange && control) {
                               onLabelChange(control.label, editingLabel.value.trim());
                             }
                             setEditingLabel(null);
-                          } else if (e.key === 'Escape') {
-                            setEditingLabel(null);
-                          }
-                        }}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          fontSize: '3.5px',
-                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-                          fontWeight: 600,
-                          textAlign: 'center',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0px',
-                          background: 'transparent',
-                          border: 'none',
-                          color: textColor,
-                          outline: 'none',
-                          padding: '0',
-                          lineHeight: '7px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      />
-                    </foreignObject>
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                                onLabelChange(control.label, editingLabel.value.trim());
+                              }
+                              setEditingLabel(null);
+                            } else if (e.key === 'Escape') {
+                              setEditingLabel(null);
+                            }
+                          }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            fontSize: labeledLettering ? '8px' : '3.5px',
+                            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+                            fontWeight: 600,
+                            textAlign: 'center',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0px',
+                            background: 'transparent',
+                            border: 'none',
+                            color: labeledLettering ? labelTextColor : textColor,
+                            outline: 'none',
+                            padding: '0',
+                            lineHeight: labeledLettering ? '9px' : '7px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        />
+                      </foreignObject>
+                    </>
                   ) : (
                     <>
                       {labeledLettering && (
                         <rect
                           x={effectivePos.x + labelOffset.x - (label.length * 2.5) - 1.2}
-                          y={effectivePos.y - labelOffset.y - 8}
+                          y={effectivePos.y - labelOffset.y - 7.25}
                           width={(label.length * 5) + 2.4}
-                          height="10.5"
+                          height="9"
                           fill={effectiveLabelBg}
                           rx="0.5"
                         />
@@ -950,62 +962,74 @@ export function EnclosureVisualizer({
                   />
                   {/* Label */}
                   {editingLabel?.type === 'switch' && editingLabel?.index === idx ? (
-                    <foreignObject
-                      x={effectivePos.x + labelOffset.x - 12}
-                      y={effectivePos.y - labelOffset.y - 4}
-                      width="24"
-                      height="6"
-                    >
-                      <input
-                        autoFocus
-                        type="text"
-                        value={editingLabel.value}
-                        onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
-                        onBlur={() => {
-                          if (editingLabel.value.trim() !== '' && onLabelChange && control) {
-                            onLabelChange(control.label, editingLabel.value.trim());
-                          }
-                          setEditingLabel(null);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
+                    <>
+                      {labeledLettering && (
+                        <rect
+                          x={effectivePos.x + labelOffset.x - 25}
+                          y={effectivePos.y - labelOffset.y - 6.75}
+                          width="50"
+                          height="9"
+                          fill={effectiveLabelBg}
+                          rx="0.5"
+                        />
+                      )}
+                      <foreignObject
+                        x={effectivePos.x + labelOffset.x - (labeledLettering ? 25 : 12)}
+                        y={effectivePos.y - labelOffset.y - (labeledLettering ? 6.75 : 4)}
+                        width={labeledLettering ? "50" : "24"}
+                        height={labeledLettering ? "9" : "6"}
+                      >
+                        <input
+                          autoFocus
+                          type="text"
+                          value={editingLabel.value}
+                          onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
+                          onBlur={() => {
                             if (editingLabel.value.trim() !== '' && onLabelChange && control) {
                               onLabelChange(control.label, editingLabel.value.trim());
                             }
                             setEditingLabel(null);
-                          } else if (e.key === 'Escape') {
-                            setEditingLabel(null);
-                          }
-                        }}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          fontSize: '3px',
-                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-                          fontWeight: 600,
-                          textAlign: 'center',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0px',
-                          background: 'transparent',
-                          border: 'none',
-                          color: textColor,
-                          outline: 'none',
-                          padding: '0',
-                          lineHeight: '6px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      />
-                    </foreignObject>
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                                onLabelChange(control.label, editingLabel.value.trim());
+                              }
+                              setEditingLabel(null);
+                            } else if (e.key === 'Escape') {
+                              setEditingLabel(null);
+                            }
+                          }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            fontSize: labeledLettering ? '8px' : '3px',
+                            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+                            fontWeight: 600,
+                            textAlign: 'center',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0px',
+                            background: 'transparent',
+                            border: 'none',
+                            color: labeledLettering ? labelTextColor : textColor,
+                            outline: 'none',
+                            padding: '0',
+                            lineHeight: labeledLettering ? '9px' : '6px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        />
+                      </foreignObject>
+                    </>
                   ) : (
                     <>
                       {labeledLettering && (
                         <rect
                           x={effectivePos.x + labelOffset.x - (label.length * 2) - 1.2}
-                          y={effectivePos.y - labelOffset.y - 7.5}
+                          y={effectivePos.y - labelOffset.y - 6.75}
                           width={(label.length * 4) + 2.4}
-                          height="10.5"
+                          height="9"
                           fill={effectiveLabelBg}
                           rx="0.5"
                         />
@@ -1045,7 +1069,7 @@ export function EnclosureVisualizer({
 
             {/* Faders */}
             {(() => {
-              console.log('🎚️ [EnclosureVisualizer] Rendering faders:', {
+              console.log('ðŸŽšï¸ [EnclosureVisualizer] Rendering faders:', {
                 layoutFaderPositions: layout.fader_positions?.length || 0,
                 faderPositionsData: layout.fader_positions,
                 controlsFaders: controls.filter(c => c.type === 'Fader').map(c => c.label)
@@ -1090,62 +1114,74 @@ export function EnclosureVisualizer({
                   <circle cx={effectivePos.x} cy={effectivePos.y + 20.5} r="0.7" fill="#555" />
                   {/* Label */}
                   {editingLabel?.type === 'fader' && editingLabel?.index === idx ? (
-                    <foreignObject
-                      x={effectivePos.x + labelOffset.x - 15}
-                      y={effectivePos.y - labelOffset.y - 4.5}
-                      width="30"
-                      height="7"
-                    >
-                      <input
-                        autoFocus
-                        type="text"
-                        value={editingLabel.value}
-                        onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
-                        onBlur={() => {
-                          if (editingLabel.value.trim() !== '' && onLabelChange && control) {
-                            onLabelChange(control.label, editingLabel.value.trim());
-                          }
-                          setEditingLabel(null);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
+                    <>
+                      {labeledLettering && (
+                        <rect
+                          x={effectivePos.x + labelOffset.x - 25}
+                          y={effectivePos.y - labelOffset.y - 7.25}
+                          width="50"
+                          height="9"
+                          fill={effectiveLabelBg}
+                          rx="0.5"
+                        />
+                      )}
+                      <foreignObject
+                        x={effectivePos.x + labelOffset.x - (labeledLettering ? 25 : 15)}
+                        y={effectivePos.y - labelOffset.y - (labeledLettering ? 7.25 : 4.5)}
+                        width={labeledLettering ? "50" : "30"}
+                        height={labeledLettering ? "9" : "7"}
+                      >
+                        <input
+                          autoFocus
+                          type="text"
+                          value={editingLabel.value}
+                          onChange={(e) => setEditingLabel({ ...editingLabel, value: e.target.value })}
+                          onBlur={() => {
                             if (editingLabel.value.trim() !== '' && onLabelChange && control) {
                               onLabelChange(control.label, editingLabel.value.trim());
                             }
                             setEditingLabel(null);
-                          } else if (e.key === 'Escape') {
-                            setEditingLabel(null);
-                          }
-                        }}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          fontSize: '3.5px',
-                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-                          fontWeight: 600,
-                          textAlign: 'center',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0px',
-                          background: 'transparent',
-                          border: 'none',
-                          color: textColor,
-                          outline: 'none',
-                          padding: '0',
-                          lineHeight: '7px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      />
-                    </foreignObject>
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              if (editingLabel.value.trim() !== '' && onLabelChange && control) {
+                                onLabelChange(control.label, editingLabel.value.trim());
+                              }
+                              setEditingLabel(null);
+                            } else if (e.key === 'Escape') {
+                              setEditingLabel(null);
+                            }
+                          }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            fontSize: labeledLettering ? '8px' : '3.5px',
+                            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+                            fontWeight: 600,
+                            textAlign: 'center',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0px',
+                            background: 'transparent',
+                            border: 'none',
+                            color: labeledLettering ? labelTextColor : textColor,
+                            outline: 'none',
+                            padding: '0',
+                            lineHeight: labeledLettering ? '9px' : '7px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        />
+                      </foreignObject>
+                    </>
                   ) : (
                     <>
                       {labeledLettering && (
                         <rect
                           x={effectivePos.x + labelOffset.x - (label.length * 2.5) - 1.2}
-                          y={effectivePos.y - labelOffset.y - 8}
+                          y={effectivePos.y - labelOffset.y - 7.25}
                           width={(label.length * 5) + 2.4}
-                          height="10.5"
+                          height="9"
                           fill={effectiveLabelBg}
                           rx="0.5"
                         />
@@ -1373,7 +1409,7 @@ export function EnclosureVisualizer({
       >
         <span>{layout.enclosure_type}</span>
         <span>
-          {layout.dimensions_mm.length}×{layout.dimensions_mm.width}mm
+          {layout.dimensions_mm.length}Ã—{layout.dimensions_mm.width}mm
         </span>
       </div>
     </div>
