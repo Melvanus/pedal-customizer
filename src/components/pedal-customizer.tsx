@@ -1054,7 +1054,7 @@ export function PedalCustomizer({
 
         {/* Scrollable Content */}
         <div data-section="tab-content-scrollable" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
-          <div style={{ padding: "1.5rem", paddingRight: "2rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px", maxWidth: "800px", marginLeft: "auto", marginRight: "auto" }}>
+          <div style={{ padding: "1.5rem", paddingRight: "2rem", paddingTop: `${summaryHeight || 130}px`, paddingBottom: "250px", maxWidth: "1400px", marginLeft: "auto", marginRight: "auto" }}>
           {/* Filters for Paint Tab - Separate Panel */}
           {activeTab === "paint" && (
             <div
@@ -1620,45 +1620,36 @@ export function PedalCustomizer({
             </>
           )}
 
+          {/* Mini Enclosure Visualizer — visible after effect+size selected, on non-effect tabs */}
+          {activeTab !== "effect" && previewLayout && selectedEffect && selectedSize && (
+            <div style={{ marginTop: "1.5rem", borderTop: "1px solid #333", paddingTop: "1rem" }}>
+              <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                Layout Preview
+              </div>
+              <EnclosureVisualizer
+                key={`preview-${previewLayout.id}-${randomLayoutKey}`}
+                layout={previewLayout}
+                availableLayouts={previewAvailableLayouts}
+                onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
+                onRandomizeLayout={() => setRandomLayoutKey(prev => prev + 1)}
+                enclosureColor={previewPaintColor}
+                finishType={selectedPaint?.finish || ""}
+                ledColor={previewLedColor}
+                ledType={selectedLed?.name}
+                pedalName=""
+                controls={effectiveControls}
+                disabledLabels={Object.fromEntries(effectiveControls.filter((c: any) => c.type === 'Switch').map((c: any) => [c.label, true]))}
+                isMaximized={isVisualizerMaximized}
+                onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}
+                labeledLettering={selectedDesign?.name === "Labeled Lettering"}
+                labelColor={previewLabelColorHex}
+                compact={true}
+              />
+            </div>
+          )}
+
           </div>
         </div>
-
-        {/* Floating Mini Visualizer — fixed on the right side */}
-        {activeTab !== "effect" && previewLayout && selectedEffect && selectedSize && (
-          <div
-            data-section="floating-visualizer"
-            style={{
-              position: "fixed",
-              top: "50%",
-              left: "calc(50% + 420px)",
-              transform: "translateY(-50%)",
-              width: "280px",
-              zIndex: 200,
-              borderRadius: "12px",
-              overflow: "hidden",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.1)",
-            }}
-          >
-            <EnclosureVisualizer
-              key={`preview-${previewLayout.id}-${randomLayoutKey}`}
-              layout={previewLayout}
-              availableLayouts={previewAvailableLayouts}
-              onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
-              onRandomizeLayout={() => setRandomLayoutKey(prev => prev + 1)}
-              enclosureColor={previewPaintColor}
-              finishType={selectedPaint?.finish || ""}
-              ledColor={previewLedColor}
-              ledType={selectedLed?.name}
-              pedalName=""
-              controls={effectiveControls}
-              isMaximized={isVisualizerMaximized}
-              onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}
-              labeledLettering={selectedDesign?.name === "Labeled Lettering"}
-              labelColor={previewLabelColorHex}
-              compact={true}
-            />
-          </div>
-        )}
 
         {/* Bottom Action Bar - Total Price & Review Button */}
         <div
