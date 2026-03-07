@@ -420,16 +420,19 @@ export function EnclosureVisualizer({
     // For label-type drags, fall back to single-item logic
     if (draggedItem.type.endsWith('-label')) {
       const parentType = draggedItem.type.replace('-label', '');
-      // Apply snap to the label's absolute position
-      const { snapped: snappedLabel, lines: labelLines } = applySnap(dataPos, new Set([itemKey(parentType, draggedItem.index)]));
+      // Apply snap at the label's vertical center (offset by labelCenterOffsetY)
+      const snapPos = { x: dataPos.x, y: dataPos.y + labelCenterOffsetY };
+      const { snapped: snappedLabel, lines: labelLines } = applySnap(snapPos, new Set([itemKey(parentType, draggedItem.index)]));
       setSnapLines(labelLines);
+      // Convert snap result back to anchor position
+      const anchorPos = { x: snappedLabel.x, y: snappedLabel.y - labelCenterOffsetY };
       setPositionOverrides(prev => {
         const newOverrides = { ...prev };
         let parentPos: Position;
         if (parentType === 'potentiometer') parentPos = prev.potentiometers[draggedItem.index] || layout.potentiometer_positions[draggedItem.index];
         else if (parentType === 'switch') parentPos = prev.switches[draggedItem.index] || layout.switch_positions[draggedItem.index];
         else parentPos = prev.faders[draggedItem.index] || (layout.fader_positions || [])[draggedItem.index];
-        const offset = { x: snappedLabel.x - parentPos.x, y: snappedLabel.y - parentPos.y };
+        const offset = { x: anchorPos.x - parentPos.x, y: anchorPos.y - parentPos.y };
         if (parentType === 'potentiometer') { const arr = [...prev.potentiometerLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.potentiometerLabelOffsets = arr; }
         else if (parentType === 'switch') { const arr = [...prev.switchLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.switchLabelOffsets = arr; }
         else { const arr = [...prev.faderLabelOffsets]; arr[draggedItem.index] = offset; newOverrides.faderLabelOffsets = arr; }
@@ -1109,9 +1112,9 @@ export function EnclosureVisualizer({
                   <>
                     {labeledLettering && !!pedalName && (
                       <rect
-                        x={getPosition('pedalName', 0, layout.pedal_name_position).x - (pedalName.length * 2.25) - 1.35}
-                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 5.75}
-                        width={(pedalName.length * 4.5) + 2.7}
+                        x={getPosition('pedalName', 0, layout.pedal_name_position).x - (pedalName.length * 2.5) - 1.2}
+                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 7.25}
+                        width={(pedalName.length * 5) + 2.4}
                         height="9"
                         fill={effectiveLabelBg}
                         rx="0.5"
@@ -1120,13 +1123,12 @@ export function EnclosureVisualizer({
                     {pedalName ? (
                       <text
                         x={getPosition('pedalName', 0, layout.pedal_name_position).x}
-                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 1.25}
+                        y={getPosition('pedalName', 0, layout.pedal_name_position).y}
                         textAnchor="middle"
-                        dominantBaseline="middle"
                         style={{
-                          fontSize: "6px",
+                          fontSize: labeledLettering ? "8px" : "3.5px",
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-                          fontWeight: "bold",
+                          fontWeight: 600,
                           fill: labeledLettering ? labelTextColor : textColor,
                           textTransform: "uppercase",
                           letterSpacing: "0.5px",
@@ -1144,13 +1146,12 @@ export function EnclosureVisualizer({
                     ) : isEditLabelsMode ? (
                       <text
                         x={getPosition('pedalName', 0, layout.pedal_name_position).x}
-                        y={getPosition('pedalName', 0, layout.pedal_name_position).y - 1.25}
+                        y={getPosition('pedalName', 0, layout.pedal_name_position).y}
                         textAnchor="middle"
-                        dominantBaseline="middle"
                         style={{
-                          fontSize: "6px",
+                          fontSize: labeledLettering ? "8px" : "3.5px",
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-                          fontWeight: "bold",
+                          fontWeight: 600,
                           fill: "#555",
                           textTransform: "uppercase",
                           letterSpacing: "0.5px",
