@@ -284,25 +284,27 @@ export function EnclosureVisualizer({
   };
 
   // Collect all item positions for snap alignment (including labels)
+  // Label snap positions are at the vertical center of the text/tape
+  const labelCenterOffsetY = labeledLettering ? 2.75 : 2.5;
   const getAllItemPositions = (): { key: string; pos: Position }[] => {
     const items: { key: string; pos: Position }[] = [];
     layout.potentiometer_positions.forEach((p, idx) => {
       items.push({ key: itemKey('potentiometer', idx), pos: getDataPosition('potentiometer', idx) });
       const parentPos = getDataPosition('potentiometer', idx);
       const offset = positionOverrides.potentiometerLabelOffsets[idx] || p.label_offset;
-      items.push({ key: itemKey('potentiometer-label', idx), pos: { x: parentPos.x + offset.x, y: parentPos.y + offset.y } });
+      items.push({ key: itemKey('potentiometer-label', idx), pos: { x: parentPos.x + offset.x, y: parentPos.y + offset.y + labelCenterOffsetY } });
     });
     layout.switch_positions.forEach((p, idx) => {
       items.push({ key: itemKey('switch', idx), pos: getDataPosition('switch', idx) });
       const parentPos = getDataPosition('switch', idx);
       const offset = positionOverrides.switchLabelOffsets[idx] || p.label_offset;
-      items.push({ key: itemKey('switch-label', idx), pos: { x: parentPos.x + offset.x, y: parentPos.y + offset.y } });
+      items.push({ key: itemKey('switch-label', idx), pos: { x: parentPos.x + offset.x, y: parentPos.y + offset.y + labelCenterOffsetY } });
     });
     (layout.fader_positions || []).forEach((p, idx) => {
       items.push({ key: itemKey('fader', idx), pos: getDataPosition('fader', idx) });
       const parentPos = getDataPosition('fader', idx);
       const offset = positionOverrides.faderLabelOffsets[idx] || p.label_offset;
-      items.push({ key: itemKey('fader-label', idx), pos: { x: parentPos.x + offset.x, y: parentPos.y + offset.y } });
+      items.push({ key: itemKey('fader-label', idx), pos: { x: parentPos.x + offset.x, y: parentPos.y + offset.y + labelCenterOffsetY } });
     });
     const ledPositions = layout.led_positions || (layout.led_position ? [layout.led_position] : []);
     ledPositions.forEach((_, idx) => items.push({ key: itemKey('led', idx), pos: getDataPosition('led', idx) }));
