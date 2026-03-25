@@ -503,10 +503,66 @@
       "popular": false,
       "mockup": false
     },
+    ,
+    {
+      "id": "SILICAFUZZ",
+      "name": "Silica Fuzz",
+      "inspired_by": "Arbiter Fuzz Face (Silicon Version)",
+      "categories": ["Fuzz"],
+      "description": "Silicon-based fuzz with two additional transistors to deliver a warmer, vintage-style tone typically associated with germanium fuzzes. Perfect for those who want the best of both worlds: the reliability of silicon transistors with the classic fuzz character. Has two internal trim pots for adjusting the gain and another for biasing the transistors, allowing you to fine-tune the sound to your liking.",
+      "sound_characters": ["warm", "vintage", "open", "dynamic", "smooth"],
+      "controls": [
+        { "label": "Fuzz", "type": "Pot", "description": "Controls the fuzz intensity." },
+        { "label": "Volume", "type": "Pot", "description": "Controls the output volume." }
+      ],
+      "image": "effectspedalplaceholder.svg",
+      "technical_specs": {
+        "pcb_supplier": "PedalPCB",
+        "schematic_link": "internal://schematics/silicafuzz.pdf",
+        "potentiometers": 2,
+        "switches": 0,
+        "io_jacks": 2,
+        "led_count": 1,
+        "complexity": "intermediate"
+      },
+      "recommended_enclosure": "125B",
+      "compatible_mods": [
+          { 
+            "name": "Bias Mod", 
+            "description": "Exposes the internal bias control potentiometer for more tonal shaping options.", 
+            "customer_price_eur": 6,
+            "adds_technical_specs": {
+              "potentiometers": 1
+            },
+            "adds_controls": [
+              { "label": "Bias", "type": "Pot", "description": "Adjusts the bias of the fuzz circuit." }
+            ]
+          },
+          { 
+            "name": "Gain Mod", 
+            "description": "Exposes the two internal gain control potentiometers for more tonal shaping options.", 
+            "customer_price_eur": 14,
+            "adds_technical_specs": {
+              "potentiometers": 2
+            },
+            "adds_controls": [
+              { "label": "Gain 1", "type": "Pot", "description": "Adjusts the gain of the first transistor in the fuzz circuit." },
+              { "label": "Gain 2", "type": "Pot", "description": "Adjusts the gain of the second transistor in the fuzz circuit." }
+            ]
+          }
+      ],
+      "pcb_supplier_id": "pedalpcb",
+      "pcb_supplier_sku": "pcb399",
+      "pcb_supplier_price_eur": 9.00,
+      "electrical_components_price_eur": 22.00,
+      "customer_price_eur": 89.90,
+      "popular": false,
+      "mockup": true
+    },
     {
       "id": "FUZZFACE",
       "name": "Fuzzy Face",
-      "inspired_by": "Dallas Arbiter Fuzz Face™",
+      "inspired_by": "Arbiter Fuzz Face (Silicon Version)",
       "categories": ["Fuzz"],
       "description": "The round fuzz that Hendrix made famous. Touch-sensitive, dynamic, and germanium goodness (or silicon if you prefer).",
       "sound_characters": ["vintage", "warm", "open", "dynamic", "smooth"],
@@ -573,7 +629,7 @@
         {
       "id": "TWOFACE",
       "name": "Two-Face",
-      "inspired_by": "Dallas Arbiter Fuzz Face™",
+      "inspired_by": "Dallas Arbiter Fuzz Face",
       "categories": ["Fuzz"],
       "description": "Two fuzz faces in one! This modded version of the classic Fuzz Face allows you to switch between two different fuzz circuits for maximum tonal versatility.",
       "sound_characters": ["vintage", "warm", "open", "dynamic", "smooth"],

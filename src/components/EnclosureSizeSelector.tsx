@@ -36,7 +36,7 @@ type EnclosureSizeSelectorProps = {
   selectedMods?: EffectMod[];
 };
 
-const BANANA_SIZE = 140; // Approximate banana size
+const BANANA_SIZE = 150; // Approximate banana size
 
 export function EnclosureSizeSelector({
   sizes,
