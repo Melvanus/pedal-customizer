@@ -86,8 +86,8 @@ export function maxSafeKnobDiameter(
 ): number {
   if (controlCount <= 0) return 40; // no controls → any size is fine
 
-  // Usable area is ~70% of face area (margins, jacks, footswitch)
-  const usableArea = enclosureWidthMm * enclosureHeightMm * 0.7;
+  // Usable area is ~60% of face area (margins, jacks, footswitch)
+  const usableArea = enclosureWidthMm * enclosureHeightMm * 0.6;
   const areaPerControl = usableArea / controlCount;
 
   // Diameter from circular area: d = 2·sqrt(A/π), then apply safety margin
