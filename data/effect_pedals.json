@@ -503,7 +503,6 @@
       "popular": false,
       "mockup": false
     },
-    ,
     {
       "id": "SILICAFUZZ",
       "name": "Silica Fuzz",
@@ -512,8 +511,8 @@
       "description": "Silicon-based fuzz with two additional transistors to deliver a warmer, vintage-style tone typically associated with germanium fuzzes. Perfect for those who want the best of both worlds: the reliability of silicon transistors with the classic fuzz character. Has two internal trim pots for adjusting the gain and another for biasing the transistors, allowing you to fine-tune the sound to your liking.",
       "sound_characters": ["warm", "vintage", "open", "dynamic", "smooth"],
       "controls": [
-        { "label": "Fuzz", "type": "Pot", "description": "Controls the fuzz intensity." },
-        { "label": "Volume", "type": "Pot", "description": "Controls the output volume." }
+        { "label": "Volume", "type": "Pot", "description": "Controls the output volume." },
+        { "label": "Fuzz", "type": "Pot", "description": "Controls the fuzz intensity." }
       ],
       "image": "effectspedalplaceholder.svg",
       "technical_specs": {
@@ -530,7 +529,7 @@
           { 
             "name": "Bias Mod", 
             "description": "Exposes the internal bias control potentiometer for more tonal shaping options.", 
-            "customer_price_eur": 6,
+            "customer_price_eur": 8,
             "adds_technical_specs": {
               "potentiometers": 1
             },
@@ -541,7 +540,7 @@
           { 
             "name": "Gain Mod", 
             "description": "Exposes the two internal gain control potentiometers for more tonal shaping options.", 
-            "customer_price_eur": 14,
+            "customer_price_eur": 12,
             "adds_technical_specs": {
               "potentiometers": 2
             },
@@ -556,7 +555,7 @@
       "pcb_supplier_price_eur": 9.00,
       "electrical_components_price_eur": 22.00,
       "customer_price_eur": 89.90,
-      "popular": false,
+      "popular": true,
       "mockup": true
     },
     {

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knob Collection Viewer</title>
+<style>
+  :root {
+    --bg: #1e1e2e;
+    --surface: #2a2a3d;
+    --surface2: #33334d;
+    --border: #444466;
+    --text: #e0e0f0;
+    --text-dim: #9999bb;
+    --accent: #7c6fef;
+    --accent-hover: #9589f5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 { font-size: 18px; font-weight: 600; white-space: nowrap; }
+  .header-info {
+    font-size: 13px;
+    color: var(--text-dim);
+    display: flex;
+    gap: 16px;
+  }
+  .header-info span { white-space: nowrap; }
+  .search-box {
+    margin-left: auto;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    width: 260px;
+  }
+  .search-box:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+  /* Main content */
+  main { padding: 24px; }
+
+  /* Type card */
+  .type-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .type-card.hidden { display: none; }
+  .type-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .type-header:hover { background: var(--surface2); }
+  .type-header .arrow {
+    font-size: 12px;
+    transition: transform 0.2s;
+    color: var(--text-dim);
+  }
+  .type-header.collapsed .arrow { transform: rotate(-90deg); }
+  .type-title {
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;
+  }
+  .type-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--surface2);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .badge.canonical { background: #2a3a4a; color: #7cb8d8; }
+
+  /* Template SVG preview */
+  .type-svg-preview {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      repeating-conic-gradient(var(--surface2) 0% 25%, var(--bg) 0% 50%) 0 0 / 10px 10px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .type-svg-preview img {
+    max-width: 72px;
+    max-height: 72px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+  }
+
+  /* Variant grid */
+  .type-body { padding: 16px 20px; }
+  .type-body.hidden { display: none; }
+  .variant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  /* Variant card */
+  .variant-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    gap: 14px;
+  }
+  .variant-image {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background:
+      repeating-conic-gradient(var(--surface) 0% 25%, var(--bg) 0% 50%) 0 0 / 8px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .variant-image img {
+    max-width: 76px;
+    max-height: 76px;
+    object-fit: contain;
+  }
+  .variant-info { flex: 1; min-width: 0; }
+  .variant-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+  .variant-details {
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    line-height: 1.6;
+  }
+  .variant-details .detail-label { color: var(--text-dim); }
+  .variant-details .detail-value { color: var(--text); }
+  .color-swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+  .variant-price {
+    font-size: 12px;
+    font-weight: 600;
+    color: #7cd87c;
+    margin-top: 4px;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 10px 24px;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .variant-grid { grid-template-columns: 1fr; }
+    .search-box { width: 100%; margin-left: 0; }
+    header { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎛️ Knob Collection</h1>
+  <div class="header-info">
+    <span id="statTypes">—</span>
+    <span id="statKnobs">—</span>
+  </div>
+  <input type="text" class="search-box" id="searchInput" placeholder="Search knobs…">
+</header>
+
+<main id="content">
+  <p style="color:var(--text-dim);padding:40px;text-align:center;">Loading knobs…</p>
+</main>
+
+<footer id="footer"></footer>
+
+<script>
+(async function() {
+  const resp = await fetch('knobs.json');
+  if (!resp.ok) {
+    document.getElementById('content').innerHTML =
+      '<p style="color:#ff6b6b;padding:40px;text-align:center;">Failed to load knobs.json. Make sure this file is served via HTTP (not file://).</p>';
+    return;
+  }
+  const data = await resp.json();
+  const types = data.knob_types || [];
+
+  document.getElementById('statTypes').textContent = data.type_count + ' types';
+  document.getElementById('statKnobs').textContent = data.knob_count + ' knobs';
+  document.getElementById('footer').textContent =
+    'Generated ' + (data.generated_at ? new Date(data.generated_at).toLocaleString() : '—') +
+    ' · ' + data.type_count + ' types · ' + data.knob_count + ' knobs';
+
+  const main = document.getElementById('content');
+  main.innerHTML = '';
+
+  types.forEach((type, idx) => {
+    const card = document.createElement('div');
+    card.className = 'type-card';
+    card.dataset.searchText = buildSearchText(type);
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'type-header';
+    header.innerHTML = `
+      <span class="arrow">▼</span>
+      <div class="type-svg-preview">
+        ${type.template_svg_path
+          ? '<img src="' + encodeURI(type.template_svg_path) + '" alt="' + escapeHtml(type.knob_type) + '">'
+          : '<span style="color:var(--text-dim);font-size:10px">No SVG</span>'}
+      </div>
+      <span class="type-title">${escapeHtml(type.knob_type)}</span>
+      <div class="type-meta">
+        ${type.canonical_type ? '<span class="badge canonical">' + escapeHtml(type.canonical_type) + '</span>' : ''}
+        <span class="badge">${type.variants.length} variant${type.variants.length !== 1 ? 's' : ''}</span>
+        <span class="badge">${type.available_sizes_mm.map(s => s + 'mm').join(', ')}</span>
+      </div>
+    `;
+    header.addEventListener('click', () => {
+      header.classList.toggle('collapsed');
+      body.classList.toggle('hidden');
+    });
+
+    // Body
+    const body = document.createElement('div');
+    body.className = 'type-body';
+
+    const grid = document.createElement('div');
+    grid.className = 'variant-grid';
+
+    type.variants.forEach(v => {
+      const img = getVariantImage(v);
+      const imgSrc = img.local || img.fallback;
+      const fallbackSrc = img.local ? img.fallback : '';
+      const vc = document.createElement('div');
+      vc.className = 'variant-card';
+      vc.innerHTML = `
+        <div class="variant-image">
+          ${imgSrc
+            ? '<img src="' + encodeURI(imgSrc) + '" alt="' + escapeHtml(v.name) + '" loading="lazy"'
+              + (fallbackSrc ? ' onerror="this.onerror=null;this.src=\'' + encodeURI(fallbackSrc).replace(/'/g, "\\'") + '\'"' : '')
+              + '>'
+            : '<span style="color:var(--text-dim);font-size:10px">No img</span>'}
+        </div>
+        <div class="variant-info">
+          <div class="variant-name">${escapeHtml(v.name)}</div>
+          <div class="variant-details">
+            <span><span class="detail-label">Size:</span> <span class="detail-value">${v.diameter_mm}×${v.height_mm}mm</span></span>
+            <span><span class="detail-label">Shaft:</span> <span class="detail-value">${v.shaft_diameter_mm}mm ${escapeHtml(v.shaft_type || '')}</span></span>
+            <span><span class="detail-label">Color:</span> <span class="color-swatch" style="background:${v.primaryColor || '#888'}"></span><span class="detail-value">${escapeHtml(v.color || '—')}</span></span>
+            ${v.sku ? '<span><span class="detail-label">SKU:</span> <span class="detail-value">' + escapeHtml(v.sku) + '</span></span>' : ''}
+          </div>
+          ${v.price_usd ? '<div class="variant-price">$' + v.price_usd.toFixed(2) + (v.price_eur ? ' / €' + v.price_eur.toFixed(2) : '') + '</div>' : ''}
+        </div>
+      `;
+      grid.appendChild(vc);
+    });
+
+    body.appendChild(grid);
+    card.appendChild(header);
+    card.appendChild(body);
+    main.appendChild(card);
+  });
+
+  // Search
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase().trim();
+    document.querySelectorAll('.type-card').forEach(card => {
+      card.classList.toggle('hidden', q && !card.dataset.searchText.includes(q));
+    });
+  });
+
+  function buildSearchText(type) {
+    let t = [type.knob_type, type.canonical_type || ''];
+    type.variants.forEach(v => {
+      t.push(v.name, v.color || '', v.sku || '', v.shaft_type || '');
+    });
+    return t.join(' ').toLowerCase();
+  }
+
+  function getVariantImage(variant) {
+    // Try local image first, fall back to external image_url
+    if (variant.local_image_folder) {
+      const folderName = variant.local_image_folder.replace(/\\/g, '/').split('/').pop();
+      return {
+        local: 'Types/' + variant.knob_type + '/' + variant.diameter_label + '/images/' + folderName + '_1.jpg',
+        fallback: variant.image_url || ''
+      };
+    }
+    return { local: '', fallback: variant.image_url || '' };
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+})();
+</script>
+</body>
+</html>
