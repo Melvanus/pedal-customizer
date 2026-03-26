@@ -682,8 +682,9 @@ export function SummaryContent() {
           </div>
         )}
 
-        <div data-section="main-layout" style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: "2rem" }}>
-          {/* Configuration Details */}
+        <div data-section="main-layout" style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: "2rem", alignItems: "start" }}>
+          {/* Left Column: Configuration Details + Order Form */}
+          <div data-section="left-column">
           <div data-section="configuration-details">
             <h2 data-section="configuration-title" style={{ fontSize: "1.75rem", marginBottom: "1.5rem", color: "#fff" }}>Configuration Details</h2>
 
@@ -1310,51 +1311,8 @@ export function SummaryContent() {
             )}
           </div>
 
-          {/* Order Form */}
-          <div data-section="order-form-sidebar">
-            {/* Enclosure Visualizer */}
-            {selectedLayout && (() => {
-              console.log('🎨 [Summary] Rendering EnclosureVisualizer with:', {
-                layout: selectedLayout.id,
-                layoutFaderCount: selectedLayout.fader_count,
-                layoutFaderPositions: selectedLayout.fader_positions?.length || 0,
-                controls: effectiveControls.map((c: any) => `${c.label} (${c.type})`),
-                controlsCount: effectiveControls.length,
-                faderControls: effectiveControls.filter((c: any) => c.type === 'Fader').map((c: any) => c.label)
-              });
-              return (
-              <div data-section="enclosure-visualizer" style={{ marginBottom: "2rem" }}>
-                <EnclosureVisualizer
-                  key={`visualizer-${selectedLayout.id}-${randomLayoutKey}`}
-                  layout={selectedLayout}
-                  availableLayouts={availableLayouts}
-                  onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
-                  onRandomizeLayout={handleRandomizeLayout}
-                  enclosureColor={paintColor}
-                  finishType={finishType}
-                  ledColor={config.ledColor || "#ff0000"}
-                  ledType={config.led?.name}
-                  pedalName={showPedalNameInVisualizer ? pedalName : ""}
-                  controlLabels={controlLabels}
-                  disabledLabels={disabledLabels}
-                  controls={effectiveControls}
-                  isMaximized={isVisualizerMaximized}
-                  onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}
-                  onLabelChange={(controlLabel, newValue) => {
-                    setControlLabels(prev => ({ ...prev, [controlLabel]: newValue }));
-                  }}
-                  onPedalNameChange={(newValue) => {
-                    setPedalName(newValue);
-                  }}
-                  labeledLettering={config.design?.name === "Labeled Lettering"}
-                  labelColor={labelColorHex}
-                  knobConfigsPerPot={knobConfigsPerPot.length > 0 ? knobConfigsPerPot : undefined}
-                />
-              </div>
-              );
-            })()}
-            
-            <div data-section="order-form-card" style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", border: "1px solid #333", position: "sticky", top: "2rem" }}>
+          {/* Order Form — below configuration details */}
+          <div data-section="order-form-card" style={{ background: "#1a1a1a", padding: "2rem", borderRadius: "10px", border: "1px solid #333" }}>
               <h3 data-section="form-title" style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#fff" }}>Your Information</h3>
               
               <div data-section="name-field" style={{ marginBottom: "1.5rem" }}>
@@ -1458,7 +1416,52 @@ export function SummaryContent() {
                 <Download size={16} />
                 Download Configuration
               </button>
-            </div>
+          </div>
+          </div>
+
+          {/* Enclosure Visualizer — sticky right column */}
+          <div data-section="visualizer-sidebar" style={{ alignSelf: "start", position: "sticky", top: "2rem" }}>
+            {/* Enclosure Visualizer */}
+            {selectedLayout && (() => {
+              console.log('🎨 [Summary] Rendering EnclosureVisualizer with:', {
+                layout: selectedLayout.id,
+                layoutFaderCount: selectedLayout.fader_count,
+                layoutFaderPositions: selectedLayout.fader_positions?.length || 0,
+                controls: effectiveControls.map((c: any) => `${c.label} (${c.type})`),
+                controlsCount: effectiveControls.length,
+                faderControls: effectiveControls.filter((c: any) => c.type === 'Fader').map((c: any) => c.label)
+              });
+              return (
+              <div data-section="enclosure-visualizer" style={{ marginBottom: "2rem" }}>
+                <EnclosureVisualizer
+                  key={`visualizer-${selectedLayout.id}-${randomLayoutKey}`}
+                  layout={selectedLayout}
+                  availableLayouts={availableLayouts}
+                  onLayoutChange={(newLayout) => setSelectedLayoutId(newLayout.id)}
+                  onRandomizeLayout={handleRandomizeLayout}
+                  enclosureColor={paintColor}
+                  finishType={finishType}
+                  ledColor={config.ledColor || "#ff0000"}
+                  ledType={config.led?.name}
+                  pedalName={showPedalNameInVisualizer ? pedalName : ""}
+                  controlLabels={controlLabels}
+                  disabledLabels={disabledLabels}
+                  controls={effectiveControls}
+                  isMaximized={isVisualizerMaximized}
+                  onToggleMaximize={() => setIsVisualizerMaximized(!isVisualizerMaximized)}
+                  onLabelChange={(controlLabel, newValue) => {
+                    setControlLabels(prev => ({ ...prev, [controlLabel]: newValue }));
+                  }}
+                  onPedalNameChange={(newValue) => {
+                    setPedalName(newValue);
+                  }}
+                  labeledLettering={config.design?.name === "Labeled Lettering"}
+                  labelColor={labelColorHex}
+                  knobConfigsPerPot={knobConfigsPerPot.length > 0 ? knobConfigsPerPot : undefined}
+                />
+              </div>
+              );
+            })()}
           </div>
         </div>
 
