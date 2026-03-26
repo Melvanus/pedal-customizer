@@ -114,11 +114,15 @@ function recolorSvgReverse(svgText: string, colorMap: Record<string, string>): s
 
 /** Scale SVG dimensions: templates are normalized to 10mm */
 function scaleSvg(svgText: string, targetDiameterMm: number): string {
-  const scale = targetDiameterMm / 10;
-  // Replace width="10.0mm" with scaled value (handles slight variations)
+  // Parse actual width/height from SVG to scale proportionally
+  const wMatch = svgText.match(/width="([\d.]+)mm"/);
+  const hMatch = svgText.match(/height="([\d.]+)mm"/);
+  const origW = wMatch ? parseFloat(wMatch[1]) : 10;
+  const origH = hMatch ? parseFloat(hMatch[1]) : 10;
+  const scale = targetDiameterMm / Math.max(origW, origH);
   return svgText
-    .replace(/width="[\d.]+mm"/, `width="${(10 * scale).toFixed(2)}mm"`)
-    .replace(/height="[\d.]+mm"/, `height="${(10 * scale).toFixed(2)}mm"`);
+    .replace(/width="[\d.]+mm"/, `width="${(origW * scale).toFixed(2)}mm"`)
+    .replace(/height="[\d.]+mm"/, `height="${(origH * scale).toFixed(2)}mm"`);
 }
 
 // Simple SVG cache to avoid refetching
@@ -303,9 +307,10 @@ export function KnobSvgInline({
     );
   }
 
-  // Scale: the SVG is designed for 10mm, we scale to diameterMm
-  const scale = diameterMm / 10;
+  // Scale: map the SVG's viewBox width to the desired real-world diameter in mm
+  // The enclosure coordinate system is 1 unit = 1mm, so scale = targetMm / viewBoxWidth
   const { innerContent, vx, vy, vw, vh } = inlineData;
+  const scale = diameterMm / Math.max(vw, vh);
 
   return (
     <g transform={`translate(${x - (vw * scale) / 2}, ${y - (vh * scale) / 2}) scale(${scale})`}>
