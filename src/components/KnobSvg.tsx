@@ -60,56 +60,158 @@ function buildColorMap(
   };
 }
 
-/**
- * Recolor SVG content by finding elements with inkscape:label containing color references
- * and replacing their fill colors accordingly.
+/** Extract the color reference from an inkscape:label value.
+ *  Label format: <part>_color:<colorRef>[_modifiers...]
+ *  e.g. "body_color:primary_gradient:hdl_shadow" → "primary"
+ *       "face_color:primaryDark_blur" → "primaryDark"
+ *       "face_color;primary" → "primary"
  */
-function recolorSvg(svgText: string, colorMap: Record<string, string>): string {
-  // Match elements with inkscape:label containing "color:<ref>"
-  // The label format is: <part>_color:<colorRef>_<modifiers>
-  // e.g., "body_color:primary_shadow", "face_color:primaryDark", "face_color;primary"
-  return svgText.replace(
-    /(<[^>]*inkscape:label="[^"]*color[;:](\w+)[^"]*"[^>]*style="[^"]*)(fill:#[0-9a-fA-F]{3,8})/gi,
-    (match, prefix, colorRef, fillPart) => {
-      const ref = colorRef.toLowerCase();
-      let newColor: string | undefined;
-
-      if (ref === "primary") newColor = colorMap.primary;
-      else if (ref === "primarydark") newColor = colorMap.primaryDark;
-      else if (ref === "primarylight") newColor = colorMap.primaryLight;
-      else if (ref === "secondary") newColor = colorMap.secondary;
-      else if (ref === "secondarydark") newColor = colorMap.secondaryDark;
-      else if (ref === "secondarylight") newColor = colorMap.secondaryLight;
-
-      if (newColor) {
-        return `${prefix}fill:${newColor}`;
-      }
-      return match;
-    }
-  );
+function extractColorRef(label: string): { colorRef: string; isGradient: boolean; gradientSpec: string } | null {
+  // Match color: or color; followed by the camelCase color name
+  const m = label.match(/color[;:](primary(?:Dark|Light)?|secondary(?:Dark|Light)?)/i);
+  if (!m) return null;
+  const isGradient = label.includes("_gradient:");
+  let gradientSpec = "";
+  if (isGradient) {
+    const gm = label.match(/_gradient:([a-z]+)/i);
+    if (gm) gradientSpec = gm[1].toLowerCase();
+  }
+  return { colorRef: m[1], isGradient, gradientSpec };
 }
 
-/** Also handle cases where style and inkscape:label are in different order */
-function recolorSvgReverse(svgText: string, colorMap: Record<string, string>): string {
-  return svgText.replace(
-    /(<[^>]*style="[^"]*)(fill:#[0-9a-fA-F]{3,8})([^"]*"[^>]*inkscape:label="[^"]*color[;:](\w+)[^"]*")/gi,
-    (match, prefix, fillPart, suffix, colorRef) => {
-      const ref = colorRef.toLowerCase();
-      let newColor: string | undefined;
+/** Resolve a color reference name to an actual hex color */
+function resolveColorRef(colorRef: string, colorMap: Record<string, string>): string | undefined {
+  const ref = colorRef.toLowerCase();
+  if (ref === "primary") return colorMap.primary;
+  if (ref === "primarydark") return colorMap.primaryDark;
+  if (ref === "primarylight") return colorMap.primaryLight;
+  if (ref === "secondary") return colorMap.secondary;
+  if (ref === "secondarydark") return colorMap.secondaryDark;
+  if (ref === "secondarylight") return colorMap.secondaryLight;
+  return undefined;
+}
 
-      if (ref === "primary") newColor = colorMap.primary;
-      else if (ref === "primarydark") newColor = colorMap.primaryDark;
-      else if (ref === "primarylight") newColor = colorMap.primaryLight;
-      else if (ref === "secondary") newColor = colorMap.secondary;
-      else if (ref === "secondarydark") newColor = colorMap.secondaryDark;
-      else if (ref === "secondarylight") newColor = colorMap.secondaryLight;
+/** Compute a shade of the base color based on a gradient spec letter:
+ *  h = highlight (lighten 60%), l = light (lighten 30%), m = mid (as-is),
+ *  r = regular (as-is), d = dark (darken 30%), v = very dark (darken 60%)
+ */
+function shadeForLetter(letter: string, baseColor: string): string {
+  switch (letter) {
+    case "h": return lightenColor(baseColor, 0.6);
+    case "l": return lightenColor(baseColor, 0.3);
+    case "m": return baseColor;
+    case "r": return baseColor;
+    case "d": return darkenColor(baseColor, 0.3);
+    case "v": return darkenColor(baseColor, 0.6);
+    default: return baseColor;
+  }
+}
 
-      if (newColor) {
-        return `${prefix}fill:${newColor}${suffix}`;
+/**
+ * Recolor SVG content by finding elements with inkscape:label containing color references
+ * and replacing their fill/stroke colors and gradient stop-colors accordingly.
+ *
+ * Handles:
+ * - Direct fill:#hex and stroke:#hex on labeled elements
+ * - Gradient fills (fill:url(#id)) where the gradient's stop-colors are recolored
+ *   using the gradient spec letters (e.g. "rlllld" → stop 0=regular, 1=light, etc.)
+ */
+function recolorSvg(svgText: string, colorMap: Record<string, string>): string {
+  // Step 1: Find all element tags (multi-line) with inkscape:label containing a color ref.
+  // For each, recolor direct fill/stroke or collect gradient IDs to recolor.
+  const gradientRecolors: Array<{ gradientId: string; baseColor: string; spec: string }> = [];
+
+  // Match opening/self-closing tags that span multiple lines
+  let result = svgText.replace(
+    /(<(?:path|circle|ellipse|rect|polygon|polyline|line|g)\b[\s\S]*?(?:\/>|>))/gi,
+    (tagText) => {
+      const labelMatch = tagText.match(/inkscape:label="([^"]*)"/i);
+      if (!labelMatch) return tagText;
+
+      const parsed = extractColorRef(labelMatch[1]);
+      if (!parsed) return tagText;
+
+      const newColor = resolveColorRef(parsed.colorRef, colorMap);
+      if (!newColor) return tagText;
+
+      if (parsed.isGradient) {
+        // Element uses a gradient fill — collect the gradient ID for stop recoloring
+        const gradRefMatch = tagText.match(/fill:url\(#([^)]+)\)/);
+        if (gradRefMatch) {
+          gradientRecolors.push({
+            gradientId: gradRefMatch[1],
+            baseColor: newColor,
+            spec: parsed.gradientSpec,
+          });
+        }
+        return tagText; // don't modify the element itself
       }
-      return match;
+
+      // Direct coloring: replace fill:#hex and/or stroke:#hex in the style attribute
+      let modified = tagText;
+
+      // Replace fill color (but not fill:none or fill:url(...))
+      modified = modified.replace(
+        /(style="[^"]*)\bfill:#[0-9a-fA-F]{3,8}/gi,
+        (m, pre) => `${pre}fill:${newColor}`
+      );
+
+      // Replace stroke color (but not stroke:none or stroke:url(...))
+      modified = modified.replace(
+        /(style="[^"]*)\bstroke:#[0-9a-fA-F]{3,8}/gi,
+        (m, pre) => `${pre}stroke:${newColor}`
+      );
+
+      return modified;
     }
   );
+
+  // Step 2: Recolor gradient stops for collected gradient IDs.
+  // Gradients may reference other gradients via xlink:href — follow the chain.
+  for (const { gradientId, baseColor, spec } of gradientRecolors) {
+    result = recolorGradientStops(result, gradientId, baseColor, spec);
+  }
+
+  return result;
+}
+
+/** Recolor the stop-colors of a gradient (and any gradient it references via xlink:href). */
+function recolorGradientStops(svgText: string, gradientId: string, baseColor: string, spec: string): string {
+  // Check if this gradient has xlink:href to another gradient (common in Inkscape)
+  const selfCloseRe = new RegExp(
+    `<(?:linearGradient|radialGradient)[^>]*\\bid="${gradientId}"[^>]*/>`,
+    "s"
+  );
+  const selfCloseMatch = svgText.match(selfCloseRe);
+  if (selfCloseMatch) {
+    const hrefMatch = selfCloseMatch[0].match(/xlink:href="#([^"]+)"/);
+    if (hrefMatch) {
+      // The actual stops are in the referenced gradient — recolor that one
+      return recolorGradientStops(svgText, hrefMatch[1], baseColor, spec);
+    }
+  }
+
+  // Find the full gradient element with stops
+  const gradRe = new RegExp(
+    `(<(?:linearGradient|radialGradient)[^>]*\\bid="${gradientId}"[\\s\\S]*?</(?:linearGradient|radialGradient)>)`,
+    ""
+  );
+  const gradMatch = svgText.match(gradRe);
+  if (!gradMatch) return svgText;
+
+  const original = gradMatch[1];
+  let stopIndex = 0;
+
+  const recolored = original.replace(
+    /stop-color:#[0-9a-fA-F]{3,8}/gi,
+    (stopColorStr) => {
+      const letter = spec[stopIndex] || spec[spec.length - 1] || "r";
+      stopIndex++;
+      return `stop-color:${shadeForLetter(letter, baseColor)}`;
+    }
+  );
+
+  return svgText.replace(original, recolored);
 }
 
 /** Scale SVG dimensions: templates are normalized to 10mm */
@@ -175,7 +277,6 @@ export function KnobSvg({
 
     const colorMap = buildColorMap(primaryColor, secondaryColor, primaryDarkColor, primaryLightColor);
     let processed = recolorSvg(svgContent, colorMap);
-    processed = recolorSvgReverse(processed, colorMap);
     processed = scaleSvg(processed, diameterMm);
 
     // Strip XML declaration for inline embedding
@@ -284,7 +385,6 @@ export function KnobSvgInline({
 
     const colorMap = buildColorMap(primaryColor, secondaryColor, primaryDarkColor, primaryLightColor);
     let processed = recolorSvg(svgContent, colorMap);
-    processed = recolorSvgReverse(processed, colorMap);
 
     // Extract viewBox from SVG
     const viewBoxMatch = processed.match(/viewBox="([^"]*)"/);
