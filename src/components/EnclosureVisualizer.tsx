@@ -267,13 +267,21 @@ export function EnclosureVisualizer({
   };
   
   // Drag handlers
-  const getScaledMousePosition = (event: MouseEvent | React.MouseEvent): Position | null => {
+  const getScaledMousePosition = (event: MouseEvent | React.MouseEvent | TouchEvent | React.TouchEvent): Position | null => {
     if (!svgRef.current) return null;
     
     const svg = svgRef.current;
     const point = svg.createSVGPoint();
-    point.x = event.clientX;
-    point.y = event.clientY;
+    // Support both mouse and touch events
+    if ('touches' in event) {
+      const touch = event.touches[0] || event.changedTouches[0];
+      if (!touch) return null;
+      point.x = touch.clientX;
+      point.y = touch.clientY;
+    } else {
+      point.x = event.clientX;
+      point.y = event.clientY;
+    }
     
     const ctm = svg.getScreenCTM();
     if (!ctm) return null;
@@ -375,13 +383,13 @@ export function EnclosureVisualizer({
     return newOverrides;
   };
 
-  const handleMouseDown = (type: string, index: number) => (event: React.MouseEvent) => {
+  const startDrag = (type: string, index: number, event: React.MouseEvent | React.TouchEvent) => {
     if (!isEditMode) return;
     event.preventDefault();
     event.stopPropagation();
     
     const key = itemKey(type, index);
-    const shiftHeld = event.shiftKey;
+    const shiftHeld = 'shiftKey' in event && event.shiftKey;
     
     if (shiftHeld) {
       // Toggle selection
@@ -416,8 +424,18 @@ export function EnclosureVisualizer({
     setIsDragging(true);
     setDraggedItem({ type, index });
   };
+
+  const handleMouseDown = (type: string, index: number) => (event: React.MouseEvent) => {
+    startDrag(type, index, event);
+  };
+
+  const handleTouchStart = (type: string, index: number) => (event: React.TouchEvent) => {
+    startDrag(type, index, event);
+  };
   
-  const handleMouseMove = (event: MouseEvent) => {
+  const handlePointerMove = (event: MouseEvent | TouchEvent) => {
+    if ('touches' in event) event.preventDefault(); // prevent scroll while dragging
+    
     if (isBoxSelecting) {
       const pos = getScaledMousePosition(event);
       if (pos) {
@@ -489,7 +507,7 @@ export function EnclosureVisualizer({
     });
   };
   
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
     if (isBoxSelecting) {
       // Resolve box selection — use refs for latest values
       const bStart = boxSelectStartRef.current;
@@ -620,12 +638,18 @@ export function EnclosureVisualizer({
   
   React.useEffect(() => {
     if (isDragging || isBoxSelecting) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('mousemove', handlePointerMove);
+      window.addEventListener('mouseup', handlePointerUp);
+      window.addEventListener('touchmove', handlePointerMove, { passive: false });
+      window.addEventListener('touchend', handlePointerUp);
+      window.addEventListener('touchcancel', handlePointerUp);
       
       return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('mousemove', handlePointerMove);
+        window.removeEventListener('mouseup', handlePointerUp);
+        window.removeEventListener('touchmove', handlePointerMove);
+        window.removeEventListener('touchend', handlePointerUp);
+        window.removeEventListener('touchcancel', handlePointerUp);
       };
     }
   }, [isDragging, isBoxSelecting, draggedItem, dragAnchor, dragStartPositions, selectedItems, snapEnabled]);
@@ -1012,6 +1036,7 @@ export function EnclosureVisualizer({
             WebkitUserSelect: "none",
             MozUserSelect: "none",
             msUserSelect: "none",
+            touchAction: isEditMode ? "none" : "auto",
           }}
         >
           <defs>
@@ -1126,6 +1151,7 @@ export function EnclosureVisualizer({
             {pedalName && (
               <g
                 onMouseDown={handleMouseDown('pedalName', 0)}
+                onTouchStart={handleTouchStart('pedalName', 0)}
                 style={{ cursor: isEditMode ? 'move' : (isEditLabelsMode ? 'pointer' : 'default') }}
               >
                 {editingLabel?.type === 'pedalName' ? (
@@ -1248,8 +1274,17 @@ export function EnclosureVisualizer({
                 <g 
                   key={`pot-${idx}`}
                   onMouseDown={handleMouseDown('potentiometer', idx)}
+                  onTouchStart={handleTouchStart('potentiometer', idx)}
                   style={{ cursor: isEditMode ? 'move' : 'default' }}
                 >
+                  {/* Invisible hit area for better clickability */}
+                  <circle
+                    cx={effectivePos.x}
+                    cy={effectivePos.y}
+                    r={getEffectiveKnobDiameter(idx) / 2 + 1}
+                    fill="transparent"
+                    stroke="none"
+                  />
                   {/* Label (rendered first, behind knob) */}
                   {editingLabel?.type === 'potentiometer' && editingLabel?.index === idx ? (
                     <>
@@ -1341,6 +1376,12 @@ export function EnclosureVisualizer({
                           if (isEditMode && !isEditLabelsMode) {
                             e.stopPropagation();
                             handleMouseDown('potentiometer-label', idx)(e);
+                          }
+                        }}
+                        onTouchStart={(e) => {
+                          if (isEditMode && !isEditLabelsMode) {
+                            e.stopPropagation();
+                            handleTouchStart('potentiometer-label', idx)(e);
                           }
                         }}
                         onClick={() => {
@@ -1440,6 +1481,7 @@ export function EnclosureVisualizer({
                 <g 
                   key={`switch-${idx}`}
                   onMouseDown={handleMouseDown('switch', idx)}
+                  onTouchStart={handleTouchStart('switch', idx)}
                   style={{ cursor: isEditMode ? 'move' : 'default' }}
                 >
                   {/* Invisible hit area for better clickability */}
@@ -1566,6 +1608,12 @@ export function EnclosureVisualizer({
                             handleMouseDown('switch-label', idx)(e);
                           }
                         }}
+                        onTouchStart={(e) => {
+                          if (isEditMode && !isEditLabelsMode) {
+                            e.stopPropagation();
+                            handleTouchStart('switch-label', idx)(e);
+                          }
+                        }}
                         onClick={() => {
                           if (isEditLabelsMode && control) {
                             setEditingLabel({ type: 'switch', index: idx, value: label });
@@ -1614,6 +1662,7 @@ export function EnclosureVisualizer({
                 <g 
                   key={`fader-${idx}`}
                   onMouseDown={handleMouseDown('fader', idx)}
+                  onTouchStart={handleTouchStart('fader', idx)}
                   style={{ cursor: isEditMode ? 'move' : 'default' }}
                 >
                   {/* Fader track */}
@@ -1734,6 +1783,12 @@ export function EnclosureVisualizer({
                             handleMouseDown('fader-label', idx)(e);
                           }
                         }}
+                        onTouchStart={(e) => {
+                          if (isEditMode && !isEditLabelsMode) {
+                            e.stopPropagation();
+                            handleTouchStart('fader-label', idx)(e);
+                          }
+                        }}
                         onClick={() => {
                           if (isEditLabelsMode && control) {
                             setEditingLabel({ type: 'fader', index: idx, value: label });
@@ -1772,6 +1827,7 @@ export function EnclosureVisualizer({
                 <g 
                   key={`led-${index}`}
                   onMouseDown={handleMouseDown('led', index)}
+                  onTouchStart={handleTouchStart('led', index)}
                   style={{ cursor: isEditMode ? 'move' : 'default' }}
                 >
                   {/* Invisible hit area for better clickability and to prevent glow cutoff */}
@@ -1899,6 +1955,7 @@ export function EnclosureVisualizer({
                 <g 
                   key={`footswitch-${index}`}
                   onMouseDown={handleMouseDown('footswitch', index)}
+                  onTouchStart={handleTouchStart('footswitch', index)}
                   style={{ cursor: isEditMode ? 'move' : 'default' }}
                 >
                   {ledType === "Illuminated Footswitch" && (
