@@ -2,6 +2,30 @@
 
 import * as React from "react";
 
+let knobInstanceCounter = 0;
+
+/** Make all SVG IDs unique by appending a suffix, and update all references (url(#...), xlink:href="#...") */
+function uniquifyIds(svgText: string, suffix: string): string {
+  // Collect all defined IDs
+  const idSet = new Set<string>();
+  svgText.replace(/\bid="([^"]+)"/g, (_m, id) => { idSet.add(id); return _m; });
+  if (idSet.size === 0) return svgText;
+
+  let result = svgText;
+  for (const id of idSet) {
+    const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // Replace id definitions
+    result = result.replace(new RegExp(`\\bid="${escaped}"`, "g"), `id="${id}_${suffix}"`);
+    // Replace url(#id) references (in style attributes and fill/clip-path attributes)
+    result = result.replace(new RegExp(`url\\(#${escaped}\\)`, "g"), `url(#${id}_${suffix})`);
+    // Replace xlink:href="#id" references (gradient inheritance)
+    result = result.replace(new RegExp(`xlink:href="#${escaped}"`, "g"), `xlink:href="#${id}_${suffix}"`);
+    // Replace href="#id" (SVG2 style)
+    result = result.replace(new RegExp(`href="#${escaped}"`, "g"), `href="#${id}_${suffix}"`);
+  }
+  return result;
+}
+
 export type KnobSvgProps = {
   /** URL to the SVG template (e.g., /api/data/knobs/Types/Boss%20Style/Boss_Style_template.svg) */
   svgUrl: string;
@@ -354,6 +378,8 @@ export function KnobSvgInline({
   x?: number;
   y?: number;
 }) {
+  // Stable unique ID per component instance to prevent SVG ID conflicts between knobs
+  const instanceId = React.useRef(`k${++knobInstanceCounter}`).current;
   const [svgContent, setSvgContent] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -389,6 +415,9 @@ export function KnobSvgInline({
 
     const colorMap = buildColorMap(primaryColor, secondaryColor, primaryDarkColor, primaryLightColor);
     let processed = recolorSvg(svgContent, colorMap);
+
+    // Make all SVG IDs unique to this instance so multiple knobs don't clash
+    processed = uniquifyIds(processed, instanceId);
 
     // Extract viewBox from SVG
     const viewBoxMatch = processed.match(/viewBox="([^"]*)"/);
