@@ -24,6 +24,7 @@ export type EnclosureSize = {
   funny_description: string;
   capacity: string;
   best_for: string[];
+  dimensions_mm?: { length: number; width: number; height: number };
 };
 
 type EnclosureSizeSelectorProps = {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Search } from "lucide-react";
 import { resolveColors, type ColorEntry } from "@/lib/colorUtils";
 import { formatKnobSurcharge, knobSurcharge } from "@/lib/knobPricing";
+import { sortKnobsByPriority } from "@/lib/knobDefaults";
 import { KnobSvg } from "./KnobSvg";
 
 export type KnobVariant = {
@@ -84,9 +85,10 @@ export function KnobSelector({
   const [searchTerm, setSearchTerm] = React.useState("");
 
   const filteredKnobTypes = React.useMemo(() => {
-    if (!searchTerm.trim()) return knobTypes;
+    const sorted = sortKnobsByPriority(knobTypes);
+    if (!searchTerm.trim()) return sorted;
     const term = searchTerm.toLowerCase().trim();
-    return knobTypes.filter(
+    return sorted.filter(
       (kt) =>
         kt.knob_type.toLowerCase().includes(term) ||
         (kt.display_name && kt.display_name.toLowerCase().includes(term)) ||

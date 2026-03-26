@@ -12,6 +12,7 @@ import { LedSelector, type LedOption } from "./LedSelector";
 import { KnobSelector, type KnobType, getKnobDisplayName } from "./KnobSelector";
 import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
 import { knobSurcharge } from "@/lib/knobPricing";
+import { sortKnobsByPriority, pickDefaultKnob } from "@/lib/knobDefaults";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 import { IMAGE_CONFIG } from "@/lib/imageConfig";
 import { resolveColors, findColorByKey, type ColorEntry } from "@/lib/colorUtils";
@@ -104,9 +105,13 @@ export function PedalCustomizer({
   const [customLedColor, setCustomLedColor] = React.useState<string>("#ff0000");
   const [selectedLedBezelColor, setSelectedLedBezelColor] = React.useState<string | null>(null);
   const [selectedLabelColor, setSelectedLabelColor] = React.useState<string | null>(null);
-  const [selectedKnobTypeId, setSelectedKnobTypeId] = React.useState(knobTypes[0]?.knob_type ?? "");
+  const [selectedKnobTypeId, setSelectedKnobTypeId] = React.useState(() => {
+    const sorted = sortKnobsByPriority(knobTypes);
+    return sorted[0]?.knob_type ?? "";
+  });
   const [selectedKnobSize, setSelectedKnobSize] = React.useState<number | null>(null);
   const [selectedKnobColorKey, setSelectedKnobColorKey] = React.useState<string | null>(null);
+  const [userPickedKnob, setUserPickedKnob] = React.useState(false);
   const [selectedEffectMods, setSelectedEffectMods] = React.useState<SelectedModWithOptions[]>([]);
   const [labelText, setLabelText] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -463,6 +468,21 @@ export function PedalCustomizer({
     }
     return { footswitches, leds };
   }, [selectedEffect, selectedEffectMods]);
+
+  // Auto-pick the best default knob based on enclosure size + control count
+  // Runs on mount and whenever size/controls change, unless user manually picked a knob
+  React.useEffect(() => {
+    if (isRestoringRef.current || userPickedKnob) return;
+    if (!selectedSize?.dimensions_mm) return;
+    const { width, length } = selectedSize.dimensions_mm;
+    // Total face elements: controls + footswitches + LEDs (all take space on the enclosure)
+    const totalFaceElements = effectiveControls.length + requiredCounts.footswitches + requiredCounts.leds;
+    const best = pickDefaultKnob(knobTypes, width, length, totalFaceElements);
+    if (best) {
+      setSelectedKnobTypeId(best.knobType.knob_type);
+      setSelectedKnobSize(best.size);
+    }
+  }, [selectedSize, effectiveControls, requiredCounts, knobTypes, userPickedKnob]);
 
   // Select appropriate layout based on current config
   const previewLayout = React.useMemo(() => {
@@ -1618,11 +1638,12 @@ export function PedalCustomizer({
             <KnobSelector
               knobTypes={knobTypes}
               selectedKnobTypeId={selectedKnobTypeId}
-              onSelectKnobType={setSelectedKnobTypeId}
+              onSelectKnobType={(id) => { setSelectedKnobTypeId(id); setUserPickedKnob(true); }}
               onShowDetails={(knobType) => {
                 // Select knob type before opening modal
                 if (selectedKnobTypeId !== knobType.knob_type) {
                   setSelectedKnobTypeId(knobType.knob_type);
+                  setUserPickedKnob(true);
                 }
 
                 const firstVariant = knobType.variants[0];

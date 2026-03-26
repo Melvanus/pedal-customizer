@@ -10,6 +10,7 @@ import { KnobSvg } from "@/components/KnobSvg";
 import type { KnobType, KnobVariant } from "@/components/KnobSelector";
 import { getKnobDisplayName } from "@/components/KnobSelector";
 import { knobSurcharge, formatKnobSurcharge } from "@/lib/knobPricing";
+import { sortKnobsByPriority } from "@/lib/knobDefaults";
 
 type SelectedModWithOptions = {
   mod: {
@@ -1223,7 +1224,7 @@ export function SummaryContent() {
                                       fontSize: "0.85rem",
                                     }}
                                   >
-                                    {knobTypesData.map(kt => (
+                                    {sortKnobsByPriority(knobTypesData).map(kt => (
                                       <option key={kt.knob_type} value={kt.knob_type}>{getKnobDisplayName(kt)}</option>
                                     ))}
                                   </select>
