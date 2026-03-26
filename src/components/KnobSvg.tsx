@@ -91,18 +91,14 @@ function resolveColorRef(colorRef: string, colorMap: Record<string, string>): st
   return undefined;
 }
 
-/** Compute a shade of the base color based on a gradient spec letter:
- *  h = highlight (lighten 60%), l = light (lighten 30%), m = mid (as-is),
- *  r = regular (as-is), d = dark (darken 30%), v = very dark (darken 60%)
+/** Compute a shade of the base color based on a gradient stop letter:
+ *  l = light (lighten 30%), m = mid (as-is), d = dark (darken 30%)
  */
 function shadeForLetter(letter: string, baseColor: string): string {
   switch (letter) {
-    case "h": return lightenColor(baseColor, 0.6);
     case "l": return lightenColor(baseColor, 0.3);
     case "m": return baseColor;
-    case "r": return baseColor;
     case "d": return darkenColor(baseColor, 0.3);
-    case "v": return darkenColor(baseColor, 0.6);
     default: return baseColor;
   }
 }
@@ -114,7 +110,9 @@ function shadeForLetter(letter: string, baseColor: string): string {
  * Handles:
  * - Direct fill:#hex and stroke:#hex on labeled elements
  * - Gradient fills (fill:url(#id)) where the gradient's stop-colors are recolored
- *   using the gradient spec letters (e.g. "rlllld" → stop 0=regular, 1=light, etc.)
+ *   using the gradient spec. The first letter is the gradient direction
+ *   (h=horizontal, v=vertical, r=radial) and the remaining letters are stop shades
+ *   (l=light, m=mid, d=dark). E.g. "rlllld" → radial, stops: l,l,l,l,d
  */
 function recolorSvg(svgText: string, colorMap: Record<string, string>): string {
   // Step 1: Find all element tags (multi-line) with inkscape:label containing a color ref.
@@ -175,8 +173,13 @@ function recolorSvg(svgText: string, colorMap: Record<string, string>): string {
   return result;
 }
 
-/** Recolor the stop-colors of a gradient (and any gradient it references via xlink:href). */
+/** Recolor the stop-colors of a gradient (and any gradient it references via xlink:href).
+ *  The spec's first letter is the gradient direction (h/v/r) — skip it.
+ *  The remaining letters map 1:1 to gradient stops (l/m/d).
+ */
 function recolorGradientStops(svgText: string, gradientId: string, baseColor: string, spec: string): string {
+  // Strip the first letter (direction) — remaining letters are stop shades
+  const stopShades = spec.length > 1 ? spec.slice(1) : spec;
   // Check if this gradient has xlink:href to another gradient (common in Inkscape)
   const selfCloseRe = new RegExp(
     `<(?:linearGradient|radialGradient)[^>]*\\bid="${gradientId}"[^>]*/>`,
@@ -187,7 +190,8 @@ function recolorGradientStops(svgText: string, gradientId: string, baseColor: st
     const hrefMatch = selfCloseMatch[0].match(/xlink:href="#([^"]+)"/);
     if (hrefMatch) {
       // The actual stops are in the referenced gradient — recolor that one
-      return recolorGradientStops(svgText, hrefMatch[1], baseColor, spec);
+      // Pass stopShades (already stripped of direction letter) by prefixing a dummy direction
+      return recolorGradientStops(svgText, hrefMatch[1], baseColor, "r" + stopShades);
     }
   }
 
@@ -205,7 +209,7 @@ function recolorGradientStops(svgText: string, gradientId: string, baseColor: st
   const recolored = original.replace(
     /stop-color:#[0-9a-fA-F]{3,8}/gi,
     (stopColorStr) => {
-      const letter = spec[stopIndex] || spec[spec.length - 1] || "r";
+      const letter = stopShades[stopIndex] || stopShades[stopShades.length - 1] || "m";
       stopIndex++;
       return `stop-color:${shadeForLetter(letter, baseColor)}`;
     }
