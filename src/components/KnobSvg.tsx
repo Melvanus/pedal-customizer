@@ -417,7 +417,7 @@ export function KnobSvgInline({
   const scale = diameterMm / Math.max(vw, vh);
 
   return (
-    <g transform={`translate(${x - (vw * scale) / 2}, ${y - (vh * scale) / 2}) scale(${scale})`}>
+    <g transform={`translate(${x - (vw * scale) / 2}, ${y - (vh * scale) / 2}) scale(${scale})`} pointerEvents="none">
       <g transform={`translate(${-vx}, ${-vy})`} dangerouslySetInnerHTML={{ __html: innerContent }} />
     </g>
   );
