@@ -1621,8 +1621,8 @@ export function PedalCustomizer({
                 const firstVariant = knobType.variants[0];
                 const resolvedColors = resolveColors(knobType.available_colors);
                 
-                // Use external image URL for preview (local paths have directory name mismatches)
-                const previewImage = firstVariant?.image_url || undefined;
+                // Use local preview image API
+                const previewImage = `/api/data/knobs/preview/${encodeURIComponent(knobType.knob_type)}`;
 
                 setModalProduct({
                   type: "other",

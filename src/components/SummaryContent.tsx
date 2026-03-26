@@ -473,7 +473,7 @@ export function SummaryContent() {
   React.useEffect(() => {
     fetch("/api/data/knobs/knobs.json")
       .then(res => res.json())
-      .then((data: KnobType[]) => setKnobTypesData(data))
+      .then((data: { knob_types: KnobType[] }) => setKnobTypesData(data.knob_types || []))
       .catch(err => console.error("Failed to load knob types:", err));
   }, []);
 

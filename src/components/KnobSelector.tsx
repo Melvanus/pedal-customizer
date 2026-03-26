@@ -66,13 +66,9 @@ function getMinPrice(knobType: KnobType): number {
   return Math.min(...knobType.variants.map((v) => v.price_eur));
 }
 
-/** Get the first product image URL for a knob type */
-function getPreviewImage(knobType: KnobType): string | null {
-  const firstVariant = knobType.variants[0];
-  if (!firstVariant) return null;
-  // Use external URL — local image directories use rounded folder names
-  // that don't match the variant's diameter_label, so external is reliable.
-  return firstVariant.image_url || null;
+/** Get a local preview image URL for a knob type */
+function getPreviewImage(knobType: KnobType): string {
+  return `/api/data/knobs/preview/${encodeURIComponent(knobType.knob_type)}`;
 }
 
 export function KnobSelector({
