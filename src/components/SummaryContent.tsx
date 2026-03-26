@@ -549,6 +549,7 @@ export function SummaryContent() {
         pedalName,
         controlLabels,
         disabledLabels,
+        knobAssignments,
         submittedAt: new Date().toISOString(),
       };
 

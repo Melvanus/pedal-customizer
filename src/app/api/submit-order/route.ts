@@ -73,7 +73,24 @@ function createOrderDataStructure(orderData: any) {
       isCustomColor: orderData.ledColor?.startsWith('#') || false,
       price: orderData.led?.customer_price_eur,
     },
-    
+
+    // Knob configuration
+    knob: orderData.knob ? {
+      defaultType: orderData.knob.knobType,
+      defaultSize: orderData.knob.size ? `${orderData.knob.size}mm` : null,
+      defaultColor: orderData.knob.colorKey || null,
+      pricePerKnob: orderData.knob.variant?.price_eur ?? null,
+      // Per-pot assignments (if user customized individual pots)
+      perPotAssignments: orderData.knobAssignments
+        ? Object.entries(orderData.knobAssignments).map(([potIdx, a]: [string, any]) => ({
+            pot: parseInt(potIdx),
+            type: a.knobType,
+            size: `${a.size}mm`,
+            color: a.colorKey || null,
+          }))
+        : null,
+    } : null,
+
     // Layout configuration
     layout: {
       selectedLayoutId: orderData.selectedLayoutId || null,
@@ -191,6 +208,25 @@ export async function POST(request: Request) {
         inline: true
       }
     ];
+
+    // Add knob configuration if present
+    if (cleanOrderData.knob) {
+      const knobLines = [`Type: ${cleanOrderData.knob.defaultType}`];
+      if (cleanOrderData.knob.defaultSize) knobLines.push(`Size: ${cleanOrderData.knob.defaultSize}`);
+      if (cleanOrderData.knob.defaultColor) knobLines.push(`Color: ${cleanOrderData.knob.defaultColor}`);
+      if (cleanOrderData.knob.pricePerKnob != null) knobLines.push(`Price: ${formatPrice(cleanOrderData.knob.pricePerKnob)}/ea`);
+      if (cleanOrderData.knob.perPotAssignments?.length) {
+        knobLines.push(`\nPer-pot overrides:`);
+        cleanOrderData.knob.perPotAssignments.forEach((a: any) => {
+          knobLines.push(`• Pot ${a.pot + 1}: ${a.type} ${a.size}${a.color ? ` (${a.color})` : ''}`);
+        });
+      }
+      fields.push({
+        name: "🎛️ Knobs",
+        value: knobLines.join('\n'),
+        inline: false
+      });
+    }
 
     // Add effect mods if present
     if (cleanOrderData.effect.mods.length > 0) {
