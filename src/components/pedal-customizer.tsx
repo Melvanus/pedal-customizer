@@ -11,6 +11,7 @@ import { DesignSelector, type DesignOption } from "./DesignSelector";
 import { LedSelector, type LedOption } from "./LedSelector";
 import { KnobSelector, type KnobType, getKnobDisplayName } from "./KnobSelector";
 import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
+import { knobSurcharge } from "@/lib/knobPricing";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 import { IMAGE_CONFIG } from "@/lib/imageConfig";
 import { resolveColors, findColorByKey, type ColorEntry } from "@/lib/colorUtils";
@@ -395,7 +396,7 @@ export function PedalCustomizer({
       const matchingVariant = selectedKnobType.variants.find(v => v.diameter_mm === selectedKnobSize);
       return {
         ...prev,
-        price: matchingVariant?.price_eur ?? prev.price,
+        price: matchingVariant ? knobSurcharge(matchingVariant.price_eur) : prev.price,
         additionalSections: buildKnobModalSections(selectedKnobType, selectedKnobSize, selectedKnobColorKey),
       };
     });
@@ -623,13 +624,19 @@ export function PedalCustomizer({
     return result.surcharge;
   }, [selectedEffect, selectedSize, selectedEffectMods]);
 
+  // Calculate knob surcharge: per-knob surcharge × number of pots
+  const potCount = effectiveControls.filter((c: any) => c.type === "Pot").length;
+  const perKnobSurcharge = selectedKnobVariant ? knobSurcharge(selectedKnobVariant.price_eur) : 0;
+  const knobTotalSurcharge = perKnobSurcharge * potCount;
+
   const totalPrice =
     (selectedEffect?.customer_price_eur ?? 0) +
     modsTotalPrice +
     sizeSurcharge +
     (selectedPaint?.customer_price_eur ?? 0) +
     (selectedDesign?.customer_price_eur ?? 0) +
-    (selectedLed?.customer_price_eur ?? 0);
+    (selectedLed?.customer_price_eur ?? 0) +
+    knobTotalSurcharge;
 
   // Tab navigation helper
   const advanceToNextTab = () => {
@@ -1630,7 +1637,7 @@ export function PedalCustomizer({
                   type: "other",
                   title: getKnobDisplayName(knobType),
                   subtitle: knobType.canonical_type ? `Style: ${knobType.canonical_type}` : undefined,
-                  price: firstVariant?.price_eur ?? 0,
+                  price: firstVariant ? knobSurcharge(firstVariant.price_eur) : 0,
                   image: previewImage,
                   description: `Available in ${knobType.available_sizes_mm.length} size${knobType.available_sizes_mm.length > 1 ? "s" : ""} and ${resolvedColors.length} color${resolvedColors.length > 1 ? "s" : ""}. ${knobType.variants.length} total variant${knobType.variants.length > 1 ? "s" : ""} to tweak your tone controls just right.`,
                   details: [

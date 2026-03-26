@@ -9,6 +9,7 @@ import { resolveColors, findColorByKey, getContrastingColor, type ColorEntry } f
 import { KnobSvg } from "@/components/KnobSvg";
 import type { KnobType, KnobVariant } from "@/components/KnobSelector";
 import { getKnobDisplayName } from "@/components/KnobSelector";
+import { knobSurcharge, formatKnobSurcharge } from "@/lib/knobPricing";
 
 type SelectedModWithOptions = {
   mod: {
@@ -388,6 +389,24 @@ export function SummaryContent() {
       };
     });
   }, [config?.knob, knobAssignments, knobTypesData]);
+
+  // Compute total knob surcharge from per-pot assignments
+  const knobSurchargeTotal = React.useMemo(() => {
+    if (!config?.knob || Object.keys(knobAssignments).length === 0) return 0;
+    return Object.values(knobAssignments).reduce((sum, assignment) => {
+      const knobType = knobTypesData.find(kt => kt.knob_type === assignment.knobType);
+      const variant = knobType?.variants.find(
+        v => v.diameter_mm === assignment.size && v.color.toLowerCase() === (assignment.colorKey || "").toLowerCase()
+      ) || knobType?.variants.find(v => v.diameter_mm === assignment.size) || knobType?.variants[0];
+      return sum + knobSurcharge(variant?.price_eur ?? 0);
+    }, 0);
+  }, [config?.knob, knobAssignments, knobTypesData]);
+
+  // Default knob surcharge already baked into config.totalPrice — subtract it, then add per-pot surcharges
+  const defaultKnobSurchargeTotal = config?.knob
+    ? knobSurcharge(config.knob.variant.price_eur) * Object.keys(knobAssignments).length
+    : 0;
+  const effectiveTotal = (config?.totalPrice ?? 0) - defaultKnobSurchargeTotal + knobSurchargeTotal;
 
   // Pot controls list for the knob assignment UI
   const potControls = React.useMemo(() => {
@@ -1112,7 +1131,7 @@ export function SummaryContent() {
                   {config.knob.size && <> — {config.knob.size}mm</>}
                   {config.knob.variant?.price_eur != null && (
                     <span style={{ color: "#4ade80", marginLeft: "0.5rem" }}>
-                      €{config.knob.variant.price_eur.toFixed(2)} each
+                      {formatKnobSurcharge(config.knob.variant.price_eur)} each
                     </span>
                   )}
                 </p>
@@ -1362,9 +1381,17 @@ export function SummaryContent() {
                   <span style={{ color: "#999" }}>Configuration Total:</span>
                   <span style={{ color: "#fff", fontWeight: 600 }}>{formatPrice(config.totalPrice)}</span>
                 </div>
+                {knobSurchargeTotal !== defaultKnobSurchargeTotal && (
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                    <span style={{ color: "#999" }}>Knob Customization:</span>
+                    <span style={{ color: knobSurchargeTotal > defaultKnobSurchargeTotal ? "#f59e0b" : "#4ade80", fontWeight: 600 }}>
+                      {knobSurchargeTotal > defaultKnobSurchargeTotal ? "+" : "−"}€{Math.abs(knobSurchargeTotal - defaultKnobSurchargeTotal).toFixed(2)}
+                    </span>
+                  </div>
+                )}
                 <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "0.75rem", borderTop: "1px solid #2d2d2d" }}>
                   <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#fff" }}>Total:</span>
-                  <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(config.totalPrice)}</span>
+                  <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}>{formatPrice(effectiveTotal)}</span>
                 </div>
               </div>
 

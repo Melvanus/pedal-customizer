@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { resolveColors, type ColorEntry } from "@/lib/colorUtils";
+import { formatKnobSurcharge, knobSurcharge } from "@/lib/knobPricing";
 import { KnobSvg } from "./KnobSvg";
 
 export type KnobVariant = {
@@ -60,14 +61,10 @@ type KnobSelectorProps = {
   onShowDetails?: (knobType: KnobType) => void;
 };
 
-function formatPrice(price: number): string {
-  return `€${price.toFixed(2)}`;
-}
-
-/** Get the cheapest variant price for a knob type */
-function getMinPrice(knobType: KnobType): number {
+/** Get the minimum surcharge for a knob type (0 = included free) */
+function getMinSurcharge(knobType: KnobType): number {
   if (knobType.variants.length === 0) return 0;
-  return Math.min(...knobType.variants.map((v) => v.price_eur));
+  return Math.min(...knobType.variants.map((v) => knobSurcharge(v.price_eur)));
 }
 
 /** Get a local preview image URL for a knob type */
@@ -166,7 +163,7 @@ export function KnobSelector({
         {filteredKnobTypes.map((knobType) => {
           const isSelected = selectedKnobTypeId === knobType.knob_type;
           const previewImage = getPreviewImage(knobType);
-          const minPrice = getMinPrice(knobType);
+          const minSurcharge = getMinSurcharge(knobType);
           const resolvedColors = resolveColors(knobType.available_colors);
           const templateUrl = knobType.template_svg_path
             ? `/api/data/knobs/${knobType.template_svg_path.split("/").map(s => encodeURIComponent(s)).join("/")}`
@@ -265,8 +262,8 @@ export function KnobSelector({
                       <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "0.15rem" }}>{knobType.canonical_type}</div>
                     )}
                   </div>
-                  <span style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#fff", whiteSpace: "nowrap" }}>
-                    {minPrice > 0 ? `from ${formatPrice(minPrice)}` : "—"}
+                  <span style={{ fontSize: "1.1rem", fontWeight: "bold", color: minSurcharge === 0 ? "#4ade80" : "#fff", whiteSpace: "nowrap" }}>
+                    {minSurcharge === 0 ? "Included" : `from +€${minSurcharge.toFixed(2)}`}
                   </span>
                 </div>
 
