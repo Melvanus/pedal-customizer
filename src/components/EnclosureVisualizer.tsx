@@ -656,21 +656,65 @@ export function EnclosureVisualizer({
   };
   
   // Helper to get effective label offset (with overrides applied)
+  // For potentiometers without user overrides, auto-adjusts based on knob diameter
+  const DEFAULT_KNOB_RADIUS = 7.5; // default fallback knob radius in mm
+  
+  const getEffectiveKnobDiameter = (potIndex: number): number => {
+    const potKnob = knobConfigsPerPot?.[potIndex];
+    if (potKnob) return potKnob.diameterMm;
+    if (knobDiameterMm) return knobDiameterMm;
+    return DEFAULT_KNOB_RADIUS * 2; // 15mm default
+  };
+  
   const getLabelOffset = (type: string, index: number, defaultOffset: Position): Position => {
-    let offset: Position;
-    
+    // If user has manually repositioned this label, always use that
     if (type === 'potentiometer' && positionOverrides.potentiometerLabelOffsets[index]) {
-      offset = positionOverrides.potentiometerLabelOffsets[index];
+      return positionOverrides.potentiometerLabelOffsets[index];
     } else if (type === 'switch' && positionOverrides.switchLabelOffsets[index]) {
-      offset = positionOverrides.switchLabelOffsets[index];
+      return positionOverrides.switchLabelOffsets[index];
     } else if (type === 'fader' && positionOverrides.faderLabelOffsets[index]) {
-      offset = positionOverrides.faderLabelOffsets[index];
-    } else {
-      offset = defaultOffset;
+      return positionOverrides.faderLabelOffsets[index];
     }
     
-    return offset;
+    // For potentiometers, auto-adjust label offset based on knob diameter
+    if (type === 'potentiometer') {
+      const knobRadius = getEffectiveKnobDiameter(index) / 2;
+      const radiusDiff = knobRadius - DEFAULT_KNOB_RADIUS;
+      if (Math.abs(radiusDiff) > 0.5) {
+        // Push the label further away along its offset direction
+        const dist = Math.sqrt(defaultOffset.x * defaultOffset.x + defaultOffset.y * defaultOffset.y);
+        if (dist > 0) {
+          const nx = defaultOffset.x / dist;
+          const ny = defaultOffset.y / dist;
+          return { x: defaultOffset.x + nx * radiusDiff, y: defaultOffset.y + ny * radiusDiff };
+        }
+      }
+    }
+    
+    return defaultOffset;
   };
+  
+  // Knob collision detection — find pairs of pots whose knobs overlap
+  const collidingPots = React.useMemo(() => {
+    const colliding = new Set<number>();
+    const pots = layout.potentiometer_positions;
+    for (let i = 0; i < pots.length; i++) {
+      for (let j = i + 1; j < pots.length; j++) {
+        const posI = getDataPosition('potentiometer', i);
+        const posJ = getDataPosition('potentiometer', j);
+        const rI = getEffectiveKnobDiameter(i) / 2;
+        const rJ = getEffectiveKnobDiameter(j) / 2;
+        const dx = posI.x - posJ.x;
+        const dy = posI.y - posJ.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < rI + rJ - 0.5) { // 0.5mm tolerance
+          colliding.add(i);
+          colliding.add(j);
+        }
+      }
+    }
+    return colliding;
+  }, [layout.potentiometer_positions, positionOverrides.potentiometers, knobConfigsPerPot, knobDiameterMm]);
   
   const visualizerContent = (
     <div
@@ -1367,6 +1411,20 @@ export function EnclosureVisualizer({
                       </>
                     );
                   })()}
+                  {/* Collision warning ring */}
+                  {collidingPots.has(idx) && (
+                    <circle
+                      cx={effectivePos.x}
+                      cy={effectivePos.y}
+                      r={getEffectiveKnobDiameter(idx) / 2 + 1}
+                      fill="none"
+                      stroke="#ff4444"
+                      strokeWidth="0.8"
+                      strokeDasharray="2 1.5"
+                      opacity="0.85"
+                      style={{ pointerEvents: 'none' }}
+                    />
+                  )}
                 </g>
               );
             })}
