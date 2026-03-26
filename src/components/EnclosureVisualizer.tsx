@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight, Move, Shuffle, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, Magnet } from "lucide-react";
+import { KnobSvgInline } from "./KnobSvg";
 
 type Position = {
   x: number;
@@ -31,6 +32,15 @@ type LayoutData = {
   pedal_name_position: Position;
 };
 
+export type KnobConfig = {
+  svgUrl: string;
+  diameterMm: number;
+  primaryColor: string;
+  secondaryColor: string;
+  primaryDarkColor?: string;
+  primaryLightColor?: string;
+};
+
 type EnclosureVisualizerProps = {
   layout: LayoutData;
   availableLayouts?: LayoutData[];
@@ -51,6 +61,13 @@ type EnclosureVisualizerProps = {
   labeledLettering?: boolean;
   labelColor?: string;
   compact?: boolean;
+  knobSvgUrl?: string;
+  knobDiameterMm?: number;
+  knobPrimaryColor?: string;
+  knobSecondaryColor?: string;
+  knobPrimaryDarkColor?: string;
+  knobPrimaryLightColor?: string;
+  knobConfigsPerPot?: (KnobConfig | null)[];
 };
 
 const getFinishPattern = (finishType: string | undefined, color: string) => {
@@ -128,6 +145,13 @@ export function EnclosureVisualizer({
   labeledLettering = false,
   labelColor,
   compact = false,
+  knobSvgUrl,
+  knobDiameterMm,
+  knobPrimaryColor,
+  knobSecondaryColor,
+  knobPrimaryDarkColor,
+  knobPrimaryLightColor,
+  knobConfigsPerPot,
 }: EnclosureVisualizerProps) {
   console.log('ðŸŽ² [Randomize] EnclosureVisualizer rendering, layout ID:', layout.id);
   
@@ -1301,20 +1325,48 @@ export function EnclosureVisualizer({
                       +
                     </text>
                   ) : null}
-                  {/* Knob shadow */}
-                  <circle cx={effectivePos.x} cy={effectivePos.y + 0.75} r="8.25" fill="#000" opacity="0.3" />
-                  {/* Knob body */}
-                  <circle cx={effectivePos.x} cy={effectivePos.y} r="7.5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
-                  {/* Knob indicator line */}
-                  <line
-                    x1={effectivePos.x}
-                    y1={effectivePos.y - 6}
-                    x2={effectivePos.x}
-                    y2={effectivePos.y - 1.5}
-                    stroke="#fff"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                  />
+                  {/* Knob shadow & body - resolve per-pot config */}
+                  {(() => {
+                    const potKnob = knobConfigsPerPot?.[idx] ?? (knobSvgUrl ? {
+                      svgUrl: knobSvgUrl,
+                      diameterMm: knobDiameterMm || 15,
+                      primaryColor: knobPrimaryColor || "#888888",
+                      secondaryColor: knobSecondaryColor || "#888888",
+                      primaryDarkColor: knobPrimaryDarkColor,
+                      primaryLightColor: knobPrimaryLightColor,
+                    } : null);
+                    const shadowR = potKnob ? potKnob.diameterMm / 2 + 0.75 : 8.25;
+                    return (
+                      <>
+                        <circle cx={effectivePos.x} cy={effectivePos.y + 0.75} r={shadowR} fill="#000" opacity="0.3" />
+                        {potKnob ? (
+                          <KnobSvgInline
+                            svgUrl={potKnob.svgUrl}
+                            diameterMm={potKnob.diameterMm}
+                            primaryColor={potKnob.primaryColor}
+                            secondaryColor={potKnob.secondaryColor}
+                            primaryDarkColor={potKnob.primaryDarkColor}
+                            primaryLightColor={potKnob.primaryLightColor}
+                            x={effectivePos.x}
+                            y={effectivePos.y}
+                          />
+                        ) : (
+                          <>
+                            <circle cx={effectivePos.x} cy={effectivePos.y} r="7.5" fill="url(#metal-knob)" stroke="#2a2a2a" strokeWidth="0.3" />
+                            <line
+                              x1={effectivePos.x}
+                              y1={effectivePos.y - 6}
+                              x2={effectivePos.x}
+                              y2={effectivePos.y - 1.5}
+                              stroke="#fff"
+                              strokeWidth="1.2"
+                              strokeLinecap="round"
+                            />
+                          </>
+                        )}
+                      </>
+                    );
+                  })()}
                 </g>
               );
             })}

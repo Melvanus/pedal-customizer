@@ -11,6 +11,7 @@ export const IMAGE_CONFIG = {
     paint: 160,
     design: 300,
     led: 280,
+    knobs: 200,
   },
   
   // Modal image sizes (for ProductDetailModal)
@@ -20,6 +21,7 @@ export const IMAGE_CONFIG = {
     paint: { width: 400, height: 250 },
     design: { width: 400, height: 400 },
     led: { width: 400, height: 400 },
+    knobs: { width: 400, height: 300 },
     other: { width: 400, height: 250 },
   },
 } as const;

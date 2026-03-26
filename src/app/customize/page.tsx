@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import { PedalCustomizer, type OptionItem, type PaintOption } from "@/components/pedal-customizer";
 import type { EffectPedal } from "@/components/EffectSelector";
 import type { EnclosureSize } from "@/components/EnclosureSizeSelector";
+import type { KnobType } from "@/components/KnobSelector";
 import type { ColorEntry } from "@/lib/colorUtils";
 
 const toNumber = (price: string | number | undefined) => {
@@ -34,15 +35,17 @@ export default async function CustomizePage() {
   const designPath = path.join(process.cwd(), "data", "design_labeling.json");
   const ledPath = path.join(process.cwd(), "data", "led.json");
   const favouritesPath = path.join(process.cwd(), "data", "favourites.json");
+  const knobsPath = path.join(process.cwd(), "data", "knobs", "knobs.json");
   const imageDir = path.join(process.cwd(), "data", "images");
 
-  const [rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawFavourites, imageFiles] = await Promise.all([
+  const [rawEffectPedals, rawEnclosureSizes, rawData, rawDesign, rawLed, rawFavourites, rawKnobs, imageFiles] = await Promise.all([
     fs.readFile(effectPedalsPath, "utf-8"),
     fs.readFile(enclosureSizesPath, "utf-8"),
     fs.readFile(dataPath, "utf-8"),
     fs.readFile(designPath, "utf-8"),
     fs.readFile(ledPath, "utf-8"),
     fs.readFile(favouritesPath, "utf-8"),
+    fs.readFile(knobsPath, "utf-8"),
     fs.readdir(imageDir),
   ]);
 
@@ -122,6 +125,9 @@ export default async function CustomizePage() {
 
   const favourites = JSON.parse(rawFavourites) as { paintFinishFavourites: string[] };
 
+  const knobsData = JSON.parse(rawKnobs) as { knob_types: KnobType[] };
+  const knobTypes = knobsData.knob_types;
+
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
       <PedalCustomizer
@@ -130,6 +136,7 @@ export default async function CustomizePage() {
         paintOptions={paintOptions}
         designOptions={designOptions}
         ledOptions={ledOptions}
+        knobTypes={knobTypes}
         favouritePaintIds={favourites.paintFinishFavourites}
       />
     </main>

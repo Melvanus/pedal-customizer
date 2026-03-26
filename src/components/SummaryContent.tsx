@@ -3,9 +3,11 @@
 import * as React from "react";
 import Link from "next/link";
 import { ChevronLeft, AlertTriangle, Download, Mail } from "lucide-react";
-import { EnclosureVisualizer } from "@/components/EnclosureVisualizer";
+import { EnclosureVisualizer, type KnobConfig } from "@/components/EnclosureVisualizer";
 import { generateRandomLayout, type GeneratedLayout } from "@/lib/layoutGenerator";
 import { resolveColors, findColorByKey, getContrastingColor, type ColorEntry } from "@/lib/colorUtils";
+import { KnobSvg } from "@/components/KnobSvg";
+import type { KnobType, KnobVariant } from "@/components/KnobSelector";
 
 type SelectedModWithOptions = {
   mod: {
@@ -27,6 +29,22 @@ type SelectedModWithOptions = {
   options?: Record<string, any>;
 };
 
+type KnobConfigData = {
+  knobType: string;
+  size: number | null;
+  colorKey: string | null;
+  variant: any;
+  templateSvgPath?: string;
+  availableSizes: number[];
+  availableColors: ColorEntry[];
+};
+
+type PerPotKnobAssignment = {
+  knobType: string;
+  size: number;
+  colorKey: string;
+};
+
 type ConfigData = {
   effect?: any;
   effectMods?: SelectedModWithOptions[];
@@ -38,6 +56,7 @@ type ConfigData = {
   ledColor?: string;
   ledBezelColor?: string | null;
   labelColor?: string | null;
+  knob?: KnobConfigData | null;
   totalPrice: number;
 };
 
@@ -95,6 +114,11 @@ export function SummaryContent() {
   const [selectedLayoutId, setSelectedLayoutId] = React.useState<string | null>(null);
   const [showPedalNameInVisualizer, setShowPedalNameInVisualizer] = React.useState(true);
   const [randomLayoutKey, setRandomLayoutKey] = React.useState(0);
+
+  // Knob state
+  const [knobTypesData, setKnobTypesData] = React.useState<KnobType[]>([]);
+  const [knobAssignments, setKnobAssignments] = React.useState<Record<number, PerPotKnobAssignment>>({});
+  const [editingKnobIndex, setEditingKnobIndex] = React.useState<number | null>(null);
 
   // Compute effective controls considering mods
   const effectiveControls = React.useMemo(() => {
@@ -331,6 +355,44 @@ export function SummaryContent() {
     return found?.hex;
   }, [config?.labelColor, config?.design]);
 
+  // Compute per-pot knob configs for the EnclosureVisualizer
+  const knobConfigsPerPot = React.useMemo((): (KnobConfig | null)[] => {
+    if (!config?.knob || Object.keys(knobAssignments).length === 0) return [];
+    const potIndices = Object.keys(knobAssignments).map(Number).sort((a, b) => a - b);
+    return potIndices.map(idx => {
+      const assignment = knobAssignments[idx];
+      if (!assignment) return null;
+      // Find the knob type data
+      const knobType = knobTypesData.find(kt => kt.knob_type === assignment.knobType);
+      const templateSvgPath = knobType?.template_svg_path || config.knob?.templateSvgPath;
+      if (!templateSvgPath) return null;
+      // Find matching variant for color info
+      const variant = knobType?.variants.find(
+        v => v.diameter_mm === assignment.size && v.color.toLowerCase() === (assignment.colorKey || "").toLowerCase()
+      ) || knobType?.variants.find(v => v.diameter_mm === assignment.size) || knobType?.variants[0];
+      // Resolve color hex
+      let primaryColor = variant?.primaryColor || "#888888";
+      const colors = knobType?.available_colors || config.knob?.availableColors || [];
+      if (assignment.colorKey && colors.length > 0) {
+        const found = findColorByKey(colors, assignment.colorKey);
+        if (found) primaryColor = found.hex;
+      }
+      return {
+        svgUrl: `/api/data/knobs/${templateSvgPath.split("/").map(s => encodeURIComponent(s)).join("/")}`,
+        diameterMm: assignment.size,
+        primaryColor,
+        secondaryColor: variant?.secondaryColor || "#888888",
+        primaryDarkColor: variant?.primaryDarkColor,
+        primaryLightColor: variant?.primaryLightColor,
+      };
+    });
+  }, [config?.knob, knobAssignments, knobTypesData]);
+
+  // Pot controls list for the knob assignment UI
+  const potControls = React.useMemo(() => {
+    return effectiveControls.filter((c: any) => c.type === "Pot");
+  }, [effectiveControls]);
+
   React.useEffect(() => {
     // Load layouts data
     fetch("/api/data/layouts")
@@ -380,7 +442,39 @@ export function SummaryContent() {
       // Parse the old labelText format if it exists, or use effect pedal name as default
       const labelText = parsed.labelText || parsed.effect?.name || "";
       setPedalName(labelText);
+
+      // Initialize per-pot knob assignments from knob config
+      if (parsed.knob) {
+        const potCount = (() => {
+          let ctrls = parsed.effect?.controls ? [...parsed.effect.controls] : [];
+          if (parsed.effectMods) {
+            parsed.effectMods.forEach((m: SelectedModWithOptions) => {
+              if (m.mod.removes_controls) ctrls = ctrls.filter((c: any) => !m.mod.removes_controls!.includes(c.label));
+              if (m.mod.adds_controls) ctrls = [...ctrls, ...m.mod.adds_controls];
+            });
+          }
+          return ctrls.filter((c: any) => c.type === "Pot").length;
+        })();
+        const defaultAssignment: PerPotKnobAssignment = {
+          knobType: parsed.knob.knobType,
+          size: parsed.knob.size ?? parsed.knob.availableSizes?.[0] ?? 10,
+          colorKey: parsed.knob.colorKey ?? "black",
+        };
+        const assignments: Record<number, PerPotKnobAssignment> = {};
+        for (let i = 0; i < potCount; i++) {
+          assignments[i] = { ...defaultAssignment };
+        }
+        setKnobAssignments(assignments);
+      }
     }
+  }, []);
+
+  // Fetch knob types for the per-pot knob editor
+  React.useEffect(() => {
+    fetch("/api/data/knobs/knobs.json")
+      .then(res => res.json())
+      .then((data: KnobType[]) => setKnobTypesData(data))
+      .catch(err => console.error("Failed to load knob types:", err));
   }, []);
 
   if (!config) {
@@ -1005,6 +1099,213 @@ export function SummaryContent() {
                   />
               </div>
             )}
+
+            {/* Knobs */}
+            {config.knob && (
+              <div style={{ background: "#1a1a1a", padding: "0.1rem 1.5rem 1.5rem 1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
+                <h3 style={{ fontSize: "1.2rem", marginBottom: "0.75rem", color: "#fff" }}>Knob Configuration</h3>
+                <p style={{ fontSize: "0.85rem", color: "#888", marginBottom: "1rem" }}>
+                  Default: <span style={{ color: "#fff", fontWeight: 600 }}>{config.knob.knobType}</span>
+                  {config.knob.size && <> — {config.knob.size}mm</>}
+                  {config.knob.variant?.price_eur != null && (
+                    <span style={{ color: "#4ade80", marginLeft: "0.5rem" }}>
+                      €{config.knob.variant.price_eur.toFixed(2)} each
+                    </span>
+                  )}
+                </p>
+                <p style={{ fontSize: "0.75rem", color: "#666", marginBottom: "1rem" }}>
+                  Because one knob to rule them all is boring — customize each pot individually. Or don&apos;t. We won&apos;t judge. (Okay, maybe a little.)
+                </p>
+                {potControls.length > 0 && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    {potControls.map((control: any, potIdx: number) => {
+                      const assignment = knobAssignments[potIdx];
+                      if (!assignment) return null;
+                      const knobType = knobTypesData.find(kt => kt.knob_type === assignment.knobType);
+                      const resolvedColors = knobType ? resolveColors(knobType.available_colors) : (config.knob?.availableColors ? resolveColors(config.knob.availableColors) : []);
+                      const selectedColorInfo = resolvedColors.find(c => c.key === assignment.colorKey);
+                      const isEditing = editingKnobIndex === potIdx;
+                      const templateSvgPath = knobType?.template_svg_path || config.knob?.templateSvgPath;
+                      const svgUrl = templateSvgPath ? `/api/data/knobs/${templateSvgPath.split("/").map(s => encodeURIComponent(s)).join("/")}` : null;
+
+                      return (
+                        <div key={potIdx} style={{ background: "#0f0f0f", borderRadius: "8px", border: isEditing ? "1px solid #555" : "1px solid #2d2d2d", overflow: "hidden" }}>
+                          {/* Pot header row */}
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.75rem",
+                              padding: "0.75rem",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setEditingKnobIndex(isEditing ? null : potIdx)}
+                          >
+                            {/* Mini knob SVG preview */}
+                            {svgUrl && (
+                              <div style={{ width: "32px", height: "32px", flexShrink: 0 }}>
+                                <KnobSvg
+                                  svgUrl={svgUrl}
+                                  diameterMm={assignment.size || 10}
+                                  primaryColor={selectedColorInfo?.hex || "#888"}
+                                  secondaryColor="#888"
+                                  width="32px"
+                                  height="32px"
+                                />
+                              </div>
+                            )}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "#e0e0e0" }}>
+                                {controlLabels[control.label] || control.label}
+                              </div>
+                              <div style={{ fontSize: "0.7rem", color: "#888", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                {assignment.knobType} — {assignment.size}mm
+                                {selectedColorInfo && ` — ${selectedColorInfo.displayName}`}
+                              </div>
+                            </div>
+                            <div style={{ fontSize: "0.8rem", color: "#666" }}>
+                              {isEditing ? "▲" : "▼"}
+                            </div>
+                          </div>
+
+                          {/* Expanded editor */}
+                          {isEditing && (
+                            <div style={{ padding: "0 0.75rem 0.75rem", borderTop: "1px solid #2d2d2d" }}>
+                              {/* Knob type selector */}
+                              {knobTypesData.length > 0 && (
+                                <div style={{ marginTop: "0.75rem" }}>
+                                  <label style={{ fontSize: "0.75rem", color: "#888", display: "block", marginBottom: "0.35rem" }}>Type</label>
+                                  <select
+                                    value={assignment.knobType}
+                                    onChange={(e) => {
+                                      const newType = knobTypesData.find(kt => kt.knob_type === e.target.value);
+                                      if (newType) {
+                                        const newColors = resolveColors(newType.available_colors);
+                                        setKnobAssignments(prev => ({
+                                          ...prev,
+                                          [potIdx]: {
+                                            knobType: newType.knob_type,
+                                            size: newType.available_sizes_mm[0] ?? 10,
+                                            colorKey: newColors[0]?.key ?? "black",
+                                          },
+                                        }));
+                                      }
+                                    }}
+                                    style={{
+                                      width: "100%",
+                                      padding: "0.5rem",
+                                      background: "#1a1a1a",
+                                      border: "1px solid #444",
+                                      borderRadius: "5px",
+                                      color: "#e0e0e0",
+                                      fontSize: "0.85rem",
+                                    }}
+                                  >
+                                    {knobTypesData.map(kt => (
+                                      <option key={kt.knob_type} value={kt.knob_type}>{kt.knob_type}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                              )}
+
+                              {/* Size buttons */}
+                              <div style={{ marginTop: "0.75rem" }}>
+                                <label style={{ fontSize: "0.75rem", color: "#888", display: "block", marginBottom: "0.35rem" }}>Size</label>
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                                  {(knobType?.available_sizes_mm || config.knob?.availableSizes || []).map(size => (
+                                    <button
+                                      key={size}
+                                      onClick={() => setKnobAssignments(prev => ({ ...prev, [potIdx]: { ...prev[potIdx], size } }))}
+                                      style={{
+                                        padding: "0.3rem 0.6rem",
+                                        borderRadius: "4px",
+                                        border: assignment.size === size ? "2px solid #fff" : "1px solid #444",
+                                        background: assignment.size === size ? "#fff" : "#1a1a1a",
+                                        color: assignment.size === size ? "#000" : "#ccc",
+                                        cursor: "pointer",
+                                        fontWeight: assignment.size === size ? 600 : 400,
+                                        fontSize: "0.75rem",
+                                      }}
+                                    >
+                                      {size}mm
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Color buttons */}
+                              {resolvedColors.length > 0 && (
+                                <div style={{ marginTop: "0.75rem" }}>
+                                  <label style={{ fontSize: "0.75rem", color: "#888", display: "block", marginBottom: "0.35rem" }}>Color</label>
+                                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                                    {resolvedColors.map(color => (
+                                      <button
+                                        key={color.key}
+                                        onClick={() => setKnobAssignments(prev => ({ ...prev, [potIdx]: { ...prev[potIdx], colorKey: color.key } }))}
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: "0.3rem",
+                                          padding: "0.25rem 0.5rem",
+                                          borderRadius: "4px",
+                                          border: assignment.colorKey === color.key ? "2px solid #fff" : "1px solid #444",
+                                          background: assignment.colorKey === color.key ? "#333" : "#1a1a1a",
+                                          color: "#ccc",
+                                          cursor: "pointer",
+                                          fontSize: "0.7rem",
+                                        }}
+                                      >
+                                        <div style={{
+                                          width: "14px",
+                                          height: "14px",
+                                          borderRadius: "50%",
+                                          background: color.hex,
+                                          border: "1px solid #555",
+                                          flexShrink: 0,
+                                        }} />
+                                        {color.displayName}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Apply to all button */}
+                              <div style={{ marginTop: "0.75rem", display: "flex", gap: "0.5rem" }}>
+                                <button
+                                  onClick={() => {
+                                    const current = knobAssignments[potIdx];
+                                    if (!current) return;
+                                    setKnobAssignments(prev => {
+                                      const updated = { ...prev };
+                                      Object.keys(updated).forEach(k => {
+                                        updated[Number(k)] = { ...current };
+                                      });
+                                      return updated;
+                                    });
+                                  }}
+                                  style={{
+                                    padding: "0.35rem 0.75rem",
+                                    borderRadius: "4px",
+                                    border: "1px solid #555",
+                                    background: "#2d2d2d",
+                                    color: "#ccc",
+                                    cursor: "pointer",
+                                    fontSize: "0.75rem",
+                                  }}
+                                >
+                                  Apply to all pots
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Order Form */}
@@ -1045,6 +1346,7 @@ export function SummaryContent() {
                   }}
                   labeledLettering={config.design?.name === "Labeled Lettering"}
                   labelColor={labelColorHex}
+                  knobConfigsPerPot={knobConfigsPerPot.length > 0 ? knobConfigsPerPot : undefined}
                 />
               </div>
               );

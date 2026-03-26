@@ -9,6 +9,7 @@ import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelect
 import { PaintSelector, type PaintOption as PaintSelectorOption } from "./PaintSelector";
 import { DesignSelector, type DesignOption } from "./DesignSelector";
 import { LedSelector, type LedOption } from "./LedSelector";
+import { KnobSelector, type KnobType } from "./KnobSelector";
 import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 import { IMAGE_CONFIG } from "@/lib/imageConfig";
@@ -50,6 +51,7 @@ type PedalCustomizerProps = {
   paintOptions: PaintSelectorOption[];
   designOptions: DesignOption[];
   ledOptions: LedOption[];
+  knobTypes: KnobType[];
   favouritePaintIds: string[];
 };
 
@@ -87,10 +89,11 @@ export function PedalCustomizer({
   paintOptions,
   designOptions,
   ledOptions,
+  knobTypes,
   favouritePaintIds,
 }: PedalCustomizerProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = React.useState<"effect" | "size" | "paint" | "design" | "led">("effect");
+  const [activeTab, setActiveTab] = React.useState<"effect" | "size" | "paint" | "design" | "knobs" | "led">("effect");
   const [selectedEffectId, setSelectedEffectId] = React.useState(effectPedals[0]?.id ?? "");
   const [selectedEnclosureSizeId, setSelectedEnclosureSizeId] = React.useState(enclosureSizes[0]?.name ?? "");
   const [selectedPaintId, setSelectedPaintId] = React.useState(paintOptions[0]?.id ?? "");
@@ -100,6 +103,9 @@ export function PedalCustomizer({
   const [customLedColor, setCustomLedColor] = React.useState<string>("#ff0000");
   const [selectedLedBezelColor, setSelectedLedBezelColor] = React.useState<string | null>(null);
   const [selectedLabelColor, setSelectedLabelColor] = React.useState<string | null>(null);
+  const [selectedKnobTypeId, setSelectedKnobTypeId] = React.useState(knobTypes[0]?.knob_type ?? "");
+  const [selectedKnobSize, setSelectedKnobSize] = React.useState<number | null>(null);
+  const [selectedKnobColorKey, setSelectedKnobColorKey] = React.useState<string | null>(null);
   const [selectedEffectMods, setSelectedEffectMods] = React.useState<SelectedModWithOptions[]>([]);
   const [labelText, setLabelText] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -130,6 +136,7 @@ export function PedalCustomizer({
   const selectedPaint = paintOptions.find((item) => item.id === selectedPaintId);
   const selectedDesign = designOptions.find((item) => item.id === selectedDesignId);
   const selectedLed = ledOptions.find((item) => item.id === selectedLedId);
+  const selectedKnobType = knobTypes.find((kt) => kt.knob_type === selectedKnobTypeId);
 
   // Restore configuration from sessionStorage on mount
   React.useEffect(() => {
@@ -283,6 +290,116 @@ export function PedalCustomizer({
       prevDesignIdRef.current = selectedDesignId;
     }
   }, [selectedDesignId, selectedDesign, selectedLabelColor]);
+
+  // Auto-default knob size and color when knob type changes
+  React.useEffect(() => {
+    if (selectedKnobType) {
+      if (!selectedKnobSize || !selectedKnobType.available_sizes_mm.includes(selectedKnobSize)) {
+        setSelectedKnobSize(selectedKnobType.available_sizes_mm[0] ?? null);
+      }
+      if (selectedKnobType.available_colors.length > 0) {
+        const resolved = resolveColors(selectedKnobType.available_colors);
+        if (!selectedKnobColorKey || !resolved.some(c => c.key === selectedKnobColorKey)) {
+          setSelectedKnobColorKey(resolved[0].key);
+        }
+      }
+    }
+  }, [selectedKnobTypeId, selectedKnobType]);
+
+  // Helper to build knob modal sections (reused on open and on state changes)
+  const buildKnobModalSections = React.useCallback((
+    knobType: KnobType,
+    currentSize: number | null,
+    currentColorKey: string | null,
+  ) => {
+    const resolvedColors = resolveColors(knobType.available_colors);
+    return [
+      {
+        title: "🎛️ Size Selection",
+        content: (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            {knobType.available_sizes_mm.map((size) => (
+              <button
+                key={size}
+                onClick={() => {
+                  setSelectedKnobSize(size);
+                  setModalProduct(prev => prev ? { ...prev, price: knobType.variants.find(v => v.diameter_mm === size)?.price_eur ?? prev.price } : null);
+                }}
+                style={{
+                  padding: "0.5rem 1rem",
+                  borderRadius: "6px",
+                  border: currentSize === size ? "2px solid #fff" : "2px solid #444",
+                  background: currentSize === size ? "#fff" : "#1a1a1a",
+                  color: currentSize === size ? "#000" : "#e0e0e0",
+                  cursor: "pointer",
+                  fontWeight: currentSize === size ? 600 : 400,
+                  fontSize: "0.85rem",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {size}mm
+              </button>
+            ))}
+          </div>
+        ),
+      },
+      {
+        title: "🎨 Color Selection",
+        content: (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            {resolvedColors.map((color) => (
+              <button
+                key={color.key}
+                onClick={() => {
+                  setSelectedKnobColorKey(color.key);
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                  padding: "0.4rem 0.75rem",
+                  borderRadius: "6px",
+                  border: currentColorKey === color.key ? "2px solid #fff" : "2px solid #444",
+                  background: currentColorKey === color.key ? "#333" : "#1a1a1a",
+                  color: "#e0e0e0",
+                  cursor: "pointer",
+                  fontSize: "0.8rem",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <div style={{
+                  width: "18px",
+                  height: "18px",
+                  borderRadius: "50%",
+                  background: color.hex,
+                  border: "1px solid #666",
+                  flexShrink: 0,
+                }} />
+                {color.displayName}
+              </button>
+            ))}
+          </div>
+        ),
+      },
+    ];
+  }, []);
+
+  // Keep knob modal sections in sync with size/color selection changes
+  React.useEffect(() => {
+    if (!modalProduct || !selectedKnobType) return;
+    // Only update if the modal is showing the current knob type
+    if (modalProduct.title !== selectedKnobType.knob_type) return;
+
+    setModalProduct(prev => {
+      if (!prev) return null;
+      const matchingVariant = selectedKnobType.variants.find(v => v.diameter_mm === selectedKnobSize);
+      return {
+        ...prev,
+        price: matchingVariant?.price_eur ?? prev.price,
+        additionalSections: buildKnobModalSections(selectedKnobType, selectedKnobSize, selectedKnobColorKey),
+      };
+    });
+  }, [selectedKnobSize, selectedKnobColorKey, selectedKnobType, buildKnobModalSections]);
 
   // Measure configuration summary height and update padding
   React.useEffect(() => {
@@ -441,6 +558,45 @@ export function PedalCustomizer({
     return colorMap[selectedLedColor] || "#ff0000";
   }, [selectedLedColor, customLedColor]);
 
+  // Compute selected knob variant for the visualizer
+  const selectedKnobVariant = React.useMemo(() => {
+    if (!selectedKnobType) return null;
+    // Find variant matching the selected size and color
+    const colorMatched = selectedKnobType.variants.find(
+      (v) => v.diameter_mm === selectedKnobSize && v.color.toLowerCase() === (selectedKnobColorKey || "").toLowerCase()
+    );
+    if (colorMatched) return colorMatched;
+    // Fall back to just matching size
+    const sizeMatched = selectedKnobType.variants.find((v) => v.diameter_mm === selectedKnobSize);
+    if (sizeMatched) return sizeMatched;
+    // Fall back to first variant
+    return selectedKnobType.variants[0] ?? null;
+  }, [selectedKnobType, selectedKnobSize, selectedKnobColorKey]);
+
+  // Compute knob SVG URL and colors for the visualizer
+  const knobPreviewData = React.useMemo(() => {
+    if (!selectedKnobType || !selectedKnobVariant) return null;
+    // Always prefer template_svg_path — variant-specific SVGs don't exist on disk
+    const svgPath = selectedKnobType.template_svg_path || selectedKnobVariant.template_svg_path;
+    if (!svgPath) return null;
+    
+    // Find color hex from the selected color key
+    let primaryColor = selectedKnobVariant.primaryColor || "#888888";
+    if (selectedKnobColorKey && selectedKnobType.available_colors.length > 0) {
+      const found = findColorByKey(selectedKnobType.available_colors, selectedKnobColorKey);
+      if (found) primaryColor = found.hex;
+    }
+    
+    return {
+      svgUrl: `/api/data/knobs/${svgPath.split("/").map(s => encodeURIComponent(s)).join("/")}`,
+      diameterMm: selectedKnobVariant.diameter_mm,
+      primaryColor,
+      secondaryColor: selectedKnobVariant.secondaryColor || "#888888",
+      primaryDarkColor: selectedKnobVariant.primaryDarkColor,
+      primaryLightColor: selectedKnobVariant.primaryLightColor,
+    };
+  }, [selectedKnobType, selectedKnobVariant, selectedKnobColorKey]);
+
   // Compute label color hex for preview
   const previewLabelColorHex = React.useMemo(() => {
     if (!selectedLabelColor || !selectedDesign) return undefined;
@@ -477,7 +633,7 @@ export function PedalCustomizer({
 
   // Tab navigation helper
   const advanceToNextTab = () => {
-    const tabOrder: Array<typeof activeTab> = ["effect", "size", "paint", "design", "led"];
+    const tabOrder: Array<typeof activeTab> = ["effect", "size", "paint", "design", "knobs", "led"];
     const currentIndex = tabOrder.indexOf(activeTab);
     if (currentIndex < tabOrder.length - 1) {
       setActiveTab(tabOrder[currentIndex + 1]);
@@ -492,7 +648,8 @@ export function PedalCustomizer({
       effect: "Size",
       size: "Paint",
       paint: "Design",
-      design: "LED",
+      design: "Knobs",
+      knobs: "LED",
       led: "Summary",
       other: undefined,
     };
@@ -580,6 +737,15 @@ export function PedalCustomizer({
         ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
         ledBezelColor: selectedLedBezelColor,
         labelColor: selectedLabelColor,
+        knob: selectedKnobType ? {
+          knobType: selectedKnobType.knob_type,
+          size: selectedKnobSize,
+          colorKey: selectedKnobColorKey,
+          variant: selectedKnobVariant,
+          templateSvgPath: selectedKnobType.template_svg_path,
+          availableSizes: selectedKnobType.available_sizes_mm,
+          availableColors: selectedKnobType.available_colors,
+        } : null,
         totalPrice,
       };
       
@@ -802,6 +968,15 @@ export function PedalCustomizer({
       ledColor: selectedLedColor === "Custom" ? customLedColor : selectedLedColor,
       ledBezelColor: selectedLedBezelColor,
       labelColor: selectedLabelColor,
+      knob: selectedKnobType ? {
+        knobType: selectedKnobType.knob_type,
+        size: selectedKnobSize,
+        colorKey: selectedKnobColorKey,
+        variant: selectedKnobVariant,
+        templateSvgPath: selectedKnobType.template_svg_path,
+        availableSizes: selectedKnobType.available_sizes_mm,
+        availableColors: selectedKnobType.available_colors,
+      } : null,
       totalPrice,
     };
     
@@ -885,7 +1060,7 @@ export function PedalCustomizer({
             zIndex: 100,
             padding: "0.5rem",
             display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
+            gridTemplateColumns: "repeat(6, 1fr)",
             gap: "0.5rem",
             overflow: "hidden",
           }}
@@ -1019,6 +1194,37 @@ export function PedalCustomizer({
                 >
                   <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "design" ? "#000" : "#888", marginBottom: "0.25rem" }}>Design/Label</span>
                   <span style={{ fontSize: "0.8rem", color: activeTab === "design" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selectedDesign?.name || "—"}</span>
+                </button>
+                {/* Knobs Tab */}
+                <button
+                  data-section="tab-knobs"
+                  onClick={() => setActiveTab("knobs")}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "0.5rem",
+                    background: activeTab === "knobs" ? "#fff" : "#0f0f0f",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                    border: activeTab === "knobs" ? "2px solid #fff" : "2px solid transparent",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    minWidth: 0,
+                    overflow: "hidden",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== "knobs") {
+                      e.currentTarget.style.background = "#1a1a1a";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== "knobs") {
+                      e.currentTarget.style.background = "#0f0f0f";
+                    }
+                  }}
+                >
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "knobs" ? "#000" : "#888", marginBottom: "0.25rem" }}>Knobs</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "knobs" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selectedKnobType?.knob_type || "—"}</span>
                 </button>
                 <button
                   data-section="tab-led"
@@ -1400,6 +1606,43 @@ export function PedalCustomizer({
             />
           )}
 
+          {/* Knobs Tab */}
+          {activeTab === "knobs" && (
+            <KnobSelector
+              knobTypes={knobTypes}
+              selectedKnobTypeId={selectedKnobTypeId}
+              onSelectKnobType={setSelectedKnobTypeId}
+              onShowDetails={(knobType) => {
+                // Select knob type before opening modal
+                if (selectedKnobTypeId !== knobType.knob_type) {
+                  setSelectedKnobTypeId(knobType.knob_type);
+                }
+
+                const firstVariant = knobType.variants[0];
+                const resolvedColors = resolveColors(knobType.available_colors);
+                
+                // Use external image URL for preview (local paths have directory name mismatches)
+                const previewImage = firstVariant?.image_url || undefined;
+
+                setModalProduct({
+                  type: "other",
+                  title: knobType.knob_type,
+                  subtitle: knobType.canonical_type ? `Style: ${knobType.canonical_type}` : undefined,
+                  price: firstVariant?.price_eur ?? 0,
+                  image: previewImage,
+                  description: `Available in ${knobType.available_sizes_mm.length} size${knobType.available_sizes_mm.length > 1 ? "s" : ""} and ${resolvedColors.length} color${resolvedColors.length > 1 ? "s" : ""}. ${knobType.variants.length} total variant${knobType.variants.length > 1 ? "s" : ""} to tweak your tone controls just right.`,
+                  details: [
+                    { label: "Sizes", value: knobType.available_sizes_mm.map(s => `${s}mm`).join(", ") },
+                    { label: "Colors", value: resolvedColors.map(c => c.displayName).join(", ") },
+                    { label: "Variants", value: `${knobType.variants.length}` },
+                    ...(firstVariant ? [{ label: "Shaft Type", value: firstVariant.shaft_type }] : []),
+                  ],
+                  additionalSections: buildKnobModalSections(knobType, selectedKnobSize, selectedKnobColorKey),
+                });
+              }}
+            />
+          )}
+
           {/* LED Tab */}
           {activeTab === "led" && (
             <>
@@ -1644,6 +1887,12 @@ export function PedalCustomizer({
                 labeledLettering={selectedDesign?.name === "Labeled Lettering"}
                 labelColor={previewLabelColorHex}
                 compact={true}
+                knobSvgUrl={knobPreviewData?.svgUrl}
+                knobDiameterMm={knobPreviewData?.diameterMm}
+                knobPrimaryColor={knobPreviewData?.primaryColor}
+                knobSecondaryColor={knobPreviewData?.secondaryColor}
+                knobPrimaryDarkColor={knobPreviewData?.primaryDarkColor}
+                knobPrimaryLightColor={knobPreviewData?.primaryLightColor}
               />
             </div>
           )}
