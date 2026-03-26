@@ -8,6 +8,7 @@ import { generateRandomLayout, type GeneratedLayout } from "@/lib/layoutGenerato
 import { resolveColors, findColorByKey, getContrastingColor, type ColorEntry } from "@/lib/colorUtils";
 import { KnobSvg } from "@/components/KnobSvg";
 import type { KnobType, KnobVariant } from "@/components/KnobSelector";
+import { getKnobDisplayName } from "@/components/KnobSelector";
 
 type SelectedModWithOptions = {
   mod: {
@@ -1105,7 +1106,7 @@ export function SummaryContent() {
               <div style={{ background: "#1a1a1a", padding: "0.1rem 1.5rem 1.5rem 1.5rem", borderRadius: "10px", marginBottom: "1.5rem", border: "1px solid #333" }}>
                 <h3 style={{ fontSize: "1.2rem", marginBottom: "0.75rem", color: "#fff" }}>Knob Configuration</h3>
                 <p style={{ fontSize: "0.85rem", color: "#888", marginBottom: "1rem" }}>
-                  Default: <span style={{ color: "#fff", fontWeight: 600 }}>{config.knob.knobType}</span>
+                  Default: <span style={{ color: "#fff", fontWeight: 600 }}>{(() => { const kt = knobTypesData.find(k => k.knob_type === config.knob?.knobType); return kt ? getKnobDisplayName(kt) : config.knob?.knobType; })()}</span>
                   {config.knob.size && <> — {config.knob.size}mm</>}
                   {config.knob.variant?.price_eur != null && (
                     <span style={{ color: "#4ade80", marginLeft: "0.5rem" }}>
@@ -1159,7 +1160,7 @@ export function SummaryContent() {
                                 {controlLabels[control.label] || control.label}
                               </div>
                               <div style={{ fontSize: "0.7rem", color: "#888", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                {assignment.knobType} — {assignment.size}mm
+                                {knobType ? getKnobDisplayName(knobType) : assignment.knobType} — {assignment.size}mm
                                 {selectedColorInfo && ` — ${selectedColorInfo.displayName}`}
                               </div>
                             </div>
@@ -1202,7 +1203,7 @@ export function SummaryContent() {
                                     }}
                                   >
                                     {knobTypesData.map(kt => (
-                                      <option key={kt.knob_type} value={kt.knob_type}>{kt.knob_type}</option>
+                                      <option key={kt.knob_type} value={kt.knob_type}>{getKnobDisplayName(kt)}</option>
                                     ))}
                                   </select>
                                 </div>

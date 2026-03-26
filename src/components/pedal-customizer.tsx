@@ -9,7 +9,7 @@ import { EnclosureSizeSelector, type EnclosureSize } from "./EnclosureSizeSelect
 import { PaintSelector, type PaintOption as PaintSelectorOption } from "./PaintSelector";
 import { DesignSelector, type DesignOption } from "./DesignSelector";
 import { LedSelector, type LedOption } from "./LedSelector";
-import { KnobSelector, type KnobType } from "./KnobSelector";
+import { KnobSelector, type KnobType, getKnobDisplayName } from "./KnobSelector";
 import { checkSizeCompatibility } from "@/lib/sizeCompatibility";
 import { ProductDetailModal, type ProductModalData, type SelectedModWithOptions } from "./ProductDetailModal";
 import { IMAGE_CONFIG } from "@/lib/imageConfig";
@@ -388,7 +388,7 @@ export function PedalCustomizer({
   React.useEffect(() => {
     if (!modalProduct || !selectedKnobType) return;
     // Only update if the modal is showing the current knob type
-    if (modalProduct.title !== selectedKnobType.knob_type) return;
+    if (modalProduct.title !== getKnobDisplayName(selectedKnobType)) return;
 
     setModalProduct(prev => {
       if (!prev) return null;
@@ -577,7 +577,7 @@ export function PedalCustomizer({
   const knobPreviewData = React.useMemo(() => {
     if (!selectedKnobType || !selectedKnobVariant) return null;
     // Always prefer template_svg_path — variant-specific SVGs don't exist on disk
-    const svgPath = selectedKnobType.template_svg_path || selectedKnobVariant.template_svg_path;
+    const svgPath = selectedKnobType.template_svg_path;
     if (!svgPath) return null;
     
     // Find color hex from the selected color key
@@ -588,7 +588,7 @@ export function PedalCustomizer({
     }
     
     return {
-      svgUrl: `/api/data/knobs/${svgPath.split("/").map(s => encodeURIComponent(s)).join("/")}`,
+      svgUrl: `/api/data/knobs/${svgPath.split("/").map((s: string) => encodeURIComponent(s)).join("/")}`,
       diameterMm: selectedKnobVariant.diameter_mm,
       primaryColor,
       secondaryColor: selectedKnobVariant.secondaryColor || "#888888",
@@ -1224,7 +1224,7 @@ export function PedalCustomizer({
                   }}
                 >
                   <span style={{ fontSize: "0.7rem", fontWeight: 600, color: activeTab === "knobs" ? "#000" : "#888", marginBottom: "0.25rem" }}>Knobs</span>
-                  <span style={{ fontSize: "0.8rem", color: activeTab === "knobs" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selectedKnobType?.knob_type || "—"}</span>
+                  <span style={{ fontSize: "0.8rem", color: activeTab === "knobs" ? "#000" : "#aaa", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selectedKnobType ? getKnobDisplayName(selectedKnobType) : "—"}</span>
                 </button>
                 <button
                   data-section="tab-led"
@@ -1622,11 +1622,13 @@ export function PedalCustomizer({
                 const resolvedColors = resolveColors(knobType.available_colors);
                 
                 // Use local preview image API
-                const previewImage = `/api/data/knobs/preview/${encodeURIComponent(knobType.knob_type)}`;
+                const previewImage = knobType.preview_image
+                  ? `/api/data/knobs/${knobType.preview_image}`
+                  : `/api/data/knobs/preview/${encodeURIComponent(knobType.knob_type)}`;
 
                 setModalProduct({
                   type: "other",
-                  title: knobType.knob_type,
+                  title: getKnobDisplayName(knobType),
                   subtitle: knobType.canonical_type ? `Style: ${knobType.canonical_type}` : undefined,
                   price: firstVariant?.price_eur ?? 0,
                   image: previewImage,

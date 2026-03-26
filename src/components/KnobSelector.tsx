@@ -11,7 +11,6 @@ export type KnobVariant = {
   sku: string;
   price_usd: number;
   price_eur: number;
-  image_url: string;
   product_url: string;
   supplier: string;
   diameter_mm: number;
@@ -21,26 +20,31 @@ export type KnobVariant = {
   shaft_type: string;
   knob_type: string;
   knob_categories: string[];
-  local_image_folder?: string;
   primaryColor: string;
   secondaryColor: string;
   primaryDarkColor?: string;
   primaryLightColor?: string;
-  available_colors: ColorEntry[];
-  svg_path?: string;
-  template_svg_path?: string;
-  diameter_label: string;
+  size_folder: string;
+  image_path?: string;
+  image_paths?: string[];
+  image_is_exact?: boolean;
 };
 
 export type KnobType = {
   knob_type: string;
+  display_name?: string | null;
   canonical_type: string;
-  folder: string;
   template_svg_path?: string;
   available_sizes_mm: number[];
   available_colors: ColorEntry[];
+  preview_image?: string;
   variants: KnobVariant[];
 };
+
+/** Get the display name for a knob type, falling back to knob_type */
+export function getKnobDisplayName(kt: KnobType): string {
+  return kt.display_name || kt.knob_type;
+}
 
 export type KnobSelection = {
   knobType: KnobType;
@@ -68,6 +72,9 @@ function getMinPrice(knobType: KnobType): number {
 
 /** Get a local preview image URL for a knob type */
 function getPreviewImage(knobType: KnobType): string {
+  if (knobType.preview_image) {
+    return `/api/data/knobs/${knobType.preview_image.split("/").map(s => encodeURIComponent(s)).join("/")}`;
+  }
   return `/api/data/knobs/preview/${encodeURIComponent(knobType.knob_type)}`;
 }
 
@@ -85,6 +92,7 @@ export function KnobSelector({
     return knobTypes.filter(
       (kt) =>
         kt.knob_type.toLowerCase().includes(term) ||
+        (kt.display_name && kt.display_name.toLowerCase().includes(term)) ||
         kt.canonical_type.toLowerCase().includes(term) ||
         kt.variants.some((v) => v.color.toLowerCase().includes(term) || v.knob_categories.some((c) => c.toLowerCase().includes(term)))
     );
@@ -230,7 +238,7 @@ export function KnobSelector({
                     {previewImage ? (
                       <Image
                         src={previewImage}
-                        alt={knobType.knob_type}
+                        alt={getKnobDisplayName(knobType)}
                         fill
                         unoptimized
                         style={{ objectFit: "contain" }}
@@ -252,7 +260,7 @@ export function KnobSelector({
               <div style={{ padding: "1rem" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
                   <div>
-                    <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{knobType.knob_type}</div>
+                    <div style={{ fontSize: "0.95rem", fontWeight: 600, color: "#e0e0e0" }}>{getKnobDisplayName(knobType)}</div>
                     {knobType.canonical_type && (
                       <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "0.15rem" }}>{knobType.canonical_type}</div>
                     )}
